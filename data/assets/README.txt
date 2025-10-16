@@ -1,0 +1,1 @@
+Lege hier deine Logos ab – PNG oder JPG – z. B. jellyfin.png, omv.png

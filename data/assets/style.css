@@ -1,0 +1,83 @@
+
+    :root {
+  --bg-color: #f2f2f2;
+  --text-color: #111;
+  --tile-bg: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #121212;
+    --text-color: #eee;
+    --tile-bg: #1e1e1e;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 2rem;
+  font-family: system-ui, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+body>a {
+      color: #FFF;
+      text-decoration: none;
+    }
+	
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.service {
+  background-color: var(--tile-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.service:hover {
+  transform: scale(1.02);
+}
+
+.service img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.service-title {
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+    .service a {
+      color: inherit;
+      text-decoration: none;
+	  padding-bottom: 10px;
+    }
+	
+	.service a span {
+		padding-left: 10px;
+	}
+	

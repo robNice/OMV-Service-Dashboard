@@ -1,0 +1,9 @@
+{
+  "name": "omv-landingpage",
+  "version": "1.0.0",
+  "description": "Dashboard für OMV-Dienste",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
