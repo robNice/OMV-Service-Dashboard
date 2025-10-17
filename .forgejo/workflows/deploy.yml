@@ -1,20 +1,130 @@
-- uses: actions/checkout@v4
+name: Deploy live to OMV
+on:
+  push:
+    branches: ["live"]
+  workflow_dispatch: {}
 
-- name: Install rsync
-  run: |
-    apt-get update && apt-get install -y --no-install-recommends rsync
+jobs:
+  deploy:
+    runs-on: ["docker"]
+    env:
+      GIT_SSL_CAINFO: /etc/ssl/certs/omv-ca-bundle.crt
+      SSL_CERT_FILE:  /etc/ssl/certs/omv-ca-bundle.crt
 
-- name: Copy to mounted target
-  run: |
-    rsync -rltD --delete --omit-dir-times --no-perms \
-      --exclude '.git' --exclude '.forgejo' \
-      ./ /deploy/
+    steps:
+      - name: "Sanity: CA & /deploy vorhanden?"
+        run: |
+          set -e
+          echo "whoami/id:"; whoami || true; id
+          [ -r /etc/ssl/certs/omv-ca-bundle.crt ] || (echo "CA-Bundle fehlt!"; exit 1)
+          ls -ld /deploy || (echo "/deploy fehlt!"; exit 1)        
 
-- name: Rebuild & restart
-  run: |
-    cd /deploy && \
-    if [ -f docker-compose.yml ] || [ -f compose.yml ]; then
-      docker compose up -d --build || docker-compose up -d --build
-    else
-      echo "No compose file – skipping rebuild"
-    fi
+      - uses: actions/checkout@v4
+
+      - name: "Sanity: ist /deploy vorhanden?"
+        run: |
+          set -e
+          echo "whoami/id:"
+          whoami || true; id
+          echo "Mounts (grep /deploy):"
+          cat /proc/self/mounts | grep '/deploy' || true
+          ls -ld /deploy || (echo "/deploy fehlt – bitte container.options in /data/config.yaml prüfen."; exit 1)
+
+
+      - name: Build repo file list
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO_LIST="/tmp/repo_list.txt"
+          # Alle Pfade aus dem Repo relativ auflisten (ohne .git/.forgejo/Manifest)
+          find . -mindepth 1 \
+            -path './.git' -prune -o \
+            -path './.forgejo' -prune -o \
+            -name '.deploy-manifest.txt' -prune -o \
+            -print \
+          | sed -E 's|^\./||' | sort -u > "$REPO_LIST"
+          echo "Repo items: $(wc -l < "$REPO_LIST")"
+
+
+
+
+      - name: "Copy repo -> /deploy (no rsync, no tar)"
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="."
+          DST="/deploy"
+
+          # 1) Ordnerstruktur im Ziel anlegen (ohne .git/.forgejo/Manifest)
+          find "$SRC" -mindepth 1 \
+            -path './.git' -prune -o \
+            -path './.forgejo' -prune -o \
+            -name '.deploy-manifest.txt' -prune -o \
+            -type d -print0 \
+          | xargs -0 -I{} mkdir -p "$DST/{}"
+
+          # 2) Dateien kopieren/überschreiben, ohne Owner/Mode/Timestamps zu ändern
+          find "$SRC" -mindepth 1 \
+            -path './.git' -prune -o \
+            -path './.forgejo' -prune -o \
+            -name '.deploy-manifest.txt' -prune -o \
+            -type f -print0 \
+          | xargs -0 -I{} cp --parents --force --no-preserve=mode,ownership,timestamps "{}" "$DST"
+
+
+
+
+      - name: Delete only previously-deployed-but-now-missing
+        shell: bash
+        run: |
+          set -euo pipefail
+          DST="/deploy"
+          PREV_MAN="$DST/.deploy-manifest.txt"
+          CUR_LIST="/tmp/repo_list.txt"
+
+          # Erst ab dem 2. Deploy werden Löschungen geprüft
+          if [ -f "$PREV_MAN" ]; then
+            # sicherstellen, dass das alte Manifest sortiert ist
+            sort -u "$PREV_MAN" -o "$PREV_MAN"
+            # to_delete = (alt) minus (neu)
+            comm -23 "$PREV_MAN" "$CUR_LIST" > /tmp/to_delete.txt || true
+
+            if [ -s /tmp/to_delete.txt ]; then
+              echo "Will remove $(wc -l < /tmp/to_delete.txt) paths that were previously deployed but are now gone in repo"
+              while IFS= read -r rel; do
+                [ -z "$rel" ] && continue
+                tgt="$DST/$rel"
+                # Nur entfernen, wenn der Pfad exakt existiert
+                if [ -e "$tgt" ]; then
+                  if [ -f "$tgt" ] || [ -L "$tgt" ]; then
+                    rm -f -- "$tgt"
+                  elif [ -d "$tgt" ]; then
+                    # Verzeichnis nur löschen, wenn leer – sonst bleibt es (fremde Inhalte werden NICHT angerührt)
+                    rmdir --ignore-fail-on-non-empty -- "$tgt" || true
+                  fi
+                fi
+              done < /tmp/to_delete.txt
+            else
+              echo "Nothing to delete."
+            fi
+          else
+            echo "No previous manifest found – first deploy, nothing to delete."
+          fi
+
+          # Neues Manifest schreiben (Liste der aktuell deployten Repo-Pfade)
+          cp /tmp/repo_list.txt "$PREV_MAN"
+
+
+      - name: Rebuild & restart (optional)
+        run: |
+          cd /deploy
+          if [ -f docker-compose.yml ] || [ -f compose.yml ]; then
+            # Docker-CLI im Jobcontainer nachinstallieren (einmal pro Job)
+            if ! command -v docker >/dev/null 2>&1; then
+              apt-get update
+              apt-get install -y --no-install-recommends docker.io docker-compose-plugin
+            fi
+            docker compose up -d --build || docker-compose up -d --build
+          else
+            echo "No compose file – skipping rebuild"
+          fi
