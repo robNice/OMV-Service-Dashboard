@@ -10,11 +10,6 @@ jobs:
 
     steps:
 
-      - name: Forgejo in /etc/hosts eintragen
-        run: |
-          echo "${{ secrets.FORGEJO_IP }} git.cube.fritz.box" >> /etc/hosts
-          getent hosts git.cube.fritz.box
-
       - name: CA bereitstellen (falls Runner-Env nicht greift)
         env:
           INTERNAL_CA_PEM: ${{ secrets.INTERNAL_CA_PEM }}
