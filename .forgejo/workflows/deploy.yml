@@ -30,16 +30,45 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Install rsync
+      - name: Clean target (/deploy) except optional keep-list
+        shell: bash
         run: |
-          apt-get update
-          apt-get install -y --no-install-recommends rsync
+          set -euo pipefail
+          # Optional: Falls du Dateien im Ziel bewahren willst, liste sie in .deploy-keep (eine pro Zeile, relativ zum Deploy-Root)
+          KEEPFILE=".deploy-keep"
+          if [ -f "$KEEPFILE" ]; then
+            echo "Using keep list from $KEEPFILE"
+            # Markiere zu behaltende Pfade
+            mapfile -t KEEP < <(grep -vE '^\s*(#|$)' "$KEEPFILE" || true)
+          else
+            KEEP=()
+          fi
 
-      - name: Copy to mounted target (/deploy)
+          shopt -s dotglob nullglob
+          cd /deploy
+          for item in * .*; do
+            # . und .. auslassen
+            [[ "$item" == "." || "$item" == ".." ]] && continue
+            # keep-list respektieren
+            skip=""
+            for k in "${KEEP[@]:-}"; do
+              [[ "$item" == "$k" ]] && { skip="yes"; break; }
+            done
+            [[ -n "$skip" ]] && { echo "Keep: $item"; continue; }
+            rm -rf -- "$item"
+          done
+
+      - name: Copy repo -> /deploy (no rsync, no apt)
+        shell: bash
         run: |
-          rsync -rltD --delete --omit-dir-times --no-perms \
-            --exclude '.git' --exclude '.forgejo' \
-            ./ /deploy/
+          set -euo pipefail
+          # Inhalte des Repos nach /deploy entpacken (ohne .git / .forgejo)
+          tar -C . -cf - \
+            --exclude=.git \
+            --exclude=.forgejo \
+            . \
+          | tar -C /deploy -xpf -
+      
 
       - name: Rebuild & restart (optional)
         run: |
