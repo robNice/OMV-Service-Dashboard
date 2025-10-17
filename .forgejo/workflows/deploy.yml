@@ -9,6 +9,10 @@ jobs:
     runs-on: [ "docker" ]
 
     steps:
+      - name: Forgejo Host eintragen
+        run: |
+          echo "192.168.1.2 git.cube.fritz.box" >> /etc/hosts
+          getent hosts git.cube.fritz.box
       - name: Check out
         uses: actions/checkout@v4
 
