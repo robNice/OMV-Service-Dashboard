@@ -65,7 +65,7 @@ jobs:
           printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           # Temporäre Host-Config: IPv4 erzwingen, Port/Benutzer setzen, Hostkey auto-accept (nur NEUE Keys)
-          cat > ~/.ssh/config <<EOF
+          cat > /root/.ssh/config <<EOF
           Host omv
             HostName ${SSH_HOST}
             Port ${SSH_PORT}
@@ -76,9 +76,9 @@ jobs:
             IdentitiesOnly yes
             IdentityFile ~/.ssh/id_ed25519
           EOF
-          chmod 600 ~/.ssh/config
+          chmod 600 /root/.ssh/config
           # Smoke-Test (nicht failen lassen, nur Diagnose)
-          ssh -F ~/.ssh/config -o ConnectTimeout=5 omv 'echo OK || true' || true
+          ssh -F /root/.ssh/config -o ConnectTimeout=5 omv 'echo OK || true' || true
 
       # 5) Deploy via rsync (als Ziel-User; keine Rechteänderung!)
       - name: Deploy to target dir
@@ -88,7 +88,7 @@ jobs:
           rsync -a --delete \
             --exclude '.git' \
             --exclude '.forgejo' \
-            -e "ssh -F ~/.ssh/config" \
+            -e "ssh -F /root/.ssh/config" \
             ./ "omv:${TARGET_DIR}/"
 
       # 6) Optional: Compose neu starten (falls vorhanden)
@@ -96,7 +96,7 @@ jobs:
         env:
           TARGET_DIR: ${{ secrets.TARGET_DIR }}
         run: |
-          ssh -F ~/.ssh/config omv "cd '${TARGET_DIR}' && \
+          ssh -F /root/.ssh/config omv "cd '${TARGET_DIR}' && \
             if [ -f docker-compose.yml ] || [ -f compose.yml ]; then \
               (docker compose up -d --build || docker-compose up -d --build) ; \
             else \
