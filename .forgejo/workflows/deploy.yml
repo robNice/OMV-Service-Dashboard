@@ -1,20 +1,37 @@
-- uses: actions/checkout@v4
+name: Deploy live to OMV
+on:
+  push:
+    branches: ["live"]
+  workflow_dispatch: {}
 
-- name: Install rsync
-  run: |
-    apt-get update && apt-get install -y --no-install-recommends rsync
+jobs:
+  deploy:
+    runs-on: ["docker"]   # dein Label
 
-- name: Copy to mounted target
-  run: |
-    rsync -rltD --delete --omit-dir-times --no-perms \
-      --exclude '.git' --exclude '.forgejo' \
-      ./ /deploy/
+    steps:
+      - uses: actions/checkout@v4
 
-- name: Rebuild & restart
-  run: |
-    cd /deploy && \
-    if [ -f docker-compose.yml ] || [ -f compose.yml ]; then
-      docker compose up -d --build || docker-compose up -d --build
-    else
-      echo "No compose file – skipping rebuild"
-    fi
+      - name: Install rsync
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends rsync
+
+      - name: Copy to mounted target (/deploy)
+        run: |
+          rsync -rltD --delete --omit-dir-times --no-perms \
+            --exclude '.git' --exclude '.forgejo' \
+            ./ /deploy/
+
+      - name: Rebuild & restart (optional)
+        run: |
+          cd /deploy
+          if [ -f docker-compose.yml ] || [ -f compose.yml ]; then
+            # Docker-CLI im Jobcontainer nachinstallieren (einmal pro Job)
+            if ! command -v docker >/dev/null 2>&1; then
+              apt-get update
+              apt-get install -y --no-install-recommends docker.io docker-compose-plugin
+            fi
+            docker compose up -d --build || docker-compose up -d --build
+          else
+            echo "No compose file – skipping rebuild"
+          fi
