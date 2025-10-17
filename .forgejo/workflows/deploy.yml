@@ -37,6 +37,14 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
+      - name: DNS fix für Job-Container
+        run: |
+          echo "${{ secrets.DNS_IP }}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' >/dev/null || \
+            (echo "DNS_IP Secret fehlt/ungültig" && exit 1)
+          printf 'nameserver %s\noptions ndots:0\n' "${{ secrets.DNS_IP }}" > /etc/resolv.conf
+          getent hosts deb.debian.org || (echo "DNS noch kaputt" && cat /etc/resolv.conf && exit 1)
+
+
       - name: Install ssh + rsync
         run: |
           if command -v apt-get >/dev/null 2>&1; then
