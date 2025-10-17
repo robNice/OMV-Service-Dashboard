@@ -46,7 +46,7 @@ jobs:
           echo "Repo items: $(wc -l < "$REPO_LIST")"
 
 
-      
+
 
       - name: "Copy repo -> /deploy (no rsync, no tar)"
         shell: bash
@@ -70,9 +70,9 @@ jobs:
             -name '.deploy-manifest.txt' -prune -o \
             -type f -print0 \
           | xargs -0 -I{} cp --parents --force --no-preserve=mode,ownership,timestamps "{}" "$DST"
-      
-      
-      
+
+
+
 
       - name: Delete only previously-deployed-but-now-missing
         shell: bash
