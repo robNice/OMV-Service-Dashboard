@@ -44,6 +44,16 @@ jobs:
           | sed -E 's|^\./||' | sort -u > "$REPO_LIST"
           echo "Repo items: $(wc -l < "$REPO_LIST")"
 
+
+      - name: "Sanity-Check: ist /deploy vorhanden?"
+        run: |
+          set -e
+          echo "User/IDs:"
+          id
+          echo "Mounts (grep /deploy):"
+          cat /proc/self/mounts | grep /deploy || true
+          ls -ld /deploy || (echo "/deploy fehlt – Runner config.yaml greift nicht."; exit 1)
+
       - name: Copy repo -> /deploy (no rsync, no apt)
         shell: bash
         run: |
@@ -55,10 +65,7 @@ jobs:
             . \
           | tar -C /deploy -xpf -
 
-      - name: "Sanity: ist /deploy vorhanden?"
-        run: |
-          set -e
-          ls -ld /deploy || (echo "/deploy fehlt – Runner config.yaml greift nicht."; exit 1)
+
 
       - name: Delete only previously-deployed-but-now-missing
         shell: bash
