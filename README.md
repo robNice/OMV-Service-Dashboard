@@ -29,3 +29,7 @@ die zweite die einzelnen Dienste (services) die der Kategorie untergeordnet sind
 }
 
 ```
+
+## deploy.yml
+
+Deployment der Landingpage direkt zu /opt/OMV-landingpage
