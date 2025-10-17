@@ -13,6 +13,27 @@ jobs:
         run: |
           echo "192.168.1.2 git.cube.fritz.box" >> /etc/hosts
           getent hosts git.cube.fritz.box
+
+      - name: CA installieren
+        env:
+          INTERNAL_CA_PEM: ${{ secrets.INTERNAL_CA_PEM }}
+        run: |
+          set -e
+          if command -v apt-get >/dev/null 2>&1; then
+            apt-get update
+            apt-get install -y --no-install-recommends ca-certificates
+          elif command -v apk >/dev/null 2>&1; then
+            apk add --no-cache ca-certificates
+          fi
+          mkdir -p /usr/local/share/ca-certificates
+          printf '%s\n' "$INTERNAL_CA_PEM" > /usr/local/share/ca-certificates/internal-ca.crt
+          update-ca-certificates || true
+
+          # git explizit auf das System-Bundle zeigen (hilft in manchen Minimal-Images)
+          if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
+            git config --global http."https://git.cube.fritz.box/".sslCAInfo /etc/ssl/certs/ca-certificates.crt
+          fi
+
       - name: Check out
         uses: actions/checkout@v4
 
