@@ -48,18 +48,31 @@ jobs:
 
       
 
-      - name: Copy repo -> /deploy (no rsync, no apt)
+      - name: "Copy repo -> /deploy (no rsync, no tar)"
         shell: bash
         run: |
           set -euo pipefail
-          tar -C . -cf - \
-            --exclude=.git \
-            --exclude=.forgejo \
-            --exclude=.deploy-manifest.txt \
-            . \
-          | tar -C /deploy -xpf -
+          SRC="."
+          DST="/deploy"
 
+          # 1) Ordnerstruktur im Ziel anlegen (ohne .git/.forgejo/Manifest)
+          find "$SRC" -mindepth 1 \
+            -path './.git' -prune -o \
+            -path './.forgejo' -prune -o \
+            -name '.deploy-manifest.txt' -prune -o \
+            -type d -print0 \
+          | xargs -0 -I{} mkdir -p "$DST/{}"
 
+          # 2) Dateien kopieren/überschreiben, ohne Owner/Mode/Timestamps zu ändern
+          find "$SRC" -mindepth 1 \
+            -path './.git' -prune -o \
+            -path './.forgejo' -prune -o \
+            -name '.deploy-manifest.txt' -prune -o \
+            -type f -print0 \
+          | xargs -0 -I{} cp --parents --force --no-preserve=mode,ownership,timestamps "{}" "$DST"
+      
+      
+      
 
       - name: Delete only previously-deployed-but-now-missing
         shell: bash
