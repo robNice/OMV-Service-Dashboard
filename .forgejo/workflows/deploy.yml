@@ -55,7 +55,7 @@ jobs:
             . \
           | tar -C /deploy -xpf -
 
-      - name: "Sanity: /deploy vorhanden?"
+      - name: "Sanity: ist /deploy vorhanden?"
         run: |
           set -e
           ls -ld /deploy || (echo "/deploy fehlt – Runner config.yaml greift nicht."; exit 1)
