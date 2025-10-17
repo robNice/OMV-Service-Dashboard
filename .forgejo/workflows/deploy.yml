@@ -9,6 +9,25 @@ jobs:
     runs-on: ["docker"]   # dein Label
 
     steps:
+
+      - name: Forgejo in /etc/hosts eintragen
+        run: |
+          echo "${{ secrets.FORGEJO_IP }} git.cube.fritz.box" >> /etc/hosts
+          getent hosts git.cube.fritz.box
+
+      - name: CA bereitstellen (falls Runner-Env nicht greift)
+        env:
+          INTERNAL_CA_PEM: ${{ secrets.INTERNAL_CA_PEM }}
+        run: |
+          apt-get update || true
+          apt-get install -y --no-install-recommends ca-certificates || true
+          mkdir -p /usr/local/share/ca-certificates
+          printf '%s\n' "$INTERNAL_CA_PEM" > /usr/local/share/ca-certificates/internal-ca.crt
+          update-ca-certificates || true
+          [ -f /etc/ssl/certs/ca-certificates.crt ] && \
+            git config --global http."https://git.cube.fritz.box/".sslCAInfo /etc/ssl/certs/ca-certificates.crt
+      
+
       - uses: actions/checkout@v4
 
       - name: Install rsync
