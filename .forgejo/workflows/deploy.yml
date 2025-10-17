@@ -12,6 +12,13 @@ jobs:
       SSL_CERT_FILE:  /etc/ssl/certs/omv-ca-bundle.crt
 
     steps:
+      - name: "Sanity: CA & /deploy vorhanden?"
+        run: |
+          set -e
+          echo "whoami/id:"; whoami || true; id
+          [ -r /etc/ssl/certs/omv-ca-bundle.crt ] || (echo "CA-Bundle fehlt!"; exit 1)
+          ls -ld /deploy || (echo "/deploy fehlt!"; exit 1)        
+
       - uses: actions/checkout@v4
 
       - name: "Sanity: ist /deploy vorhanden?"
