@@ -1,104 +1,20 @@
-name: Deploy live to OMV
+- uses: actions/checkout@v4
 
-on:
-  push:
-    branches: ["live"]
-  workflow_dispatch: {}
+- name: Install rsync
+  run: |
+    apt-get update && apt-get install -y --no-install-recommends rsync
 
-jobs:
-  deploy:
-    runs-on: ["docker"]  # Dein Runner-Label
+- name: Copy to mounted target
+  run: |
+    rsync -rltD --delete --omit-dir-times --no-perms \
+      --exclude '.git' --exclude '.forgejo' \
+      ./ /deploy/
 
-    env:
-      GIT_HOST: git.cube.fritz.box
-
-    steps:
-      # 0) Netz/DNS im Job-Container fixen
-      - name: Netz-Fixes (DNS + /etc/hosts)
-        run: |
-          # DNS für apt & ssh (nutze deinen lokalen DNS)
-          if [ -n "${{ secrets.DNS_IP }}" ]; then
-            printf 'nameserver %s\noptions ndots:0\n' "${{ secrets.DNS_IP }}" > /etc/resolv.conf
-          fi
-          # FQDN der Forgejo-Instanz auflösen
-          if [ -n "${{ secrets.FORGEJO_IP }}" ]; then
-            echo "${{ secrets.FORGEJO_IP }} ${GIT_HOST}" >> /etc/hosts
-          fi
-          getent hosts "${GIT_HOST}"
-
-      # 1) Interne CA einspielen, damit HTTPS-Checkout klappt
-      - name: Interne CA installieren
-        env:
-          INTERNAL_CA_PEM: ${{ secrets.INTERNAL_CA_PEM }}
-        run: |
-          set -e
-          apt-get update || true
-          apt-get install -y --no-install-recommends ca-certificates || true
-          mkdir -p /usr/local/share/ca-certificates
-          printf '%s\n' "$INTERNAL_CA_PEM" > /usr/local/share/ca-certificates/internal-ca.crt
-          update-ca-certificates || true
-          # Git explizit auf Systembundle zeigen (falls Minimal-Image)
-          if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
-            git config --global http."https://${GIT_HOST}/".sslCAInfo /etc/ssl/certs/ca-certificates.crt
-          fi
-
-      # 2) Checkout
-      - name: Check out
-        uses: actions/checkout@v4
-
-      # 3) SSH + rsync installieren
-      - name: Install ssh + rsync
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends openssh-client rsync
-
-      # 4) SSH-Key + Client-Konfig anlegen (kein separater "Trust host" Step nötig)
-      - name: SSH konfigurieren
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_USER:        ${{ secrets.SSH_USER }}
-          SSH_PORT:        ${{ secrets.SSH_PORT }}
-          SSH_HOST:        ${{ secrets.SSH_HOST }}   # z.B. 127.0.0.1
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          # Temporäre Host-Config: IPv4 erzwingen, Port/Benutzer setzen, Hostkey auto-accept (nur NEUE Keys)
-          cat > /root/.ssh/config <<EOF
-          Host omv
-            HostName ${SSH_HOST}
-            Port ${SSH_PORT}
-            User ${SSH_USER}
-            AddressFamily inet
-            StrictHostKeyChecking accept-new
-            UserKnownHostsFile ~/.ssh/known_hosts
-            IdentitiesOnly yes
-            IdentityFile ~/.ssh/id_ed25519
-          EOF
-          chmod 600 /root/.ssh/config
-          # Smoke-Test (nicht failen lassen, nur Diagnose)
-          ssh -F /root/.ssh/config -o ConnectTimeout=5 omv 'echo OK || true' || true
-
-      # 5) Deploy via rsync (als Ziel-User; keine Rechteänderung!)
-      - name: Deploy to target dir
-        env:
-          TARGET_DIR: ${{ secrets.TARGET_DIR }}
-        run: |
-          rsync -a --delete \
-            --exclude '.git' \
-            --exclude '.forgejo' \
-            -e "ssh -F /root/.ssh/config" \
-            ./ "omv:${TARGET_DIR}/"
-
-      # 6) Optional: Compose neu starten (falls vorhanden)
-      - name: Rebuild & restart (docker compose)
-        env:
-          TARGET_DIR: ${{ secrets.TARGET_DIR }}
-        run: |
-          ssh -F /root/.ssh/config omv "cd '${TARGET_DIR}' && \
-            if [ -f docker-compose.yml ] || [ -f compose.yml ]; then \
-              (docker compose up -d --build || docker-compose up -d --build) ; \
-            else \
-              echo 'No compose file – skipping rebuild'; \
-            fi"
+- name: Rebuild & restart
+  run: |
+    cd /deploy && \
+    if [ -f docker-compose.yml ] || [ -f compose.yml ]; then
+      docker compose up -d --build || docker-compose up -d --build
+    else
+      echo "No compose file – skipping rebuild"
+    fi
