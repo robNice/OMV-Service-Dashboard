@@ -10,20 +10,22 @@ jobs:
 
     steps:
 
-      - name: CA bereitstellen (falls Runner-Env nicht greift)
-        env:
-          INTERNAL_CA_PEM: ${{ secrets.INTERNAL_CA_PEM }}
+      - name: "Configure Git CA (optional)"
         run: |
-          apt-get update || true
-          apt-get install -y --no-install-recommends ca-certificates || true
-          mkdir -p /usr/local/share/ca-certificates
-          printf '%s\n' "$INTERNAL_CA_PEM" > /usr/local/share/ca-certificates/internal-ca.crt
-          update-ca-certificates || true
-          [ -f /etc/ssl/certs/ca-certificates.crt ] && \
-            git config --global http."https://git.cube.fritz.box/".sslCAInfo /etc/ssl/certs/ca-certificates.crt
-      
+          git config --global http."https://git.cube.fritz.box/".sslCAInfo /etc/ssl/certs/omv-ca-bundle.crt
+          git config --global http.sslbackend openssl || true
 
       - uses: actions/checkout@v4
+
+      - name: "Sanity: ist /deploy vorhanden?"
+        run: |
+          set -e
+          echo "whoami/id:"
+          whoami || true; id
+          echo "Mounts (grep /deploy):"
+          cat /proc/self/mounts | grep '/deploy' || true
+          ls -ld /deploy || (echo "/deploy fehlt – bitte container.options in /data/config.yaml prüfen."; exit 1)
+
 
       - name: Build repo file list
         shell: bash
@@ -40,15 +42,7 @@ jobs:
           echo "Repo items: $(wc -l < "$REPO_LIST")"
 
 
-      - name: "Sanity: ist /deploy vorhanden?"
-        run: |
-          set -e
-          echo "whoami/id:"
-          whoami || true; id
-          echo "Mounts (grep /deploy):"
-          cat /proc/self/mounts | grep '/deploy' || true
-          ls -ld /deploy || (echo "/deploy fehlt – bitte container.options in /data/config.yaml prüfen."; exit 1)
-
+      
 
       - name: Copy repo -> /deploy (no rsync, no apt)
         shell: bash
