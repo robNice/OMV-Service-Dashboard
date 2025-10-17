@@ -6,15 +6,12 @@ on:
 
 jobs:
   deploy:
-    runs-on: ["docker"]   # dein Label
+    runs-on: ["docker"]
+    env:
+      GIT_SSL_CAINFO: /etc/ssl/certs/omv-ca-bundle.crt
+      SSL_CERT_FILE:  /etc/ssl/certs/omv-ca-bundle.crt
 
     steps:
-
-      - name: "Configure Git CA (optional)"
-        run: |
-          git config --global http."https://git.cube.fritz.box/".sslCAInfo /etc/ssl/certs/omv-ca-bundle.crt
-          git config --global http.sslbackend openssl || true
-
       - uses: actions/checkout@v4
 
       - name: "Sanity: ist /deploy vorhanden?"
