@@ -36,7 +36,7 @@
     if (m) {
       const slug = decodeURIComponent(m[1]);
       const candidates = [
-        `/assets/backgrounds/section-${slug}.jpg`,
+        //`/assets/backgrounds/section-${slug}.jpg`,
         `/assets/backgrounds/${slug}.jpg`,
         '/assets/backgrounds/_default.png'
       ];
