@@ -115,35 +115,18 @@ jobs:
           cp /tmp/repo_list.txt "$PREV_MAN"
 
 
-      # Docker CLI + Compose Plugin (statisch) laden – keine root-Rechte nötig
-      - name: Get Docker CLI + Compose plugin
-        env:
-          DOCKER_VERSION: "27.2.0"
-          COMPOSE_VERSION: "2.29.7"
-        run: |
-          set -euo pipefail
-          mkdir -p /tmp/docker/cli-plugins
-          curl -fsSL "https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz" \
-            | tar -xz -C /tmp/docker --strip-components=1
-          curl -fsSL -o /tmp/docker/cli-plugins/docker-compose \
-            "https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64"
-          chmod +x /tmp/docker/cli-plugins/docker-compose
-          /tmp/docker/docker version
-          /tmp/docker/docker compose version
-
-      # Nur down + up -d --build im /deploy Verzeichnis
-      - name: Rebuild (compose down + up -d --build)
+      - name: "Rebuild (compose down + up -d --build)"
         env:
           DOCKER_HOST: "unix:///var/run/docker.sock"
         run: |
           set -euo pipefail
           cd /deploy
-          # wähle die Compose-Datei, die existiert
           FILE=""
           if [ -f docker-compose.yml ]; then FILE=docker-compose.yml; elif [ -f compose.yml ]; then FILE=compose.yml; fi
           if [ -n "$FILE" ]; then
-            /tmp/docker/docker compose -f "$FILE" down
-            /tmp/docker/docker compose -f "$FILE" up -d --build
+            /tmp/docker/cli-plugins/docker-compose -f "$FILE" down
+            /tmp/docker/cli-plugins/docker-compose -f "$FILE" up -d --build
           else
             echo "No compose file found in /deploy – skipping rebuild"
           fi
+
