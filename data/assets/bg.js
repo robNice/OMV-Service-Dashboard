@@ -3,11 +3,11 @@
  * Picks a thematically fitting blurred background per view.
  *
  * Convention:
- *   - Home (/) uses:           /data/backgrounds/_home.jpg
+ *   - Home (/) uses:           /backgrounds/_home.jpg
  *   - Section (/section/:slug) uses (first match wins):
- *         /data/backgrounds/section-:slug.jpg
- *         /data/backgrounds/:slug.jpg
- *         /data/backgrounds/_default.jpg
+ *         /backgrounds/section-:slug.jpg
+ *         /backgrounds/:slug.jpg
+ *         /backgrounds/_default.jpg
  *
  * You can override on any page by placing
  *   <meta name="omv-bg" content="/data/backgrounds/custom.jpg">
@@ -27,7 +27,7 @@
     const path = location.pathname.replace(/\/+/g,'/').replace(/\/$/,'') || '/';
 
     if (path === '/') {
-      setVar('/data/backgrounds/_home.png');
+      setVar('/backgrounds/_home.png');
       return;
     }
 
@@ -36,16 +36,16 @@
     if (m) {
       const slug = decodeURIComponent(m[1]);
       const candidates = [
-        `/data/backgrounds/section-${slug}.jpg`,
-        `/data/backgrounds/${slug}.jpg`,
-        '/data/backgrounds/_default.png'
+        `/backgrounds/section-${slug}.jpg`,
+        `/backgrounds/${slug}.jpg`,
+        '/backgrounds/_default.png'
       ];
       pickFirstExisting(candidates).then(setVar);
       return;
     }
 
     // Fallback for any other route
-    setVar('/data/backgrounds/_default.png');
+    setVar('/backgrounds/_default.png');
 
     function setVar(url){
       if (!url) return;
