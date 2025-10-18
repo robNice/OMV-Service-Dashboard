@@ -32,14 +32,8 @@ jobs:
 
       - name: "Git pull live (SSH Deploy-Key) -> /opt/omv-landingpage"
         env:
-          REPO_SSH: "ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git"            # z. B. git@git.cube.fritz.box:owner/repo.git
-          SSH_PRIVKEY: "-----BEGIN OPENSSH PRIVATE KEY-----
-    b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-    QyNTUxOQAAACD8/Au8H3q78Quv3hU4aJMNNsPnnheSPSeoXUk8ZurM2QAAAJDvPDiv7zw4
-    rwAAAAtzc2gtZWQyNTUxOQAAACD8/Au8H3q78Quv3hU4aJMNNsPnnheSPSeoXUk8ZurM2Q
-    AAAEDYJQ7a9teGT2rrWY8BR1dDkW3tHt4XC1WO8GWK+mTgtfz8C7wfervxC6/eFThokw02
-    w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
-    -----END OPENSSH PRIVATE KEY-----"
+          REPO_SSH: ${{ secrets.DEPLOY_REPO_SSH }}
+          SSH_PRIVKEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           SSH_KNOWN: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
           SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
           BRANCH: "live"
