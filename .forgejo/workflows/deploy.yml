@@ -59,11 +59,11 @@ jobs:
           /tmp/docker/docker/docker run --rm -v "${TARGET_DIR}":/dst alpine:3 sh -ceu '
             [ -f /dst/.deploy_target ] || { echo "Missing .deploy_target in ${TARGET_DIR}"; exit 3; }
           '
-          # Backup des aktuellen Zustands
-          TS="$(date +%Y%m%d_%H%M%S)"
+          # Backup des aktuellen Zustands (Timestamp IM Container erzeugen)
           /tmp/docker/docker/docker run --rm -v "${TARGET_DIR}":/dst -v /opt:/opt-host alpine:3 sh -ceu '
             set -eux
             cd /dst
+            TS="$(date +%Y%m%d_%H%M%S)"
             tar -czf "/opt-host/omv-landingpage._backup_${TS}.tgz" . || true
           '
           # Sync: Dateien vom Repo ins Ziel kopieren (keine Full-Deletes)
