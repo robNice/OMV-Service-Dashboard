@@ -47,16 +47,28 @@ jobs:
               set -euxo pipefail
               apk add --no-cache git openssh ca-certificates docker-cli docker-cli-compose
           
-              # known_hosts füllen (falls nicht per Secret gekommen)
+              # Einheitlicher Key-Name im Container
+              SSH_KEY_FILE=/root/.ssh/deploy_key
+          
+              # Falls der Host den Key unter anderem Namen gemountet hat, normalisieren:
+              if [ -f /root/.ssh/forgejo_deploy ]; then mv /root/.ssh/forgejo_deploy "$SSH_KEY_FILE"; fi
+              if [ -f /root/.ssh/*_deploy ] 2>/dev/null; then mv /root/.ssh/*_deploy "$SSH_KEY_FILE" || true; fi
+              chmod 600 "$SSH_KEY_FILE"
+          
+              # known_hosts befüllen (falls nicht per Secret geliefert)
               if [ ! -s /root/.ssh/known_hosts ]; then
                 ssh-keyscan -T 5 -p 2222 -t ed25519 git.cube.fritz.box \
                   | sed -E "s/^git\.cube\.fritz\.box/\[git.cube.fritz.box]:2222/" \
                   > /root/.ssh/known_hosts
                 chmod 644 /root/.ssh/known_hosts
               fi
-
-              export GIT_SSH_COMMAND="ssh -i /root/.ssh/forgejo_deploy -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
-
+          
+              # Sanity-Checks (loggen nur harmlose Infos)
+              ls -l /root/.ssh
+              head -n1 "$SSH_KEY_FILE" | sed "s/OPENSSH/OPENSSH/"
+          
+              export GIT_SSH_COMMAND="ssh -i $SSH_KEY_FILE -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
+          
               # Repo direkt im Host-Zielpfad aktualisieren
               mkdir -p "$PROJECT_DIR"
               cd "$PROJECT_DIR"
@@ -66,11 +78,12 @@ jobs:
               git remote set-url origin "$REPO_URL"
               git fetch --prune origin
               git reset --hard "origin/${BRANCH}"
-
-              # Re-Deploy (spricht den Host-Docker über den gemounteten Socket an)
+          
+              # Re-Deploy
               docker compose down || true
               docker compose up -d --build
               docker compose ps
             '
-
+          
+          
           rm -rf "$CI_SSH_DIR"
