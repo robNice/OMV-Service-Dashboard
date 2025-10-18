@@ -2,7 +2,7 @@ name: Deploy OMV Landingpage
 
 on:
   push:
-    branches: ["live"]
+    branches: [ live ]
 
 jobs:
   deploy:
