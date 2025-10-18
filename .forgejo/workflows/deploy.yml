@@ -131,12 +131,11 @@ jobs:
 
 
       - name: Recreate landingpage (compose down + up -d --build)
+        working-directory: ${{ github.workspace }}
         shell: bash
         run: |
           set -euo pipefail
-          cd /opt/omv-landingpage
-          docker compose down --remove-orphans || true
-          docker rm -f omv-landingpage 2>/dev/null || true
-          docker compose up -d --build
+          /tmp/compose/docker-compose -p omv-landingpage down --remove-orphans || true
+          /tmp/compose/docker-compose -p omv-landingpage up -d --build
 
 
