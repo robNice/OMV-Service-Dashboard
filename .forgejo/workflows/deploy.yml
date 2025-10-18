@@ -2,19 +2,16 @@ name: Deploy OMV Landingpage
 
 on:
   push:
-    branches: [ live ]   # ["live"] wäre auch ok
+    branches: [ live ]
 
 jobs:
   deploy:
     runs-on: docker
 
-    # >>> WICHTIG: Job läuft in einem Image mit Docker-CLI
+    # Job läuft in einem Container, der die Docker-CLI bereits mitbringt.
+    # KEINE additional "options:" mit -v! (verursacht die Duplicate-/Invalid-Fehler)
     container:
-      image: docker:27.2.0-cli       # Alpine-basiert, docker CLI bereits drin
-      options: >-
-        --network host
-        -v /var/run/docker.sock:/var/run/docker.sock
-        -v /opt:/opt
+      image: docker:27.2.0-cli   # Alpine-basiert, docker bereits vorhanden
 
     steps:
       - name: Install git + ssh in job container
@@ -36,39 +33,53 @@ jobs:
         run: |
           set -euxo pipefail
 
-          # --- SSH vorbereiten (im Job-Container laufen wir als root)
-          install -d -m 700 /root/.ssh
-          printf '%s' "$DEPLOY_SSH_PRIVATE_KEY" > /root/.ssh/forgejo_deploy
-          chmod 600 /root/.ssh/forgejo_deploy
-          # CRLF-Schutz
-          tr -d '\r' < /root/.ssh/forgejo_deploy > /tmp/k && mv /tmp/k /root/.ssh/forgejo_deploy
-
-          # known_hosts: Secret bevorzugt; sonst sicher via ssh-keyscan (Port 2222)
+          # SSH-Material temporär für den Toolbox-Container vorbereiten
+          CI_SSH_DIR="$(mktemp -d)"
+          install -d -m 700 "$CI_SSH_DIR"
+          printf '%s' "$DEPLOY_SSH_PRIVATE_KEY" > "$CI_SSH_DIR/forgejo_deploy"
+          chmod 600 "$CI_SSH_DIR/forgejo_deploy"
+          tr -d '\r' < "$CI_SSH_DIR/forgejo_deploy" > "$CI_SSH_DIR/k" && mv "$CI_SSH_DIR/k" "$CI_SSH_DIR/forgejo_deploy"
           if [ -n "${DEPLOY_KNOWN_HOSTS:-}" ]; then
-            printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > /root/.ssh/known_hosts
+            printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$CI_SSH_DIR/known_hosts"
+            chmod 644 "$CI_SSH_DIR/known_hosts"
           else
-            ssh-keyscan -p 2222 -t ed25519 git.cube.fritz.box \
-              | sed -E 's/^git\.cube\.fritz\.box/[git.cube.fritz.box]:2222/' \
-              > /root/.ssh/known_hosts
+            : > "$CI_SSH_DIR/known_hosts"
           fi
-          chmod 644 /root/.ssh/known_hosts
 
-          export GIT_SSH_COMMAND='ssh -i /root/.ssh/forgejo_deploy -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes'
+          # Toolbox-Container führt den eigentlichen Deploy auf dem Host aus
+          docker run --rm -u 0:0 \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v /opt:/opt \
+            -v "$CI_SSH_DIR":/root/.ssh \
+            -e REPO_URL -e BRANCH -e PROJECT_DIR \
+            alpine:3.22 sh -lc '
+              set -euxo pipefail
+              apk add --no-cache git openssh ca-certificates docker-cli docker-cli-compose
 
-          # --- Repo im Host-Zielpfad aktualisieren (wir sehen /opt dank Mount)
-          mkdir -p "$PROJECT_DIR"
-          cd "$PROJECT_DIR"
+              # known_hosts füllen (falls nicht aus Secret gekommen)
+              if [ ! -s /root/.ssh/known_hosts ]; then
+                ssh-keyscan -p 2222 -t ed25519 git.cube.fritz.box \
+                  | sed -E "s/^git\.cube\.fritz\.box/\[git.cube.fritz.box]:2222/" \
+                  > /root/.ssh/known_hosts
+                chmod 644 /root/.ssh/known_hosts
+              fi
 
-          if [ ! -d .git ]; then
-            git clone "$REPO_URL" .
-          fi
-          git remote set-url origin "$REPO_URL"
-          git fetch --prune origin
-          git reset --hard "origin/${BRANCH}"
-          # optional:
-          # git clean -fdx
+              export GIT_SSH_COMMAND="ssh -i /root/.ssh/forgejo_deploy -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
 
-          # --- Re-Deploy (Docker Compose spricht den Host-Daemon über /var/run/docker.sock an)
-          docker compose down || true
-          docker compose up -d --build
-          docker compose ps
+              # Repo direkt auf dem Hostpfad aktualisieren
+              mkdir -p "$PROJECT_DIR"
+              cd "$PROJECT_DIR"
+              if [ ! -d .git ]; then
+                git clone "$REPO_URL" .
+              fi
+              git remote set-url origin "$REPO_URL"
+              git fetch --prune origin
+              git reset --hard "origin/${BRANCH}"
+
+              # Re-Deploy (spricht den Host-Docker über den gemounteten Socket an)
+              docker compose down || true
+              docker compose up -d --build
+              docker compose ps
+            '
+
+          rm -rf "$CI_SSH_DIR"
