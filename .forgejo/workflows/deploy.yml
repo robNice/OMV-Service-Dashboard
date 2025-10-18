@@ -49,10 +49,10 @@ jobs:
 
               mkdir -p /root/.ssh
               chmod 700 /root/.ssh
-              printf %s "$SSH_PRIVKEY" > /root/.ssh/id_ed25519
-              chmod 600 /root/.ssh/id_ed25519
+              printf %s "$SSH_PRIVKEY" > /root/.ssh/forgejo_deploy
+              chmod 600 /root/.ssh/forgejo_deploy
 
-              GIT_SSH_OPTS="-i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes"
+              GIT_SSH_OPTS="-i /root/.ssh/forgejo_deploy -o IdentitiesOnly=yes"
               if [ -n "${SSH_KNOWN:-}" ]; then
                 printf %s "$SSH_KNOWN" > /root/.ssh/known_hosts
                 chmod 644 /root/.ssh/known_hosts
