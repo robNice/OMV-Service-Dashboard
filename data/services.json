@@ -1,8 +1,8 @@
 {
   "sections": [
     {
-      "id": "mediass",
-      "title": "Media",
+      "id": "media",
+      "title": "Medias",
       "thumbnail": "assets/media.png",
       "services": [
         {
