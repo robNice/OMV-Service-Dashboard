@@ -8,7 +8,6 @@ jobs:
   deploy:
     runs-on: ["docker"]
     env:
-      # Optional CA bundle if your runner uses a custom CA
       GIT_SSL_CAINFO: /etc/ssl/certs/omv-ca-bundle.crt
       SSL_CERT_FILE:  /etc/ssl/certs/omv-ca-bundle.crt
 
@@ -18,7 +17,6 @@ jobs:
           set -e
           [ -S /var/run/docker.sock ] || (echo "Docker socket fehlt!"; exit 1)
 
-      # 1) Git pull/clone via SSH Deploy-Key direkt nach /opt/omv-landingpage
       - name: "Git pull live (SSH Deploy-Key) -> /opt/omv-landingpage"
         env:
           REPO_SSH: "ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git"            # z. B. git@git.cube.fritz.box:owner/repo.git
@@ -28,9 +26,9 @@ QyNTUxOQAAACD8/Au8H3q78Quv3hU4aJMNNsPnnheSPSeoXUk8ZurM2QAAAJDvPDiv7zw4
 rwAAAAtzc2gtZWQyNTUxOQAAACD8/Au8H3q78Quv3hU4aJMNNsPnnheSPSeoXUk8ZurM2Q
 AAAEDYJQ7a9teGT2rrWY8BR1dDkW3tHt4XC1WO8GWK+mTgtfz8C7wfervxC6/eFThokw02
 w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
------END OPENSSH PRIVATE KEY-----"   # Inhalt des privaten ED25519-Keys
-          SSH_KNOWN: ${{ secrets.DEPLOY_KNOWN_HOSTS }}        # optional: Output von `ssh-keyscan git.cube.fritz.box`
-          SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}            # optional: Hostname für ssh-keyscan
+-----END OPENSSH PRIVATE KEY-----"
+          SSH_KNOWN: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
           BRANCH: "live"
         shell: bash
         run: |
@@ -42,46 +40,43 @@ w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
               set -eux
               apk add --no-cache git openssh-client ca-certificates
 
-              # SSH vorbereiten
               mkdir -p /root/.ssh
               chmod 700 /root/.ssh
-              printf '"'"'%s
-  '"'"' "$SSH_PRIVKEY" > /root/.ssh/id_ed25519
-  chmod 600 /root/.ssh/id_ed25519
-  
-  if [ -n "${SSH_KNOWN:-}" ]; then
-  printf '"'"'%s
-  '"'"' "$SSH_KNOWN" > /root/.ssh/known_hosts
-  else
-  ssh-keyscan -T 10 "${SSH_HOST:-git.cube.fritz.box}" > /root/.ssh/known_hosts 2>/dev/null
-  fi
-  chmod 644 /root/.ssh/known_hosts
-  
-  export GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
-  
-  if [ ! -d .git ]; then
-  git init .
-  git remote add origin "$REPO_SSH"
-  git fetch --depth=1 origin "$BRANCH"
-  git checkout -B "$BRANCH" FETCH_HEAD
-  else
-  git remote set-url origin "$REPO_SSH"
-  git fetch origin "$BRANCH"
-  git reset --hard "origin/$BRANCH"
-  fi
-  
-  git submodule update --init --recursive || true
-  git status --porcelain -b
-  '
+              # Schlüssel schreiben (ohne komplizierte Quotes)
+              printf %s "$SSH_PRIVKEY" > /root/.ssh/id_ed25519
+              chmod 600 /root/.ssh/id_ed25519
 
-# 2) Compose recreate im Host-Verzeichnis
-- name: "Compose down+up (build) in /opt/omv-landingpage"
-  env:
-    DOCKER_CONFIG: "/tmp/.docker"
-    HOME: "/tmp"
-  shell: bash
-  run: |
-    set -euo pipefail
-    mkdir -p "$DOCKER_CONFIG"
-    docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage down --remove-orphans || true
-    docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage up -d --build
+              if [ -n "${SSH_KNOWN:-}" ]; then
+                printf %s "$SSH_KNOWN" > /root/.ssh/known_hosts
+              else
+                ssh-keyscan -T 10 "${SSH_HOST:-git.cube.fritz.box}" > /root/.ssh/known_hosts 2>/dev/null
+              fi
+              chmod 644 /root/.ssh/known_hosts
+
+              export GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
+
+              if [ ! -d .git ]; then
+                git init .
+                git remote add origin "$REPO_SSH"
+                git fetch --depth=1 origin "$BRANCH"
+                git checkout -B "$BRANCH" FETCH_HEAD
+              else
+                git remote set-url origin "$REPO_SSH"
+                git fetch origin "$BRANCH"
+                git reset --hard "origin/$BRANCH"
+              fi
+
+              git submodule update --init --recursive || true
+              git status --porcelain -b
+            '
+
+      - name: "Compose down+up (build) in /opt/omv-landingpage"
+        env:
+          DOCKER_CONFIG: "/tmp/.docker"
+          HOME: "/tmp"
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$DOCKER_CONFIG"
+          docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage down --remove-orphans || true
+          docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage up -d --build
