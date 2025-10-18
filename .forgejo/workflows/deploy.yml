@@ -8,21 +8,11 @@ jobs:
   deploy:
     runs-on: docker
 
-    # Job läuft in einem Container, der die Docker-CLI bereits mitbringt.
-    # KEINE additional "options:" mit -v! (verursacht die Duplicate-/Invalid-Fehler)
+    # Job-Container mit Docker-CLI – sonst nichts.
     container:
-      image: docker:27.2.0-cli   # Alpine-basiert, docker bereits vorhanden
+      image: docker:27.2.0-cli
 
     steps:
-      - name: Install git + ssh in job container
-        run: |
-          set -eux
-          apk add --no-cache git openssh ca-certificates docker-cli-compose
-          git --version
-          ssh -V || true
-          docker version
-          docker compose version || true
-
       - name: Deploy to OMV host (/opt/omv-landingpage)
         env:
           REPO_URL: ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git
@@ -46,7 +36,7 @@ jobs:
             : > "$CI_SSH_DIR/known_hosts"
           fi
 
-          # Toolbox-Container führt den eigentlichen Deploy auf dem Host aus
+          # Toolbox-Container macht den eigentlichen Deploy direkt auf dem Host
           docker run --rm -u 0:0 \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v /opt:/opt \
@@ -56,7 +46,7 @@ jobs:
               set -euxo pipefail
               apk add --no-cache git openssh ca-certificates docker-cli docker-cli-compose
 
-              # known_hosts füllen (falls nicht aus Secret gekommen)
+              # known_hosts füllen (falls nicht per Secret gekommen)
               if [ ! -s /root/.ssh/known_hosts ]; then
                 ssh-keyscan -p 2222 -t ed25519 git.cube.fritz.box \
                   | sed -E "s/^git\.cube\.fritz\.box/\[git.cube.fritz.box]:2222/" \
@@ -66,7 +56,7 @@ jobs:
 
               export GIT_SSH_COMMAND="ssh -i /root/.ssh/forgejo_deploy -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
 
-              # Repo direkt auf dem Hostpfad aktualisieren
+              # Repo direkt im Host-Zielpfad aktualisieren
               mkdir -p "$PROJECT_DIR"
               cd "$PROJECT_DIR"
               if [ ! -d .git ]; then
