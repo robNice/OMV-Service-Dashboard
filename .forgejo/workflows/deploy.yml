@@ -48,44 +48,24 @@ jobs:
             ls -ld /host/omv-landingpage
           '
 
-      - name: "Safe mirror repo -> /opt/omv-landingpage (backup + sync)"
+      - name: "Mirror repo -> /opt/omv-landingpage (tar-stream sync, no delete, no backups)"
         env:
           TARGET_DIR: "/opt/omv-landingpage"
         shell: bash
         run: |
           set -euo pipefail
-          [ -n "${TARGET_DIR}" ] && [ "${TARGET_DIR}" = "/opt/omv-landingpage" ] || { echo "Unsafe TARGET_DIR"; exit 2; }
+          SRC="${GITHUB_WORKSPACE:-$PWD}"
           # Guard vorhanden?
           /tmp/docker/docker/docker run --rm -v "${TARGET_DIR}":/dst alpine:3 sh -ceu '
             [ -f /dst/.deploy_target ] || { echo "Missing .deploy_target in ${TARGET_DIR}"; exit 3; }
           '
-          # Backup des aktuellen Zustands (Timestamp IM Container erzeugen)
-          /tmp/docker/docker/docker run --rm -v "${TARGET_DIR}":/dst -v /opt:/opt-host alpine:3 sh -ceu '
-            set -eux
-            cd /dst
-            TS="$(date +%Y%m%d_%H%M%S)"
-            tar -czf "/opt-host/omv-landingpage._backup_${TS}.tgz" . || true
-          '
-          # Sync: Dateien vom Repo ins Ziel kopieren (keine Full-Deletes)
-          /tmp/docker/docker/docker run --rm -v "${GITHUB_WORKSPACE:-.}":/src:ro -v "${TARGET_DIR}":/dst alpine:3 sh -ceu '
-            set -eux
-            cp -a /src/. /dst/
-            echo "--- /dst after copy ---"
-            ls -la /dst
-          '
-
-      - name: "List host dir (/opt/omv-landingpage)"
-        shell: bash
-        run: |
-          set -euo pipefail
-          /tmp/docker/docker/docker run --rm -v /opt/omv-landingpage:/w alpine:3 sh -ceu '
-            echo "--- Inhalt /w ---"; ls -la /w;
-            echo "--- mögliche Compose-Dateien ---";
-            for f in compose.yaml compose.yml docker-compose.yaml docker-compose.yml; do
-              [ -f "/w/$f" ] && echo "gefunden: $f";
-            done
-            [ -f /w/Dockerfile ] && echo "Dockerfile vorhanden."
-          '
+          # Tar-Stream Sync: überschreibt geänderte Dateien, löscht nichts
+          /tmp/docker/docker/docker run --rm             -v "${SRC}":/src:ro             -v "${TARGET_DIR}":/dst             alpine:3 sh -ceu '
+              set -eux
+              tar -C /src -cf - . | tar -C /dst -xf -
+              echo "--- /dst after sync ---"
+              ls -la /dst | head -n 200
+            '
 
       - name: "Compose down+up at host:/opt/omv-landingpage"
         env:
@@ -95,19 +75,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$DOCKER_CONFIG"
-          
           # Down (tolerant)
-          /tmp/docker/docker/docker run --rm \
-            -v /opt/omv-landingpage:/opt/omv-landingpage \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -w /opt/omv-landingpage \
-            docker/compose:latest \
-            -p omv-landingpage down --remove-orphans || true
-          
+          /tmp/docker/docker/docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage down --remove-orphans || true
           # Up (build)
-          /tmp/docker/docker/docker run --rm \
-            -v /opt/omv-landingpage:/opt/omv-landingpage \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -w /opt/omv-landingpage \
-            docker/compose:latest \
-            -p omv-landingpage up -d --build
+          /tmp/docker/docker/docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage up -d --build
