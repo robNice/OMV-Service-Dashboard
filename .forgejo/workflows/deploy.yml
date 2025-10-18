@@ -144,12 +144,24 @@ jobs:
               ls -la /dst;
             '
 
-      # Compose down + up im HOST-Pfad (nutzt docker/compose:latest)
+      # (Optional) Sichtprüfung: Was liegt wirklich auf dem Host?
+      - name: "List host dir (/opt/omv-landingpage)"
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/docker/docker/docker run --rm -v /opt/omv-landingpage:/w alpine:3 sh -ceu '
+            echo "--- Inhalt /w ---"; ls -la /w;
+            echo "--- mögliche Compose-Dateien ---";
+            for f in compose.yaml compose.yml docker-compose.yaml docker-compose.yml; do
+              [ -f "/w/$f" ] && echo "gefunden: $f";
+            done
+          '
+
+      # Compose down+up IM Verzeichnis (kein -f nötig)
       - name: "Compose down+up at host:/opt/omv-landingpage"
         env:
           DOCKER_CONFIG: "/tmp/.docker"
           HOME: "/tmp"
-          COMPOSE_TAG: "latest"   # alternativ: z.B. "2.29.2"
         shell: bash
         run: |
           set -euo pipefail
@@ -159,18 +171,19 @@ jobs:
           /tmp/docker/docker/docker run --rm \
             -v /opt/omv-landingpage:/workspace \
             -v /var/run/docker.sock:/var/run/docker.sock \
-            docker/compose:${COMPOSE_TAG} \
-            -f /workspace/docker-compose.yml \
+            -w /workspace \
+            docker/compose:latest \
             -p omv-landingpage down --remove-orphans || true
           
           # Up (build)
           /tmp/docker/docker/docker run --rm \
             -v /opt/omv-landingpage:/workspace \
             -v /var/run/docker.sock:/var/run/docker.sock \
-            docker/compose:${COMPOSE_TAG} \
-            -f /workspace/docker-compose.yml \
+            -w /workspace \
+            docker/compose:latest \
             -p omv-landingpage up -d --build
-
+    
+    
 
 
 
