@@ -49,13 +49,12 @@ w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
           : "${REPO_SSH:?Secret DEPLOY_REPO_SSH fehlt (z. B. git@git.cube.fritz.box:owner/repo.git)}"
           : "${SSH_PRIVKEY:?Secret DEPLOY_SSH_PRIVATE_KEY fehlt (privater ED25519 Deploy-Key, ohne Passphrase)}"
 
-          docker run --rm             -e REPO_SSH             -e SSH_PRIVKEY             -e SSH_KNOWN             -e SSH_HOST             -e BRANCH             -v /opt/omv-landingpage:/repo             -w /repo             alpine:3 sh -ceu '
+          /tmp/docker/docker/docker run --rm             -e REPO_SSH             -e SSH_PRIVKEY             -e SSH_KNOWN             -e SSH_HOST             -e BRANCH             -v /opt/omv-landingpage:/repo             -w /repo             alpine:3 sh -ceu '
               set -eux
               apk add --no-cache git openssh-client ca-certificates
 
               mkdir -p /root/.ssh
               chmod 700 /root/.ssh
-              # Schlüssel schreiben (ohne komplizierte Quotes)
               printf %s "$SSH_PRIVKEY" > /root/.ssh/id_ed25519
               chmod 600 /root/.ssh/id_ed25519
 
@@ -91,5 +90,5 @@ w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
         run: |
           set -euo pipefail
           mkdir -p "$DOCKER_CONFIG"
-          docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage down --remove-orphans || true
-          docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage up -d --build
+          /tmp/docker/docker/docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage down --remove-orphans || true
+          /tmp/docker/docker/docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage up -d --build
