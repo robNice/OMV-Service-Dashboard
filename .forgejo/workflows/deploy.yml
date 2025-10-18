@@ -34,6 +34,13 @@ jobs:
           chmod 644 "$CI_SSH_DIR/known_hosts"
 
           # 2) Toolbox-Container startet als root, hat alles Nötige und arbeitet direkt auf Host-/opt
+          
+          if [ -f /etc/alpine-release ]; then
+            apk add --no-cache docker-cli docker-cli-compose
+          elif command -v apt-get >/dev/null 2>&1; then
+            apt-get update && apt-get install -y --no-install-recommends docker.io
+          fi
+          
           docker run --rm -u 0:0 \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v /opt:/opt \
