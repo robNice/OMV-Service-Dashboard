@@ -11,7 +11,7 @@ html::before {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: blur(22px) saturate(1.05);
+  filter: blur(3px) saturate(1.05);
   transform: scale(1.06); /* hide blur edges */
   opacity: var(--bg-opacity);
 }
