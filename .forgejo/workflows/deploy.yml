@@ -17,6 +17,19 @@ jobs:
           set -e
           [ -S /var/run/docker.sock ] || (echo "Docker socket fehlt!"; exit 1)
 
+      - name: "Fetch Docker CLI (static)"
+        env:
+          DOCKER_VERSION: "27.2.0"
+          DOCKER_CONFIG: "/tmp/.docker"
+          HOME: "/tmp"
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$DOCKER_CONFIG" /tmp/docker
+          curl -fsSL "https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz" -o /tmp/docker/docker.tgz
+          tar -xzf /tmp/docker/docker.tgz -C /tmp/docker
+          /tmp/docker/docker/docker version
+
       - name: "Git pull live (SSH Deploy-Key) -> /opt/omv-landingpage"
         env:
           REPO_SSH: "ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git"            # z. B. git@git.cube.fritz.box:owner/repo.git
