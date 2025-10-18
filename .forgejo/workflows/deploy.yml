@@ -115,7 +115,18 @@ jobs:
           cp /tmp/repo_list.txt "$PREV_MAN"
 
 
-      - name: "Rebuild (compose down + up -d --build)"
+      - name: Fetch Compose v2 (standalone)
+        env:
+          COMPOSE_VERSION: "2.29.7"
+        run: |
+          set -e
+          mkdir -p /tmp/compose
+          curl -fsSL -o /tmp/compose/docker-compose \
+            "https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64"
+          chmod +x /tmp/compose/docker-compose
+          /tmp/compose/docker-compose version
+
+      - name: Rebuild (compose down + up -d --build)
         env:
           DOCKER_HOST: "unix:///var/run/docker.sock"
         run: |
@@ -124,8 +135,8 @@ jobs:
           FILE=""
           if [ -f docker-compose.yml ]; then FILE=docker-compose.yml; elif [ -f compose.yml ]; then FILE=compose.yml; fi
           if [ -n "$FILE" ]; then
-            /tmp/docker/cli-plugins/docker-compose -f "$FILE" down
-            /tmp/docker/cli-plugins/docker-compose -f "$FILE" up -d --build
+            /tmp/compose/docker-compose -f "$FILE" down
+            /tmp/compose/docker-compose -f "$FILE" up -d --build
           else
             echo "No compose file found in /deploy – skipping rebuild"
           fi
