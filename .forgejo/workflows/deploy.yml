@@ -1,4 +1,4 @@
-name: Deploy live to OMV
+name: "Deploy live to OMV"
 on:
   push:
     branches: ["live"]
@@ -12,110 +12,16 @@ jobs:
       SSL_CERT_FILE:  /etc/ssl/certs/omv-ca-bundle.crt
 
     steps:
-      - name: "Sanity: CA & /deploy vorhanden?"
+      - name: "Sanity: CA bundle und Docker-Socket vorhanden?"
         run: |
           set -e
-          echo "whoami/id:"; whoami || true; id
-          [ -r /etc/ssl/certs/omv-ca-bundle.crt ] || (echo "CA-Bundle fehlt!"; exit 1)
-          ls -ld /deploy || (echo "/deploy fehlt!"; exit 1)        
-
-      - uses: actions/checkout@v4
-
-      - name: "Sanity: ist /deploy vorhanden?"
-        run: |
-          set -e
-          echo "whoami/id:"
           whoami || true; id
-          echo "Mounts (grep /deploy):"
-          cat /proc/self/mounts | grep '/deploy' || true
-          ls -ld /deploy || (echo "/deploy fehlt – bitte container.options in /data/config.yaml prüfen."; exit 1)
+          [ -r /etc/ssl/certs/omv-ca-bundle.crt ] || (echo "CA-Bundle fehlt!"; exit 1)
+          [ -S /var/run/docker.sock ] || (echo "Docker socket fehlt!"; ls -l /var/run || true; exit 1)
 
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
 
-      - name: Build repo file list
-        shell: bash
-        run: |
-          set -euo pipefail
-          REPO_LIST="/tmp/repo_list.txt"
-          # Alle Pfade aus dem Repo relativ auflisten (ohne .git/.forgejo/Manifest)
-          find . -mindepth 1 \
-            -path './.git' -prune -o \
-            -path './.forgejo' -prune -o \
-            -name '.deploy-manifest.txt' -prune -o \
-            -print \
-          | sed -E 's|^\./||' | sort -u > "$REPO_LIST"
-          echo "Repo items: $(wc -l < "$REPO_LIST")"
-
-
-
-
-      - name: "Copy repo -> /deploy (no rsync, no tar)"
-        shell: bash
-        run: |
-          set -euo pipefail
-          SRC="."
-          DST="/deploy"
-
-          # 1) Ordnerstruktur im Ziel anlegen (ohne .git/.forgejo/Manifest)
-          find "$SRC" -mindepth 1 \
-            -path './.git' -prune -o \
-            -path './.forgejo' -prune -o \
-            -name '.deploy-manifest.txt' -prune -o \
-            -type d -print0 \
-          | xargs -0 -I{} mkdir -p "$DST/{}"
-
-          # 2) Dateien kopieren/überschreiben, ohne Owner/Mode/Timestamps zu ändern
-          find "$SRC" -mindepth 1 \
-            -path './.git' -prune -o \
-            -path './.forgejo' -prune -o \
-            -name '.deploy-manifest.txt' -prune -o \
-            -type f -print0 \
-          | xargs -0 -I{} cp --parents --force --no-preserve=mode,ownership,timestamps "{}" "$DST"
-
-
-
-
-      - name: Delete only previously-deployed-but-now-missing
-        shell: bash
-        run: |
-          set -euo pipefail
-          DST="/deploy"
-          PREV_MAN="$DST/.deploy-manifest.txt"
-          CUR_LIST="/tmp/repo_list.txt"
-
-          # Erst ab dem 2. Deploy werden Löschungen geprüft
-          if [ -f "$PREV_MAN" ]; then
-            # sicherstellen, dass das alte Manifest sortiert ist
-            sort -u "$PREV_MAN" -o "$PREV_MAN"
-            # to_delete = (alt) minus (neu)
-            comm -23 "$PREV_MAN" "$CUR_LIST" > /tmp/to_delete.txt || true
-
-            if [ -s /tmp/to_delete.txt ]; then
-              echo "Will remove $(wc -l < /tmp/to_delete.txt) paths that were previously deployed but are now gone in repo"
-              while IFS= read -r rel; do
-                [ -z "$rel" ] && continue
-                tgt="$DST/$rel"
-                # Nur entfernen, wenn der Pfad exakt existiert
-                if [ -e "$tgt" ]; then
-                  if [ -f "$tgt" ] || [ -L "$tgt" ]; then
-                    rm -f -- "$tgt"
-                  elif [ -d "$tgt" ]; then
-                    # Verzeichnis nur löschen, wenn leer – sonst bleibt es (fremde Inhalte werden NICHT angerührt)
-                    rmdir --ignore-fail-on-non-empty -- "$tgt" || true
-                  fi
-                fi
-              done < /tmp/to_delete.txt
-            else
-              echo "Nothing to delete."
-            fi
-          else
-            echo "No previous manifest found – first deploy, nothing to delete."
-          fi
-
-          # Neues Manifest schreiben (Liste der aktuell deployten Repo-Pfade)
-          cp /tmp/repo_list.txt "$PREV_MAN"
-
-
-      # Docker CLI (statisch) holen – bleibt wie zuvor
       - name: "Fetch Docker CLI (static)"
         env:
           DOCKER_VERSION: "27.2.0"
@@ -129,22 +35,45 @@ jobs:
           tar -xzf /tmp/docker/docker.tgz -C /tmp/docker
           /tmp/docker/docker/docker version
 
-      - name: "Mirror repo to host:/opt/omv-landingpage (bind-mount copy)"
+      - name: "Prepare target dir (/opt/omv-landingpage)"
         shell: bash
         run: |
           set -euo pipefail
-          /tmp/docker/docker/docker run --rm \
-            -v "${GITHUB_WORKSPACE:-.}":/src:ro \
-            -v /opt/omv-landingpage:/dst \
-            alpine:3 sh -ceu '
-              rm -rf /dst/*;
-              mkdir -p /dst;
-              cp -a /src/. /dst/;
-              echo "--- /dst content ---";
-              ls -la /dst;
-            '
+          /tmp/docker/docker/docker run --rm -v /opt:/host alpine:3 sh -ceu '
+            set -eux
+            mkdir -p /host/omv-landingpage
+            touch /host/omv-landingpage/.deploy_target
+            chown -R 0:0 /host/omv-landingpage
+            chmod -R 0775 /host/omv-landingpage
+            ls -ld /host/omv-landingpage
+          '
 
-      # (Optional) Sichtprüfung: Was liegt wirklich auf dem Host?
+      - name: "Safe mirror repo -> /opt/omv-landingpage (backup + sync)"
+        env:
+          TARGET_DIR: "/opt/omv-landingpage"
+        shell: bash
+        run: |
+          set -euo pipefail
+          [ -n "${TARGET_DIR}" ] && [ "${TARGET_DIR}" = "/opt/omv-landingpage" ] || { echo "Unsafe TARGET_DIR"; exit 2; }
+          # Guard vorhanden?
+          /tmp/docker/docker/docker run --rm -v "${TARGET_DIR}":/dst alpine:3 sh -ceu '
+            [ -f /dst/.deploy_target ] || { echo "Missing .deploy_target in ${TARGET_DIR}"; exit 3; }
+          '
+          # Backup des aktuellen Zustands
+          TS="$(date +%Y%m%d_%H%M%S)"
+          /tmp/docker/docker/docker run --rm -v "${TARGET_DIR}":/dst -v /opt:/opt-host alpine:3 sh -ceu '
+            set -eux
+            cd /dst
+            tar -czf "/opt-host/omv-landingpage._backup_${TS}.tgz" . || true
+          '
+          # Sync: Dateien vom Repo ins Ziel kopieren (keine Full-Deletes)
+          /tmp/docker/docker/docker run --rm -v "${GITHUB_WORKSPACE:-.}":/src:ro -v "${TARGET_DIR}":/dst alpine:3 sh -ceu '
+            set -eux
+            cp -a /src/. /dst/
+            echo "--- /dst after copy ---"
+            ls -la /dst
+          '
+
       - name: "List host dir (/opt/omv-landingpage)"
         shell: bash
         run: |
@@ -155,9 +84,9 @@ jobs:
             for f in compose.yaml compose.yml docker-compose.yaml docker-compose.yml; do
               [ -f "/w/$f" ] && echo "gefunden: $f";
             done
+            [ -f /w/Dockerfile ] && echo "Dockerfile vorhanden."
           '
 
-      # Compose down+up IM Verzeichnis (kein -f nötig)
       - name: "Compose down+up at host:/opt/omv-landingpage"
         env:
           DOCKER_CONFIG: "/tmp/.docker"
@@ -166,27 +95,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$DOCKER_CONFIG"
-          
           # Down (tolerant)
-          /tmp/docker/docker/docker run --rm \
-            -v /opt/omv-landingpage:/workspace \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -w /workspace \
-            docker/compose:latest \
-            -p omv-landingpage down --remove-orphans || true
-          
+          /tmp/docker/docker/docker run --rm             -v /opt/omv-landingpage:/workspace             -v /var/run/docker.sock:/var/run/docker.sock             -w /workspace             docker/compose:latest             -p omv-landingpage down --remove-orphans || true
           # Up (build)
-          /tmp/docker/docker/docker run --rm \
-            -v /opt/omv-landingpage:/workspace \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -w /workspace \
-            docker/compose:latest \
-            -p omv-landingpage up -d --build
-    
-    
-
-
-
-
-
-
+          /tmp/docker/docker/docker run --rm             -v /opt/omv-landingpage:/workspace             -v /var/run/docker.sock:/var/run/docker.sock             -w /workspace             docker/compose:latest             -p omv-landingpage up -d --build
