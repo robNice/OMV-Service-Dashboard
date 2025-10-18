@@ -38,6 +38,7 @@ jobs:
 
           # Toolbox-Container macht den eigentlichen Deploy direkt auf dem Host
           docker run --rm -u 0:0 \
+            --add-host git.cube.fritz.box:192.168.1.2 \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v /opt:/opt \
             -v "$CI_SSH_DIR":/root/.ssh \
@@ -45,10 +46,10 @@ jobs:
             alpine:3.22 sh -lc '
               set -euxo pipefail
               apk add --no-cache git openssh ca-certificates docker-cli docker-cli-compose
-
+          
               # known_hosts füllen (falls nicht per Secret gekommen)
               if [ ! -s /root/.ssh/known_hosts ]; then
-                ssh-keyscan -p 2222 -t ed25519 git.cube.fritz.box \
+                ssh-keyscan -T 5 -p 2222 -t ed25519 git.cube.fritz.box \
                   | sed -E "s/^git\.cube\.fritz\.box/\[git.cube.fritz.box]:2222/" \
                   > /root/.ssh/known_hosts
                 chmod 644 /root/.ssh/known_hosts
