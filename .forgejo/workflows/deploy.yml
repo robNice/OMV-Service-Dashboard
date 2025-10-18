@@ -2,72 +2,74 @@ name: Deploy OMV Landingpage
 
 on:
   push:
-    branches: ["live"]
+    branches: [ live ]
 
 jobs:
   deploy:
     runs-on: docker
     steps:
-      - name: Deploy to OMV host (/opt/omv-landingpage)
+      - name: Deploy via toolbox container (root) onto host /opt
         env:
-          # Secrets (in Forgejo → Repo → Settings → Secrets)
-          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
-          # Projekt-Parameter
           REPO_URL: ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git
           BRANCH: live
           PROJECT_DIR: /opt/omv-landingpage
+          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
         run: |
           set -euxo pipefail
 
-          # --- Prereqs (Runner kann Alpine oder Debian/Ubuntu sein)
-          if [ -f /etc/alpine-release ]; then
-            apk add --no-cache openssh git ca-certificates
-          elif command -v apt-get >/dev/null 2>&1; then
-            apt-get update
-            apt-get install -y --no-install-recommends openssh-client git ca-certificates
-          fi
-
-          # --- SSH vorbereiten
-          install -d -m 700 /root/.ssh
-          printf '%s' "$DEPLOY_SSH_PRIVATE_KEY" > /root/.ssh/forgejo_deploy
-          chmod 600 /root/.ssh/forgejo_deploy
-          # CRLF-Schutz (falls Secret mal Windows-Zeilenenden hat)
-          tr -d '\r' < /root/.ssh/forgejo_deploy > /tmp/k && cat /tmp/k > /root/.ssh/forgejo_deploy && rm /tmp/k
-
-          # known_hosts: Secret bevorzugt; sonst sicher via ssh-keyscan (Port 2222)
+          # 1) Temp-SSH-Verzeichnis für den Toolbox-Container vorbereiten
+          CI_SSH_DIR="$(mktemp -d)"
+          install -d -m 700 "$CI_SSH_DIR"
+          printf '%s' "$DEPLOY_SSH_PRIVATE_KEY" > "$CI_SSH_DIR/forgejo_deploy"
+          chmod 600 "$CI_SSH_DIR/forgejo_deploy"
+          # CRLF-Schutz
+          tr -d '\r' < "$CI_SSH_DIR/forgejo_deploy" > "$CI_SSH_DIR/k" && mv "$CI_SSH_DIR/k" "$CI_SSH_DIR/forgejo_deploy"
+          # known_hosts (Secret bevorzugt, sonst via ssh-keyscan im Container)
           if [ -n "${DEPLOY_KNOWN_HOSTS:-}" ]; then
-            printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > /root/.ssh/known_hosts
+            printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$CI_SSH_DIR/known_hosts"
           else
-            ssh-keyscan -p 2222 -t ed25519 git.cube.fritz.box \
-              | sed -E 's/^git\.cube\.fritz\.box/[git.cube.fritz.box]:2222/' \
-              > /root/.ssh/known_hosts
+            : > "$CI_SSH_DIR/known_hosts"  # leer; wird im Container gefüllt
           fi
-          chmod 644 /root/.ssh/known_hosts
+          chmod 644 "$CI_SSH_DIR/known_hosts"
 
-          export GIT_SSH_COMMAND='ssh -i /root/.ssh/forgejo_deploy -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes'
+          # 2) Toolbox-Container startet als root, hat alles Nötige und arbeitet direkt auf Host-/opt
+          docker run --rm -u 0:0 \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v /opt:/opt \
+            -v "$CI_SSH_DIR":/root/.ssh \
+            -e REPO_URL -e BRANCH -e PROJECT_DIR \
+            alpine:3.22 sh -lc '
+              set -euxo pipefail
+              apk add --no-cache git openssh ca-certificates docker-cli docker-cli-compose
 
-          # --- Repo ins Host-Verzeichnis klonen/aktualisieren
-          mkdir -p "$PROJECT_DIR"
-          cd "$PROJECT_DIR"
+              # known_hosts ggf. füllen (mit Port 2222 und Klammern)
+              if [ ! -s /root/.ssh/known_hosts ]; then
+                ssh-keyscan -p 2222 -t ed25519 git.cube.fritz.box \
+                  | sed -E "s/^git\.cube\.fritz\.box/[git.cube.fritz.box]:2222/" \
+                  > /root/.ssh/known_hosts
+                chmod 644 /root/.ssh/known_hosts
+              fi
 
-          if [ ! -d .git ]; then
-            git clone "$REPO_URL" .
-          fi
+              export GIT_SSH_COMMAND="ssh -i /root/.ssh/forgejo_deploy -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
 
-          git remote set-url origin "$REPO_URL"
-          git fetch --prune origin
-          git reset --hard "origin/${BRANCH}"
-          # Optional: alles aufräumen, falls gewünscht
-          # git clean -fdx
+              # Repo auf dem Hostpfad vorbereiten/aktualisieren
+              mkdir -p "$PROJECT_DIR"
+              cd "$PROJECT_DIR"
 
-          # --- Docker Compose Re-Deploy (nutzt den Host-Docker via /var/run/docker.sock)
-          docker -v
-          docker compose version || true
+              if [ ! -d .git ]; then
+                git clone "$REPO_URL" .
+              fi
+              git remote set-url origin "$REPO_URL"
+              git fetch --prune origin
+              git reset --hard "origin/${BRANCH}"
+              # optional: git clean -fdx
 
-          # robust neu starten
-          docker compose down || true
-          docker compose up -d --build
+              # Re-Deploy (Docker Compose gegen den Host-Daemon via gemountetem docker.sock)
+              docker compose down || true
+              docker compose up -d --build
+              docker compose ps
+            '
 
-          # kleine Sichtkontrolle
-          docker compose ps
+          # 3) Aufräumen
+          rm -rf "$CI_SSH_DIR"
