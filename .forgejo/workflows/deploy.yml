@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ["docker"]
     env:
-      # not needed for SSH, but harmless to keep if the runner uses custom CA
+      # Optional CA bundle if your runner uses a custom CA
       GIT_SSL_CAINFO: /etc/ssl/certs/omv-ca-bundle.crt
       SSL_CERT_FILE:  /etc/ssl/certs/omv-ca-bundle.crt
 
@@ -29,33 +29,29 @@ rwAAAAtzc2gtZWQyNTUxOQAAACD8/Au8H3q78Quv3hU4aJMNNsPnnheSPSeoXUk8ZurM2Q
 AAAEDYJQ7a9teGT2rrWY8BR1dDkW3tHt4XC1WO8GWK+mTgtfz8C7wfervxC6/eFThokw02
 w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
 -----END OPENSSH PRIVATE KEY-----"   # Inhalt des privaten ED25519-Keys
-          SSH_KNOWN: "${{ secrets.DEPLOY_KNOWN_HOSTS }}"         # optional: Output von `ssh-keyscan git.cube.fritz.box`
-          SSH_HOST: "${{ secrets.DEPLOY_SSH_HOST || 'git.cube.fritz.box' }}"  # Fallback Hostname für ssh-keyscan
+          SSH_KNOWN: ${{ secrets.DEPLOY_KNOWN_HOSTS }}        # optional: Output von `ssh-keyscan git.cube.fritz.box`
+          SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}            # optional: Hostname für ssh-keyscan
           BRANCH: "live"
         shell: bash
         run: |
           set -euo pipefail
-          if [ -z "${REPO_SSH:-}" ]; then
-            echo "Secret DEPLOY_REPO_SSH fehlt (z. B. git@git.cube.fritz.box:owner/repo.git)."; exit 2
-          fi
-          if [ -z "${SSH_PRIVKEY:-}" ]; then
-            echo "Secret DEPLOY_SSH_PRIVATE_KEY fehlt (privater ED25519 Deploy-Key, ohne Passphrase)."; exit 3
-          fi
+          : "${REPO_SSH:?Secret DEPLOY_REPO_SSH fehlt (z. B. git@git.cube.fritz.box:owner/repo.git)}"
+          : "${SSH_PRIVKEY:?Secret DEPLOY_SSH_PRIVATE_KEY fehlt (privater ED25519 Deploy-Key, ohne Passphrase)}"
 
-          /usr/bin/docker run --rm             -v /opt/omv-landingpage:/repo             -w /repo             alpine:3 sh -ceu '
+          docker run --rm             -e REPO_SSH             -e SSH_PRIVKEY             -e SSH_KNOWN             -e SSH_HOST             -e BRANCH             -v /opt/omv-landingpage:/repo             -w /repo             alpine:3 sh -ceu '
               set -eux
               apk add --no-cache git openssh-client ca-certificates
 
               # SSH vorbereiten
               mkdir -p /root/.ssh
               chmod 700 /root/.ssh
-              printf "%s
-  " "$SSH_PRIVKEY" > /root/.ssh/id_ed25519
+              printf '"'"'%s
+  '"'"' "$SSH_PRIVKEY" > /root/.ssh/id_ed25519
   chmod 600 /root/.ssh/id_ed25519
   
   if [ -n "${SSH_KNOWN:-}" ]; then
-  printf "%s
-  " "$SSH_KNOWN" > /root/.ssh/known_hosts
+  printf '"'"'%s
+  '"'"' "$SSH_KNOWN" > /root/.ssh/known_hosts
   else
   ssh-keyscan -T 10 "${SSH_HOST:-git.cube.fritz.box}" > /root/.ssh/known_hosts 2>/dev/null
   fi
@@ -87,5 +83,5 @@ w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
   run: |
     set -euo pipefail
     mkdir -p "$DOCKER_CONFIG"
-    /usr/bin/docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage down --remove-orphans || true
-    /usr/bin/docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage up -d --build
+    docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage down --remove-orphans || true
+    docker run --rm             -v /opt/omv-landingpage:/opt/omv-landingpage             -v /var/run/docker.sock:/var/run/docker.sock             -w /opt/omv-landingpage             docker/compose:latest             -p omv-landingpage up -d --build
