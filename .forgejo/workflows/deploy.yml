@@ -8,6 +8,18 @@ jobs:
   deploy:
     runs-on: docker
     steps:
+      - name: Ensure docker CLI in job env
+        run: |
+          set -euxo pipefail
+          if [ -f /etc/alpine-release ]; then
+            apk add --no-cache docker-cli docker-cli-compose ca-certificates
+          elif command -v apt-get >/dev/null 2>&1; then
+            apt-get update
+            apt-get install -y --no-install-recommends docker.io
+          fi
+          docker version
+          docker compose version || true
+
       - name: Deploy via toolbox container (root) onto host /opt
         env:
           REPO_URL: ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git
@@ -18,29 +30,18 @@ jobs:
         run: |
           set -euxo pipefail
 
-          # 1) Temp-SSH-Verzeichnis für den Toolbox-Container vorbereiten
           CI_SSH_DIR="$(mktemp -d)"
           install -d -m 700 "$CI_SSH_DIR"
           printf '%s' "$DEPLOY_SSH_PRIVATE_KEY" > "$CI_SSH_DIR/forgejo_deploy"
           chmod 600 "$CI_SSH_DIR/forgejo_deploy"
-          # CRLF-Schutz
           tr -d '\r' < "$CI_SSH_DIR/forgejo_deploy" > "$CI_SSH_DIR/k" && mv "$CI_SSH_DIR/k" "$CI_SSH_DIR/forgejo_deploy"
-          # known_hosts (Secret bevorzugt, sonst via ssh-keyscan im Container)
           if [ -n "${DEPLOY_KNOWN_HOSTS:-}" ]; then
             printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$CI_SSH_DIR/known_hosts"
+            chmod 644 "$CI_SSH_DIR/known_hosts"
           else
-            : > "$CI_SSH_DIR/known_hosts"  # leer; wird im Container gefüllt
+            : > "$CI_SSH_DIR/known_hosts"
           fi
-          chmod 644 "$CI_SSH_DIR/known_hosts"
 
-          # 2) Toolbox-Container startet als root, hat alles Nötige und arbeitet direkt auf Host-/opt
-          
-          if [ -f /etc/alpine-release ]; then
-            apk add --no-cache docker-cli docker-cli-compose
-          elif command -v apt-get >/dev/null 2>&1; then
-            apt-get update && apt-get install -y --no-install-recommends docker.io
-          fi
-          
           docker run --rm -u 0:0 \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v /opt:/opt \
@@ -50,7 +51,6 @@ jobs:
               set -euxo pipefail
               apk add --no-cache git openssh ca-certificates docker-cli docker-cli-compose
 
-              # known_hosts ggf. füllen (mit Port 2222 und Klammern)
               if [ ! -s /root/.ssh/known_hosts ]; then
                 ssh-keyscan -p 2222 -t ed25519 git.cube.fritz.box \
                   | sed -E "s/^git\.cube\.fritz\.box/[git.cube.fritz.box]:2222/" \
@@ -60,7 +60,6 @@ jobs:
 
               export GIT_SSH_COMMAND="ssh -i /root/.ssh/forgejo_deploy -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
 
-              # Repo auf dem Hostpfad vorbereiten/aktualisieren
               mkdir -p "$PROJECT_DIR"
               cd "$PROJECT_DIR"
 
@@ -70,13 +69,10 @@ jobs:
               git remote set-url origin "$REPO_URL"
               git fetch --prune origin
               git reset --hard "origin/${BRANCH}"
-              # optional: git clean -fdx
 
-              # Re-Deploy (Docker Compose gegen den Host-Daemon via gemountetem docker.sock)
               docker compose down || true
               docker compose up -d --build
               docker compose ps
             '
 
-          # 3) Aufräumen
           rm -rf "$CI_SSH_DIR"
