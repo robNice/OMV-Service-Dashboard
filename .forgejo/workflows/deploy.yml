@@ -26,64 +26,71 @@ jobs:
           # SSH-Material temporär für den Toolbox-Container vorbereiten
           CI_SSH_DIR="$(mktemp -d)"
           install -d -m 700 "$CI_SSH_DIR"
-          printf '%s' "$DEPLOY_SSH_PRIVATE_KEY" > "$CI_SSH_DIR/forgejo_deploy"
-          chmod 600 "$CI_SSH_DIR/forgejo_deploy"
-          tr -d '\r' < "$CI_SSH_DIR/forgejo_deploy" > "$CI_SSH_DIR/k" && mv "$CI_SSH_DIR/k" "$CI_SSH_DIR/forgejo_deploy"
+          
+          # PRIVATEN Key immer als "deploy_key" ablegen (einheitlicher Name)
+          printf '%s' "$DEPLOY_SSH_PRIVATE_KEY" > "$CI_SSH_DIR/deploy_key"
+          chmod 600 "$CI_SSH_DIR/deploy_key"
+          # CRLF-Schutz
+          tr -d '\r' < "$CI_SSH_DIR/deploy_key" > "$CI_SSH_DIR/.k" && mv "$CI_SSH_DIR/.k" "$CI_SSH_DIR/deploy_key"
+          
+          # known_hosts (Secret bevorzugt, sonst leer; wird innen via ssh-keyscan gefüllt)
           if [ -n "${DEPLOY_KNOWN_HOSTS:-}" ]; then
             printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$CI_SSH_DIR/known_hosts"
             chmod 644 "$CI_SSH_DIR/known_hosts"
           else
             : > "$CI_SSH_DIR/known_hosts"
+            chmod 644 "$CI_SSH_DIR/known_hosts"
           fi
+  
 
-          # Toolbox-Container macht den eigentlichen Deploy direkt auf dem Host
-          docker run --rm -u 0:0 \
-            --add-host git.cube.fritz.box:192.168.1.2 \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -v /opt:/opt \
-            -v "$CI_SSH_DIR":/root/.ssh \
-            -e REPO_URL -e BRANCH -e PROJECT_DIR \
-            alpine:3.22 sh -lc '
-              set -euxo pipefail
-              apk add --no-cache git openssh ca-certificates docker-cli docker-cli-compose
+  # Toolbox-Container macht den eigentlichen Deploy direkt auf dem Host
+               docker run --rm -u 0:0 \
+               --add-host git.cube.fritz.box:192.168.1.2 \
+               -v /var/run/docker.sock:/var/run/docker.sock \
+               -v /opt:/opt \
+               -v "$CI_SSH_DIR":/root/.ssh \
+               -e REPO_URL -e BRANCH -e PROJECT_DIR \
+               alpine:3.22 sh -lc '
+               set -euxo pipefail
+               apk add --no-cache git openssh ca-certificates docker-cli docker-cli-compose
+               
+               SSH_KEY_FILE=/root/.ssh/deploy_key
           
-              # Einheitlicher Key-Name im Container
-              SSH_KEY_FILE=/root/.ssh/deploy_key
+          # Sichtprüfung: was liegt wirklich im .ssh?
+               ls -la /root/.ssh
           
-              # Falls der Host den Key unter anderem Namen gemountet hat, normalisieren:
-              if [ -f /root/.ssh/forgejo_deploy ]; then mv /root/.ssh/forgejo_deploy "$SSH_KEY_FILE"; fi
-              if [ -f /root/.ssh/*_deploy ] 2>/dev/null; then mv /root/.ssh/*_deploy "$SSH_KEY_FILE" || true; fi
-              chmod 600 "$SSH_KEY_FILE"
+          # Key muss existieren und OpenSSH-Format haben
+               test -s "$SSH_KEY_FILE"
+               head -n1 "$SSH_KEY_FILE" | grep -q "BEGIN OPENSSH PRIVATE KEY"
+               chmod 600 "$SSH_KEY_FILE"
           
-              # known_hosts befüllen (falls nicht per Secret geliefert)
-              if [ ! -s /root/.ssh/known_hosts ]; then
-                ssh-keyscan -T 5 -p 2222 -t ed25519 git.cube.fritz.box \
-                  | sed -E "s/^git\.cube\.fritz\.box/\[git.cube.fritz.box]:2222/" \
-                  > /root/.ssh/known_hosts
-                chmod 644 /root/.ssh/known_hosts
-              fi
+          # known_hosts ggf. füllen (Port 2222, mit [] + Port)
+               if [ ! -s /root/.ssh/known_hosts ]; then
+               ssh-keyscan -T 5 -p 2222 -t ed25519 git.cube.fritz.box \
+               | sed -E "s/^git\.cube\.fritz\.box/\[git.cube.fritz.box]:2222/" \
+               > /root/.ssh/known_hosts
+               chmod 644 /root/.ssh/known_hosts
+               fi
+               
+               export GIT_SSH_COMMAND="ssh -i $SSH_KEY_FILE -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
           
-              # Sanity-Checks (loggen nur harmlose Infos)
-              ls -l /root/.ssh
-              head -n1 "$SSH_KEY_FILE" | sed "s/OPENSSH/OPENSSH/"
+          # Repo direkt im Host-Zielpfad aktualisieren
+               mkdir -p "$PROJECT_DIR"
+               cd "$PROJECT_DIR"
+               
+               if [ ! -d .git ]; then
+               git clone "$REPO_URL" .
+               fi
+               git remote set-url origin "$REPO_URL"
+               git fetch --prune origin
+               git reset --hard "origin/${BRANCH}"
           
-              export GIT_SSH_COMMAND="ssh -i $SSH_KEY_FILE -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
-          
-              # Repo direkt im Host-Zielpfad aktualisieren
-              mkdir -p "$PROJECT_DIR"
-              cd "$PROJECT_DIR"
-              if [ ! -d .git ]; then
-                git clone "$REPO_URL" .
-              fi
-              git remote set-url origin "$REPO_URL"
-              git fetch --prune origin
-              git reset --hard "origin/${BRANCH}"
-          
-              # Re-Deploy
-              docker compose down || true
-              docker compose up -d --build
-              docker compose ps
-            '
-          
-          
-          rm -rf "$CI_SSH_DIR"
+          # Re-Deploy
+               docker compose down || true
+               docker compose up -d --build
+               docker compose ps
+               '
+               
+               
+               
+               rm -rf "$CI_SSH_DIR"
