@@ -95,7 +95,19 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$DOCKER_CONFIG"
+          
           # Down (tolerant)
-          /tmp/docker/docker/docker run --rm             -v /opt/omv-landingpage:/workspace             -v /var/run/docker.sock:/var/run/docker.sock             -w /workspace             docker/compose:latest             -p omv-landingpage down --remove-orphans || true
+          /tmp/docker/docker/docker run --rm \
+            -v /opt/omv-landingpage:/opt/omv-landingpage \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -w /opt/omv-landingpage \
+            docker/compose:latest \
+            -p omv-landingpage down --remove-orphans || true
+          
           # Up (build)
-          /tmp/docker/docker/docker run --rm             -v /opt/omv-landingpage:/workspace             -v /var/run/docker.sock:/var/run/docker.sock             -w /workspace             docker/compose:latest             -p omv-landingpage up -d --build
+          /tmp/docker/docker/docker run --rm \
+            -v /opt/omv-landingpage:/opt/omv-landingpage \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -w /opt/omv-landingpage \
+            docker/compose:latest \
+            -p omv-landingpage up -d --build
