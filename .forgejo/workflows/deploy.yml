@@ -34,12 +34,12 @@ jobs:
         env:
           REPO_SSH: "ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git"            # z. B. git@git.cube.fritz.box:owner/repo.git
           SSH_PRIVKEY: "-----BEGIN OPENSSH PRIVATE KEY-----
-b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-QyNTUxOQAAACD8/Au8H3q78Quv3hU4aJMNNsPnnheSPSeoXUk8ZurM2QAAAJDvPDiv7zw4
-rwAAAAtzc2gtZWQyNTUxOQAAACD8/Au8H3q78Quv3hU4aJMNNsPnnheSPSeoXUk8ZurM2Q
-AAAEDYJQ7a9teGT2rrWY8BR1dDkW3tHt4XC1WO8GWK+mTgtfz8C7wfervxC6/eFThokw02
-w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
------END OPENSSH PRIVATE KEY-----"
+    b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+    QyNTUxOQAAACD8/Au8H3q78Quv3hU4aJMNNsPnnheSPSeoXUk8ZurM2QAAAJDvPDiv7zw4
+    rwAAAAtzc2gtZWQyNTUxOQAAACD8/Au8H3q78Quv3hU4aJMNNsPnnheSPSeoXUk8ZurM2Q
+    AAAEDYJQ7a9teGT2rrWY8BR1dDkW3tHt4XC1WO8GWK+mTgtfz8C7wfervxC6/eFThokw02
+    w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
+    -----END OPENSSH PRIVATE KEY-----"
           SSH_KNOWN: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
           SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
           BRANCH: "live"
@@ -48,25 +48,33 @@ w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
           set -euo pipefail
           : "${REPO_SSH:?Secret DEPLOY_REPO_SSH fehlt (z. B. git@git.cube.fritz.box:owner/repo.git)}"
           : "${SSH_PRIVKEY:?Secret DEPLOY_SSH_PRIVATE_KEY fehlt (privater ED25519 Deploy-Key, ohne Passphrase)}"
-
-          /tmp/docker/docker/docker run --rm             -e REPO_SSH             -e SSH_PRIVKEY             -e SSH_KNOWN             -e SSH_HOST             -e BRANCH             -v /opt/omv-landingpage:/repo             -w /repo             alpine:3 sh -ceu '
+          
+          /tmp/docker/docker/docker run --rm \
+            -e REPO_SSH \
+            -e SSH_PRIVKEY \
+            -e SSH_KNOWN \
+            -e SSH_HOST \
+            -e BRANCH \
+            -v /opt/omv-landingpage:/repo \
+            -w /repo \
+            alpine:3 sh -ceu '
               set -eux
               apk add --no-cache git openssh-client ca-certificates
-
+          
               mkdir -p /root/.ssh
               chmod 700 /root/.ssh
               printf %s "$SSH_PRIVKEY" > /root/.ssh/id_ed25519
               chmod 600 /root/.ssh/id_ed25519
-
+          
               if [ -n "${SSH_KNOWN:-}" ]; then
                 printf %s "$SSH_KNOWN" > /root/.ssh/known_hosts
               else
                 ssh-keyscan -T 10 "${SSH_HOST:-git.cube.fritz.box}" > /root/.ssh/known_hosts 2>/dev/null
               fi
               chmod 644 /root/.ssh/known_hosts
-
+          
               export GIT_SSH_COMMAND="ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
-
+          
               if [ ! -d .git ]; then
                 git init .
                 git remote add origin "$REPO_SSH"
@@ -77,10 +85,11 @@ w+eeF5I9J6hdSTxm6szZAAAACXJvb3RAY3ViZQECAwQ=
                 git fetch origin "$BRANCH"
                 git reset --hard "origin/$BRANCH"
               fi
-
+          
               git submodule update --init --recursive || true
               git status --porcelain -b
             '
+
 
       - name: "Compose down+up (build) in /opt/omv-landingpage"
         env:
