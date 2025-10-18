@@ -130,16 +130,42 @@ jobs:
           /tmp/compose/docker-compose version
 
 
-      - name: Recreate landingpage (compose down + up -d --build)
+      - name: "Mirror repo to host:/opt/omv-landingpage"
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Alles aus dem aktuellen Workspace als TAR an einen Einweg-Container pipen,
+          # der auf dem HOST das Zielverzeichnis /opt/omv-landingpage bind-mountet.
+          tar -C "${GITHUB_WORKSPACE:-.}" -cf - . \
+          | docker run --rm -i \
+              -v /opt/omv-landingpage:/deploy \
+              alpine:3 sh -ceu 'rm -rf /deploy/* && mkdir -p /deploy && tar -C /deploy -xf - && ls -la /deploy'
+
+      - name: "Compose down+up at host:/opt/omv-landingpage"
         env:
           DOCKER_CONFIG: "/tmp/.docker"
           HOME: "/tmp"
+          COMPOSE_VERSION: "2.29.7"
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p "$DOCKER_CONFIG"
-          /tmp/compose/docker-compose -p omv-landingpage down --remove-orphans || true
-          /tmp/compose/docker-compose -p omv-landingpage up -d --build
+          
+          # compose als Container nutzen – spricht über den host-Docker-Socket
+          docker run --rm \
+            -v /opt/omv-landingpage:/workspace \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            docker/compose:${COMPOSE_VERSION} \
+            -f /workspace/docker-compose.yml \
+            -p omv-landingpage down --remove-orphans || true
+          
+          docker run --rm \
+            -v /opt/omv-landingpage:/workspace \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            docker/compose:${COMPOSE_VERSION} \
+            -f /workspace/docker-compose.yml \
+            -p omv-landingpage up -d --build
+
 
 
 
