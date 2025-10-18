@@ -27,7 +27,7 @@
     const path = location.pathname.replace(/\/+/g,'/').replace(/\/$/,'') || '/';
 
     if (path === '/') {
-      setVar('/backgrounds/_home.png');
+      setVar('/assets/backgrounds/_home.png');
       return;
     }
 
@@ -36,16 +36,16 @@
     if (m) {
       const slug = decodeURIComponent(m[1]);
       const candidates = [
-        `/backgrounds/section-${slug}.jpg`,
-        `/backgrounds/${slug}.jpg`,
-        '/backgrounds/_default.png'
+        `/assets/backgrounds/section-${slug}.jpg`,
+        `/assets/backgrounds/${slug}.jpg`,
+        '/assets/backgrounds/_default.png'
       ];
       pickFirstExisting(candidates).then(setVar);
       return;
     }
 
     // Fallback for any other route
-    setVar('/backgrounds/_default.png');
+    setVar('/assets/backgrounds/_default.png');
 
     function setVar(url){
       if (!url) return;

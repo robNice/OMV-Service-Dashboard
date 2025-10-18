@@ -1,5 +1,5 @@
 /* Global blurred background layer controlled via CSS var --bg-url */
-:root { --bg-url: url('/backgrounds/_home.png'); --bg-opacity: 1; }
+:root { --bg-url: url('/assets/backgrounds/_home.png'); --bg-opacity: 1; }
 
 /* The fixed background layer */
 html::before {
