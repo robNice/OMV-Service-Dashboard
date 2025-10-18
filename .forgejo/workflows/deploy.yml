@@ -118,17 +118,23 @@ jobs:
       - name: Fetch Compose v2 (standalone)
         env:
           COMPOSE_VERSION: "2.29.7"
+          DOCKER_CONFIG: "/tmp/.docker"
+          HOME: "/tmp"
         run: |
           set -e
+          mkdir -p "$DOCKER_CONFIG"
           mkdir -p /tmp/compose
           curl -fsSL -o /tmp/compose/docker-compose \
             "https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64"
           chmod +x /tmp/compose/docker-compose
           /tmp/compose/docker-compose version
 
+
       - name: Rebuild (compose down + up -d --build)
         env:
           DOCKER_HOST: "unix:///var/run/docker.sock"
+          DOCKER_CONFIG: "/tmp/.docker"
+          HOME: "/tmp"
         run: |
           set -euo pipefail
           cd /deploy
