@@ -130,20 +130,13 @@ jobs:
           /tmp/compose/docker-compose version
 
 
-      - name: Rebuild (compose down + up -d --build)
-        env:
-          DOCKER_HOST: "unix:///var/run/docker.sock"
-          DOCKER_CONFIG: "/tmp/.docker"
-          HOME: "/tmp"
+      - name: Recreate landingpage (compose down + up -d --build)
+        shell: bash
         run: |
           set -euo pipefail
-          cd /deploy
-          FILE=""
-          if [ -f docker-compose.yml ]; then FILE=docker-compose.yml; elif [ -f compose.yml ]; then FILE=compose.yml; fi
-          if [ -n "$FILE" ]; then
-            /tmp/compose/docker-compose -f "$FILE" down
-            /tmp/compose/docker-compose -f "$FILE" up -d --build
-          else
-            echo "No compose file found in /deploy – skipping rebuild"
-          fi
+          cd /opt/omv-landingpage
+          docker compose down --remove-orphans || true
+          docker rm -f omv-landingpage 2>/dev/null || true
+          docker compose up -d --build
+
 
