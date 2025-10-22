@@ -1,80 +1,28 @@
-name: Deploy OMV Landingpage
+name: Inspect Deploy Key
 
 on:
-  push:
-    branches: [ live ]
+  workflow_dispatch:
 
 jobs:
-  deploy:
-    runs-on: docker
-
-    # Job-Container mit docker CLI (kein apt/apk hier nötig)
-    container:
-      image: docker:27.2.0-cli
-
+  inspect-deploy-key:
+    runs-on: ubuntu-latest
     steps:
-      - name: Deploy to OMV host (/opt/omv-landingpage)
-        env:
-          # Projekt-Parameter
-          REPO_URL: ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git
-          BRANCH: live
-          PROJECT_DIR: /opt/omv-landingpage
-
-          # Secrets (Forgejo → Repo → Settings → Secrets)
-          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+      - name: Schreibe Secret in Datei (privat)
+        shell: bash
         run: |
-          set -euo pipefail
+          umask 077
+          cat > deploy_key <<'EOF'
+  ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+  EOF
+  # zur Sicherheit: korrekte Rechte
+  chmod 600 deploy_key
 
-          # Toolbox-Container macht alles direkt auf dem Host.
-          # WICHTIG: Secrets als Env durchreichen, KEINE -v Mounts aus dem Job-Container!
-          docker run --rm -u 0:0 \
-            --add-host git.cube.fritz.box:192.168.1.2 \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -v /opt:/opt \
-            -e REPO_URL -e BRANCH -e PROJECT_DIR \
-            -e DEPLOY_SSH_PRIVATE_KEY="$DEPLOY_SSH_PRIVATE_KEY" \
-            -e DEPLOY_KNOWN_HOSTS="${DEPLOY_KNOWN_HOSTS:-}" \
-            alpine:3.22 sh -lc '
-              set -euo pipefail
-
-              apk add --no-cache git openssh ca-certificates docker-cli docker-cli-compose
-
-              mkdir -p /root/.ssh
-              chmod 700 /root/.ssh
-
-              # Private Key aus ENV schreiben (einheitlicher Name)
-              printf "%s" "$DEPLOY_SSH_PRIVATE_KEY" > /root/.ssh/deploy_key
-              # CRLF-Schutz
-              tr -d "\r" < /root/.ssh/deploy_key > /root/.ssh/.k && mv /root/.ssh/.k /root/.ssh/deploy_key
-              chmod 600 /root/.ssh/deploy_key
-              head -n1 /root/.ssh/deploy_key | grep -q "BEGIN OPENSSH PRIVATE KEY"
-
-              # known_hosts: Secret bevorzugt; sonst via ssh-keyscan
-              if [ -n "${DEPLOY_KNOWN_HOSTS:-}" ]; then
-                printf "%s\n" "$DEPLOY_KNOWN_HOSTS" > /root/.ssh/known_hosts
-              else
-                ssh-keyscan -T 5 -p 2222 -t ed25519 git.cube.fritz.box \
-                  | sed -E "s/^git\.cube\.fritz\.box/[git.cube.fritz.box]:2222/" \
-                  > /root/.ssh/known_hosts
-              fi
-              chmod 644 /root/.ssh/known_hosts
-
-              export GIT_SSH_COMMAND="ssh -i /root/.ssh/deploy_key -o IdentitiesOnly=yes -o UserKnownHostsFile=/root/.ssh/known_hosts -o StrictHostKeyChecking=yes"
-
-              # Repo direkt im Host-Zielpfad aktualisieren
-              mkdir -p "$PROJECT_DIR"
-              cd "$PROJECT_DIR"
-              if [ ! -d .git ]; then
-                git clone "$REPO_URL" .
-              fi
-              git remote set-url origin "$REPO_URL"
-              git fetch --prune origin
-              git reset --hard "origin/${BRANCH}"
-              # optional: git clean -fdx
-
-              # Re-Deploy (Host-Docker via gemountetem Socket)
-              docker compose down || true
-              docker compose up -d --build
-              docker compose ps
-            '
+- name: Public Key & Fingerprint ableiten
+  shell: bash
+  run: |
+    # Public Key aus Private Key erzeugen
+    ssh-keygen -y -f deploy_key > deploy_key.pub
+    
+    # Fingerprint (SHA256) berechnen
+    # -E sha256 ist auf aktuellen OpenSSH-Versionen verfügbar
+    ssh-keygen -lf deploy_key.pub -E sha256 > deploy_key.fingerprint || ssh-keygen -lf deploy_key.pub > deploy_
