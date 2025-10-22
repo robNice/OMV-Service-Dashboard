@@ -25,7 +25,7 @@
 
         // Home
         if (path === '/') {
-            setBg(`${BASE}/_home.jpg`);
+            setBg(`${BASE}/_home.png`);
             return;
         }
 
