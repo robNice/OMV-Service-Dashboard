@@ -1,5 +1,5 @@
 /* Global blurred background layer controlled via CSS var --bg-url */
-:root { --bg-url: url('/assets/backgrounds/_home.png'); --bg-opacity: 1; }
+:root { --bg-url: none; --bg-opacity: 1; }
 
 /* The fixed background layer */
 html::before {
@@ -11,7 +11,9 @@ html::before {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: blur(3px) saturate(1.05);
+    background-color: #0e0e10; /* neutral base while image loads */
+
+    filter: blur(3px) saturate(1.05);
   transform: scale(1.06); /* hide blur edges */
   opacity: var(--bg-opacity);
 }

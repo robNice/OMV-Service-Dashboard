@@ -1,80 +1,52 @@
-/*
- * Background chooser for OMV-Landingpage.
- * Picks a thematically fitting blurred background per view.
- *
- * Convention:
- *   - Home (/) uses:           /backgrounds/_home.jpg
- *   - Section (/section/:slug) uses (first match wins):
- *         /backgrounds/section-:slug.jpg
- *         /backgrounds/:slug.jpg
- *         /backgrounds/_default.jpg
- *
- * You can override on any page by placing
- *   <meta name="omv-bg" content="/data/backgrounds/custom.jpg">
- * or by setting data-bg attribute on <html> or <body>.
- */
-(function(){
-  try {
-    const html = document.documentElement;
-    const override = (document.querySelector('meta[name="omv-bg"]')||{}).content
-                  || html.dataset.bg || document.body?.dataset?.bg;
+// data/assets/bg.js
+// Minimaler Hintergrund-Switcher ohne Fallbacks/Probing.
+// Erwartet vorhandene Dateien an festen Pfaden (kein Blitzen).
 
-    if (override) {
-      setVar(override);
-      return;
+(function () {
+    try {
+        const BASE = '/assets/backgrounds';
+        const html = document.documentElement;
+
+        // Optionaler, expliziter Override (falls gesetzt)
+        const override =
+            (document.querySelector('meta[name="omv-bg"]') || {}).content ||
+            html.dataset.bg ||
+            (document.body && document.body.dataset ? document.body.dataset.bg : null);
+
+        if (override) {
+            setBg(override);
+            return;
+        }
+
+        // Route ermitteln
+        const path = (location.pathname || '/')
+            .replace(/\/+/g, '/')
+            .replace(/\/$/, '') || '/';
+
+        // Home
+        if (path === '/') {
+            setBg(`${BASE}/_home.jpg`);
+            return;
+        }
+
+        // Section: strikt nach Konvention ":slug.jpg"
+        const m = path.match(/^\/section\/([^/]+)$/);
+        if (m) {
+            const slug = decodeURIComponent(m[1]);
+            setBg(`${BASE}/${slug}.jpg`);
+            return;
+        }
+
+        // Andere Routen: absichtlich nichts setzen (kein Default)
+        // -> Stelle sicher, dass jede relevante Route ein passendes Bild hat.
+
+        function setBg(url) {
+            if (!url) return;
+            html.style.setProperty('--bg-url', `url('${url}')`);
+            html.style.setProperty('--bg-opacity', '1');
+        }
+    } catch (e) {
+        // Falls irgendwas schiefgeht, bricht es still ab – kein Fallback, kein Flackern.
+        console.warn('[omv-bg] failed:', e);
     }
-
-    const path = location.pathname.replace(/\/+/g,'/').replace(/\/$/,'') || '/';
-
-    if (path === '/') {
-      setVar('/assets/backgrounds/_home.png');
-      return;
-    }
-
-    // Expecting /section/:slug as section pages
-    const m = path.match(/^\/section\/([^/]+)$/);
-    if (m) {
-      const slug = decodeURIComponent(m[1]);
-      const candidates = [
-        //`/assets/backgrounds/section-${slug}.jpg`,
-        `/assets/backgrounds/${slug}.jpg`,
-        '/assets/backgrounds/_default.png'
-      ];
-      pickFirstExisting(candidates).then(setVar);
-      return;
-    }
-
-    // Fallback for any other route
-    setVar('/assets/backgrounds/_default.png');
-
-    function setVar(url){
-      if (!url) return;
-      html.style.setProperty('--bg-url', `url('${url}')`);
-      html.style.setProperty('--bg-opacity', '1');
-    }
-
-    // Probe which file exists by loading as Image (fast; browser-cached)
-    function pickFirstExisting(list){
-      return new Promise(resolve => {
-        let i=0;
-        const tryNext = () => {
-          if (i>=list.length) return resolve(list[list.length-1]);
-          const url = list[i++];
-          const img = new Image();
-          img.onload  = () => resolve(url);
-          img.onerror = tryNext;
-          img.src = url + `?v=${cacheBuster()}`;
-        };
-        tryNext();
-      });
-    }
-
-    function cacheBuster(){
-      // daily buster to allow hot-swapping wallpapers without hard reload
-      const d = new Date();
-      return `${d.getUTCFullYear()}${d.getUTCMonth()+1}${d.getUTCDate()}`;
-    }
-  } catch(e) {
-    console.warn('[omv-bg] failed:', e);
-  }
 })();
