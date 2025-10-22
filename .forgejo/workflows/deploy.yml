@@ -7,7 +7,7 @@ jobs:
   inspect:
     runs-on: [docker]   # passt zu deinem Runner-Label (--labels docker:docker)
     steps:
-      - name: Stelle sicher, dass ssh-keygen verfügbar ist
+      - name: "Stelle sicher, dass ssh-keygen verfügbar ist"
         shell: bash
         run: |
           if command -v ssh-keygen >/dev/null 2>&1; then
