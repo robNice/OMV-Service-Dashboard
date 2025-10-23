@@ -9,6 +9,11 @@ services:
     volumes:
       - ./data:/data
       - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+    environment:
+      PROC_ROOT: /host/proc
+      SYS_ROOT: /host/sys
     working_dir: /app
     command: ["node", "server.js"]
     ports:

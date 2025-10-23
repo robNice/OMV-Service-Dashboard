@@ -14,5 +14,85 @@
 <div class="grid">
     {{SERVICES}}
 </div>
+<!-- Info Drawer (global, auf allen Seiten) -->
+<link rel="stylesheet" href="/assets/drawer.css">
+
+<div id="info-drawer" aria-live="polite">
+    <div class="panel">
+        <div class="tab" title="Systeminformationen öffnen/schließen">INFO</div>
+
+        <header>
+            <span class="chip">Live-Stats</span>
+            <span class="chip" style="margin-left:auto">Uptime: <span data-uptime>–</span></span>
+        </header>
+
+        <div class="content">
+            <!-- RAM -->
+            <div class="section">
+                <h3>RAM</h3>
+                <div class="kv" style="flex-direction:column; align-items:stretch">
+                    <div class="flex" style="display:flex; justify-content:space-between;">
+                        <span>Belegt</span><span class="chip" data-label-for="ram-usage">–%</span>
+                    </div>
+                    <div id="ram-usage" class="bar"><i></i></div>
+                </div>
+            </div>
+
+            <!-- Disks -->
+            <div class="section">
+                <h3>Speicher (HDDs)</h3>
+                <div class="kv" style="flex-direction:column; align-items:stretch">
+                    <div class="flex" style="display:flex; justify-content:space-between;">
+                        <span>sda</span><span class="chip" data-label-for="disk-sda">–%</span>
+                    </div>
+                    <div id="disk-sda" class="bar"><i></i></div>
+                </div>
+                <div class="kv" style="flex-direction:column; align-items:stretch">
+                    <div class="flex" style="display:flex; justify-content:space-between;">
+                        <span>sdb</span><span class="chip" data-label-for="disk-sdb">–%</span>
+                    </div>
+                    <div id="disk-sdb" class="bar"><i></i></div>
+                </div>
+                <div class="kv" style="flex-direction:column; align-items:stretch">
+                    <div class="flex" style="display:flex; justify-content:space-between;">
+                        <span>sdc</span><span class="chip" data-label-for="disk-sdc">–%</span>
+                    </div>
+                    <div id="disk-sdc" class="bar"><i></i></div>
+                </div>
+            </div>
+
+            <!-- Temps -->
+            <div class="section">
+                <h3>Temperaturen</h3>
+                <div class="kv"><span>CPU</span><span class="chip" data-cpu-temp>–</span></div>
+                <div class="kv"><span>NVMe/HDD</span><span class="chip" data-nvme-temp>–</span></div>
+            </div>
+
+            <!-- Versions / Updates -->
+            <div class="section">
+                <h3>Versionen</h3>
+                <div class="kv"><span>OMV</span><span class="chip" data-omv-version>–</span></div>
+                <div class="kv" style="align-items:flex-start">
+                    <span>Erweiterungen</span>
+                    <span class="chip" data-plugins>–</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>System</h3>
+                <div class="kv"><span>Load</span><span class="chip" data-load>–</span></div>
+                <div class="kv"><span>Docker-Updates</span><span class="chip" data-updates>–</span></div>
+            </div>
+        </div>
+
+        <footer>
+            <span>Letztes Update: <span class="chip">jetzt</span></span>
+            <button data-close class="chip" style="cursor:pointer">Schließen</button>
+        </footer>
+    </div>
+</div>
+
+<script src="/assets/drawer.js" defer></script>
+
 </body>
 </html>
