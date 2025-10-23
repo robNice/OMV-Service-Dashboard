@@ -14,17 +14,15 @@
 
 #info-drawer {
     position: fixed;
-    inset: 0 auto 0 0;          /* links andocken */
+    inset: 0 auto 0 0;            /* links andocken */
     width: var(--drawer-w);
-    transform: translateX(calc(-1 * var(--drawer-w)));
+    transform: translateX(calc(-1 * (var(--drawer-w) - 44px)));
     transition: transform .28s ease;
-    z-index: 1100;               /* über Kacheln/Headers */
-    pointer-events: none;        /* geschlossen nicht klickbar */
+    z-index: 1100;                 /* über Kacheln/Headers */
 }
 
 #info-drawer.open {
     transform: translateX(0);
-    pointer-events: auto;
 }
 
 #info-drawer .panel {
@@ -137,5 +135,6 @@
 /* Mobile: Drawer breiter, Tab etwas größer */
 @media (max-width: 720px) {
     :root { --drawer-w: 86vw; }
+    #info-drawer { transform: translateX(calc(-1 * (var(--drawer-w) - 50px))); }
     #info-drawer .tab { right: -50px; }
 }

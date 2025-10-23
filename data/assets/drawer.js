@@ -11,6 +11,7 @@
     const closeBtn = el?.querySelector("[data-close]");
     if (!el || !tab) return;
 
+
     const setOpen = (open) => {
         el.classList.toggle("open", open);
         try { localStorage.setItem(STORAGE_KEY, open ? "1" : "0"); } catch (_) {}
@@ -21,7 +22,6 @@
 
     // Restore last state
     try { setOpen(localStorage.getItem(STORAGE_KEY) === "1"); } catch (_) {}
-
     /* ------- Placeholder data wiring (replace later) ------- */
 
     function setBar(id, percent) {
