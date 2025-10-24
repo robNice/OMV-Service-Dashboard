@@ -38,6 +38,10 @@
     display: grid;
     grid-template-rows: auto 1fr auto;
 }
+#info-drawer .diskpart {
+    border-bottom: 1px solid rgba(255,255,255, 0.05);
+    margin: 10px 0;
+}
 
 /* Header & Footer */
 #info-drawer header {

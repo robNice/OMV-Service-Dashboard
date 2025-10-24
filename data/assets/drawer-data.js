@@ -66,8 +66,10 @@
         return `
       <div class="kv" style="flex-direction:column;align-items:stretch">
         <div style="display:flex;justify-content:space-between;gap:.5rem;font-size:.9rem;flex-wrap:wrap">
+            <div>
           <span>${d.name}${modelStr}</span>
           <span class="temp">${tempStr}</span>
+          </div>
           <span class="chip" style="${statusStyle(d.status)}">${d.status}</span>
         </div>
         <div class="bar"><i style="width:${p}%;background:${usageColor(p)}"></i></div>
@@ -146,5 +148,5 @@
         setTimeout(loop, POLL_MS);
     }
 
-    loop();
+   // loop();
 })();
