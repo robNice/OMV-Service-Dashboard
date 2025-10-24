@@ -1,12 +1,9 @@
-
-
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const { getStats } = require("./server/stats");
 
-// const app = express();
-const app = module.exports = require("./app") || express(); // falls du schon eine App exportierst, passe an
+const app = express();
+const { getStats } = require("./server/stats"); // <— neu
 
 const PORT = 3000;
 
@@ -42,6 +39,7 @@ function renderSection(section) {
 
 // Route: Startseite mit Sektionen
 
+// in server.js (oder deiner Express-App)
 
 app.get("/api/stats", async (req, res) => {
     try {
