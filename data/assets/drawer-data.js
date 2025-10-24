@@ -66,10 +66,10 @@
         return `
       <div class="kv" style="flex-direction:column;align-items:stretch">
         <div style="display:flex;justify-content:space-between;gap:.5rem;font-size:.9rem;flex-wrap:wrap">
-            <div>
-          <span>${d.name}${modelStr}</span>
-          <span class="temp">${tempStr}</span>
-          </div>
+            <div style="flex-grow: 1;display: flex;justify-content: space-between;">
+              <span>${d.name}${modelStr}</span>
+              <span style="background: var(--chip-bg);font-size: .8rem;padding: .25rem .5rem;border-radius: 0.6rem;">${tempStr}</span>
+            </div>
           <span class="chip" style="${statusStyle(d.status)}">${d.status}</span>
         </div>
         <div class="bar"><i style="width:${p}%;background:${usageColor(p)}"></i></div>
