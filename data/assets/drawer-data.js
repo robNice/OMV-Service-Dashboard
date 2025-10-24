@@ -28,19 +28,22 @@
     }
 
     // Hilfsfunktion: einen Disk-Balken rendern
-    function renderDisk(d) {
+    function renderDisk(d, temps) {
         const total = humanBytes(d.size);
         const p = Math.min(100, Math.max(0, d.usedPercent || 0));
+        const tempObj = temps?.find(t => d.src.includes(t.device.replace("/dev/",""))) || null;
+        const tempStr = tempObj ? ` · ${tempObj.tempC}°C` : "";
         return `
-      <div class="kv" style="flex-direction:column;align-items:stretch">
-        <div style="display:flex;justify-content:space-between;font-size:.9rem">
-          <span>${d.src.replace("/dev/","")}</span>
-          <span class="chip">${p}% · ${total}</span>
-        </div>
-        <div class="bar"><i style="width:${p}%;background:${usageColor(p)}"></i></div>
+    <div class="kv" style="flex-direction:column;align-items:stretch">
+      <div style="display:flex;justify-content:space-between;font-size:.9rem">
+        <span>${d.src.replace("/dev/","")}${tempStr}</span>
+        <span class="chip">${p}% · ${total}</span>
       </div>
-    `;
+      <div class="bar"><i style="width:${p}%;background:${usageColor(p)}"></i></div>
+    </div>
+  `;
     }
+
 
     // Hauptaktualisierung
     async function loadStats() {
@@ -67,7 +70,8 @@
         if (cont) {
             cont.innerHTML = "";
             if (Array.isArray(s.disks) && s.disks.length) {
-                cont.innerHTML = s.disks.map(renderDisk).join("");
+                //cont.innerHTML = s.disks.map(renderDisk).join("");
+                cont.innerHTML = s.disks.map(d => renderDisk(d, s.temps?.disks)).join("");
             } else {
                 cont.innerHTML = `<div class="kv"><span>Keine Datenträger erkannt</span></div>`;
             }
