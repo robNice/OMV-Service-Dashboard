@@ -6,11 +6,16 @@ services:
       dockerfile: Dockerfile
     image: omv-landingpage-with-docker
     #container_name: omv-landingpage
+    pid: "host"                 # sieht Host-/proc PIDs
+    privileged: true
     volumes:
       - ./data:/data
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
+      - /:/hostroot:ro         # Host-Dateisystem lesen (für df & Mounts)
+      - /var/lib/dpkg:/host/var/lib/dpkg:ro  # dpkg-Status vom Host
+      - /dev:/host/dev         # Geräte für smartctl
     environment:
       PROC_ROOT: /host/proc
       SYS_ROOT: /host/sys

@@ -1,114 +1,168 @@
-// server/stats.js
+// server/stats.js — liest Host-Daten über gemountete Roots
+const fs = require("fs/promises");
 const { exec } = require("child_process");
 const { promisify } = require("util");
 const sh = promisify(exec);
 
+const PROC = process.env.PROC_ROOT || "/host/proc";
+const SYS  = process.env.SYS_ROOT  || "/host/sys";
+const HOST = process.env.HOST_ROOT || "/hostroot";
+const DPKG = process.env.DPKG_ROOT || "/host/var/lib/dpkg";
+
+// ---------- Helpers ----------
+async function readFile(p) {
+    try { return await fs.readFile(p, "utf8"); } catch { return null; }
+}
+function humanPercent(num) { return Math.max(0, Math.min(100, Math.round(num))); }
+
+// ---------- RAM ----------
 async function readMem() {
-    const { stdout } = await sh("cat /proc/meminfo");
-    const m = {};
-    stdout.split(/\n/).forEach(l => {
-        const [k, v] = l.split(":");
-        if (!k || !v) return;
-        m[k.trim()] = parseInt(v, 10); // kB
-    });
-    const total = m.MemTotal * 1024;
-    const free = (m.MemFree + m.Buffers + m.Cached) * 1024;
-    const used = total - free;
-    return {
-        total,
-        used,
-        percent: Math.round((used / total) * 100),
-    };
+    const txt = await readFile(`${PROC}/meminfo`);
+    if (!txt) return null;
+    const map = {};
+    for (const line of txt.split("\n")) {
+        const [k, v] = line.split(":");
+        if (!k || !v) continue;
+        map[k.trim()] = parseInt(v, 10) * 1024; // kB -> B
+    }
+    const total = map.MemTotal || 0;
+    const free  = (map.MemFree || 0) + (map.Buffers || 0) + (map.Cached || 0);
+    const used  = Math.max(0, total - free);
+    return { total, used, percent: total ? humanPercent((used / total) * 100) : 0 };
 }
 
+// ---------- Load & Uptime ----------
 async function readLoadUptime() {
-    const [load, up] = await Promise.all([
-        sh("cat /proc/loadavg"),
-        sh("cat /proc/uptime"),
-    ]);
-    const [l1, l5, l15] = load.stdout.trim().split(" ").slice(0, 3).map(Number);
-    const upsec = Math.floor(parseFloat(up.stdout.trim().split(" ")[0]));
-    const days = Math.floor(upsec / 86400);
-    const hours = Math.floor((upsec % 86400) / 3600);
-    const mins = Math.floor((upsec % 3600) / 60);
-    return { load: [l1, l5, l15], uptime: { days, hours, mins } };
+    const loadTxt = await readFile(`${PROC}/loadavg`);
+    const upTxt   = await readFile(`${PROC}/uptime`);
+    let load = [0,0,0], uptime = { days:0, hours:0, mins:0 };
+    if (loadTxt) {
+        const [a,b,c] = loadTxt.trim().split(/\s+/).slice(0,3).map(Number);
+        load = [a,b,c];
+    }
+    if (upTxt) {
+        const sec = Math.floor(parseFloat(upTxt.trim().split(/\s+/)[0]));
+        uptime = { days: Math.floor(sec/86400), hours: Math.floor(sec%86400/3600), mins: Math.floor(sec%3600/60) };
+    }
+    return { load, uptime };
 }
 
+// ---------- Disks (vom Host) ----------
 async function readDisks() {
-    // Alle gemounteten Blockdevices
-    const { stdout } = await sh("df -P -B1 --output=source,pcent,size,target | tail -n +2");
-    const lines = stdout.trim().split("\n").filter(Boolean);
-    const rows = lines.map(l => {
-        const parts = l.trim().split(/\s+/);
-        const [src, pcent, size, target] = parts;
-        return { src, usedPercent: parseInt(pcent, 10), size: parseInt(size, 10), mount: target };
-    });
-    // Nur echte Platten (sda, sdb, nvme, md) und große Mounts
-    return rows.filter(r => /^\/dev\/(sd|nvme|md)/.test(r.src));
+    // mounts vom Host lesen und Relevantes herausfiltern
+    const m = await readFile(`${PROC}/mounts`);
+    if (!m) return [];
+    const rows = [];
+    const skipTypes = new Set(["proc","sysfs","cgroup","cgroup2","tmpfs","devtmpfs","overlay","squashfs","ramfs","securityfs","pstore","bpf","tracefs","fusectl"]);
+    for (const line of m.split("\n")) {
+        if (!line) continue;
+        const [src, tgt, fstype] = line.split(/\s+/);
+        if (!src || !tgt || !fstype) continue;
+        if (skipTypes.has(fstype)) continue;
+        if (!/^\/dev\//.test(src)) continue;        // echte Blockdevices
+        // df auf Host-Pfad
+        try {
+            const { stdout } = await sh(`df -P -B1 --output=pcent,size,target ${HOST}${tgt} | tail -n 1`);
+            const [pcent, size, target] = stdout.trim().split(/\s+/);
+            rows.push({
+                src,
+                mount: tgt,
+                size: parseInt(size,10),
+                usedPercent: parseInt(pcent,10),
+            });
+        } catch {}
+    }
+    // Doppelte Mounts (z.B. Subvols) konsolidieren auf einmal pro Quelle
+    const dedup = new Map();
+    for (const r of rows) {
+        const key = `${r.src}`;
+        if (!dedup.has(key) || r.usedPercent > dedup.get(key).usedPercent) dedup.set(key, r);
+    }
+    return Array.from(dedup.values()).sort((a,b)=>a.src.localeCompare(b.src));
 }
 
+// ---------- Temperaturen ----------
 async function readTemps() {
-    // CPU via 'sensors', HDD via smartctl falls verfügbar
     let cpu = null;
+    // hwmon aus SYS lesen (funktioniert ohne lm-sensors)
     try {
-        const { stdout } = await sh("sensors 2>/dev/null | grep -m1 -Eo '[+]?[0-9]+\\.?[0-9]*°C'");
-        if (stdout) cpu = stdout.trim();
-    } catch (_) {}
+        const hwmons = await fs.readdir(`${SYS}/class/hwmon`);
+        let best = null;
+        for (const h of hwmons) {
+            const dir = `${SYS}/class/hwmon/${h}`;
+            const name = (await readFile(`${dir}/name`))?.trim() || "";
+            const entries = await fs.readdir(dir);
+            for (const e of entries) {
+                if (!/^temp[0-9]+_input$/.test(e)) continue;
+                const vTxt = await readFile(`${dir}/${e}`);
+                const millic = parseInt(vTxt, 10);
+                if (!isNaN(millic)) {
+                    const c = Math.round(millic / 1000);
+                    if (name.match(/(k10temp|coretemp|cpu)/i)) best = c;
+                }
+            }
+        }
+        if (best != null) cpu = `${best}°C`;
+    } catch {}
+    // HDD Temps via smartctl (optional, nur wenn installiert & /dev gemountet)
     const disks = [];
     try {
-        const { stdout } = await sh("lsblk -ndo NAME,TYPE | awk '$2==\"disk\"{print \"/dev/\"$1}'");
+        const { stdout } = await sh(`ls -1 ${HOST}/dev | egrep '^(sd[a-z]|nvme[0-9]+n[0-9]+)$' || true`);
         const devs = stdout.trim().split("\n").filter(Boolean);
         for (const d of devs) {
             try {
-                const { stdout: s } = await sh(`smartctl -A ${d} 2>/dev/null | egrep '194|190' | awk '{print $10}' | tail -n1`);
+                const { stdout: s } = await sh(`smartctl -A /host/dev/${d} 2>/dev/null | egrep '194|190' | awk '{print $10}' | tail -n1`);
                 const t = parseInt(s, 10);
-                if (!isNaN(t)) disks.push({ device: d, tempC: t });
-            } catch (_) {}
+                if (!isNaN(t)) disks.push({ device: `/dev/${d}`, tempC: t });
+            } catch {}
         }
-    } catch (_) {}
+    } catch {}
     return { cpu, disks };
 }
 
+// ---------- OMV Versionen/Plugins (dpkg-Status vom Host parsen) ----------
 async function readOMV() {
-    // OMV-Version + Plugins aus dpkg
-    let omv = null;
-    const plugins = [];
-    try {
-        const { stdout } = await sh(`dpkg-query -W -f='${'${Package} ${Version}\\n'}' 'openmediavault*' 2>/dev/null`);
-        stdout.trim().split("\n").forEach(line => {
-            const [pkg, ver] = line.trim().split(/\s+/);
-            if (!pkg || !ver) return;
-            if (pkg === "openmediavault") omv = ver;
-            else if (pkg.startsWith("openmediavault-")) plugins.push({ name: pkg.replace(/^openmediavault-/, ''), version: ver });
-        });
-    } catch (_) {}
+    const status = await readFile(`${DPKG}/status`);
+    if (!status) return { omv: null, plugins: [] };
+    const blocks = status.split("\n\n");
+    let omv = null; const plugins = [];
+    for (const b of blocks) {
+        const pkg = b.match(/^Package:\s*(.+)$/m)?.[1]?.trim();
+        if (!pkg) continue;
+        const ver = b.match(/^Version:\s*(.+)$/m)?.[1]?.trim();
+        if (!ver) continue;
+        if (pkg === "openmediavault") omv = ver;
+        else if (pkg.startsWith("openmediavault-")) {
+            plugins.push({ name: pkg.replace(/^openmediavault-/, ""), version: ver });
+        }
+    }
     return { omv, plugins };
 }
 
+// ---------- Docker Updates ----------
 async function readDockerUpdates() {
-    // Für laufende Container: Image vergleichen mit remote (pull nur Manifest)
-    // Achtung: benötigt /var/run/docker.sock im Container + Docker CLI
     const out = { updates: [], total: 0 };
     try {
         const { stdout } = await sh("docker ps --format '{{.Names}}|{{.Image}}'");
-        const lines = stdout.trim().split("\n").filter(Boolean);
+        const lines = stdout.trim() ? stdout.trim().split("\n") : [];
         for (const line of lines) {
             const [name, image] = line.split("|");
+            if (!name || !image) continue;
             try {
                 const { stdout: before } = await sh(`docker image inspect --format='{{.Id}}' ${image}`);
-                await sh(`docker pull -q ${image}`); // lädt nur neuere Layer, falls vorhanden
+                await sh(`docker pull -q ${image}`);
                 const { stdout: after } = await sh(`docker image inspect --format='{{.Id}}' ${image}`);
-                const changed = before.trim() !== after.trim();
-                if (changed) out.updates.push({ container: name, image, current: before.trim(), latest: after.trim() });
-            } catch (_) {
-                // ignore single image failures
-            }
+                if (before.trim() !== after.trim()) {
+                    out.updates.push({ container: name, image, current: before.trim(), latest: after.trim() });
+                }
+            } catch {}
         }
         out.total = out.updates.length;
-    } catch (_) {}
+    } catch {}
     return out;
 }
 
+// ---------- Exportierte Aggregation ----------
 async function getStats() {
     const [mem, lu, disks, temps, omv, docker] = await Promise.all([
         readMem(),
@@ -118,10 +172,9 @@ async function getStats() {
         readOMV(),
         readDockerUpdates(),
     ]);
-
     return {
         ts: Date.now(),
-        ram: mem,
+        ram: mem || { total:0, used:0, percent:0 },
         load: lu.load,
         uptime: lu.uptime,
         disks,
