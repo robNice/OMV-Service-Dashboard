@@ -133,20 +133,30 @@ async function readDisks() {
 // ------- Temperaturen -------
 // ------- Temperaturen (CPU + HDDs erweitert) -------
 // ------- Temperaturen (CPU + HDDs via smartctl --json) -------
+// ------- Temperaturen (CPU + HDDs via smartctl + sysfs/hwmon mapping) -------
 async function readTemps() {
-    let cpu = null;
+    const realpath = async (p) => {
+        try { return await fs.realpath(p); } catch { return null; }
+    };
+    const readDir = async (p) => {
+        try { return await fs.readdir(p); } catch { return []; }
+    };
+    const read = async (p) => {
+        try { return await fs.readFile(p, "utf8"); } catch { return null; }
+    };
 
-    // CPU-Temp via hwmon
+    // --- CPU-Temperatur über hwmon ---
+    let cpu = null;
     try {
-        const hwmons = await fs.readdir(`${SYS}/class/hwmon`);
+        const hwmons = await readDir(`${SYS}/class/hwmon`);
         let best = null;
         for (const h of hwmons) {
             const dir = `${SYS}/class/hwmon/${h}`;
-            const name = (await readFile(`${dir}/name`))?.trim() || "";
-            const entries = await fs.readdir(dir);
-            for (const e of entries) {
-                if (!/^temp[0-9]+_input$/.test(e)) continue;
-                const vTxt = await readFile(`${dir}/${e}`);
+            const name = (await read(`${dir}/name`))?.trim() || "";
+            const files = await readDir(dir);
+            for (const f of files) {
+                if (!/^temp[0-9]+_input$/.test(f)) continue;
+                const vTxt = await read(`${dir}/${f}`);
                 const millic = parseInt(vTxt, 10);
                 if (!isNaN(millic)) {
                     const c = Math.round(millic / 1000);
@@ -157,36 +167,34 @@ async function readTemps() {
         if (best != null) cpu = `${best}°C`;
     } catch {}
 
-    // Disk-Temps via smartctl --json (erfordert Zugriff auf /dev/*)
-    const disks = [];
+    // --- 1) Disk-Temps per smartctl --json (SATA/NVMe, wenn verfügbar) ---
+    const smartTemps = new Map(); // "/dev/sdX" -> tempC
     try {
-        // Alle physischen Disks (keine Partitionen)
         const { stdout } = await sh(`lsblk -dn -o NAME,TYPE | awk '$2=="disk"{print "/dev/"$1}'`);
         const devs = stdout.trim().split("\n").filter(Boolean);
 
-        // Helper: smartctl JSON parsen
         async function smartTemp(dev) {
             try {
                 const { stdout } = await sh(`smartctl -a --json ${dev} 2>/dev/null`);
                 const j = JSON.parse(stdout);
 
-                // NVMe: nvme_smart_health_information_log.temperature (°C)
-                if (j.nvme_smart_health_information_log && typeof j.nvme_smart_health_information_log.temperature === "number") {
-                    return { device: dev, tempC: j.nvme_smart_health_information_log.temperature };
+                // NVMe
+                if (j.nvme_smart_health_information_log &&
+                    typeof j.nvme_smart_health_information_log.temperature === "number") {
+                    return j.nvme_smart_health_information_log.temperature;
                 }
-
-                // Allgemein: j.temperature.current (manche SATA/USB-Ausgaben)
+                // General
                 if (j.temperature && typeof j.temperature.current === "number") {
-                    return { device: dev, tempC: j.temperature.current };
+                    return j.temperature.current;
                 }
-
-                // ATA (SATA): Attribute-Tabelle (IDs 194 / 190)
+                // ATA attributes (190/194)
                 const tbl = j.ata_smart_attributes && j.ata_smart_attributes.table;
                 if (Array.isArray(tbl)) {
                     for (const a of tbl) {
                         if (a.id === 194 || a.id === 190) {
-                            const rawv = (a.raw && typeof a.raw.value !== "undefined") ? Number(a.raw.value) : Number(a.value);
-                            if (!Number.isNaN(rawv)) return { device: dev, tempC: rawv };
+                            const rawv = (a.raw && typeof a.raw.value !== "undefined")
+                                ? Number(a.raw.value) : Number(a.value);
+                            if (!Number.isNaN(rawv)) return rawv;
                         }
                     }
                 }
@@ -194,57 +202,90 @@ async function readTemps() {
             return null;
         }
 
-        // Helper: sysfs fallback (/sys/block/<dev>/device/)
-        async function sysfsTemp(dev) {
-            const name = dev.replace("/dev/", "");
-            const base = `${SYS}/block/${name}/device`;
-            try {
-                // Es kann mehrere hwmon-Instanzen geben
-                const hmons = await fs.readdir(base);
-                for (const entry of hmons) {
-                    if (entry.startsWith("hwmon")) {
-                        const dir = `${base}/${entry}`;
-                        const files = await fs.readdir(dir);
-                        for (const f of files) {
-                            if (/^temp[0-9]+_input$/.test(f)) {
-                                const val = await readFile(`${dir}/${f}`);
-                                const millic = parseInt(val.trim(), 10);
-                                if (!isNaN(millic)) {
-                                    return { device: dev, tempC: Math.round(millic / 1000) };
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch {}
-            return null;
-        }
-
-        // Kombiniert: zuerst smartctl, dann sysfs fallback
-        const results = [];
-        for (const d of devs) {
-            let t = await smartTemp(d);
-            if (!t) t = await sysfsTemp(d);
-            if (t && typeof t.tempC === "number") results.push(t);
-        }
-        disks.push(...results);
+        const vals = await Promise.all(devs.map(async d => [d, await smartTemp(d)]));
+        for (const [dev, t] of vals) if (typeof t === "number") smartTemps.set(dev, t);
     } catch {}
-    // Optional: Gehäuse-/PCH-/Board-Sensoren
-    const chassis = [];
+
+    // --- 2) sysfs/hwmon Fallback → ordnet hwmon-Sensoren dem Blockdevice zu ---
+    // Idee: /sys/class/hwmon/hwmon*/device -> realpath
+    //       /sys/class/block/<dev>/device -> realpath
+    // Wenn gleich/Prefix, dann gehört Sensor zu dem Blockdevice.
+    const sysfsTemps = new Map();
     try {
-        const hwmons = await fs.readdir(`${SYS}/class/hwmon`);
+        const hwmons = await readDir(`${SYS}/class/hwmon`);
+        // baue Map: realpath(/sys/class/hwmon/hwmonX/device) -> Temperatur in °C
+        const sensorByDevPath = new Map();
         for (const h of hwmons) {
             const dir = `${SYS}/class/hwmon/${h}`;
-            const name = (await readFile(`${dir}/name`))?.trim().toLowerCase() || "";
-            if (!name.match(/(acpitz|pch|motherboard|system|chassis)/)) continue;
-            const entries = await fs.readdir(dir);
-            for (const e of entries) {
-                if (!/^temp[0-9]+_input$/.test(e)) continue;
-                const vTxt = await readFile(`${dir}/${e}`);
+            const name = (await read(`${dir}/name`))?.trim().toLowerCase() || "";
+            // nur Kandidaten, die typischerweise zu Laufwerken gehören
+            if (!name.match(/(drivetemp|nvme|sata|ahci|scsi|ata|disk)/)) continue;
+
+            const devPath = await realpath(`${dir}/device`);
+            if (!devPath) continue;
+
+            // sammle einen sinnvollen Temperaturwert aus temp*_input
+            const files = await readDir(dir);
+            let tempC = null;
+            for (const f of files) {
+                if (!/^temp[0-9]+_input$/.test(f)) continue;
+                const vTxt = await read(`${dir}/${f}`);
                 const millic = parseInt(vTxt, 10);
                 if (!isNaN(millic)) {
-                    chassis.push({ label: name, tempC: Math.round(millic / 1000) });
+                    const c = Math.round(millic / 1000);
+                    // nimm den höchsten/letzten gefundenen Wert als Heuristik
+                    tempC = c;
                 }
+            }
+            if (tempC != null) sensorByDevPath.set(devPath, tempC);
+        }
+
+        // mappe auf Blockdevices
+        const blocks = await readDir(`${SYS}/class/block`);
+        for (const b of blocks) {
+            if (!/^(sd[a-z]+|nvme\d+n\d+)$/.test(b)) continue;
+            const blockDev = `/dev/${b}`;
+            const blockDevPath = await realpath(`${SYS}/class/block/${b}/device`);
+            if (!blockDevPath) continue;
+
+            // direkter Treffer
+            if (sensorByDevPath.has(blockDevPath)) {
+                sysfsTemps.set(blockDev, sensorByDevPath.get(blockDevPath));
+                continue;
+            }
+            // heuristisch: manche Pfade sind Eltern/Kind-Beziehungen → Prefix-Vergleich
+            for (const [devPath, t] of sensorByDevPath.entries()) {
+                if (blockDevPath.startsWith(devPath) || devPath.startsWith(blockDevPath)) {
+                    sysfsTemps.set(blockDev, t);
+                    break;
+                }
+            }
+        }
+    } catch {}
+
+    // --- 3) Merge: bevorzugt SMART, sonst sysfs ---
+    const diskMap = new Map();
+    for (const [k, v] of sysfsTemps) diskMap.set(k, v);
+    for (const [k, v] of smartTemps) diskMap.set(k, v); // SMART overwrites sysfs
+
+    const disks = Array.from(diskMap.entries())
+        .map(([device, tempC]) => ({ device, tempC }))
+        .sort((a, b) => a.device.localeCompare(b.device));
+
+    // --- Chassis/Board-Sensoren (wie gehabt) ---
+    const chassis = [];
+    try {
+        const hwmons = await readDir(`${SYS}/class/hwmon`);
+        for (const h of hwmons) {
+            const dir = `${SYS}/class/hwmon/${h}`;
+            const name = (await read(`${dir}/name`))?.trim().toLowerCase() || "";
+            if (!name.match(/(acpitz|pch|motherboard|system|chassis)/)) continue;
+            const files = await readDir(dir);
+            for (const f of files) {
+                if (!/^temp[0-9]+_input$/.test(f)) continue;
+                const vTxt = await read(`${dir}/${f}`);
+                const millic = parseInt(vTxt, 10);
+                if (!isNaN(millic)) chassis.push({ label: name, tempC: Math.round(millic / 1000) });
             }
         }
     } catch {}
