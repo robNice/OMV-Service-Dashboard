@@ -135,6 +135,7 @@ async function readDisks() {
 // ------- Temperaturen (CPU + HDDs via smartctl --json) -------
 // ------- Temperaturen (CPU + HDDs via smartctl + sysfs/hwmon mapping) -------
 // ------- Temperaturen (CPU + HDDs: smartctl JSON → SCT → -x → sysfs-Ancestry) -------
+// ------- Temperaturen (CPU + HDDs: multi-probe smartctl → sysfs fallback) -------
 async function readTemps() {
     const read = async (p) => { try { return await fs.readFile(p, "utf8"); } catch { return null; } };
     const rd = async (p) => { try { return await fs.readdir(p); } catch { return []; } };
@@ -168,63 +169,68 @@ async function readTemps() {
         devs = stdout.trim().split("\n").filter(Boolean);
     } catch {}
 
-    // Helfer: smartctl JSON, SCT, -x parsen
-    async function smartJsonTemp(dev) {
-        try {
-            const { stdout } = await sh(`smartctl -a --json ${dev} 2>/dev/null`);
-            const j = JSON.parse(stdout);
-            if (j.nvme_smart_health_information_log?.temperature != null)
-                return j.nvme_smart_health_information_log.temperature;
-            if (j.temperature?.current != null)
-                return Number(j.temperature.current);
+    // --- smartctl Probes ---
+    const DEV_TYPES = ["auto", "ata", "sat", "scsi", "ata,12", "sat,12"]; // probiere mehrere Treiber
+    async function probeSmartTemp(dev) {
+        // 1) JSON
+        for (const dt of DEV_TYPES) {
+            try {
+                const { stdout } = await sh(`smartctl -a --json ${dt !== "auto" ? `-d ${dt}` : ""} ${dev} 2>/dev/null`);
+                const j = JSON.parse(stdout);
 
-            const tbl = j.ata_smart_attributes?.table;
-            if (Array.isArray(tbl)) {
-                for (const a of tbl) {
-                    if (a.id === 194 || a.id === 190) {
-                        const v = a.raw?.value ?? a.value;
-                        if (v != null) return Number(v);
+                // NVMe
+                if (j.nvme_smart_health_information_log?.temperature != null)
+                    return j.nvme_smart_health_information_log.temperature;
+
+                // Generic
+                if (j.temperature?.current != null)
+                    return Number(j.temperature.current);
+
+                // ATA attributes (190/194)
+                const tbl = j.ata_smart_attributes?.table;
+                if (Array.isArray(tbl)) {
+                    for (const a of tbl) {
+                        if (a.id === 194 || a.id === 190) {
+                            const v = a.raw?.value ?? a.value;
+                            if (v != null) return Number(v);
+                        }
                     }
                 }
-            }
-        } catch {}
+            } catch { /* next */ }
+        }
+
+        // 2) SCT
+        for (const dt of DEV_TYPES) {
+            try {
+                const { stdout } = await sh(`smartctl -l scttempsts ${dt !== "auto" ? `-d ${dt}` : ""} ${dev} 2>/dev/null`);
+                const m = stdout.match(/Current (Drive )?Temperature:\s+(\d+)\s*C/i);
+                if (m) return Number(m[2]);
+            } catch { /* next */ }
+        }
+
+        // 3) Vollausgabe -x
+        for (const dt of DEV_TYPES) {
+            try {
+                const { stdout } = await sh(`smartctl -x ${dt !== "auto" ? `-d ${dt}` : ""} ${dev} 2>/dev/null`);
+                let m = stdout.match(/Current (Drive )?Temperature:\s+(\d+)\s*C/i);
+                if (m) return Number(m[2]);
+                m = stdout.match(/Drive Temperature:\s+(\d+)\s*C/i);
+                if (m) return Number(m[1]);
+                m = stdout.match(/Temperature:\s+(\d+)\s*C/i); // NVMe
+                if (m) return Number(m[1]);
+            } catch { /* next */ }
+        }
+
         return null;
     }
 
-    async function smartSCTTemp(dev) {
-        try {
-            const { stdout } = await sh(`smartctl -l scttempsts ${dev} 2>/dev/null`);
-            // Beispiele:
-            // Current Temperature:                    36 Celsius
-            // Current Drive Temperature:     48 C
-            const m = stdout.match(/Current (Drive )?Temperature:\s+(\d+)\s*C/i);
-            if (m) return Number(m[2]);
-        } catch {}
-        return null;
-    }
-
-    async function smartXTemp(dev) {
-        try {
-            const { stdout } = await sh(`smartctl -x ${dev} 2>/dev/null`);
-            // Fallback-Muster
-            let m = stdout.match(/Current (Drive )?Temperature:\s+(\d+)\s*C/i);
-            if (m) return Number(m[2]);
-            m = stdout.match(/Drive Temperature:\s+(\d+)\s*C/i);
-            if (m) return Number(m[1]);
-            m = stdout.match(/Temperature:\s+(\d+)\s*C/i); // NVMe
-            if (m) return Number(m[1]);
-        } catch {}
-        return null;
-    }
-
-    // sysfs: gehe Elternkette hoch und suche hwmon/temp*_input
+    // --- sysfs-Ancestry Fallback ---
     async function sysfsAncestryTemp(dev) {
         const name = dev.replace("/dev/", "");
         let cur = await rp(`${SYS}/class/block/${name}`);
         const visited = new Set();
         while (cur && !visited.has(cur)) {
             visited.add(cur);
-            // direktes hwmon?
             const entries = await rd(cur);
             for (const e of entries) {
                 if (!e.startsWith("hwmon")) continue;
@@ -236,34 +242,24 @@ async function readTemps() {
                     if (!isNaN(v)) return Math.round(v / 1000);
                 }
             }
-            // /device & Parent
             const devLink = await rp(`${cur}/device`);
-            if (devLink && !visited.has(devLink)) {
-                cur = devLink;
-                continue;
-            }
-            // Parent-Verzeichnis
+            if (devLink && !visited.has(devLink)) { cur = devLink; continue; }
             const parent = cur.split("/").slice(0, -1).join("/");
-            if (parent && parent !== cur) {
-                cur = parent;
-                continue;
-            }
+            if (parent && parent !== cur) { cur = parent; continue; }
             break;
         }
         return null;
     }
 
-    // Für jedes Device: JSON → SCT → -x → sysfs
+    // Für jedes Device: smartctl (Multi-Probe) → sysfs
     const disks = [];
     for (const d of devs) {
-        let t = await smartJsonTemp(d);
-        if (t == null) t = await smartSCTTemp(d);
-        if (t == null) t = await smartXTemp(d);
+        let t = await probeSmartTemp(d);
         if (t == null) t = await sysfsAncestryTemp(d);
         if (typeof t === "number") disks.push({ device: d, tempC: t });
     }
 
-    // Chassis / Board wie gehabt
+    // Chassis/Board wie gehabt
     const chassis = [];
     try {
         const hwmons = await rd(`${SYS}/class/hwmon`);
@@ -280,7 +276,6 @@ async function readTemps() {
         }
     } catch {}
 
-    // sortiert zurückgeben
     disks.sort((a, b) => a.device.localeCompare(b.device));
     return { cpu, disks, chassis };
 }

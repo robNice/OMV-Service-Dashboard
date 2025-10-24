@@ -7,16 +7,13 @@ const { getStats } = require("./server/stats"); // <— neu
 
 const PORT = 3000;
 
-app.use("/assets", express.static("/data/assets"));
 
 
-app.use(
-    "/assets",
-    express.static(path.resolve(__dirname, "data", "data/assets"), {
-        maxAge: "1h",
-        etag: false,
-    })
-);
+app.use("/assets", express.static("/data/assets", {
+    maxAge: "1h",
+    etag: false,
+}));
+
 
 // Hilfsfunktion zum Einlesen und Parsen der services.json
 function loadData() {
@@ -50,16 +47,17 @@ function renderSection(section) {
 
 
 
-app.get('/favicon.ico', (req, res) => {
-    // Langer Cache, weil sich Favicons selten ändern
-    res.set('Cache-Control', 'public, max-age=31536000, immutable');
-    res.sendFile('/data/assets/favicon.ico', (err) => {
+app.get("/favicon.ico", (req, res) => {
+    res.type("image/x-icon");
+    res.set("Cache-Control", "public, max-age=31536000, immutable");
+    res.sendFile("favicon.ico", { root: "/data/assets" }, (err) => {
         if (err) {
-            // Falls die Datei fehlt, keine Fehlerseite – Browser erwartet nur 200/404.
+            console.error("favicon send failed:", err);
             res.status(404).end();
         }
     });
 });
+app.head("/favicon.ico", (req, res) => res.status(200).end());
 
 app.get("/api/stats", async (req, res) => {
     try {
