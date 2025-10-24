@@ -209,11 +209,6 @@ async function readTempsCpuChassis() {
 
 
 
-function kuerzeText(val, n) {
-    const s = (val == null) ? "" : String(val);
-    return s.length > n ? s.slice(0, n) + "…" : s;
-}
-
 async function readPhysicalDrives() {
     // OMV SMART-Liste
     const list = await readOmvSmartList();
@@ -245,12 +240,11 @@ async function readPhysicalDrives() {
         const usedBytes = u.usedBytes;
         const usedPercent = sizeBytes > 0 ? clamp(Math.round((usedBytes / sizeBytes) * 100), 0, 100) : null;
 
-        const modelShortened = kuerzeText(model,8);
 
         drives.push({
             device: dev,              // /dev/sdX
             byId: byIdOrDev,          // /dev/disk/by-id/...
-            modelShortened,                    // z. B. "Corsair Force LS SSD"
+            model,                    // z. B. "Corsair Force LS SSD"
             tempC,                    // z. B. 77
             status,                   // GOOD / WARNING / FAILING / UNKNOWN ...
             sizeBytes,

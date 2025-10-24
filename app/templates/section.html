@@ -17,6 +17,8 @@
 <!-- Info Drawer (global, auf allen Seiten) -->
 <link rel="stylesheet" href="/assets/drawer.css">
 
+
+
 <div id="info-drawer" aria-live="polite">
     <div class="panel">
         <div class="tab" title="Systeminformationen öffnen/schließen">INFO</div>
@@ -37,8 +39,6 @@
                     <div id="ram-usage" class="bar"><i></i></div>
                     <div style="text-align:right;font-size:.8rem;opacity:.8" data-ram-used>–</div>
                 </div>
-
-
             </div>
 
             <!-- Disks -->
@@ -51,7 +51,8 @@
             <div class="section">
                 <h3>Temperaturen</h3>
                 <div class="kv"><span>CPU</span><span class="chip" data-cpu-temp>–</span></div>
-                <div class="kv"><span>NVMe/HDD</span><span class="chip" data-nvme-temp>–</span></div>
+                <div class="kv"><span>HDD Ø</span><span class="chip" data-hdd-temp>–</span></div>
+                <div class="kv"><span>Chassis</span><span class="chip" data-chassis-temps>–</span></div>
             </div>
 
             <!-- Versions / Updates -->
@@ -77,6 +78,8 @@
         </footer>
     </div>
 </div>
+
+
 
 <script src="/assets/drawer.js" defer></script>
 <script src="/assets/drawer-data.js" defer></script>

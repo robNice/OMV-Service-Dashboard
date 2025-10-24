@@ -34,6 +34,13 @@
         return "background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#e5e7eb;";
     }
 
+    function shortModel(str) {
+        if (!str) return "";
+        const t = String(str).trim();
+        if (t.length <= 8) return t;
+        return t.slice(0, 8) + "…";
+    }
+
     function normalizeDisk(d) {
         const device = d.device || "";
         const name   = device ? device.replace("/dev/","") : (d.byId?.split("/").pop() || "unknown");
@@ -54,7 +61,7 @@
         const used  = humanBytes(d.usedBytes);
         const p = d.usedPercent;
         const tempStr = (d.tempC != null) ? ` · ${d.tempC}°C` : "";
-        const modelStr = d.model ? `, ${d.model}` : "";
+        const modelStr = d.model ? `, ${shortModel(d.model)}` : "";
 
         return `
       <div class="kv" style="flex-direction:column;align-items:stretch">
