@@ -3,9 +3,9 @@ FROM node:18-alpine
 # Install docker CLI (für docker ps im Container)
 RUN apk add --no-cache docker-cli
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    lm-sensors smartmontools coreutils util-linux procps \
- && rm -rf /var/lib/apt/lists/*
+FROM node:20-alpine
+RUN apk add --no-cache \
+    coreutils util-linux procps lm_sensors smartmontools
 
 
 WORKDIR /app
