@@ -132,10 +132,11 @@ async function readDisks() {
 
 // ------- Temperaturen -------
 // ------- Temperaturen (CPU + HDDs erweitert) -------
+// ------- Temperaturen (CPU + HDDs via smartctl --json) -------
 async function readTemps() {
     let cpu = null;
 
-    // --- CPU-Temperatur (hwmon) ---
+    // CPU-Temp via hwmon
     try {
         const hwmons = await fs.readdir(`${SYS}/class/hwmon`);
         let best = null;
@@ -156,37 +157,50 @@ async function readTemps() {
         if (best != null) cpu = `${best}°C`;
     } catch {}
 
-    // --- HDD/NVMe Temperaturen via smartctl ---
+    // Disk-Temps via smartctl --json (erfordert Zugriff auf /dev/*)
     const disks = [];
     try {
-        const { stdout } = await sh(`ls -1 ${HOST}/dev | egrep '^(sd[a-z]|nvme[0-9]+n[0-9]+)$' || true`);
+        // Alle physischen Disks (keine Partitionen)
+        const { stdout } = await sh(`lsblk -dn -o NAME,TYPE | awk '$2=="disk"{print "/dev/"$1}'`);
         const devs = stdout.trim().split("\n").filter(Boolean);
-        for (const d of devs) {
+
+        // Helper: smartctl JSON parsen
+        async function smartTemp(dev) {
             try {
-                const cmd = `smartctl -A /host/dev/${d} 2>/dev/null`;
-                const { stdout: s } = await sh(cmd);
+                const { stdout } = await sh(`smartctl -a --json ${dev} 2>/dev/null`);
+                const j = JSON.parse(stdout);
 
-                // Versuche mehrere mögliche Temperatur-Felder
-                const patterns = [
-                    /^194\s+Temperature_Celsius\s+\S+\s+\S+\s+\S+\s+\S+\s+(\d+)/m,
-                    /^190\s+Airflow_Temperature_Cel\s+\S+\s+\S+\s+\S+\s+\S+\s+(\d+)/m,
-                    /^Temperature:\s+(\d+)\s*C/m,                     // NVMe
-                    /^Current Temperature:\s+(\d+)\s*C/m,             // alternative Ausgabe
-                ];
+                // NVMe: nvme_smart_health_information_log.temperature (°C)
+                if (j.nvme_smart_health_information_log && typeof j.nvme_smart_health_information_log.temperature === "number") {
+                    return { device: dev, tempC: j.nvme_smart_health_information_log.temperature };
+                }
 
-                let temp = null;
-                for (const p of patterns) {
-                    const m = s.match(p);
-                    if (m) { temp = parseInt(m[1], 10); break; }
+                // Allgemein: j.temperature.current (manche SATA/USB-Ausgaben)
+                if (j.temperature && typeof j.temperature.current === "number") {
+                    return { device: dev, tempC: j.temperature.current };
                 }
-                if (temp != null && !isNaN(temp)) {
-                    disks.push({ device: `/dev/${d}`, tempC: temp });
+
+                // ATA (SATA): Attribute-Tabelle (IDs 194 / 190)
+                const tbl = j.ata_smart_attributes && j.ata_smart_attributes.table;
+                if (Array.isArray(tbl)) {
+                    for (const a of tbl) {
+                        if (a.id === 194 || a.id === 190) {
+                            // bevorzugt raw.value, sonst value
+                            const rawv = (a.raw && typeof a.raw.value !== "undefined") ? Number(a.raw.value) : Number(a.value);
+                            if (!Number.isNaN(rawv)) return { device: dev, tempC: rawv };
+                        }
+                    }
                 }
-            } catch { /* ignore single drive */ }
+            } catch { /* ignore this dev */ }
+            return null;
         }
+
+        // parallel abfragen
+        const results = await Promise.all(devs.map(smartTemp));
+        for (const r of results) if (r && typeof r.tempC === "number") disks.push(r);
     } catch {}
 
-    // --- Optional: Gehäuse-/Mainboard-Sensoren (falls vorhanden) ---
+    // Optional: Gehäuse-/PCH-/Board-Sensoren
     const chassis = [];
     try {
         const hwmons = await fs.readdir(`${SYS}/class/hwmon`);
