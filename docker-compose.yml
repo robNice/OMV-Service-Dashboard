@@ -8,6 +8,8 @@ services:
     #container_name: omv-landingpage
     pid: "host"                 # sieht Host-/proc PIDs
     privileged: true
+    devices:
+      - "/dev:/dev"
     volumes:
       - ./data:/data
       - /var/run/docker.sock:/var/run/docker.sock

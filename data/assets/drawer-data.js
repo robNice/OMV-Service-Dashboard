@@ -1,83 +1,138 @@
 // /assets/drawer-data.js
+// Lädt /api/stats regelmäßig, zeigt RAM, Disks, Temps, Versionsinfos u. Updates.
+
 (async function () {
     const $ = (sel) => document.querySelector(sel);
-
-    function setText(sel, val) { const n = $(sel); if (n) n.textContent = val; }
-    function setBar(id, percent) {
-        const p = Math.max(0, Math.min(100, Math.round(percent)));
-        const bar = document.querySelector(`#${id} i`);
-        if (bar) bar.style.width = p + "%";
-        const label = document.querySelector(`[data-label-for='${id}']`);
-        if (label) label.textContent = p + "%";
-    }
+    const host = "/api/stats";
+    const POLL_MS = 30000; // 30s
 
     function humanBytes(b) {
-        if (b == null) return "–";
-        const units = ["B","KB","MB","GB","TB","PB"];
+        if (!b || b <= 0) return "–";
+        const u = ["B", "KB", "MB", "GB", "TB", "PB"];
         let i = 0, n = b;
-        while (n >= 1024 && i < units.length - 1) { n /= 1024; i++; }
-        return n.toFixed(n >= 10 ? 0 : 1) + " " + units[i];
+        while (n >= 1024 && i < u.length - 1) { n /= 1024; i++; }
+        return n.toFixed(n >= 10 ? 0 : 1) + " " + u[i];
     }
 
-    async function load() {
-        const r = await fetch("/api/stats", { cache: "no-store" });
-        if (!r.ok) throw new Error("fetch failed");
-        const s = await r.json();
+    function setText(sel, val) {
+        const el = $(sel);
+        if (el) el.textContent = val;
+    }
+
+    // Farbverlauf für Balken nach Belegung
+    function usageColor(p) {
+        if (p >= 85) return "linear-gradient(to right,#ef4444,#b91c1c)"; // rot
+        if (p >= 70) return "linear-gradient(to right,#f97316,#ea580c)"; // orange
+        if (p >= 50) return "linear-gradient(to right,#eab308,#ca8a04)"; // gelb
+        return "linear-gradient(to right,#22c55e,#15803d)"; // grün
+    }
+
+    // Hilfsfunktion: einen Disk-Balken rendern
+    function renderDisk(d) {
+        const total = humanBytes(d.size);
+        const p = Math.min(100, Math.max(0, d.usedPercent || 0));
+        return `
+      <div class="kv" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;justify-content:space-between;font-size:.9rem">
+          <span>${d.src.replace("/dev/","")}</span>
+          <span class="chip">${p}% · ${total}</span>
+        </div>
+        <div class="bar"><i style="width:${p}%;background:${usageColor(p)}"></i></div>
+      </div>
+    `;
+    }
+
+    // Hauptaktualisierung
+    async function loadStats() {
+        const res = await fetch(host, { cache: "no-store" });
+        if (!res.ok) throw new Error(res.statusText);
+        const s = await res.json();
 
         // RAM
         if (s.ram) {
-            setBar("ram-usage", s.ram.percent);
+            const p = s.ram.percent ?? 0;
+            const used = (s.ram.used / (1024 ** 3)).toFixed(1);
+            const total = (s.ram.total / (1024 ** 3)).toFixed(1);
+            setText("[data-label-for='ram-usage']", p + "%");
+            const bar = $("#ram-usage i");
+            if (bar) {
+                bar.style.width = p + "%";
+                bar.style.background = usageColor(p);
+            }
+            setText("[data-ram-used]", `${used}/${total} GB`);
         }
 
-        // Disks (wir mappen die ersten drei auf sda/sdb/sdc – passe bei Bedarf IDs an)
-        if (Array.isArray(s.disks)) {
-            const map = ["disk-sda", "disk-sdb", "disk-sdc"];
-            s.disks.slice(0, 3).forEach((d, i) => setBar(map[i], d.usedPercent));
-        }
-
-        // Temps
-        if (s.temps) {
-            setText("[data-cpu-temp]", s.temps.cpu || "–");
-            const hddT = (s.temps.disks && s.temps.disks[0]?.tempC) ? `${s.temps.disks[0].tempC}°C` : "–";
-            setText("[data-nvme-temp]", hddT);
-        }
-
-        // Uptime & Load
-        if (s.uptime) {
-            const u = s.uptime;
-            setText("[data-uptime]", `${u.days} Tage ${u.hours} Std`);
-        }
-        if (Array.isArray(s.load)) {
-            setText("[data-load]", s.load.map(v => v.toFixed(2)).join(" / "));
-        }
-
-        // OMV + Plugins
-        if (s.versions) {
-            setText("[data-omv-version]", s.versions.omv || "–");
-            if (Array.isArray(s.versions.plugins)) {
-                const txt = s.versions.plugins.slice(0, 4).map(p => `${p.name} ${p.version}`).join(" · ");
-                setText("[data-plugins]", txt || "–");
+        // Disks
+        const cont = $("#drawer-disks");
+        if (cont) {
+            cont.innerHTML = "";
+            if (Array.isArray(s.disks) && s.disks.length) {
+                cont.innerHTML = s.disks.map(renderDisk).join("");
+            } else {
+                cont.innerHTML = `<div class="kv"><span>Keine Datenträger erkannt</span></div>`;
             }
         }
 
-        // Docker Updates
-        if (s.docker) {
-            const n = s.docker.total || 0;
-            setText("[data-updates]", n === 0 ? "Keine Updates" : `${n} Container haben Updates`);
+        // Temperaturen
+        if (s.temps) {
+            setText("[data-cpu-temp]", s.temps.cpu || "–");
+            const hddTemp =
+                s.temps.disks && s.temps.disks.length
+                    ? Math.round(
+                    s.temps.disks.map((x) => x.tempC).reduce((a, b) => a + b, 0) /
+                    s.temps.disks.length
+                ) + "°C"
+                    : "–";
+            setText("[data-nvme-temp]", hddTemp);
         }
 
-        // Timestamp
+        // Uptime & Load
+        if (s.uptime)
+            setText(
+                "[data-uptime]",
+                `${s.uptime.days} Tage ${s.uptime.hours} Std`
+            );
+        if (s.load)
+            setText(
+                "[data-load]",
+                s.load.map((v) => v.toFixed(2)).join(" / ")
+            );
+
+        // Versionsinfos
+        if (s.versions) {
+            setText("[data-omv-version]", s.versions.omv || "–");
+            const plugins =
+                s.versions.plugins
+                    ?.slice(0, 5)
+                    .map((p) => `${p.name} ${p.version}`)
+                    .join(" · ") || "–";
+            setText("[data-plugins]", plugins);
+        }
+
+        // Docker-Updates
+        if (s.docker)
+            setText(
+                "[data-updates]",
+                s.docker.total > 0
+                    ? `${s.docker.total} Container haben Updates`
+                    : "Keine Updates"
+            );
+
+        // Zeitstempel
         const date = new Date(s.ts || Date.now());
-        const ts = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        const tsEl = document.querySelector("#info-drawer footer .chip");
-        if (tsEl) tsEl.textContent = ts;
+        const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        const chip = $("#info-drawer footer .chip");
+        if (chip) chip.textContent = t;
     }
 
     async function loop() {
-        try { await load(); } catch (e) { console.warn("stats load failed:", e); }
-        setTimeout(loop, 30000);
+        try {
+            await loadStats();
+        } catch (e) {
+            console.warn("stats fetch error", e);
+        }
+        setTimeout(loop, POLL_MS);
     }
 
-    // initial
     loop();
 })();

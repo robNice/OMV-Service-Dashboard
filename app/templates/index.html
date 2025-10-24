@@ -29,35 +29,19 @@
             <!-- RAM -->
             <div class="section">
                 <h3>RAM</h3>
-                <div class="kv" style="flex-direction:column; align-items:stretch">
-                    <div class="flex" style="display:flex; justify-content:space-between;">
+                <div class="kv" style="flex-direction:column;align-items:stretch">
+                    <div class="flex" style="display:flex;justify-content:space-between;">
                         <span>Belegt</span><span class="chip" data-label-for="ram-usage">–%</span>
                     </div>
                     <div id="ram-usage" class="bar"><i></i></div>
+                    <div style="text-align:right;font-size:.8rem;opacity:.8" data-ram-used>–</div>
                 </div>
             </div>
 
             <!-- Disks -->
             <div class="section">
                 <h3>Speicher (HDDs)</h3>
-                <div class="kv" style="flex-direction:column; align-items:stretch">
-                    <div class="flex" style="display:flex; justify-content:space-between;">
-                        <span>sda</span><span class="chip" data-label-for="disk-sda">–%</span>
-                    </div>
-                    <div id="disk-sda" class="bar"><i></i></div>
-                </div>
-                <div class="kv" style="flex-direction:column; align-items:stretch">
-                    <div class="flex" style="display:flex; justify-content:space-between;">
-                        <span>sdb</span><span class="chip" data-label-for="disk-sdb">–%</span>
-                    </div>
-                    <div id="disk-sdb" class="bar"><i></i></div>
-                </div>
-                <div class="kv" style="flex-direction:column; align-items:stretch">
-                    <div class="flex" style="display:flex; justify-content:space-between;">
-                        <span>sdc</span><span class="chip" data-label-for="disk-sdc">–%</span>
-                    </div>
-                    <div id="disk-sdc" class="bar"><i></i></div>
-                </div>
+                <div id="drawer-disks" class="space-y-2"></div>
             </div>
 
             <!-- Temps -->
