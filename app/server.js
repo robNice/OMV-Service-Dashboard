@@ -50,6 +50,17 @@ function renderSection(section) {
 
 
 
+app.get('/favicon.ico', (req, res) => {
+    // Langer Cache, weil sich Favicons selten ändern
+    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    res.sendFile('/data/assets/favicon.ico', (err) => {
+        if (err) {
+            // Falls die Datei fehlt, keine Fehlerseite – Browser erwartet nur 200/404.
+            res.status(404).end();
+        }
+    });
+});
+
 app.get("/api/stats", async (req, res) => {
     try {
         const data = await getStats();
