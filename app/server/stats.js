@@ -130,6 +130,21 @@ async function readDisks() {
     return Array.from(bestBySrc.values()).sort((a, b) => a.src.localeCompare(b.src));
 }
 
+async function readOMVSmartTempsFromHost() {
+    try {
+        const { stdout } = await sh("bash /hostroot/usr/local/bin/omv-smart-json.sh 2>/dev/null");
+        const payload = JSON.parse(stdout);
+        const list = Array.isArray(payload?.data) ? payload.data : [];
+        // Mappe auf { device, tempC }
+        return list
+            .filter(d => d?.devicefile && typeof d.temperature === "number")
+            .map(d => ({ device: d.devicefile, tempC: d.temperature }));
+    } catch {
+        return [];
+    }
+}
+
+
 // ------- Temperaturen -------
 // ------- Temperaturen (CPU + HDDs erweitert) -------
 // ------- Temperaturen (CPU + HDDs via smartctl --json) -------
@@ -275,6 +290,35 @@ async function readTemps() {
             }
         }
     } catch {}
+
+
+    // --- OMV-API (Host) als letzte Instanz: füllt fehlende Geräte (wie /dev/sdb)
+    try {
+        const omvTemps = await readOMVSmartTempsFromHost();
+        if (omvTemps.length) {
+            const byDev = new Map(disks.map(d => [d.device, d.tempC]));
+            for (const t of omvTemps) {
+                if (!byDev.has(t.device) || byDev.get(t.device) == null) {
+                    // Nur ergänzen, vorhandene Werte aus SMART/sysfs nicht überschreiben
+                    byDev.set(t.device, t.tempC);
+                }
+            }
+            // zurück in disks-Array
+            const merged = [];
+            for (const [device, tempC] of byDev.entries()) {
+                merged.push({ device, tempC });
+            }
+            // evtl. Laufwerke, die nur OMV kennt (nicht in disks) ebenfalls aufnehmen
+            for (const t of omvTemps) {
+                if (!byDev.has(t.device)) merged.push(t);
+            }
+            merged.sort((a,b) => a.device.localeCompare(b.device));
+            // ersetze disks durch merged
+            disks = merged;
+        }
+    } catch {}
+
+
 
     disks.sort((a, b) => a.device.localeCompare(b.device));
     return { cpu, disks, chassis };
