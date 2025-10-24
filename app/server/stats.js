@@ -165,82 +165,70 @@ async function readTemps() {
         const devs = stdout.trim().split("\n").filter(Boolean);
 
         // Helper: smartctl JSON parsen
-        // Helper: smartctl JSON/Text mit Treiber-Hints robust auswerten
         async function smartTemp(dev) {
-            // Versuchsreihen mit diversen Device-Typ-Hints
-            const hints = ["", "-d sat", "-d ata", "-d scsi"];
-            let lastErr = null;
+            try {
+                const { stdout } = await sh(`smartctl -a --json ${dev} 2>/dev/null`);
+                const j = JSON.parse(stdout);
 
-            // JSON-basierte Versuche (bevorzugt)
-            for (const hint of hints) {
-                try {
-                    const cmd = `smartctl -a --json ${hint} ${dev} 2>/dev/null`.trim();
-                    const { stdout } = await sh(cmd);
-                    const j = JSON.parse(stdout);
+                // NVMe: nvme_smart_health_information_log.temperature (°C)
+                if (j.nvme_smart_health_information_log && typeof j.nvme_smart_health_information_log.temperature === "number") {
+                    return { device: dev, tempC: j.nvme_smart_health_information_log.temperature };
+                }
 
-                    // NVMe
-                    if (j.nvme_smart_health_information_log && typeof j.nvme_smart_health_information_log.temperature === "number") {
-                        return { device: dev, tempC: j.nvme_smart_health_information_log.temperature };
-                    }
+                // Allgemein: j.temperature.current (manche SATA/USB-Ausgaben)
+                if (j.temperature && typeof j.temperature.current === "number") {
+                    return { device: dev, tempC: j.temperature.current };
+                }
 
-                    // Generisch
-                    if (j.temperature && typeof j.temperature.current === "number") {
-                        return { device: dev, tempC: j.temperature.current };
-                    }
-
-                    // ATA/SATA-Attribute
-                    const tbl = j.ata_smart_attributes && j.ata_smart_attributes.table;
-                    if (Array.isArray(tbl)) {
-                        for (const a of tbl) {
-                            if (a.id === 194 || a.id === 190) {
-                                const rawv = (a.raw && typeof a.raw.value !== "undefined") ? Number(a.raw.value) : Number(a.value);
-                                if (!Number.isNaN(rawv)) return { device: dev, tempC: rawv };
-                            }
+                // ATA (SATA): Attribute-Tabelle (IDs 194 / 190)
+                const tbl = j.ata_smart_attributes && j.ata_smart_attributes.table;
+                if (Array.isArray(tbl)) {
+                    for (const a of tbl) {
+                        if (a.id === 194 || a.id === 190) {
+                            const rawv = (a.raw && typeof a.raw.value !== "undefined") ? Number(a.raw.value) : Number(a.value);
+                            if (!Number.isNaN(rawv)) return { device: dev, tempC: rawv };
                         }
                     }
-                } catch (e) { lastErr = e; }
-            }
-
-            // Text-Fallbacks (manche Controller liefern keine saubere JSON-Struktur)
-            for (const hint of hints) {
-                try {
-                    const cmd = `smartctl -A ${hint} ${dev} 2>/dev/null | egrep '(^194|^190|Temperature|Current Drive Temperature|Drive Temperature)'`.trim();
-                    const { stdout } = await sh(cmd);
-                    // Mögliche Matches: „Temperature: 48 Celsius“, „Current Drive Temperature: 48 C“, SMART 190/194 Tabellenzeilen
-                    let m;
-                    if ((m = stdout.match(/Temperature:\s*(\d+)\s*C/i))) {
-                        return { device: dev, tempC: parseInt(m[1], 10) };
-                    }
-                    if ((m = stdout.match(/Current Drive Temperature:\s*(\d+)\s*C/i))) {
-                        return { device: dev, tempC: parseInt(m[1], 10) };
-                    }
-                    if ((m = stdout.match(/^\s*194\s+Temperature_Celsius.*\s(\d+)\s*$/m))) {
-                        return { device: dev, tempC: parseInt(m[1], 10) };
-                    }
-                    if ((m = stdout.match(/^\s*190\s+Airflow_Temperature_Cel.*\s(\d+)\s*$/m))) {
-                        return { device: dev, tempC: parseInt(m[1], 10) };
-                    }
-                } catch (e) { lastErr = e; }
-            }
-
-            // SCT-Log (einige SSDs nur hier)
-            for (const hint of hints) {
-                try {
-                    const cmd = `smartctl -l scttempsts ${hint} ${dev} 2>/dev/null | egrep 'Current Temperature'`.trim();
-                    const { stdout } = await sh(cmd);
-                    const m = stdout.match(/Current Temperature:\s*(\d+)\s*C/i);
-                    if (m) return { device: dev, tempC: parseInt(m[1], 10) };
-                } catch (e) { lastErr = e; }
-            }
-
+                }
+            } catch {}
             return null;
         }
 
-        // parallel abfragen
-        const results = await Promise.all(devs.map(smartTemp));
-        for (const r of results) if (r && typeof r.tempC === "number") disks.push(r);
-    } catch {}
+        // Helper: sysfs fallback (/sys/block/<dev>/device/)
+        async function sysfsTemp(dev) {
+            const name = dev.replace("/dev/", "");
+            const base = `${SYS}/block/${name}/device`;
+            try {
+                // Es kann mehrere hwmon-Instanzen geben
+                const hmons = await fs.readdir(base);
+                for (const entry of hmons) {
+                    if (entry.startsWith("hwmon")) {
+                        const dir = `${base}/${entry}`;
+                        const files = await fs.readdir(dir);
+                        for (const f of files) {
+                            if (/^temp[0-9]+_input$/.test(f)) {
+                                const val = await readFile(`${dir}/${f}`);
+                                const millic = parseInt(val.trim(), 10);
+                                if (!isNaN(millic)) {
+                                    return { device: dev, tempC: Math.round(millic / 1000) };
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch {}
+            return null;
+        }
 
+        // Kombiniert: zuerst smartctl, dann sysfs fallback
+        const results = [];
+        for (const d of devs) {
+            let t = await smartTemp(d);
+            if (!t) t = await sysfsTemp(d);
+            if (t && typeof t.tempC === "number") results.push(t);
+        }
+        disks.push(...results);
+    } catch {}
     // Optional: Gehäuse-/PCH-/Board-Sensoren
     const chassis = [];
     try {
