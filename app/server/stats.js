@@ -208,13 +208,13 @@ async function readTempsCpuChassis() {
 // ---------------- Drives (physisch) aus OMV + Usage ----------------
 
 
-async function kuerzeText(text, maxLaenge) {
-    if (text.length > maxLaenge) {
-        return text.slice(0, maxLaenge) + '...';
-    } else {
-        return text;
-    }
-}
+// async function kuerzeText(text, maxLaenge) {
+//     if (text.length > maxLaenge) {
+//         return text.slice(0, maxLaenge) + '...';
+//     } else {
+//         return text;
+//     }
+// }
 
 async function readPhysicalDrives() {
     // OMV SMART-Liste
@@ -247,12 +247,12 @@ async function readPhysicalDrives() {
         const usedBytes = u.usedBytes;
         const usedPercent = sizeBytes > 0 ? clamp(Math.round((usedBytes / sizeBytes) * 100), 0, 100) : null;
 
-        const modelShortened = this.kuerzeText(model,8);
+        // const modelShortened = this.kuerzeText(model,8);
 
         drives.push({
             device: dev,              // /dev/sdX
             byId: byIdOrDev,          // /dev/disk/by-id/...
-            modelShortened,                    // z. B. "Corsair Force LS SSD"
+            model,                    // z. B. "Corsair Force LS SSD"
             tempC,                    // z. B. 77
             status,                   // GOOD / WARNING / FAILING / UNKNOWN ...
             sizeBytes,
