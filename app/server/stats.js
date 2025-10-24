@@ -1,23 +1,22 @@
-// server/stats.js  — Host-Stats für OMV-Landingpage
+// server/stats.js — stabile Host-Stats für die OMV-Landingpage
 // Liest Host-Daten über gemountete Roots (PROC_ROOT, SYS_ROOT, HOST_ROOT, DPKG_ROOT)
-// Disks: robust via statfs (Node 20+). Fallback: df.
+// Disks via /proc/1/mountinfo (Host) + statfs auf Host-Pfad.
 
 const fs = require("fs/promises");
 const { exec } = require("child_process");
 const { promisify } = require("util");
 const sh = promisify(exec);
 
-const PROC = process.env.PROC_ROOT || "/host/proc";
-const SYS  = process.env.SYS_ROOT  || "/host/sys";
-const HOST = process.env.HOST_ROOT || "/hostroot";
-const DPKG = process.env.DPKG_ROOT || "/host/var/lib/dpkg";
+const PROC = process.env.PROC_ROOT || "/host/proc";           // Host-Proc (eingebunden als /proc:/host/proc:ro)
+const SYS  = process.env.SYS_ROOT  || "/host/sys";            // Host-Sys (eingebunden als /sys:/host/sys:ro)
+const HOST = process.env.HOST_ROOT || "/hostroot";            // Host-Root (eingebunden als /:/hostroot:ro,rslave)
+const DPKG = process.env.DPKG_ROOT || "/host/var/lib/dpkg";   // Host-dpkg-Status
 
-// ---------- helpers ----------
 async function readFile(p) { try { return await fs.readFile(p, "utf8"); } catch { return null; } }
 function clampPct(v) { return Math.max(0, Math.min(100, Math.round(v))); }
 function uniqBy(arr, keyFn) { const m = new Map(); for (const x of arr) { const k = keyFn(x); if (!m.has(k)) m.set(k, x); } return [...m.values()]; }
 
-// ---------- RAM ----------
+// ------- RAM -------
 async function readMem() {
     const txt = await readFile(`${PROC}/meminfo`);
     if (!txt) return { total: 0, used: 0, percent: 0 };
@@ -33,7 +32,7 @@ async function readMem() {
     return { total, used, percent: total ? clampPct((used / total) * 100) : 0 };
 }
 
-// ---------- Load & Uptime ----------
+// ------- Load & Uptime -------
 async function readLoadUptime() {
     const loadTxt = await readFile(`${PROC}/loadavg`);
     const upTxt   = await readFile(`${PROC}/uptime`);
@@ -49,74 +48,91 @@ async function readLoadUptime() {
     return { load, uptime };
 }
 
-// ---------- Disks (Host) ----------
-// ---------- Disks (robust via lsblk) ----------
+// ------- Disks via Host /proc/1/mountinfo + statfs -------
 async function readDisks() {
-    try {
-        // Wir lesen Blockgeräte auf dem Host – erfordert /dev und /sys gemountet
-        const { stdout } = await sh(
-            "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT,FSTYPE,MODEL /host/dev"
-        );
+    const mi = await readFile(`${PROC}/1/mountinfo`);
+    if (!mi) return [];
 
-        const data = JSON.parse(stdout);
-        const flat = [];
+    const skipFSTypes = new Set([
+        "proc","sysfs","cgroup","cgroup2","tmpfs","devtmpfs","overlay","squashfs","ramfs",
+        "securityfs","pstore","bpf","tracefs","fusectl","debugfs","configfs","aufs","mqueue","hugetlbfs","rpc_pipefs"
+    ]);
+    const skipMountPrefix = [
+        "/proc", "/sys", "/dev", "/run", "/var/lib/docker", "/var/lib/containers",
+        "/var/lib/kubelet", "/snap", "/boot/efi"
+    ];
 
-        function walk(devs) {
-            for (const d of devs) {
-                if (d.type === "disk" && Array.isArray(d.children)) {
-                    walk(d.children);
-                    continue;
-                }
-                if (d.type !== "part") continue;
-                if (!d.mountpoint) continue;
-                // echten Host-Pfad zusammenbauen
-                const mp = d.mountpoint.startsWith("/hostroot")
-                    ? d.mountpoint
-                    : `/hostroot${d.mountpoint}`;
-                flat.push({
-                    src: `/dev/${d.name}`,
-                    mount: mp,
-                    size: Number(d.size),
+    const entries = [];
+    for (const line of mi.split("\n")) {
+        if (!line) continue;
+        // mountinfo-Format: prefields ... - fstype source superopts
+        const idx = line.indexOf(" - ");
+        if (idx === -1) continue;
+        const pre = line.slice(0, idx).split(" ");
+        const post = line.slice(idx + 3).split(" ");
+        // pre: 0:id 1:parent 2:major:minor 3:root 4:mountpoint 5:opts ...
+        const mountPoint = pre[4];
+        const fstype = post[0];
+        const source = post[1]; // z. B. /dev/sda1
+
+        if (!mountPoint || !fstype || !source) continue;
+        if (skipFSTypes.has(fstype)) continue;
+        if (!source.startsWith("/dev/")) continue;
+        if (skipMountPrefix.some(p => mountPoint === p || mountPoint.startsWith(p + "/"))) continue;
+
+        entries.push({ src: source, mount: mountPoint, fstype });
+    }
+
+    // statfs für jeden Host-Mount ermitteln
+    const out = [];
+    for (const e of entries) {
+        const hostPath = `${HOST}${e.mount}`;
+        try {
+            // Node 20+: fs.statfs
+            const st = await fs.statfs(hostPath);
+            const block = st?.bsize || st?.frsize || 4096;
+            const total = Number(st.blocks || 0) * block;
+            const free  = Number(st.bfree || 0) * block;
+            const used  = total - free;
+            if (total > 0) {
+                out.push({
+                    src: e.src,
+                    mount: e.mount,         // echter Host-Mountpoint
+                    size: total,
+                    usedPercent: clampPct((used / total) * 100),
                 });
             }
-        }
-        walk(data.blockdevices || []);
-
-        // für jedes Mount df ermitteln (statfs)
-        const results = [];
-        for (const f of flat) {
+        } catch {
+            // Fallback auf df, falls statfs auf bind-mounts scheitert
             try {
-                const st = await fs.statfs(f.mount);
-                const block = st?.bsize || st?.frsize || 4096;
-                const total = Number(st.blocks || 0) * block;
-                const free = Number(st.bfree || 0) * block;
-                const used = total - free;
-                if (total > 0) {
-                    results.push({
-                        src: f.src,
-                        mount: f.mount.replace("/hostroot", ""),
-                        size: total,
-                        usedPercent: clampPct((used / total) * 100),
+                const { stdout } = await sh(`df -P -B1 --output=pcent,size ${hostPath} | tail -n 1`);
+                const parts = stdout.trim().split(/\s+/);
+                const pcent = parseInt(parts[0].replace("%",""), 10);
+                const size  = parseInt(parts[1], 10);
+                if (!isNaN(size) && !isNaN(pcent)) {
+                    out.push({
+                        src: e.src,
+                        mount: e.mount,
+                        size,
+                        usedPercent: clampPct(pcent),
                     });
                 }
-            } catch {
-                /* ignorieren */
-            }
+            } catch { /* ignore */ }
         }
-
-        // konsolidieren
-        return results.sort((a, b) => a.src.localeCompare(b.src));
-    } catch (err) {
-        console.error("readDisks error", err);
-        return [];
     }
+
+    // pro Device konsolidieren (falls mehrere Mounts desselben Devices existieren)
+    const bestBySrc = new Map();
+    for (const d of out) {
+        const prev = bestBySrc.get(d.src);
+        if (!prev || d.size > prev.size) bestBySrc.set(d.src, d);
+    }
+    return Array.from(bestBySrc.values()).sort((a, b) => a.src.localeCompare(b.src));
 }
 
-
-// ---------- Temperaturen ----------
+// ------- Temperaturen -------
 async function readTemps() {
     let cpu = null;
-    // hwmon direkt lesen (funktioniert ohne sensors-Binary)
     try {
         const hwmons = await fs.readdir(`${SYS}/class/hwmon`);
         let best = null;
@@ -137,7 +153,6 @@ async function readTemps() {
         if (best != null) cpu = `${best}°C`;
     } catch {}
 
-    // HDD/NVMe Temperaturen via smartctl (optional)
     const disks = [];
     try {
         const { stdout } = await sh(`ls -1 ${HOST}/dev | egrep '^(sd[a-z]|nvme[0-9]+n[0-9]+)$' || true`);
@@ -154,7 +169,7 @@ async function readTemps() {
     return { cpu, disks };
 }
 
-// ---------- OMV Versionen/Plugins ----------
+// ------- OMV Versionen/Plugins -------
 async function readOMV() {
     const status = await readFile(`${DPKG}/status`);
     if (!status) return { omv: null, plugins: [] };
@@ -171,7 +186,7 @@ async function readOMV() {
     return { omv, plugins: uniqBy(plugins, p => p.name).sort((a,b) => a.name.localeCompare(b.name)) };
 }
 
-// ---------- Docker Updates ----------
+// ------- Docker Updates -------
 async function readDockerUpdates() {
     const out = { updates: [], total: 0 };
     try {
@@ -182,7 +197,7 @@ async function readDockerUpdates() {
             if (!name || !image) continue;
             try {
                 const { stdout: before } = await sh(`docker image inspect --format='{{.Id}}' ${image}`);
-                await sh(`docker pull -q ${image}`); // nur Digest/Layers ziehen, kein Restart
+                await sh(`docker pull -q ${image}`); // zieht nur neue Layer/Digest, kein Restart
                 const { stdout: after } = await sh(`docker image inspect --format='{{.Id}}' ${image}`);
                 if (before.trim() !== after.trim()) {
                     out.updates.push({ container: name, image, current: before.trim(), latest: after.trim() });
@@ -194,7 +209,7 @@ async function readDockerUpdates() {
     return out;
 }
 
-// ---------- Aggregation ----------
+// ------- Aggregation -------
 async function getStats() {
     const [{ load, uptime }, ram, disks, temps, versions, docker] = await Promise.all([
         readLoadUptime(),
