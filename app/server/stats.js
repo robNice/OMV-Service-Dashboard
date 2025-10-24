@@ -1,24 +1,27 @@
-// server/stats.js — stabile Host-Stats für die OMV-Landingpage
-// Liest Host-Daten über gemountete Roots (PROC_ROOT, SYS_ROOT, HOST_ROOT, DPKG_ROOT)
-// Disks via /proc/1/mountinfo (Host) + statfs auf Host-Pfad.
+// server/stats.js — Physische Laufwerke via OMV SMART JSON, plus Usage pro Drive
+// Voraussetzungen: Host hat /usr/local/bin/omv-smart-json.sh (liefert "omv-rpc Smart getList")
+// Container: privileged + /:/hostroot:ro,rslave + /proc:/host/proc:ro + /sys:/host/sys:ro
 
 const fs = require("fs/promises");
+const path = require("path");
 const { exec } = require("child_process");
 const { promisify } = require("util");
 const sh = promisify(exec);
 
-const PROC = process.env.PROC_ROOT || "/host/proc";           // Host-Proc (eingebunden als /proc:/host/proc:ro)
-const SYS  = process.env.SYS_ROOT  || "/host/sys";            // Host-Sys (eingebunden als /sys:/host/sys:ro)
-const HOST = process.env.HOST_ROOT || "/hostroot";            // Host-Root (eingebunden als /:/hostroot:ro,rslave)
-const DPKG = process.env.DPKG_ROOT || "/host/var/lib/dpkg";   // Host-dpkg-Status
+const PROC = process.env.PROC_ROOT || "/host/proc";
+const SYS  = process.env.SYS_ROOT  || "/host/sys";
+const HOST = process.env.HOST_ROOT || "/hostroot";
+const DPKG = process.env.DPKG_ROOT || "/host/var/lib/dpkg";
 
-async function readFile(p) { try { return await fs.readFile(p, "utf8"); } catch { return null; } }
-function clampPct(v) { return Math.max(0, Math.min(100, Math.round(v))); }
-function uniqBy(arr, keyFn) { const m = new Map(); for (const x of arr) { const k = keyFn(x); if (!m.has(k)) m.set(k, x); } return [...m.values()]; }
+const readFileSafe = async (p) => { try { return await fs.readFile(p, "utf8"); } catch { return null; } };
+const readdirSafe = async (p) => { try { return await fs.readdir(p); } catch { return []; } };
+const statfsSafe  = async (p) => { try { return await fs.statfs(p); } catch { return null; } };
+const clamp       = (n, a, b) => Math.max(a, Math.min(b, n));
+const pct         = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
-// ------- RAM -------
+// ---------------- RAM / Load / Uptime ----------------
 async function readMem() {
-    const txt = await readFile(`${PROC}/meminfo`);
+    const txt = await readFileSafe(`${PROC}/meminfo`);
     if (!txt) return { total: 0, used: 0, percent: 0 };
     const map = {};
     for (const line of txt.split("\n")) {
@@ -29,326 +32,102 @@ async function readMem() {
     const total = map.MemTotal || 0;
     const free  = (map.MemFree || 0) + (map.Buffers || 0) + (map.Cached || 0);
     const used  = Math.max(0, total - free);
-    return { total, used, percent: total ? clampPct((used / total) * 100) : 0 };
+    return { total, used, percent: total ? pct(used, total) : 0 };
 }
-
-// ------- Load & Uptime -------
 async function readLoadUptime() {
-    const loadTxt = await readFile(`${PROC}/loadavg`);
-    const upTxt   = await readFile(`${PROC}/uptime`);
-    let load = [0, 0, 0], uptime = { days: 0, hours: 0, mins: 0 };
+    const loadTxt = await readFileSafe(`${PROC}/loadavg`);
+    const upTxt   = await readFileSafe(`${PROC}/uptime`);
+    let load = [0,0,0], uptime = { days:0, hours:0, mins:0 };
     if (loadTxt) {
-        const [a, b, c] = loadTxt.trim().split(/\s+/).slice(0, 3).map(Number);
-        load = [a || 0, b || 0, c || 0];
+        const [a,b,c] = loadTxt.trim().split(/\s+/).slice(0,3).map(Number);
+        load = [a||0,b||0,c||0];
     }
     if (upTxt) {
         const sec = Math.floor(parseFloat(upTxt.trim().split(/\s+/)[0]) || 0);
-        uptime = { days: Math.floor(sec / 86400), hours: Math.floor((sec % 86400) / 3600), mins: Math.floor((sec % 3600) / 60) };
+        uptime = { days: Math.floor(sec/86400), hours: Math.floor((sec%86400)/3600), mins: Math.floor((sec%3600)/60) };
     }
     return { load, uptime };
 }
 
-// ------- Disks via Host /proc/1/mountinfo + statfs -------
-async function readDisks() {
-    const mi = await readFile(`${PROC}/1/mountinfo`);
-    if (!mi) return [];
-
-    const skipFSTypes = new Set([
-        "proc","sysfs","cgroup","cgroup2","tmpfs","devtmpfs","overlay","squashfs","ramfs",
-        "securityfs","pstore","bpf","tracefs","fusectl","debugfs","configfs","aufs","mqueue","hugetlbfs","rpc_pipefs"
-    ]);
-    const skipMountPrefix = [
-        "/proc", "/sys", "/dev", "/run", "/var/lib/docker", "/var/lib/containers",
-        "/var/lib/kubelet", "/snap", "/boot/efi"
-    ];
-
-    const entries = [];
-    for (const line of mi.split("\n")) {
-        if (!line) continue;
-        // mountinfo-Format: prefields ... - fstype source superopts
-        const idx = line.indexOf(" - ");
-        if (idx === -1) continue;
-        const pre = line.slice(0, idx).split(" ");
-        const post = line.slice(idx + 3).split(" ");
-        // pre: 0:id 1:parent 2:major:minor 3:root 4:mountpoint 5:opts ...
-        const mountPoint = pre[4];
-        const fstype = post[0];
-        const source = post[1]; // z. B. /dev/sda1
-
-        if (!mountPoint || !fstype || !source) continue;
-        if (skipFSTypes.has(fstype)) continue;
-        if (!source.startsWith("/dev/")) continue;
-        if (skipMountPrefix.some(p => mountPoint === p || mountPoint.startsWith(p + "/"))) continue;
-
-        entries.push({ src: source, mount: mountPoint, fstype });
-    }
-
-    // statfs für jeden Host-Mount ermitteln
-    const out = [];
-    for (const e of entries) {
-        const hostPath = `${HOST}${e.mount}`;
-        try {
-            // Node 20+: fs.statfs
-            const st = await fs.statfs(hostPath);
-            const block = st?.bsize || st?.frsize || 4096;
-            const total = Number(st.blocks || 0) * block;
-            const free  = Number(st.bfree || 0) * block;
-            const used  = total - free;
-            if (total > 0) {
-                out.push({
-                    src: e.src,
-                    mount: e.mount,         // echter Host-Mountpoint
-                    size: total,
-                    usedPercent: clampPct((used / total) * 100),
-                });
-            }
-        } catch {
-            // Fallback auf df, falls statfs auf bind-mounts scheitert
-            try {
-                const { stdout } = await sh(`df -P -B1 --output=pcent,size ${hostPath} | tail -n 1`);
-                const parts = stdout.trim().split(/\s+/);
-                const pcent = parseInt(parts[0].replace("%",""), 10);
-                const size  = parseInt(parts[1], 10);
-                if (!isNaN(size) && !isNaN(pcent)) {
-                    out.push({
-                        src: e.src,
-                        mount: e.mount,
-                        size,
-                        usedPercent: clampPct(pcent),
-                    });
-                }
-            } catch { /* ignore */ }
-        }
-    }
-
-    // pro Device konsolidieren (falls mehrere Mounts desselben Devices existieren)
-    const bestBySrc = new Map();
-    for (const d of out) {
-        const prev = bestBySrc.get(d.src);
-        if (!prev || d.size > prev.size) bestBySrc.set(d.src, d);
-    }
-    return Array.from(bestBySrc.values()).sort((a, b) => a.src.localeCompare(b.src));
-}
-
-async function readOMVSmartTempsFromHost() {
+// ---------------- OMV SMART JSON (Host) ----------------
+// ruft das Host-Script innerhalb des Host-Roots auf (nutzt Host-Bash & OMV-Stack)
+async function readOmvSmartList() {
     try {
-        const { stdout } = await sh("bash /hostroot/usr/local/bin/omv-smart-json.sh 2>/dev/null");
-        const payload = JSON.parse(stdout);
-        const list = Array.isArray(payload?.data) ? payload.data : [];
-        // Mappe auf { device, tempC }
-        return list
-            .filter(d => d?.devicefile && typeof d.temperature === "number")
-            .map(d => ({ device: d.devicefile, tempC: d.temperature }));
+        const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/local/bin/omv-smart-json.sh'`);
+        const j = JSON.parse(stdout);
+        return Array.isArray(j?.data) ? j.data : [];
     } catch {
         return [];
     }
 }
 
-// Liest OMV SMART JSON direkt aus dem Host, indem wir in /hostroot chrooten
-async function readOmvSmartViaChroot() {
+// /dev/disk/by-id/...  ->  /dev/sdX (via Host-Root)
+async function resolveByIdToDev(byIdPath) {
     try {
-        // Bevorzugt dein Script (du erlaubst es als Ausnahme):
-        //   /usr/local/bin/omv-smart-json.sh -> gibt exakt das JSON aus, das OMV nutzt.
-        const { stdout } = await sh(
-            `chroot /hostroot /bin/bash -lc '/usr/local/bin/omv-smart-json.sh'`
-        );
-        const payload = JSON.parse(stdout);
-        const list = Array.isArray(payload?.data) ? payload.data : [];
-        return list
-            .filter(d => d?.devicefile && typeof d.temperature === "number")
-            .map(d => ({ device: d.devicefile, tempC: d.temperature }));
-    } catch (e1) {
-        // Fallback: direkt OMV-RPC (falls Script fehlt)
-        try {
-            const { stdout } = await sh(
-                `chroot /hostroot /bin/bash -lc "omv-rpc -m 'Smart' -n 'getList' -j"`
-            );
-            const payload = JSON.parse(stdout);
-            const list = Array.isArray(payload?.data) ? payload.data : [];
-            return list
-                .filter(d => d?.devicefile && typeof d.temperature === "number")
-                .map(d => ({ device: d.devicefile, tempC: d.temperature }));
-        } catch (e2) {
-            return [];
-        }
-    }
+        const full = path.posix.join(HOST, byIdPath);
+        const real = await fs.realpath(full); // z.B. /hostroot/dev/sdb
+        const dev  = real.replace(`${HOST}`, "");
+        return dev; // /dev/sdb
+    } catch { return null; }
 }
 
-
-// ------- Temperaturen -------
-// ------- Temperaturen (CPU + HDDs erweitert) -------
-// ------- Temperaturen (CPU + HDDs via smartctl --json) -------
-// ------- Temperaturen (CPU + HDDs via smartctl + sysfs/hwmon mapping) -------
-// ------- Temperaturen (CPU + HDDs: smartctl JSON → SCT → -x → sysfs-Ancestry) -------
-// ------- Temperaturen (CPU + HDDs: multi-probe smartctl → sysfs fallback) -------
-async function readTemps() {
-    const read = async (p) => { try { return await fs.readFile(p, "utf8"); } catch { return null; } };
-    const rd = async (p) => { try { return await fs.readdir(p); } catch { return []; } };
-    const rp = async (p) => { try { return await fs.realpath(p); } catch { return null; } };
-
-    // CPU-Temp via hwmon
-    let cpu = null;
+// ---------------- Drive Usage (über alle Partitionen summiert) ----------------
+async function readDriveUsageMap() {
+    // lsblk JSON vom Host: Disk -> Partitions -> Mountpoints
+    let lb;
     try {
-        const hwmons = await rd(`${SYS}/class/hwmon`);
-        let best = null;
-        for (const h of hwmons) {
-            const dir = `${SYS}/class/hwmon/${h}`;
-            const name = (await read(`${dir}/name`))?.trim() || "";
-            const files = await rd(dir);
-            for (const f of files) {
-                if (!/^temp[0-9]+_input$/.test(f)) continue;
-                const v = parseInt((await read(`${dir}/${f}`)) || "", 10);
-                if (!isNaN(v)) {
-                    const c = Math.round(v / 1000);
-                    if (name.match(/(k10temp|coretemp|cpu|zenpower)/i)) best = c;
-                }
-            }
+        const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT"`);
+        lb = JSON.parse(stdout);
+    } catch { return new Map(); }
+
+    const usage = new Map(); // "/dev/sdX" -> { sizeBytes, usedBytes }
+    async function addPartitionUsage(mount) {
+        const hostMount = path.posix.join(HOST, mount);
+        const st = await statfsSafe(hostMount);
+        if (!st) return { total:0, used:0 };
+        const bs = st.bsize || st.frsize || 4096;
+        const total = Number(st.blocks || 0) * bs;
+        const free  = Number(st.bfree || 0) * bs;
+        const used  = Math.max(0, total - free);
+        return { total, used };
+    }
+
+    async function walk(dev, parentDev = null) {
+        const isDisk = dev.type === "disk";
+        const name   = dev.name; // sda / sda1 / nvme0n1 ...
+        if (isDisk) {
+            usage.set(`/dev/${name}`, { sizeBytes: Number(dev.size||0), usedBytes: 0 });
         }
-        if (best != null) cpu = `${best}°C`;
-    } catch {}
-
-    // Alle physischen Disks
-    let devs = [];
-    try {
-        const { stdout } = await sh(`lsblk -dn -o NAME,TYPE | awk '$2=="disk"{print "/dev/"$1}'`);
-        devs = stdout.trim().split("\n").filter(Boolean);
-    } catch {}
-
-    // --- smartctl Probes ---
-    const DEV_TYPES = ["auto", "ata", "sat", "scsi", "ata,12", "sat,12"]; // probiere mehrere Treiber
-    async function probeSmartTemp(dev) {
-        // 1) JSON
-        for (const dt of DEV_TYPES) {
-            try {
-                const { stdout } = await sh(`smartctl -a --json ${dt !== "auto" ? `-d ${dt}` : ""} ${dev} 2>/dev/null`);
-                const j = JSON.parse(stdout);
-
-                // NVMe
-                if (j.nvme_smart_health_information_log?.temperature != null)
-                    return j.nvme_smart_health_information_log.temperature;
-
-                // Generic
-                if (j.temperature?.current != null)
-                    return Number(j.temperature.current);
-
-                // ATA attributes (190/194)
-                const tbl = j.ata_smart_attributes?.table;
-                if (Array.isArray(tbl)) {
-                    for (const a of tbl) {
-                        if (a.id === 194 || a.id === 190) {
-                            const v = a.raw?.value ?? a.value;
-                            if (v != null) return Number(v);
-                        }
+        if (Array.isArray(dev.children)) {
+            for (const ch of dev.children) {
+                if (ch.type === "part") {
+                    // Mount?
+                    if (ch.mountpoint && ch.mountpoint !== "" && ch.mountpoint !== "[SWAP]") {
+                        const u = await addPartitionUsage(ch.mountpoint);
+                        const diskKey = `/dev/${name.replace(/[0-9]+$/, "")}`; // naive, wird unten überschrieben
+                        const rootKey = isDisk ? `/dev/${name}` : parentDev || diskKey;
+                        const cur = usage.get(rootKey) || { sizeBytes: 0, usedBytes: 0 };
+                        usage.set(rootKey, { sizeBytes: cur.sizeBytes, usedBytes: cur.usedBytes + u.used });
                     }
                 }
-            } catch { /* next */ }
-        }
-
-        // 2) SCT
-        for (const dt of DEV_TYPES) {
-            try {
-                const { stdout } = await sh(`smartctl -l scttempsts ${dt !== "auto" ? `-d ${dt}` : ""} ${dev} 2>/dev/null`);
-                const m = stdout.match(/Current (Drive )?Temperature:\s+(\d+)\s*C/i);
-                if (m) return Number(m[2]);
-            } catch { /* next */ }
-        }
-
-        // 3) Vollausgabe -x
-        for (const dt of DEV_TYPES) {
-            try {
-                const { stdout } = await sh(`smartctl -x ${dt !== "auto" ? `-d ${dt}` : ""} ${dev} 2>/dev/null`);
-                let m = stdout.match(/Current (Drive )?Temperature:\s+(\d+)\s*C/i);
-                if (m) return Number(m[2]);
-                m = stdout.match(/Drive Temperature:\s+(\d+)\s*C/i);
-                if (m) return Number(m[1]);
-                m = stdout.match(/Temperature:\s+(\d+)\s*C/i); // NVMe
-                if (m) return Number(m[1]);
-            } catch { /* next */ }
-        }
-
-        return null;
-    }
-
-    // --- sysfs-Ancestry Fallback ---
-    async function sysfsAncestryTemp(dev) {
-        const name = dev.replace("/dev/", "");
-        let cur = await rp(`${SYS}/class/block/${name}`);
-        const visited = new Set();
-        while (cur && !visited.has(cur)) {
-            visited.add(cur);
-            const entries = await rd(cur);
-            for (const e of entries) {
-                if (!e.startsWith("hwmon")) continue;
-                const hdir = `${cur}/${e}`;
-                const files = await rd(hdir);
-                for (const f of files) {
-                    if (!/^temp[0-9]+_input$/.test(f)) continue;
-                    const v = parseInt((await read(`${hdir}/${f}`)) || "", 10);
-                    if (!isNaN(v)) return Math.round(v / 1000);
-                }
-            }
-            const devLink = await rp(`${cur}/device`);
-            if (devLink && !visited.has(devLink)) { cur = devLink; continue; }
-            const parent = cur.split("/").slice(0, -1).join("/");
-            if (parent && parent !== cur) { cur = parent; continue; }
-            break;
-        }
-        return null;
-    }
-
-    // Für jedes Device: smartctl (Multi-Probe) → sysfs
-    let disks = [];
-    for (const d of devs) {
-        let t = await probeSmartTemp(d);
-        if (t == null) t = await sysfsAncestryTemp(d);
-        if (typeof t === "number") disks.push({ device: d, tempC: t });
-    }
-
-    // Chassis/Board wie gehabt
-    const chassis = [];
-    try {
-        const hwmons = await rd(`${SYS}/class/hwmon`);
-        for (const h of hwmons) {
-            const dir = `${SYS}/class/hwmon/${h}`;
-            const name = (await read(`${dir}/name`))?.trim().toLowerCase() || "";
-            if (!name.match(/(acpitz|pch|motherboard|system|chassis)/)) continue;
-            const files = await rd(dir);
-            for (const f of files) {
-                if (!/^temp[0-9]+_input$/.test(f)) continue;
-                const v = parseInt((await read(`${dir}/${f}`)) || "", 10);
-                if (!isNaN(v)) chassis.push({ label: name, tempC: Math.round(v / 1000) });
+                // tiefer laufen (nvme hat evtl. anders verschachtelt)
+                await walk(ch, isDisk ? `/dev/${name}` : parentDev);
             }
         }
-    } catch {}
+    }
 
-
-    // OMV (Host) als Lückenfüller – füllt z. B. /dev/sdb, wenn SMART/sysfs leer
-    try {
-        const omvTemps = await readOmvSmartViaChroot();
-        if (omvTemps.length) {
-            const map = new Map(disks.map(d => [d.device, d.tempC]));
-            for (const t of omvTemps) {
-                if (!map.has(t.device) || map.get(t.device) == null) {
-                    map.set(t.device, t.tempC);
-                }
-            }
-            disks = Array.from(map.entries())
-                .map(([device, tempC]) => ({ device, tempC }))
-                .sort((a, b) => a.device.localeCompare(b.device));
+    // alle Top-Level Devices
+    if (Array.isArray(lb?.blockdevices)) {
+        for (const d of lb.blockdevices) {
+            await walk(d);
         }
-    } catch {}
-
-
-
-
-    disks.sort((a, b) => a.device.localeCompare(b.device));
-    return { cpu, disks, chassis };
+    }
+    return usage; // Map("/dev/sdX" => {sizeBytes, usedBytes})
 }
 
-
-// ------- OMV Versionen/Plugins -------
+// ---------------- Versionen / Docker ----------------
 async function readOMV() {
-    const status = await readFile(`${DPKG}/status`);
+    const status = await readFileSafe(`${DPKG}/status`);
     if (!status) return { omv: null, plugins: [] };
     const blocks = status.split("\n\n");
     let omv = null; const plugins = [];
@@ -360,10 +139,9 @@ async function readOMV() {
         if (pkg === "openmediavault") omv = ver;
         else if (pkg.startsWith("openmediavault-")) plugins.push({ name: pkg.replace(/^openmediavault-/, ""), version: ver });
     }
-    return { omv, plugins: uniqBy(plugins, p => p.name).sort((a,b) => a.name.localeCompare(b.name)) };
+    plugins.sort((a,b)=>a.name.localeCompare(b.name));
+    return { omv, plugins };
 }
-
-// ------- Docker Updates -------
 async function readDockerUpdates() {
     const out = { updates: [], total: 0 };
     try {
@@ -374,7 +152,7 @@ async function readDockerUpdates() {
             if (!name || !image) continue;
             try {
                 const { stdout: before } = await sh(`docker image inspect --format='{{.Id}}' ${image}`);
-                await sh(`docker pull -q ${image}`); // zieht nur neue Layer/Digest, kein Restart
+                await sh(`docker pull -q ${image}`);
                 const { stdout: after } = await sh(`docker image inspect --format='{{.Id}}' ${image}`);
                 if (before.trim() !== after.trim()) {
                     out.updates.push({ container: name, image, current: before.trim(), latest: after.trim() });
@@ -386,15 +164,101 @@ async function readDockerUpdates() {
     return out;
 }
 
-// ------- Aggregation -------
+// ---------------- Temperaturen (CPU + Chassis) ----------------
+async function readTempsCpuChassis() {
+    let cpu = null;
+    try {
+        const hwmons = await readdirSafe(`${SYS}/class/hwmon`);
+        let best = null;
+        for (const h of hwmons) {
+            const dir = `${SYS}/class/hwmon/${h}`;
+            const name = (await readFileSafe(`${dir}/name`))?.trim().toLowerCase() || "";
+            const files = await readdirSafe(dir);
+            for (const f of files) {
+                if (!/^temp[0-9]+_input$/.test(f)) continue;
+                const vTxt = await readFileSafe(`${dir}/${f}`);
+                const millic = parseInt(vTxt, 10);
+                if (!isNaN(millic)) {
+                    const c = Math.round(millic / 1000);
+                    if (name.match(/(k10temp|coretemp|cpu|zenpower)/)) best = c;
+                }
+            }
+        }
+        if (best != null) cpu = `${best}°C`;
+    } catch {}
+    const chassis = [];
+    try {
+        const hwmons = await readdirSafe(`${SYS}/class/hwmon`);
+        for (const h of hwmons) {
+            const dir = `${SYS}/class/hwmon/${h}`;
+            const name = (await readFileSafe(`${dir}/name`))?.trim().toLowerCase() || "";
+            if (!name.match(/(acpitz|pch|motherboard|system|chassis)/)) continue;
+            const files = await readdirSafe(dir);
+            for (const f of files) {
+                if (!/^temp[0-9]+_input$/.test(f)) continue;
+                const vTxt = await readFileSafe(`${dir}/${f}`);
+                const millic = parseInt(vTxt, 10);
+                if (!isNaN(millic)) chassis.push({ label: name, tempC: Math.round(millic / 1000) });
+            }
+        }
+    } catch {}
+    return { cpu, chassis };
+}
+
+// ---------------- Drives (physisch) aus OMV + Usage mergen ----------------
+async function readPhysicalDrives() {
+    // 1) SMART-Liste aus OMV
+    const list = await readOmvSmartList(); // enthält devicefile (id-Pfad), model, temperature, ...
+    if (!list.length) return [];
+
+    // 2) By-ID → /dev/sdX auflösen & Usage pro Drive sammeln
+    const usageMap = await readDriveUsageMap();
+
+    const drives = [];
+    for (const d of list) {
+        if (!d?.devicefile) continue;
+        const byId = d.devicefile; // z.B. /dev/disk/by-id/ata-...
+        const dev = (byId.startsWith("/dev/disk/by-id/"))
+            ? await resolveByIdToDev(byId)
+            : byId; // falls OMV bereits /dev/sdX liefert
+
+        if (!dev || !/^\/dev\/(sd[a-z]+|nvme\d+n\d+)$/.test(dev)) continue;
+
+        const model = d?.model || d?.vendor?.trim?.() && d?.name ? `${d.vendor} ${d.name}` : (d?.name || byId.split("/").pop());
+        const tempC = (typeof d?.temperature === "number") ? d.temperature : null;
+
+        // Gesamtkapazität vom usageMap (lsblk disk-size) + used summe
+        const u = usageMap.get(dev) || { sizeBytes: 0, usedBytes: 0 };
+        const sizeBytes = u.sizeBytes;
+        const usedBytes = u.usedBytes;
+        const usedPercent = sizeBytes > 0 ? clamp(Math.round((usedBytes / sizeBytes) * 100), 0, 100) : null;
+
+        drives.push({
+            device: dev,           // /dev/sdX
+            byId,                  // /dev/disk/by-id/...
+            model,                 // "Corsair Force LS SSD"
+            tempC,                 // 77
+            sizeBytes,             // 15873632378880
+            usedBytes,             // sum(Partitions used)
+            usedPercent            // 0..100 oder null, wenn keine Mounts
+        });
+    }
+
+    // Doppelte Devices (falls OMV-Liste Einträge mehrfach hat) deduplizieren
+    const seen = new Map();
+    for (const d of drives) if (!seen.has(d.device)) seen.set(d.device, d);
+    return Array.from(seen.values()).sort((a,b)=>a.device.localeCompare(b.device));
+}
+
+// ---------------- Aggregation ----------------
 async function getStats() {
-    const [{ load, uptime }, ram, disks, temps, versions, docker] = await Promise.all([
+    const [{ load, uptime }, ram, tempsCpuChassis, versions, docker, drives] = await Promise.all([
         readLoadUptime(),
         readMem(),
-        readDisks(),
-        readTemps(),
+        readTempsCpuChassis(),
         readOMV(),
         readDockerUpdates(),
+        readPhysicalDrives(),
     ]);
 
     return {
@@ -402,10 +266,12 @@ async function getStats() {
         ram,
         load,
         uptime,
-        disks,
-        temps,
+        // NEU: nur CPU/Gehäuse unter temps
+        temps: tempsCpuChassis,
         versions,
         docker,
+        // NEU: physische Drives mit Model/Temp/Usage
+        disks: drives,
     };
 }
 

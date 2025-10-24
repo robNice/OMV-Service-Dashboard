@@ -27,19 +27,21 @@
         return "linear-gradient(to right,#22c55e,#15803d)"; // grün
     }
 
-    // Hilfsfunktion: einen Disk-Balken rendern
-    function renderDisk(d, temps) {
-        const total = humanBytes(d.size);
-        const p = Math.min(100, Math.max(0, d.usedPercent || 0));
-        const tempObj = temps?.find(t => d.src.includes(t.device.replace("/dev/",""))) || null;
-        const tempStr = tempObj ? ` · ${tempObj.tempC}°C` : "";
+    function renderDisk(d) {
+        const name = d.device.replace("/dev/","");
+        const model = d.model || d.byId?.split("/").pop() || name;
+        const temp  = (typeof d.tempC === "number") ? ` · ${d.tempC}°C` : "";
+        const total = humanBytes(d.sizeBytes || 0);
+        const used  = humanBytes(d.usedBytes || 0);
+        const p = Math.min(100, Math.max(0, d.usedPercent ?? 0));
         return `
     <div class="kv" style="flex-direction:column;align-items:stretch">
       <div style="display:flex;justify-content:space-between;font-size:.9rem">
-        <span>${d.src.replace("/dev/","")}${tempStr}</span>
-        <span class="chip">${p}% · ${total}</span>
+        <span>${name}, ${model}${temp}</span>
+        <span class="chip">${p ? p + "%" : "–"} · ${total}</span>
       </div>
       <div class="bar"><i style="width:${p}%;background:${usageColor(p)}"></i></div>
+      <div style="display:flex;justify-content:flex-end;font-size:.75rem;opacity:.8">${used} / ${total}</div>
     </div>
   `;
     }
@@ -70,12 +72,12 @@
         if (cont) {
             cont.innerHTML = "";
             if (Array.isArray(s.disks) && s.disks.length) {
-                //cont.innerHTML = s.disks.map(renderDisk).join("");
-                cont.innerHTML = s.disks.map(d => renderDisk(d, s.temps?.disks)).join("");
+                cont.innerHTML = s.disks.map(renderDisk).join("");
             } else {
-                cont.innerHTML = `<div class="kv"><span>Keine Datenträger erkannt</span></div>`;
+                cont.innerHTML = `<div class="kv"><span>Keine Laufwerke erkannt</span></div>`;
             }
         }
+
 
         // Temperaturen
         if (s.temps) {
