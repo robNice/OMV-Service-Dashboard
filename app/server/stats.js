@@ -144,6 +144,36 @@ async function readOMVSmartTempsFromHost() {
     }
 }
 
+// Liest OMV SMART JSON direkt aus dem Host, indem wir in /hostroot chrooten
+async function readOmvSmartViaChroot() {
+    try {
+        // Bevorzugt dein Script (du erlaubst es als Ausnahme):
+        //   /usr/local/bin/omv-smart-json.sh -> gibt exakt das JSON aus, das OMV nutzt.
+        const { stdout } = await sh(
+            `chroot /hostroot /bin/bash -lc '/usr/local/bin/omv-smart-json.sh'`
+        );
+        const payload = JSON.parse(stdout);
+        const list = Array.isArray(payload?.data) ? payload.data : [];
+        return list
+            .filter(d => d?.devicefile && typeof d.temperature === "number")
+            .map(d => ({ device: d.devicefile, tempC: d.temperature }));
+    } catch (e1) {
+        // Fallback: direkt OMV-RPC (falls Script fehlt)
+        try {
+            const { stdout } = await sh(
+                `chroot /hostroot /bin/bash -lc "omv-rpc -m 'Smart' -n 'getList' -j"`
+            );
+            const payload = JSON.parse(stdout);
+            const list = Array.isArray(payload?.data) ? payload.data : [];
+            return list
+                .filter(d => d?.devicefile && typeof d.temperature === "number")
+                .map(d => ({ device: d.devicefile, tempC: d.temperature }));
+        } catch (e2) {
+            return [];
+        }
+    }
+}
+
 
 // ------- Temperaturen -------
 // ------- Temperaturen (CPU + HDDs erweitert) -------
@@ -267,7 +297,7 @@ async function readTemps() {
     }
 
     // Für jedes Device: smartctl (Multi-Probe) → sysfs
-    const disks = [];
+    let disks = [];
     for (const d of devs) {
         let t = await probeSmartTemp(d);
         if (t == null) t = await sysfsAncestryTemp(d);
@@ -292,31 +322,22 @@ async function readTemps() {
     } catch {}
 
 
-    // --- OMV-API (Host) als letzte Instanz: füllt fehlende Geräte (wie /dev/sdb)
+    // OMV (Host) als Lückenfüller – füllt z. B. /dev/sdb, wenn SMART/sysfs leer
     try {
-        const omvTemps = await readOMVSmartTempsFromHost();
+        const omvTemps = await readOmvSmartViaChroot();
         if (omvTemps.length) {
-            const byDev = new Map(disks.map(d => [d.device, d.tempC]));
+            const map = new Map(disks.map(d => [d.device, d.tempC]));
             for (const t of omvTemps) {
-                if (!byDev.has(t.device) || byDev.get(t.device) == null) {
-                    // Nur ergänzen, vorhandene Werte aus SMART/sysfs nicht überschreiben
-                    byDev.set(t.device, t.tempC);
+                if (!map.has(t.device) || map.get(t.device) == null) {
+                    map.set(t.device, t.tempC);
                 }
             }
-            // zurück in disks-Array
-            const merged = [];
-            for (const [device, tempC] of byDev.entries()) {
-                merged.push({ device, tempC });
-            }
-            // evtl. Laufwerke, die nur OMV kennt (nicht in disks) ebenfalls aufnehmen
-            for (const t of omvTemps) {
-                if (!byDev.has(t.device)) merged.push(t);
-            }
-            merged.sort((a,b) => a.device.localeCompare(b.device));
-            // ersetze disks durch merged
-            disks = merged;
+            disks = Array.from(map.entries())
+                .map(([device, tempC]) => ({ device, tempC }))
+                .sort((a, b) => a.device.localeCompare(b.device));
         }
     } catch {}
+
 
 
 
