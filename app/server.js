@@ -7,9 +7,12 @@ const { getStats } = require("./server/stats"); // <— neu
 
 const PORT = 3000;
 
+app.use("/assets", express.static("/data/assets"));
+
+
 app.use(
     "/assets",
-    express.static(path.resolve(__dirname, "data", "assets"), {
+    express.static(path.resolve(__dirname, "data", "data/assets"), {
         maxAge: "1h",
         etag: false,
     })
