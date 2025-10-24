@@ -16,7 +16,6 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /var/lib/dpkg:/host/var/lib/dpkg:ro  # dpkg-Status vom Host
-      - /dev:/host/dev         # Geräte für smartctl
       - /:/hostroot:ro,rslave
     environment:
       PROC_ROOT: /host/proc
