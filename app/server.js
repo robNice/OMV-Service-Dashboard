@@ -1,8 +1,13 @@
+
+
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const { getStats } = require("./server/stats");
 
-const app = express();
+// const app = express();
+const app = module.exports = require("./app") || express(); // falls du schon eine App exportierst, passe an
+
 const PORT = 3000;
 
 app.use("/assets", express.static("/data/assets"));
@@ -36,6 +41,21 @@ function renderSection(section) {
 }
 
 // Route: Startseite mit Sektionen
+
+
+app.get("/api/stats", async (req, res) => {
+    try {
+        const data = await getStats();
+        res.json(data);
+    } catch (e) {
+        console.error("stats error:", e);
+        res.status(500).json({ error: "stats_failed" });
+    }
+});
+
+// ... dein bestehender app.listen(...)
+
+
 app.get("/", (req, res) => {
   const data = loadData();
   const sections = data.sections.map(renderSection).join("\n");
