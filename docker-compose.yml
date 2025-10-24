@@ -21,6 +21,8 @@ services:
     environment:
       PROC_ROOT: /host/proc
       SYS_ROOT: /host/sys
+      HOST_ROOT: /hostroot
+      DPKG_ROOT: /host/var/lib/dpkg
     working_dir: /app
     command: ["node", "server.js"]
     ports:
