@@ -60,7 +60,7 @@
         const total = humanBytes(d.sizeBytes);
         const used  = humanBytes(d.usedBytes);
         const p = d.usedPercent;
-        const tempStr = (d.tempC != null) ? ` · ${d.tempC}°C` : "";
+        const tempStr = (d.tempC != null) ? `${d.tempC}°C` : "";
         const modelStr = d.model ? `, ${shortModel(d.model)}` : "";
 
         return `
@@ -145,7 +145,7 @@
 
     async function loop() {
         try { await loadStats(); } catch (e) { console.warn("stats fetch error", e); }
-        //setTimeout(loop, POLL_MS);
+        setTimeout(loop, POLL_MS);
     }
 
     loop();
