@@ -1,10 +1,10 @@
 // /assets/drawer-data.js
-// Lädt /api/stats regelmäßig und rendert RAM, HDDs (physische Drives), Temps, Versionen, Updates.
+// Rendert RAM, physische HDDs (Model + Temp + Status), CPU-Temps, Versionen, Updates
 
 (async function () {
     const $ = (sel) => document.querySelector(sel);
     const host = "/api/stats";
-    const POLL_MS = 30000; // 30s
+    const POLL_MS = 30000;
 
     function humanBytes(b) {
         const n = Number(b || 0);
@@ -15,11 +15,8 @@
         return x.toFixed(x >= 10 ? 0 : 1) + " " + u[i];
     }
 
-    function setText(sel, val) {
-        const el = $(sel); if (el) el.textContent = val;
-    }
+    function setText(sel, val) { const el = $(sel); if (el) el.textContent = val; }
 
-    // Farbverlauf für Balken nach Füllstand
     function usageColor(p) {
         if (p >= 85) return "linear-gradient(to right,#ef4444,#b91c1c)"; // rot
         if (p >= 70) return "linear-gradient(to right,#f97316,#ea580c)"; // orange
@@ -27,47 +24,51 @@
         return "linear-gradient(to right,#22c55e,#15803d)";              // grün
     }
 
-    // Back-compat & Guards: unterstützt altes (src/size/usedPercent) und neues (device/model/tempC/sizeBytes/usedBytes/usedPercent) Format
+    function statusStyle(s) {
+        const v = String(s || "UNKNOWN").toUpperCase();
+        if (v.includes("GOOD") || v === "PASSED") {
+            return "background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.35);color:#86efac;";
+        }
+        if (v.includes("WARN") || v.includes("PRE-FAIL") || v.includes("DEGRADED")) {
+            return "background:rgba(234,179,8,.18);border:1px solid rgba(234,179,8,.38);color:#fde68a;";
+        }
+        if (v.includes("FAIL") || v.includes("BAD") || v.includes("CRIT")) {
+            return "background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.35);color:#fecaca;";
+        }
+        return "background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#e5e7eb;";
+    }
+
     function normalizeDisk(d) {
-        // device name
-        const dev = (d.device || d.src || d.byId || "").toString();
-        const device = dev.includes("/dev/") ? dev : (d.device ? d.device : (d.src ? d.src : ""));
-        const name = device ? device.replace("/dev/", "") : (d.byId?.split("/").pop() || "unknown");
-
-        // model / temp
-        const model = d.model || d.modelName || (d.byId?.split("/").pop()) || "";
-        const tempC = (typeof d.tempC === "number") ? d.tempC : null;
-
-        // sizes
-        const sizeBytes = (typeof d.sizeBytes === "number") ? d.sizeBytes
-            : (typeof d.size === "number") ? d.size
-                : 0;
-        const usedBytes = (typeof d.usedBytes === "number") ? d.usedBytes : null;
-
-        // percent
-        let p = null;
-        if (typeof d.usedPercent === "number") p = d.usedPercent;
-        else if (usedBytes != null && sizeBytes > 0) p = Math.round(Math.min(100, Math.max(0, (usedBytes / sizeBytes) * 100)));
-
-        return { device: device || "", name, model, tempC, sizeBytes, usedBytes, usedPercent: p };
+        // Neues Format aus Backend (physische Drives)
+        const device = d.device || "";
+        const name   = device ? device.replace("/dev/","") : (d.byId?.split("/").pop() || "unknown");
+        const model  = (d.model && String(d.model).trim()) ? String(d.model).trim() : "";
+        const tempC  = (typeof d.tempC === "number") ? d.tempC : null;
+        const status = d.status || "UNKNOWN";
+        const sizeBytes = Number(d.sizeBytes || 0);
+        const usedBytes = Number(d.usedBytes || 0);
+        const usedPercent = (typeof d.usedPercent === "number")
+            ? Math.max(0, Math.min(100, Math.round(d.usedPercent)))
+            : (sizeBytes > 0 ? Math.round(Math.min(100, Math.max(0, (usedBytes/sizeBytes)*100))) : 0);
+        return { name, model, tempC, status, sizeBytes, usedBytes, usedPercent };
     }
 
     function renderDisk(raw) {
         const d = normalizeDisk(raw);
         const total = humanBytes(d.sizeBytes);
         const used  = humanBytes(d.usedBytes);
-        const p = Math.min(100, Math.max(0, d.usedPercent ?? 0));
+        const p = d.usedPercent;
+        const tempStr = (d.tempC != null) ? ` · ${d.tempC}°C` : "";
         const modelStr = d.model ? `, ${d.model}` : "";
-        const tempStr  = (typeof d.tempC === "number") ? ` · ${d.tempC}°C` : "";
 
         return `
       <div class="kv" style="flex-direction:column;align-items:stretch">
-        <div style="display:flex;justify-content:space-between;font-size:.9rem">
+        <div style="display:flex;justify-content:space-between;gap:.5rem;font-size:.9rem;flex-wrap:wrap">
           <span>${d.name}${modelStr}${tempStr}</span>
-          <span class="chip">${d.usedPercent != null ? (p + "%") : "–"} · ${total}</span>
+          <span class="chip" style="${statusStyle(d.status)}">${d.status}</span>
         </div>
         <div class="bar"><i style="width:${p}%;background:${usageColor(p)}"></i></div>
-        <div style="display:flex;justify-content:flex-end;font-size:.75rem;opacity:.8">${used} / ${total}</div>
+        <div style="display:flex;justify-content:flex-end;font-size:.75rem;opacity:.8">${used} / ${total} (${p}%)</div>
       </div>
     `;
     }
@@ -84,10 +85,7 @@
             const total = (s.ram.total / (1024 ** 3)).toFixed(1);
             setText("[data-label-for='ram-usage']", p + "%");
             const bar = $("#ram-usage i");
-            if (bar) {
-                bar.style.width = p + "%";
-                bar.style.background = usageColor(p);
-            }
+            if (bar) { bar.style.width = p + "%"; bar.style.background = usageColor(p); }
             setText("[data-ram-used]", `${used}/${total} GB`);
         }
 
@@ -111,10 +109,8 @@
         }
 
         // Uptime & Load
-        if (s.uptime)
-            setText("[data-uptime]", `${s.uptime.days} Tage ${s.uptime.hours} Std`);
-        if (s.load)
-            setText("[data-load]", s.load.map((v) => Number(v).toFixed(2)).join(" / "));
+        if (s.uptime) setText("[data-uptime]", `${s.uptime.days} Tage ${s.uptime.hours} Std`);
+        if (s.load)   setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
 
         // Versionen
         if (s.versions) {

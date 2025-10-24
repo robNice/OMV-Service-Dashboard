@@ -1,6 +1,11 @@
-// server/stats.js — Physische Laufwerke via OMV SMART JSON, plus Usage pro Drive
-// Voraussetzungen: Host hat /usr/local/bin/omv-smart-json.sh (liefert "omv-rpc Smart getList")
-// Container: privileged + /:/hostroot:ro,rslave + /proc:/host/proc:ro + /sys:/host/sys:ro
+// server/stats.js — OMV-gestützte physische Laufwerke + RAM/Load/Temps/Docker
+// Voraussetzungen: Container mit privileged + Mounts:
+//  - /:/hostroot:ro,rslave
+//  - /proc:/host/proc:ro
+//  - /sys:/host/sys:ro
+//  - /var/lib/dpkg:/host/var/lib/dpkg:ro
+//
+// Host muss das Script /usr/local/bin/omv-smart-json.sh bereitstellen (liefert OMV "Smart getList")
 
 const fs = require("fs/promises");
 const path = require("path");
@@ -34,6 +39,7 @@ async function readMem() {
     const used  = Math.max(0, total - free);
     return { total, used, percent: total ? pct(used, total) : 0 };
 }
+
 async function readLoadUptime() {
     const loadTxt = await readFileSafe(`${PROC}/loadavg`);
     const upTxt   = await readFileSafe(`${PROC}/uptime`);
@@ -50,8 +56,8 @@ async function readLoadUptime() {
 }
 
 // ---------------- OMV SMART JSON (Host) ----------------
-// ruft das Host-Script innerhalb des Host-Roots auf (nutzt Host-Bash & OMV-Stack)
 async function readOmvSmartList() {
+    // nutzt den Host-Stack via chroot; NOCH autonom aus dem Container aufrufbar
     try {
         const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/local/bin/omv-smart-json.sh'`);
         const j = JSON.parse(stdout);
@@ -61,19 +67,19 @@ async function readOmvSmartList() {
     }
 }
 
-// /dev/disk/by-id/...  ->  /dev/sdX (via Host-Root)
+// by-id → /dev/sdX
 async function resolveByIdToDev(byIdPath) {
     try {
         const full = path.posix.join(HOST, byIdPath);
         const real = await fs.realpath(full); // z.B. /hostroot/dev/sdb
-        const dev  = real.replace(`${HOST}`, "");
-        return dev; // /dev/sdb
+        const dev  = real.replace(`${HOST}`, ""); // /dev/sdb
+        return dev;
     } catch { return null; }
 }
 
-// ---------------- Drive Usage (über alle Partitionen summiert) ----------------
+// ---------------- Drive Usage (Gesamt pro physischem Laufwerk) ----------------
 async function readDriveUsageMap() {
-    // lsblk JSON vom Host: Disk -> Partitions -> Mountpoints
+    // lsblk auf dem Host (alle Devices, inkl. Mountpoints)
     let lb;
     try {
         const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT"`);
@@ -81,7 +87,8 @@ async function readDriveUsageMap() {
     } catch { return new Map(); }
 
     const usage = new Map(); // "/dev/sdX" -> { sizeBytes, usedBytes }
-    async function addPartitionUsage(mount) {
+
+    async function partUsage(mount) {
         const hostMount = path.posix.join(HOST, mount);
         const st = await statfsSafe(hostMount);
         if (!st) return { total:0, used:0 };
@@ -92,37 +99,29 @@ async function readDriveUsageMap() {
         return { total, used };
     }
 
-    async function walk(dev, parentDev = null) {
+    async function walk(dev, parentDisk = null) {
         const isDisk = dev.type === "disk";
-        const name   = dev.name; // sda / sda1 / nvme0n1 ...
+        const name   = dev.name; // sda / nvme0n1 etc.
         if (isDisk) {
             usage.set(`/dev/${name}`, { sizeBytes: Number(dev.size||0), usedBytes: 0 });
+            parentDisk = `/dev/${name}`;
         }
         if (Array.isArray(dev.children)) {
             for (const ch of dev.children) {
-                if (ch.type === "part") {
-                    // Mount?
-                    if (ch.mountpoint && ch.mountpoint !== "" && ch.mountpoint !== "[SWAP]") {
-                        const u = await addPartitionUsage(ch.mountpoint);
-                        const diskKey = `/dev/${name.replace(/[0-9]+$/, "")}`; // naive, wird unten überschrieben
-                        const rootKey = isDisk ? `/dev/${name}` : parentDev || diskKey;
-                        const cur = usage.get(rootKey) || { sizeBytes: 0, usedBytes: 0 };
-                        usage.set(rootKey, { sizeBytes: cur.sizeBytes, usedBytes: cur.usedBytes + u.used });
-                    }
+                if (ch.type === "part" && ch.mountpoint && ch.mountpoint !== "" && ch.mountpoint !== "[SWAP]") {
+                    const u = await partUsage(ch.mountpoint);
+                    const cur = usage.get(parentDisk) || { sizeBytes: 0, usedBytes: 0 };
+                    usage.set(parentDisk, { sizeBytes: cur.sizeBytes, usedBytes: cur.usedBytes + u.used });
                 }
-                // tiefer laufen (nvme hat evtl. anders verschachtelt)
-                await walk(ch, isDisk ? `/dev/${name}` : parentDev);
+                await walk(ch, parentDisk);
             }
         }
     }
 
-    // alle Top-Level Devices
     if (Array.isArray(lb?.blockdevices)) {
-        for (const d of lb.blockdevices) {
-            await walk(d);
-        }
+        for (const d of lb.blockdevices) await walk(d);
     }
-    return usage; // Map("/dev/sdX" => {sizeBytes, usedBytes})
+    return usage;
 }
 
 // ---------------- Versionen / Docker ----------------
@@ -142,6 +141,7 @@ async function readOMV() {
     plugins.sort((a,b)=>a.name.localeCompare(b.name));
     return { omv, plugins };
 }
+
 async function readDockerUpdates() {
     const out = { updates: [], total: 0 };
     try {
@@ -164,7 +164,7 @@ async function readDockerUpdates() {
     return out;
 }
 
-// ---------------- Temperaturen (CPU + Chassis) ----------------
+// ---------------- Temperaturen (nur CPU + Chassis) ----------------
 async function readTempsCpuChassis() {
     let cpu = null;
     try {
@@ -205,46 +205,51 @@ async function readTempsCpuChassis() {
     return { cpu, chassis };
 }
 
-// ---------------- Drives (physisch) aus OMV + Usage mergen ----------------
+// ---------------- Drives (physisch) aus OMV + Usage ----------------
 async function readPhysicalDrives() {
-    // 1) SMART-Liste aus OMV
-    const list = await readOmvSmartList(); // enthält devicefile (id-Pfad), model, temperature, ...
+    // OMV SMART-Liste
+    const list = await readOmvSmartList();
     if (!list.length) return [];
 
-    // 2) By-ID → /dev/sdX auflösen & Usage pro Drive sammeln
     const usageMap = await readDriveUsageMap();
 
     const drives = [];
     for (const d of list) {
-        if (!d?.devicefile) continue;
-        const byId = d.devicefile; // z.B. /dev/disk/by-id/ata-...
-        const dev = (byId.startsWith("/dev/disk/by-id/"))
-            ? await resolveByIdToDev(byId)
-            : byId; // falls OMV bereits /dev/sdX liefert
+        // OMV-Felder: devicefile (by-id ODER /dev/*), model, temperature, overallstatus (oder ähnliche Schreibweise)
+        const byIdOrDev = d?.devicefile || "";
+        let dev = byIdOrDev;
+        if (byIdOrDev.startsWith("/dev/disk/by-id/")) {
+            dev = await resolveByIdToDev(byIdOrDev) || byIdOrDev; // versuche /dev/sdX
+        }
 
+        // nur physische Blockgeräte
         if (!dev || !/^\/dev\/(sd[a-z]+|nvme\d+n\d+)$/.test(dev)) continue;
 
-        const model = d?.model || d?.vendor?.trim?.() && d?.name ? `${d.vendor} ${d.name}` : (d?.name || byId.split("/").pop());
+        const model = (d?.model && String(d.model).trim()) ? String(d.model).trim() : null;
         const tempC = (typeof d?.temperature === "number") ? d.temperature : null;
 
-        // Gesamtkapazität vom usageMap (lsblk disk-size) + used summe
+        // overallstatus: robuste Extraktion (verschiedene OMV-Versionen nutzen abweichende Keys)
+        const rawStatus = d?.overallstatus || d?.overall_status || d?.overall || d?.smart_status || d?.health || "";
+        const status = String(rawStatus || "").toUpperCase() || "UNKNOWN";
+
         const u = usageMap.get(dev) || { sizeBytes: 0, usedBytes: 0 };
         const sizeBytes = u.sizeBytes;
         const usedBytes = u.usedBytes;
         const usedPercent = sizeBytes > 0 ? clamp(Math.round((usedBytes / sizeBytes) * 100), 0, 100) : null;
 
         drives.push({
-            device: dev,           // /dev/sdX
-            byId,                  // /dev/disk/by-id/...
-            model,                 // "Corsair Force LS SSD"
-            tempC,                 // 77
-            sizeBytes,             // 15873632378880
-            usedBytes,             // sum(Partitions used)
-            usedPercent            // 0..100 oder null, wenn keine Mounts
+            device: dev,              // /dev/sdX
+            byId: byIdOrDev,          // /dev/disk/by-id/...
+            model,                    // z. B. "Corsair Force LS SSD"
+            tempC,                    // z. B. 77
+            status,                   // GOOD / WARNING / FAILING / UNKNOWN ...
+            sizeBytes,
+            usedBytes,
+            usedPercent
         });
     }
 
-    // Doppelte Devices (falls OMV-Liste Einträge mehrfach hat) deduplizieren
+    // deduplizieren (falls OMV-Duplikate liefert)
     const seen = new Map();
     for (const d of drives) if (!seen.has(d.device)) seen.set(d.device, d);
     return Array.from(seen.values()).sort((a,b)=>a.device.localeCompare(b.device));
@@ -266,12 +271,10 @@ async function getStats() {
         ram,
         load,
         uptime,
-        // NEU: nur CPU/Gehäuse unter temps
-        temps: tempsCpuChassis,
+        temps: tempsCpuChassis, // nur CPU + Chassis
         versions,
         docker,
-        // NEU: physische Drives mit Model/Temp/Usage
-        disks: drives,
+        disks: drives           // physische Laufwerke
     };
 }
 
