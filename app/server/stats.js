@@ -165,33 +165,74 @@ async function readTemps() {
         const devs = stdout.trim().split("\n").filter(Boolean);
 
         // Helper: smartctl JSON parsen
+        // Helper: smartctl JSON/Text mit Treiber-Hints robust auswerten
         async function smartTemp(dev) {
-            try {
-                const { stdout } = await sh(`smartctl -a --json ${dev} 2>/dev/null`);
-                const j = JSON.parse(stdout);
+            // Versuchsreihen mit diversen Device-Typ-Hints
+            const hints = ["", "-d sat", "-d ata", "-d scsi"];
+            let lastErr = null;
 
-                // NVMe: nvme_smart_health_information_log.temperature (°C)
-                if (j.nvme_smart_health_information_log && typeof j.nvme_smart_health_information_log.temperature === "number") {
-                    return { device: dev, tempC: j.nvme_smart_health_information_log.temperature };
-                }
+            // JSON-basierte Versuche (bevorzugt)
+            for (const hint of hints) {
+                try {
+                    const cmd = `smartctl -a --json ${hint} ${dev} 2>/dev/null`.trim();
+                    const { stdout } = await sh(cmd);
+                    const j = JSON.parse(stdout);
 
-                // Allgemein: j.temperature.current (manche SATA/USB-Ausgaben)
-                if (j.temperature && typeof j.temperature.current === "number") {
-                    return { device: dev, tempC: j.temperature.current };
-                }
+                    // NVMe
+                    if (j.nvme_smart_health_information_log && typeof j.nvme_smart_health_information_log.temperature === "number") {
+                        return { device: dev, tempC: j.nvme_smart_health_information_log.temperature };
+                    }
 
-                // ATA (SATA): Attribute-Tabelle (IDs 194 / 190)
-                const tbl = j.ata_smart_attributes && j.ata_smart_attributes.table;
-                if (Array.isArray(tbl)) {
-                    for (const a of tbl) {
-                        if (a.id === 194 || a.id === 190) {
-                            // bevorzugt raw.value, sonst value
-                            const rawv = (a.raw && typeof a.raw.value !== "undefined") ? Number(a.raw.value) : Number(a.value);
-                            if (!Number.isNaN(rawv)) return { device: dev, tempC: rawv };
+                    // Generisch
+                    if (j.temperature && typeof j.temperature.current === "number") {
+                        return { device: dev, tempC: j.temperature.current };
+                    }
+
+                    // ATA/SATA-Attribute
+                    const tbl = j.ata_smart_attributes && j.ata_smart_attributes.table;
+                    if (Array.isArray(tbl)) {
+                        for (const a of tbl) {
+                            if (a.id === 194 || a.id === 190) {
+                                const rawv = (a.raw && typeof a.raw.value !== "undefined") ? Number(a.raw.value) : Number(a.value);
+                                if (!Number.isNaN(rawv)) return { device: dev, tempC: rawv };
+                            }
                         }
                     }
-                }
-            } catch { /* ignore this dev */ }
+                } catch (e) { lastErr = e; }
+            }
+
+            // Text-Fallbacks (manche Controller liefern keine saubere JSON-Struktur)
+            for (const hint of hints) {
+                try {
+                    const cmd = `smartctl -A ${hint} ${dev} 2>/dev/null | egrep '(^194|^190|Temperature|Current Drive Temperature|Drive Temperature)'`.trim();
+                    const { stdout } = await sh(cmd);
+                    // Mögliche Matches: „Temperature: 48 Celsius“, „Current Drive Temperature: 48 C“, SMART 190/194 Tabellenzeilen
+                    let m;
+                    if ((m = stdout.match(/Temperature:\s*(\d+)\s*C/i))) {
+                        return { device: dev, tempC: parseInt(m[1], 10) };
+                    }
+                    if ((m = stdout.match(/Current Drive Temperature:\s*(\d+)\s*C/i))) {
+                        return { device: dev, tempC: parseInt(m[1], 10) };
+                    }
+                    if ((m = stdout.match(/^\s*194\s+Temperature_Celsius.*\s(\d+)\s*$/m))) {
+                        return { device: dev, tempC: parseInt(m[1], 10) };
+                    }
+                    if ((m = stdout.match(/^\s*190\s+Airflow_Temperature_Cel.*\s(\d+)\s*$/m))) {
+                        return { device: dev, tempC: parseInt(m[1], 10) };
+                    }
+                } catch (e) { lastErr = e; }
+            }
+
+            // SCT-Log (einige SSDs nur hier)
+            for (const hint of hints) {
+                try {
+                    const cmd = `smartctl -l scttempsts ${hint} ${dev} 2>/dev/null | egrep 'Current Temperature'`.trim();
+                    const { stdout } = await sh(cmd);
+                    const m = stdout.match(/Current Temperature:\s*(\d+)\s*C/i);
+                    if (m) return { device: dev, tempC: parseInt(m[1], 10) };
+                } catch (e) { lastErr = e; }
+            }
+
             return null;
         }
 
