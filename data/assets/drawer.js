@@ -42,12 +42,17 @@
         const x = document.querySelector(sel);
         if (x) x.textContent = text;
     };
+    const avgDiskTemp = (() => {
+        const arr = (s.disks || []).map(d => d.tempC).filter(t => typeof t === "number");
+        return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0) / arr.length) : null;
+    })();
+    setText("[data-hdd-temp]", avgDiskTemp !== null ? `${avgDiskTemp}°C` : "–");
 
-    setText("[data-cpu-temp]", "42°C");
-    setText("[data-nvme-temp]", "38°C");
-    setText("[data-uptime]", "7 Tage 12 Std");
-    setText("[data-load]", "0.35 / 0.40 / 0.55");
-    setText("[data-omv-version]", "7.0.x");
-    setText("[data-plugins]", "OMV-Extras 7.6.2 · Borg 7.2.1 · rsnapshot 7.1.0");
-    setText("[data-updates]", "2 Container haben Updates");
+    setText("[data-cpu-temp]", "-");
+    // setText("[data-nvme-temp]", "38°C");
+    setText("[data-uptime]", "-");
+    setText("[data-load]", "- / - / -");
+    setText("[data-omv-version]", "-");
+    setText("[data-plugins]", "-");
+    setText("[data-updates]", "n/a Container haben Updates");
 })();
