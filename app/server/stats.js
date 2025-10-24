@@ -131,8 +131,11 @@ async function readDisks() {
 }
 
 // ------- Temperaturen -------
+// ------- Temperaturen (CPU + HDDs erweitert) -------
 async function readTemps() {
     let cpu = null;
+
+    // --- CPU-Temperatur (hwmon) ---
     try {
         const hwmons = await fs.readdir(`${SYS}/class/hwmon`);
         let best = null;
@@ -146,28 +149,66 @@ async function readTemps() {
                 const millic = parseInt(vTxt, 10);
                 if (!isNaN(millic)) {
                     const c = Math.round(millic / 1000);
-                    if (name.match(/(k10temp|coretemp|cpu)/i)) best = c;
+                    if (name.match(/(k10temp|coretemp|cpu|zenpower)/i)) best = c;
                 }
             }
         }
         if (best != null) cpu = `${best}°C`;
     } catch {}
 
+    // --- HDD/NVMe Temperaturen via smartctl ---
     const disks = [];
     try {
         const { stdout } = await sh(`ls -1 ${HOST}/dev | egrep '^(sd[a-z]|nvme[0-9]+n[0-9]+)$' || true`);
         const devs = stdout.trim().split("\n").filter(Boolean);
         for (const d of devs) {
             try {
-                const { stdout: s } = await sh(`smartctl -A /host/dev/${d} 2>/dev/null | egrep '194|190|Temperature_Celsius' | awk '{print $10}' | tail -n1`);
-                const t = parseInt(String(s).trim(), 10);
-                if (!isNaN(t)) disks.push({ device: `/dev/${d}`, tempC: t });
-            } catch {}
+                const cmd = `smartctl -A /host/dev/${d} 2>/dev/null`;
+                const { stdout: s } = await sh(cmd);
+
+                // Versuche mehrere mögliche Temperatur-Felder
+                const patterns = [
+                    /^194\s+Temperature_Celsius\s+\S+\s+\S+\s+\S+\s+\S+\s+(\d+)/m,
+                    /^190\s+Airflow_Temperature_Cel\s+\S+\s+\S+\s+\S+\s+\S+\s+(\d+)/m,
+                    /^Temperature:\s+(\d+)\s*C/m,                     // NVMe
+                    /^Current Temperature:\s+(\d+)\s*C/m,             // alternative Ausgabe
+                ];
+
+                let temp = null;
+                for (const p of patterns) {
+                    const m = s.match(p);
+                    if (m) { temp = parseInt(m[1], 10); break; }
+                }
+                if (temp != null && !isNaN(temp)) {
+                    disks.push({ device: `/dev/${d}`, tempC: temp });
+                }
+            } catch { /* ignore single drive */ }
         }
     } catch {}
 
-    return { cpu, disks };
+    // --- Optional: Gehäuse-/Mainboard-Sensoren (falls vorhanden) ---
+    const chassis = [];
+    try {
+        const hwmons = await fs.readdir(`${SYS}/class/hwmon`);
+        for (const h of hwmons) {
+            const dir = `${SYS}/class/hwmon/${h}`;
+            const name = (await readFile(`${dir}/name`))?.trim().toLowerCase() || "";
+            if (!name.match(/(acpitz|pch|motherboard|system|chassis)/)) continue;
+            const entries = await fs.readdir(dir);
+            for (const e of entries) {
+                if (!/^temp[0-9]+_input$/.test(e)) continue;
+                const vTxt = await readFile(`${dir}/${e}`);
+                const millic = parseInt(vTxt, 10);
+                if (!isNaN(millic)) {
+                    chassis.push({ label: name, tempC: Math.round(millic / 1000) });
+                }
+            }
+        }
+    } catch {}
+
+    return { cpu, disks, chassis };
 }
+
 
 // ------- OMV Versionen/Plugins -------
 async function readOMV() {
