@@ -1,4 +1,6 @@
-// Rendert RAM, physische HDDs (Model + Temp + Status), CPU-/Chassis-Temps, Versionen, Updates
+// /assets/drawer-data.js
+// Rendert RAM, physische HDDs (Model + Temp + Status), CPU-Temps, Versionen, Updates
+
 (async function () {
     const $ = (sel) => document.querySelector(sel);
     const host = "/api/stats";
@@ -12,14 +14,16 @@
         while (x >= 1024 && i < u.length - 1) { x /= 1024; i++; }
         return x.toFixed(x >= 10 ? 0 : 1) + " " + u[i];
     }
+
     function setText(sel, val) { const el = $(sel); if (el) el.textContent = val; }
 
     function usageColor(p) {
-        if (p >= 85) return "linear-gradient(to right,#ef4444,#b91c1c)";
-        if (p >= 70) return "linear-gradient(to right,#f97316,#ea580c)";
-        if (p >= 50) return "linear-gradient(to right,#eab308,#ca8a04)";
-        return "linear-gradient(to right,#22c55e,#15803d)";
+        if (p >= 85) return "linear-gradient(to right,#ef4444,#b91c1c)"; // rot
+        if (p >= 70) return "linear-gradient(to right,#f97316,#ea580c)"; // orange
+        if (p >= 50) return "linear-gradient(to right,#eab308,#ca8a04)"; // gelb
+        return "linear-gradient(to right,#22c55e,#15803d)";              // grün
     }
+
     function statusStyle(s) {
         const v = String(s || "UNKNOWN").toUpperCase();
         if (v.includes("GOOD") || v === "PASSED") {
@@ -35,6 +39,7 @@
     }
 
     function normalizeDisk(d) {
+        // Neues Format aus Backend (physische Drives)
         const device = d.device || "";
         const name   = device ? device.replace("/dev/","") : (d.byId?.split("/").pop() || "unknown");
         const model  = (d.model && String(d.model).trim()) ? String(d.model).trim() : "";
@@ -79,13 +84,13 @@
             const used = (s.ram.used / (1024 ** 3)).toFixed(1);
             const total = (s.ram.total / (1024 ** 3)).toFixed(1);
             setText("[data-label-for='ram-usage']", p + "%");
-            const bar = document.querySelector("#ram-usage i");
+            const bar = $("#ram-usage i");
             if (bar) { bar.style.width = p + "%"; bar.style.background = usageColor(p); }
             setText("[data-ram-used]", `${used}/${total} GB`);
         }
 
         // HDDs (physische Drives)
-        const cont = document.getElementById("drawer-disks");
+        const cont = $("#drawer-disks");
         if (cont) {
             cont.innerHTML = "";
             if (Array.isArray(s.disks) && s.disks.length) {
@@ -95,19 +100,12 @@
             }
         }
 
-        // HDD Ø-Temperatur (aus disks[].tempC)
-        const avgDiskTemp = (() => {
-            const arr = (s.disks || []).map(d => d && typeof d.tempC === "number" ? d.tempC : null).filter(x => x != null);
-            return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0) / arr.length) : null;
-        })();
-        setText("[data-hdd-temp]", avgDiskTemp !== null ? `${avgDiskTemp}°C` : "–");
-
         // Temperaturen (nur CPU + optional Chassis)
         if (s.temps) {
             setText("[data-cpu-temp]", s.temps.cpu || "–");
             const ch = Array.isArray(s.temps.chassis) ? s.temps.chassis.map(x => `${x.label}:${x.tempC}°C`).join(" · ") : "";
-            const el = document.querySelector("[data-chassis-temps]");
-            if (el) el.textContent = ch || "–";
+            const el = $("[data-chassis-temps]");
+            if (el) el.textContent = ch || "";
         }
 
         // Uptime & Load
@@ -128,7 +126,7 @@
         // Zeitstempel
         const date = new Date(s.ts || Date.now());
         const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        const chip = document.querySelector("#info-drawer footer .chip");
+        const chip = $("#info-drawer footer .chip");
         if (chip) chip.textContent = t;
     }
 
