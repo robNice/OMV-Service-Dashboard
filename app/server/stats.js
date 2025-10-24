@@ -208,12 +208,10 @@ async function readTempsCpuChassis() {
 // ---------------- Drives (physisch) aus OMV + Usage ----------------
 
 
-function kuerzeText(text, maxLaenge) {
-    if (text.length > maxLaenge) {
-        return text.slice(0, maxLaenge) + '...';
-    } else {
-        return text;
-    }
+
+function kuerzeText(val, n) {
+    const s = (val == null) ? "" : String(val);
+    return s.length > n ? s.slice(0, n) + "…" : s;
 }
 
 async function readPhysicalDrives() {
