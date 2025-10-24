@@ -145,8 +145,8 @@
 
     async function loop() {
         try { await loadStats(); } catch (e) { console.warn("stats fetch error", e); }
-        setTimeout(loop, POLL_MS);
+        //setTimeout(loop, POLL_MS);
     }
 
-   // loop();
+    loop();
 })();
