@@ -17,6 +17,13 @@ services:
       - /sys:/host/sys:ro
       - /var/lib/dpkg:/host/var/lib/dpkg:ro  # dpkg-Status vom Host
       - /:/hostroot:ro,rslave
+      - "/dev/sda:/dev/sda"
+      - "/dev/sdb:/dev/sdb"
+      - "/dev/sdc:/dev/sdc"
+      - "/dev/sdd:/dev/sdd"
+      - "/dev/sde:/dev/sde"
+      - "/dev/sdf:/dev/sdf"
+      - "/dev/sdg:/dev/sdg"
     environment:
       PROC_ROOT: /host/proc
       SYS_ROOT: /host/sys
