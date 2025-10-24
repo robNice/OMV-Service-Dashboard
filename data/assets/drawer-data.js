@@ -34,7 +34,7 @@
         return "background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#e5e7eb;";
     }
 
-    function shortModel(str) {f
+    function shortModel(str) {
         if (!str) return "";
         const t = String(str).trim();
         if (t.length <= 16) return t;
@@ -66,12 +66,14 @@
         return `
       <div class="kv" style="flex-direction:column;align-items:stretch">
         <div style="display:flex;justify-content:space-between;gap:.5rem;font-size:.9rem;flex-wrap:wrap">
-          <span>${d.name}${modelStr}${tempStr}</span>
+          <span>${d.name}${modelStr}</span>
+          <span class="temp">${tempStr}</span>
           <span class="chip" style="${statusStyle(d.status)}">${d.status}</span>
         </div>
         <div class="bar"><i style="width:${p}%;background:${usageColor(p)}"></i></div>
         <div style="display:flex;justify-content:flex-end;font-size:.75rem;opacity:.8">${used} / ${total} (${p}%)</div>
       </div>
+      <div class="diskpart"></div>
     `;
     }
 
