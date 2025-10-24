@@ -73,7 +73,6 @@
         <div class="bar"><i style="width:${p}%;background:${usageColor(p)}"></i></div>
         <div style="display:flex;justify-content:flex-end;font-size:.75rem;opacity:.8">${used} / ${total} (${p}%)</div>
       </div>
-      <div class="diskpart"></div>
     `;
     }
 
