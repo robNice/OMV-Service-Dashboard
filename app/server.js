@@ -7,7 +7,13 @@ const { getStats } = require("./server/stats"); // <— neu
 
 const PORT = 3000;
 
-app.use("/assets", express.static("/data/assets"));
+app.use(
+    "/assets",
+    express.static(path.resolve(__dirname, "data", "assets"), {
+        maxAge: "1h",
+        etag: false,
+    })
+);
 
 // Hilfsfunktion zum Einlesen und Parsen der services.json
 function loadData() {
@@ -39,17 +45,19 @@ function renderSection(section) {
 
 // Route: Startseite mit Sektionen
 
-// in server.js (oder deiner Express-App)
+
 
 app.get("/api/stats", async (req, res) => {
     try {
         const data = await getStats();
+        res.set("Cache-Control", "no-store");
         res.json(data);
-    } catch (e) {
-        console.error("stats error:", e);
+    } catch (err) {
+        console.error("GET /api/stats failed:", err);
         res.status(500).json({ error: "stats_failed" });
     }
 });
+
 
 // ... dein bestehender app.listen(...)
 
