@@ -16,7 +16,7 @@
     position: fixed;
     inset: 0 auto 0 0;            /* links andocken */
     width: var(--drawer-w);
-    transform: translateX(calc(-1 * (var(--drawer-w) - 44px)));
+    transform: translateX(calc(-1 * (var(--drawer-w) - 0px)));
     transition: transform .28s ease;
     z-index: 1100;                 /* über Kacheln/Headers */
 }
@@ -104,14 +104,14 @@
 #info-drawer .tab {
     position: absolute;
     top: 50%;
-    right: -44px;                /* Breite des Tabs, damit er raussteht */
+    right: -19px;                /* Breite des Tabs, damit er raussteht */
     transform: translateY(-50%) rotate(-90deg);
     transform-origin: right center;
     background: #111827;
     color: var(--text);
     border: 1px solid var(--drawer-border);
-    border-bottom: none;
-    border-radius: .6rem .6rem 0 0;
+    border-top: none;
+    border-radius: 0 0 .6rem .6rem;
     padding: .45rem .8rem;
     font-weight: 700;
     letter-spacing: .15em;
@@ -135,6 +135,6 @@
 /* Mobile: Drawer breiter, Tab etwas größer */
 @media (max-width: 720px) {
     :root { --drawer-w: 86vw; }
-    #info-drawer { transform: translateX(calc(-1 * (var(--drawer-w) - 50px))); }
-    #info-drawer .tab { right: -50px; }
+    #info-drawer { transform: translateX(calc(-1 * (var(--drawer-w) - 0px))); }
+    #info-drawer .tab { right: -19px; }
 }
