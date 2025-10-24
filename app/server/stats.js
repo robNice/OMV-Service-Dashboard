@@ -50,73 +50,68 @@ async function readLoadUptime() {
 }
 
 // ---------- Disks (Host) ----------
+// ---------- Disks (robust via lsblk) ----------
 async function readDisks() {
-    const mountsTxt = await readFile(`${PROC}/mounts`);
-    if (!mountsTxt) return [];
+    try {
+        // Wir lesen Blockgeräte auf dem Host – erfordert /dev und /sys gemountet
+        const { stdout } = await sh(
+            "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT,FSTYPE,MODEL /host/dev"
+        );
 
-    const skipTypes = new Set([
-        "proc","sysfs","cgroup","cgroup2","tmpfs","devtmpfs","overlay","squashfs","ramfs",
-        "securityfs","pstore","bpf","tracefs","fusectl","debugfs","configfs","aufs"
-    ]);
+        const data = JSON.parse(stdout);
+        const flat = [];
 
-    // Kandidaten aus /proc/mounts
-    const candidates = [];
-    for (const line of mountsTxt.split("\n")) {
-        if (!line) continue;
-        const [src, tgt, fstype] = line.split(/\s+/);
-        if (!src || !tgt || !fstype) continue;
-        if (skipTypes.has(fstype)) continue;
-        if (!/^\/dev\//.test(src)) continue;              // nur echte Blockdevices
-        candidates.push({ src, tgt, fstype });
-    }
-
-    // Doppelte Geräte (Subvols etc.) vorerst zulassen – wir deduplizieren später
-    const out = [];
-    for (const { src, tgt } of candidates) {
-        const hostPath = `${HOST}${tgt}`;                 // echter Pfad auf dem Host-Dateisystem
-        let size = null, usedPercent = null;
-
-        // 1) Versuch: statfs (am zuverlässigsten, kein Parsing, unabhängig von df-Ausgabe)
-        try {
-            // @ts-ignore — Node 20+: statfs verfügbar
-            const st = await fs.statfs(hostPath);
-            const block = st?.bsize || st?.frsize || 4096;
-            const total = Number(st.blocks || st.bavail || 0) * Number(block);
-            const free  = Number(st.bfree || 0) * Number(block);
-            const used  = total - free;
-            if (total > 0) {
-                size = total;
-                usedPercent = clampPct((used / total) * 100);
+        function walk(devs) {
+            for (const d of devs) {
+                if (d.type === "disk" && Array.isArray(d.children)) {
+                    walk(d.children);
+                    continue;
+                }
+                if (d.type !== "part") continue;
+                if (!d.mountpoint) continue;
+                // echten Host-Pfad zusammenbauen
+                const mp = d.mountpoint.startsWith("/hostroot")
+                    ? d.mountpoint
+                    : `/hostroot${d.mountpoint}`;
+                flat.push({
+                    src: `/dev/${d.name}`,
+                    mount: mp,
+                    size: Number(d.size),
+                });
             }
-        } catch {
-            // 2) Fallback: df
+        }
+        walk(data.blockdevices || []);
+
+        // für jedes Mount df ermitteln (statfs)
+        const results = [];
+        for (const f of flat) {
             try {
-                const { stdout } = await sh(`df -P -B1 --output=pcent,size ${hostPath} | tail -n 1`);
-                // Format: "  73%  3600755083264"
-                const parts = stdout.trim().split(/\s+/);
-                const pcent = parts[0] || "";
-                const sz    = parts[1] || "";
-                const pVal  = parseInt(pcent.replace("%", ""), 10);
-                const sVal  = parseInt(sz, 10);
-                if (!Number.isNaN(sVal) && sVal > 0) size = sVal;
-                if (!Number.isNaN(pVal)) usedPercent = clampPct(pVal);
-            } catch { /* ignorieren */ }
+                const st = await fs.statfs(f.mount);
+                const block = st?.bsize || st?.frsize || 4096;
+                const total = Number(st.blocks || 0) * block;
+                const free = Number(st.bfree || 0) * block;
+                const used = total - free;
+                if (total > 0) {
+                    results.push({
+                        src: f.src,
+                        mount: f.mount.replace("/hostroot", ""),
+                        size: total,
+                        usedPercent: clampPct((used / total) * 100),
+                    });
+                }
+            } catch {
+                /* ignorieren */
+            }
         }
 
-        // Wenn statfs/df nichts sinnvoll liefert (bind mounts, special), überspringen
-        if (size === null || usedPercent === null) continue;
-
-        out.push({ src, mount: tgt, size, usedPercent });
+        // konsolidieren
+        return results.sort((a, b) => a.src.localeCompare(b.src));
+    } catch (err) {
+        console.error("readDisks error", err);
+        return [];
     }
-
-    // Auf Geräteebene deduplizieren – nehme den Eintrag mit der höchsten Belegung
-    const dedup = new Map();
-    for (const r of out) {
-        const key = r.src;
-        if (!dedup.has(key) || r.usedPercent > dedup.get(key).usedPercent) dedup.set(key, r);
-    }
-    return Array.from(dedup.values()).sort((a, b) => a.src.localeCompare(b.src));
 }
+
 
 // ---------- Temperaturen ----------
 async function readTemps() {
