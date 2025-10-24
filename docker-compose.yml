@@ -6,8 +6,9 @@ services:
       dockerfile: Dockerfile
     image: omv-landingpage-with-docker
     #container_name: omv-landingpage
-    pid: "host"                 # sieht Host-/proc PIDs
+#    pid: "host"                 # sieht Host-/proc PIDs
     privileged: true
+    cap_add: [ "SYS_RAWIO" ]
     devices:
       - "/dev:/dev"
     volumes:
