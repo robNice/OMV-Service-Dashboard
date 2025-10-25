@@ -229,7 +229,13 @@ async function readPhysicalDrives() {
         if (!dev || !/^\/dev\/(sd[a-z]+|nvme\d+n\d+)$/.test(dev)) continue;
 
         const model = (d?.model && String(d.model).trim()) ? String(d.model).trim() : null;
-        const tempC = (typeof d?.temperature === "number") ? d.temperature : null;
+        // const tempC = (typeof d?.temperature === "number") ? d.temperature : null;
+        let tempC = (typeof d?.temperature === "number") ? d.temperature : null;
+        // SandForce-basiert: Corsair Force LS meldet oft keine verlässliche Temperatur → auf NULL setzen
+        if (model && model.toLowerCase() === "corsair force ls ssd") {
+            tempC = null;
+        }
+
 
         // overallstatus: robuste Extraktion (verschiedene OMV-Versionen nutzen abweichende Keys)
         const rawStatus = d?.overallstatus || d?.overall_status || d?.overall || d?.smart_status || d?.health || "";
