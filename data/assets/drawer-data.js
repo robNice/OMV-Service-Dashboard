@@ -60,7 +60,7 @@
         const total = humanBytes(d.sizeBytes);
         const used  = humanBytes(d.usedBytes);
         const p = d.usedPercent;
-        const tempStr = (d.tempC != null) ? `${d.tempC}°C` : "";
+        const tempStr = (d.tempC != null) ? `${d.tempC}°C` : "n/a";
         const modelStr = d.model ? `, ${shortModel(d.model)}` : "";
 
         return `
