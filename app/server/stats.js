@@ -232,9 +232,9 @@ async function readPhysicalDrives() {
         // const tempC = (typeof d?.temperature === "number") ? d.temperature : null;
         let tempC = (typeof d?.temperature === "number") ? d.temperature : null;
         // SandForce-basiert: Corsair Force LS meldet oft keine verlässliche Temperatur → auf NULL setzen
-        if (model && model.toLowerCase() === "corsair force ls ssd") {
-            tempC = null;
-        }
+        // if (model && model.toLowerCase() === "corsair force ls ssd") {
+        //     tempC = null;
+        // }
 
 
         // overallstatus: robuste Extraktion (verschiedene OMV-Versionen nutzen abweichende Keys)
