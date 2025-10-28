@@ -29,3 +29,8 @@ die zweite die einzelnen Dienste (services) die der Kategorie untergeordnet sind
 }
 
 ```
+
+## deploy.yml
+
+Deployment der Landingpage direkt zu /opt/OMV-landingpage.
+Strategie: Dateien nur löschen, wenn sie vorher im Repository waren.

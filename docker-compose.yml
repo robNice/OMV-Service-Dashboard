@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  landingpage:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: omv-landingpage-with-docker
+    #container_name: omv-landingpage
+    pid: "host"                 # sieht Host-/proc PIDs
+    privileged: true
+    devices:
+      - "/dev:/dev"
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/lib/dpkg:/host/var/lib/dpkg:ro  # dpkg-Status vom Host
+      - /:/hostroot:ro,rslave
+    environment:
+      PROC_ROOT: /host/proc
+      SYS_ROOT: /host/sys
+      HOST_ROOT: /hostroot
+      DPKG_ROOT: /host/var/lib/dpkg
+    working_dir: /app
+    command: ["node", "server.js"]
+    ports:
+      - "8069:3000"
+    restart: unless-stopped

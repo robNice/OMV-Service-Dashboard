@@ -3,9 +3,17 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
+const { getStats } = require("./server/stats"); // <— neu
+
 const PORT = 3000;
 
-app.use("/assets", express.static("/data/assets"));
+
+
+app.use("/assets", express.static("/data/assets", {
+    maxAge: "1h",
+    etag: false,
+}));
+
 
 // Hilfsfunktion zum Einlesen und Parsen der services.json
 function loadData() {
@@ -36,6 +44,36 @@ function renderSection(section) {
 }
 
 // Route: Startseite mit Sektionen
+
+
+
+app.get("/favicon.ico", (req, res) => {
+    res.type("image/x-icon");
+    res.set("Cache-Control", "public, max-age=31536000, immutable");
+    res.sendFile("favicon.ico", { root: "/data/assets" }, (err) => {
+        if (err) {
+            console.error("favicon send failed:", err);
+            res.status(404).end();
+        }
+    });
+});
+app.head("/favicon.ico", (req, res) => res.status(200).end());
+
+app.get("/api/stats", async (req, res) => {
+    try {
+        const data = await getStats();
+        res.set("Cache-Control", "no-store");
+        res.json(data);
+    } catch (err) {
+        console.error("GET /api/stats failed:", err);
+        res.status(500).json({ error: "stats_failed" });
+    }
+});
+
+
+// ... dein bestehender app.listen(...)
+
+
 app.get("/", (req, res) => {
   const data = loadData();
   const sections = data.sections.map(renderSection).join("\n");
