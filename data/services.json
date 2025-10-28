@@ -2,7 +2,7 @@
   "sections": [
     {
       "id": "media",
-      "title": "Media",
+      "title": "🖼🎞🎵 Media 🖼🎞🎵",
       "thumbnail": "assets/media.png",
       "services": [
         {
@@ -71,6 +71,11 @@
           "title": "OMV Webinterface",
           "url": "http://omv.cube.fritz.box",
           "logo": "assets/omv.png"
+        },
+        {
+          "title": "Filebrowser",
+          "url": "http://filebrowser.cube.fritz.box",
+          "logo": "assets/filebrowser.png"
         },
         {
           "id": "epson",
