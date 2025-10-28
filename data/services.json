@@ -2,7 +2,7 @@
   "sections": [
     {
       "id": "media",
-      "title": "🖼🎞🎵 Media 🖼🎞🎵",
+      "title": "Media 🎧📷🎥",
       "thumbnail": "assets/media.png",
       "services": [
         {
@@ -35,7 +35,7 @@
     },
     {
       "id": "kueche",
-      "title": "Küche",
+      "title": "Küche 🔪🍳🍔",
       "thumbnail": "assets/kitchen.png",
       "services": [
         {
@@ -47,7 +47,7 @@
     },
     {
       "id": "smarthome",
-      "title": "Smart Home",
+      "title": "Smart-Home 🌡💡🔈",
       "thumbnail": "assets/smart-home.png",
       "services": [
         {
@@ -63,7 +63,7 @@
       ]
     },
     {
-      "id": "verwaltung",
+      "id": "Verwaltung ⚙🔌⏼",
       "title": "Verwaltung",
       "thumbnail": "assets/verwaltung.png",
       "services": [
@@ -99,7 +99,7 @@
     },
     {
       "id": "netzwerk",
-      "title": "Netzwerk",
+      "title": "Netzwerk 🖧🌐📡",
       "thumbnail": "assets/network.png",
       "services": [
         {
