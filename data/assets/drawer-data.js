@@ -131,8 +131,16 @@
 
         // --- CPU + Chassis Temps ---
         if (s.temps) {
-            setText("#temps .cpu", s.temps.cpu + " °C");
-            setText("#temps .chassis", s.temps.chassis.map(c => `${c.tempC}°C`).join(" / "));
+
+            const cpuVal = Array.isArray(s.temps.cpu)
+                ? s.temps.cpu.filter(x => x != null).join(" / ")
+                : (s.temps.cpu != null ? String(s.temps.cpu) : "–");
+
+            setText("[data-cpu-temp]", cpuVal || "–");
+
+
+            // setText("#temps .cpu", s.temps.cpu + " °C");
+            setText([data-chassis-temps], s.temps.chassis.map(c => `${c.tempC}°C`).join(" / "));
         }
 
         // --- Versions ---
