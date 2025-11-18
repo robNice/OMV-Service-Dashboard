@@ -267,13 +267,15 @@ async function readPhysicalDrives() {
 
 // ---------------- Aggregation ----------------
 async function getStats() {
-    const [{ load, uptime }, ram, tempsCpuChassis, versions, docker, drives] = await Promise.all([
+    const [{ load, uptime }, ram, tempsCpuChassis, versions, dockerUpdates, drives, containers] = await Promise.all([
+    //const [{ load, uptime }, ram, tempsCpuChassis, versions, docker, drives] = await Promise.all([
         readLoadUptime(),
         readMem(),
         readTempsCpuChassis(),
         readOMV(),
         readDockerUpdates(),
         readPhysicalDrives(),
+        readDockerContainers(),
     ]);
 
     return {
@@ -284,8 +286,41 @@ async function getStats() {
         temps: tempsCpuChassis, // nur CPU + Chassis
         versions,
         docker,
-        disks: drives           // physische Laufwerke
+        disks: drives,
+        containers
     };
+}
+
+async function readDockerContainers() {
+    try {
+        // Führt den Docker-Befehl auf dem Host aus (z.B. mittels 'nsenter' oder direkt über den Socket,
+        // abhängig von der Docker-Konfiguration und den Host-Mounts des Containers.
+        // Hier wird angenommen, dass der 'docker' Befehl im Host-Kontext ausgeführt werden kann,
+        // oder es gibt ein Host-Skript, das das übernimmt.
+        // Da du bereits 'sh' für omv-smart-json.sh nutzt, verwenden wir 'sh' (promisify(exec)).
+
+        // Host-Befehl, um Container-ID, Name und Status zu erhalten
+        const { stdout } = await sh('docker ps --format "{{.ID}}|{{.Names}}|{{.Status}}"');
+
+        const lines = stdout.trim().split('\n').filter(l => l.length > 0);
+
+        const containers = lines.map(line => {
+            const parts = line.split('|');
+            const id = parts[0].substring(0, 4); // Kurze ID
+            const name = parts[1];
+            const status = parts[2].trim();
+            // status kann z.B. "Up 3 hours", "Exited (0) 5 minutes ago" sein
+
+            return { id, name, status };
+        });
+
+        return containers;
+
+    } catch (e) {
+        // Fehler ignorieren, wenn Docker nicht verfügbar ist
+        console.warn("Could not read Docker container status:", e.message);
+        return [];
+    }
 }
 
 module.exports = { getStats };
