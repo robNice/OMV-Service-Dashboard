@@ -109,10 +109,97 @@
     `;
     }
 
+    async function loadBasicStats() {
+        const s = await fetch("/api/stats").then(r => r.json());
+
+        // --- RAM ---
+        setText("#ram .used", humanBytes(s.ram.used));
+        setText("#ram .total", humanBytes(s.ram.total));
+
+        // --- Drives ---
+        const zone = $("#drives");
+        if (zone && Array.isArray(s.drives)) {
+            zone.innerHTML = s.drives.map(d => `
+            <div class="drive">
+                <strong>${d.device}</strong>
+                <span>${d.model || ""}</span>
+                <span>${d.temp || "-"}°C</span>
+                <span>${d.smart || ""}</span>
+            </div>
+        `).join("");
+        }
+
+        // --- CPU + Chassis Temps ---
+        if (s.temps) {
+            setText("#temps .cpu", s.temps.cpu.join(" / ") + " °C");
+            setText("#temps .chassis", s.temps.chassis.map(c => `${c.tempC}°C`).join(" / "));
+        }
+
+        // --- Versions ---
+        if (s.versions) {
+            setText("#versions .os", s.versions.os || "–");
+            setText("#versions .kernel", s.versions.kernel || "–");
+            setText("#versions .omv", s.versions.omv || "–");
+        }
+
+        // --- Zeitstempel ---
+        const date = new Date();
+        const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        const chip = document.querySelector("#info-drawer footer .chip");
+        if (chip) chip.textContent = t;
+    }
+
+    async function loadDockerStats() {
+        const d = await fetch("/api/stats/docker").then(r => r.json());
+
+        // Containerliste rendern
+        const czone = $("#docker-container-list");
+        if (czone && Array.isArray(d.containers)) {
+            czone.innerHTML = d.containers.map(c => `
+            <div class="container">
+                <strong>${c.name}</strong>
+                <span>${c.status}</span>
+            </div>
+        `).join("");
+        }
+
+        // Updates rendern
+        const uzone = $("#docker-updates");
+        if (uzone && d.dockerUpdates) {
+            uzone.innerHTML = d.dockerUpdates.updates.map(u => `
+            <div class="update">
+                <strong>${u.container}</strong>
+                <span>Update verfügbar</span>
+            </div>
+        `).join("");
+
+            setText("#docker-update-count", d.dockerUpdates.total);
+        }
+
+        // Loading-Hinweis ausblenden
+        const loading = $("#docker-loading");
+        if (loading) loading.style.display = "none";
+    }
+
+
     async function loadStats() {
         const res = await fetch(host, { cache: "no-store" });
         if (!res.ok) throw new Error(res.statusText);
         const s = await res.json();
+
+        fetch("/api/stats/docker", { cache: "no-store" })
+            .then(r => r.json())
+            .then(d => {
+                if (d.dockerUpdates)
+                    setText("[data-updates]", d.dockerUpdates.total > 0
+                        ? `${d.dockerUpdates.total} Container haben Updates`
+                        : "Keine Updates");
+
+                // if (d.containers)
+                //     renderContainerList(d.containers);
+            })
+            .catch(err => console.warn("docker load error:", err));
+
 
         // RAM
         if (s.ram) {
@@ -178,10 +265,21 @@
         if (chip) chip.textContent = t;
     }
 
+    // async function loop() {
+    //     try { await loadStats(); } catch (e) { console.warn("stats fetch error", e); }
+    //     setTimeout(loop, POLL_MS);
+    // }
+
     async function loop() {
-        try { await loadStats(); } catch (e) { console.warn("stats fetch error", e); }
+        try {
+            await loadBasicStats();   // sofort
+            loadDockerStats();        // async, blockiert nichts
+        } catch (e) {
+            console.warn("stats fetch error", e);
+        }
         setTimeout(loop, POLL_MS);
     }
+
 
     loop();
 })();

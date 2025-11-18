@@ -267,30 +267,64 @@ async function readPhysicalDrives() {
 }
 
 // ---------------- Aggregation ----------------
+// async function getStats() {
+//     //const [{ load, uptime }, ram, tempsCpuChassis, versions, dockerUpdates, drives, containers] = await Promise.all([
+//     const [{ load, uptime }, ram, tempsCpuChassis, versions, docker, drives, containers] = await Promise.all([
+//         readLoadUptime(),
+//         readMem(),
+//         readTempsCpuChassis(),
+//         readOMV(),
+//         readDockerUpdates(),
+//         readPhysicalDrives(),
+//         readDockerContainers()
+//     ]);
+//
+//     return {
+//         ts: Date.now(),
+//         ram,
+//         load,
+//         uptime,
+//         temps: tempsCpuChassis, // nur CPU + Chassis
+//         versions,
+//         docker,
+//         disks: drives,
+//         containers
+//     };
+// }
+
 async function getStats() {
-    //const [{ load, uptime }, ram, tempsCpuChassis, versions, dockerUpdates, drives, containers] = await Promise.all([
-    const [{ load, uptime }, ram, tempsCpuChassis, versions, docker, drives, containers] = await Promise.all([
+    // Basisinfos (schnell!)
+    const [loaduptime, ram, temps, versions, drives] = await Promise.all([
         readLoadUptime(),
         readMem(),
         readTempsCpuChassis(),
         readOMV(),
-        readDockerUpdates(),
-        readPhysicalDrives(),
-        readDockerContainers()
+        readPhysicalDrives()
     ]);
 
     return {
-        ts: Date.now(),
+        load: loaduptime.load,
+        uptime: loaduptime.uptime,
         ram,
-        load,
-        uptime,
-        temps: tempsCpuChassis, // nur CPU + Chassis
+        temps,
         versions,
-        docker,
-        disks: drives,
-        containers
+        drives
     };
 }
+async function getDockerStats() {
+    const [containers, dockerUpdates] = await Promise.all([
+        readDockerContainers(),
+        readDockerUpdates()
+    ]);
+
+    return {
+        containers,
+        dockerUpdates,
+        totalUpdates: dockerUpdates.total
+    };
+}
+
+
 
 async function readDockerContainers() {
     try {
@@ -356,4 +390,7 @@ async function readDockerUpdates() {
 
 
 
-module.exports = { getStats };
+module.exports = {
+    getStats,
+    getDockerStats
+};
