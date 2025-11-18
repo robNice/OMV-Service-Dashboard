@@ -14,6 +14,36 @@
     }
     function setText(sel, val) { const el = $(sel); if (el) el.textContent = val; }
 
+    function renderContainerList(containers) {
+        const target = $('[data-containers-list-target]');
+        if (!target) return;
+
+        target.innerHTML = ''; // Liste leeren
+
+        if (!containers || containers.length === 0) {
+            target.innerHTML = `<li style="list-style:none;text-align:center;color:var(--muted);font-size:.85rem;padding:.5rem 0;">Keine Container aktiv</li>`;
+            return;
+        }
+
+        containers.forEach(c => {
+            // Status farblich hervorheben
+            const statusLower = c.status.toLowerCase();
+            const statusClass = statusLower.includes('up') ? 'status-good' :
+                statusLower.includes('exited') ? 'status-warn' :
+                    'status-unknown';
+
+            const html = `
+                <li>
+                    <div class="kv">
+                        <span title="${c.name}">${c.name}</span>
+                        <span class="chip ${statusClass}" title="${c.status} (ID: ${c.id})">${c.status.split(' ')[0]}</span>
+                    </div>
+                </li>
+            `;
+            target.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
     function usageColor(p) {
         if (p >= 85) return "linear-gradient(to right,#ef4444,#b91c1c)";
         if (p >= 70) return "linear-gradient(to right,#f97316,#ea580c)";
@@ -132,9 +162,14 @@
             setText("[data-plugins]", plugins);
         }
 
-        // Docker Updates
+
         if (s.docker)
             setText("[data-updates]", s.docker.total > 0 ? `${s.docker.total} Container haben Updates` : "Keine Updates");
+
+
+        // Docker-Container
+        if (s.containers)
+            renderContainerList(s.containers); // <-- NEU
 
         // Zeitstempel
         const date = new Date(s.ts || Date.now());

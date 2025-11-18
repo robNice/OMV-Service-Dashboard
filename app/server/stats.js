@@ -11,6 +11,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const { exec } = require("child_process");
 const { promisify } = require("util");
+const shWithTimeout = (cmd, timeout = 5000) => promisify(exec)(cmd, { timeout });
 const sh = promisify(exec);
 
 const PROC = process.env.PROC_ROOT || "/host/proc";
@@ -293,23 +294,16 @@ async function getStats() {
 
 async function readDockerContainers() {
     try {
-        // Führt den Docker-Befehl auf dem Host aus (z.B. mittels 'nsenter' oder direkt über den Socket,
-        // abhängig von der Docker-Konfiguration und den Host-Mounts des Containers.
-        // Hier wird angenommen, dass der 'docker' Befehl im Host-Kontext ausgeführt werden kann,
-        // oder es gibt ein Host-Skript, das das übernimmt.
-        // Da du bereits 'sh' für omv-smart-json.sh nutzt, verwenden wir 'sh' (promisify(exec)).
-
-        // Host-Befehl, um Container-ID, Name und Status zu erhalten
-        const { stdout } = await sh('docker ps --format "{{.ID}}|{{.Names}}|{{.Status}}"');
+        // Ruft Container-ID (kurz), Name und Status ab
+        const { stdout } = await shWithTimeout('docker ps --format "{{.ID}}|{{.Names}}|{{.Status}}"', 5000);
 
         const lines = stdout.trim().split('\n').filter(l => l.length > 0);
 
         const containers = lines.map(line => {
             const parts = line.split('|');
-            const id = parts[0].substring(0, 4); // Kurze ID
+            const id = parts[0].substring(0, 4);
             const name = parts[1];
             const status = parts[2].trim();
-            // status kann z.B. "Up 3 hours", "Exited (0) 5 minutes ago" sein
 
             return { id, name, status };
         });
@@ -317,10 +311,49 @@ async function readDockerContainers() {
         return containers;
 
     } catch (e) {
-        // Fehler ignorieren, wenn Docker nicht verfügbar ist
+        // Fehler, falls Docker nicht läuft oder der Befehl fehlschlägt
         console.warn("Could not read Docker container status:", e.message);
         return [];
     }
 }
+
+async function readDockerUpdates() {
+    const out = { updates: [], total: 0 };
+    try {
+        // Wir verwenden shWithTimeout mit 15 Sekunden
+        const { stdout } = await shWithTimeout("docker ps --format '{{.Names}}|{{.Image}}'", 15000);
+        const lines = stdout.trim() ? stdout.trim().split("\n") : [];
+
+        // Die Pull-Vorgänge einzeln ausführen, um eine lange Blockade zu verhindern
+        for (const line of lines) {
+            const [name, image] = line.split("|");
+            if (!name || !image) continue;
+            try {
+                // IDs abrufen (vor und nach Pull) – hier verwenden wir wieder shWithTimeout
+                const { stdout: before } = await shWithTimeout(`docker image inspect --format='{{.Id}}' ${image}`, 5000);
+
+                // Pull mit einem etwas längeren Timeout (z.B. 15s)
+                await shWithTimeout(`docker pull -q ${image}`, 15000);
+
+                const { stdout: after } = await shWithTimeout(`docker image inspect --format='{{.Id}}' ${image}`, 5000);
+
+                if (before.trim() !== after.trim()) {
+                    out.updates.push({ container: name, image, current: before.trim(), latest: after.trim() });
+                }
+            } catch (e) {
+                // Fehler beim Pull oder Inspect ignorieren
+                // console.warn(`Docker update check failed for ${name}: ${e.message}`);
+            }
+        }
+        out.total = out.updates.length;
+    } catch (e) {
+        // Fehler, falls docker ps fehlschlägt (z.B. Timeout)
+        console.warn(`Docker updates check failed: ${e.message}`);
+    }
+    return out;
+}
+
+
+
 
 module.exports = { getStats };
