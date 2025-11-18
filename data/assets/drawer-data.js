@@ -131,7 +131,7 @@
 
         // --- CPU + Chassis Temps ---
         if (s.temps) {
-            setText("#temps .cpu", s.temps.cpu.join(" / ") + " °C");
+            setText("#temps .cpu", s.temps.cpu + " °C");
             setText("#temps .chassis", s.temps.chassis.map(c => `${c.tempC}°C`).join(" / "));
         }
 
