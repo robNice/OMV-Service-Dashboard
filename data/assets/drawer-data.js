@@ -14,6 +14,36 @@
     }
     function setText(sel, val) { const el = $(sel); if (el) el.textContent = val; }
 
+    function renderContainerList(containers) {
+        const target = $('[data-containers-list-target]');
+        if (!target) return;
+
+        target.innerHTML = ''; // Liste leeren
+
+        if (!containers || containers.length === 0) {
+            target.innerHTML = `<li style="list-style:none;text-align:center;color:var(--muted);font-size:.85rem;padding:.5rem 0;">Keine Container aktiv</li>`;
+            return;
+        }
+
+        containers.forEach(c => {
+            // Status farblich hervorheben
+            const statusLower = c.status.toLowerCase();
+            const statusClass = statusLower.includes('up') ? 'status-good' :
+                statusLower.includes('exited') ? 'status-warn' :
+                    'status-unknown';
+
+            const html = `
+                <li>
+                    <div class="kv">
+                        <span title="${c.name}">${c.name}</span>
+                        <span class="chip ${statusClass}" title="${c.status} (ID: ${c.id})">${c.status.split(' ')[0]}</span>
+                    </div>
+                </li>
+            `;
+            target.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
     function usageColor(p) {
         if (p >= 85) return "linear-gradient(to right,#ef4444,#b91c1c)";
         if (p >= 70) return "linear-gradient(to right,#f97316,#ea580c)";
@@ -79,6 +109,87 @@
     `;
     }
 
+    async function loadBasicStats() {
+        const s = await fetch("/api/stats").then(r => r.json());
+
+        // --- RAM ---
+        setText("#ram .used", humanBytes(s.ram.used));
+        setText("#ram .total", humanBytes(s.ram.total));
+
+        // --- Drives ---
+        const zone = $("#drives");
+        if (zone && Array.isArray(s.drives)) {
+            zone.innerHTML = s.drives.map(d => `
+            <div class="drive">
+                <strong>${d.device}</strong>
+                <span>${d.model || ""}</span>
+                <span>${d.temp || "-"}°C</span>
+                <span>${d.smart || ""}</span>
+            </div>
+        `).join("");
+        }
+
+        // --- CPU + Chassis Temps ---
+        if (s.temps) {
+
+            const cpuVal = Array.isArray(s.temps.cpu)
+                ? s.temps.cpu.filter(x => x != null).join(" / ")
+                : (s.temps.cpu != null ? String(s.temps.cpu) : "–");
+
+            setText("[data-cpu-temp]", cpuVal || "–");
+
+
+            setText("#temps .cpu", s.temps.cpu + " °C");
+            setText("#temps .chassis", s.temps.chassis.map(c => `${c.tempC}°C`).join(" / "));
+        }
+
+        // --- Versions ---
+        if (s.versions) {
+            setText("#versions .os", s.versions.os || "–");
+            setText("#versions .kernel", s.versions.kernel || "–");
+            setText("#versions .omv", s.versions.omv || "–");
+        }
+
+        // --- Zeitstempel ---
+        const date = new Date();
+        const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        const chip = document.querySelector("#info-drawer footer .chip");
+        if (chip) chip.textContent = t;
+    }
+
+    async function loadDockerStats() {
+        const d = await fetch("/api/stats/docker").then(r => r.json());
+
+        // Containerliste rendern
+        const czone = $("#docker-container-list");
+        if (czone && Array.isArray(d.containers)) {
+            czone.innerHTML = d.containers.map(c => `
+            <div class="container">
+                <strong>${c.name}</strong>
+                <span>${c.status}</span>
+            </div>
+        `).join("");
+        }
+
+        // Updates rendern
+        const uzone = $("#docker-updates");
+        if (uzone && d.dockerUpdates) {
+            uzone.innerHTML = d.dockerUpdates.updates.map(u => `
+            <div class="update">
+                <strong>${u.container}</strong>
+                <span>Update verfügbar</span>
+            </div>
+        `).join("");
+
+            setText("#docker-update-count", d.dockerUpdates.total);
+        }
+
+        // Loading-Hinweis ausblenden
+        const loading = $("#docker-loading");
+        if (loading) loading.style.display = "none";
+    }
+
+
     async function loadStats() {
         const res = await fetch(host, { cache: "no-store" });
         if (!res.ok) throw new Error(res.statusText);
@@ -87,15 +198,22 @@
         // RAM
         if (s.ram) {
             const p = s.ram.percent ?? 0;
-            const used = (s.ram.used / (1024 ** 3)).toFixed(1);
-            const total = (s.ram.total / (1024 ** 3)).toFixed(1);
+            const usedGB  = (s.ram.used  / (1024 ** 3)).toFixed(1);
+            const totalGB = (s.ram.total / (1024 ** 3)).toFixed(1);
+
             setText("[data-label-for='ram-usage']", p + "%");
+
             const bar = document.querySelector("#ram-usage i");
-            if (bar) { bar.style.width = p + "%"; bar.style.background = usageColor(p); }
-            setText("[data-ram-used]", `${used}/${total} GB`);
+            if (bar) {
+                bar.style.width = p + "%";
+                bar.style.background = usageColor(p);
+            }
+
+            // z.B. "5.3/16.0 GB"
+            setText("[data-ram-used]", `${usedGB}/${totalGB} GB`);
         }
 
-        // HDDs (physische Drives)
+        // HDDs (physische Drives) -> wird von /api/stats als "disks" geliefert
         const cont = document.getElementById("drawer-disks");
         if (cont) {
             cont.innerHTML = "";
@@ -108,45 +226,90 @@
 
         // HDD Ø-Temperatur (aus disks[].tempC)
         const avgDiskTemp = (() => {
-            const arr = (s.disks || []).map(d => d && typeof d.tempC === "number" ? d.tempC : null).filter(x => x != null);
-            return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0) / arr.length) : null;
+            const arr = (s.disks || [])
+                .map(d => d && typeof d.tempC === "number" ? d.tempC : null)
+                .filter(x => x != null);
+            return arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : null;
         })();
         setText("[data-hdd-temp]", avgDiskTemp !== null ? `${avgDiskTemp}°C` : "–");
 
-        // Temperaturen (nur CPU + optional Chassis)
+        // Temperaturen (CPU + Chassis)
         if (s.temps) {
-            setText("[data-cpu-temp]", s.temps.cpu || "–");
-            const ch = Array.isArray(s.temps.chassis) ? s.temps.chassis.map(x => `${x.label}:${x.tempC}°C`).join(" · ") : "";
+            // cpu kann Zahl ODER Array sein, also defensiv:
+            let cpuDisplay = "–";
+            if (Array.isArray(s.temps.cpu)) {
+                const parts = s.temps.cpu.filter(x => x != null);
+                cpuDisplay = parts.length ? parts.join(" / ") : "–";
+            } else if (s.temps.cpu != null) {
+                cpuDisplay = String(s.temps.cpu);
+            }
+            setText("[data-cpu-temp]", cpuDisplay);
+
+            const chassisList = Array.isArray(s.temps.chassis) ? s.temps.chassis : [];
+            const chassisText = chassisList
+                .filter(x => x && typeof x.tempC !== "undefined")
+                .map(x => `${x.label || "Chassis"}:${x.tempC}°C`)
+                .join(" · ");
+
             const el = document.querySelector("[data-chassis-temps]");
-            if (el) el.textContent = ch || "–";
+            if (el) el.textContent = chassisText || "–";
         }
 
         // Uptime & Load
-        if (s.uptime) setText("[data-uptime]", `${s.uptime.days} Tage ${s.uptime.hours} Std`);
-        if (s.load)   setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
+        if (s.uptime) {
+            setText("[data-uptime]", `${s.uptime.days} Tage ${s.uptime.hours} Std`);
+        }
+        if (s.load) {
+            setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
+        }
 
-        // Versionen
+        // Versionen & Plugins
         if (s.versions) {
             setText("[data-omv-version]", s.versions.omv || "–");
-            const plugins = s.versions.plugins?.slice(0, 5).map(p => `${p.name} ${p.version}`).join(" · ") || "–";
+            const plugins = (s.versions.plugins || [])
+                .slice(0, 5)
+                .map(p => `${p.name} ${p.version}`)
+                .join(" · ") || "–";
             setText("[data-plugins]", plugins);
         }
 
-        // Docker Updates
-        if (s.docker)
-            setText("[data-updates]", s.docker.total > 0 ? `${s.docker.total} Container haben Updates` : "Keine Updates");
+        // Docker-Updates
+        if (s.docker) {
+            setText(
+                "[data-updates]",
+                s.docker.total > 0
+                    ? `${s.docker.total} Container haben Updates`
+                    : "Keine Updates"
+            );
+        }
 
-        // Zeitstempel
+        // Docker-Containerliste
+        if (s.containers) {
+            renderContainerList(s.containers);
+        }
+
+        // Zeitstempel (unten rechts im Drawer)
         const date = new Date(s.ts || Date.now());
         const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
         const chip = document.querySelector("#info-drawer footer .chip");
         if (chip) chip.textContent = t;
     }
 
+    // async function loop() {
+    //     try { await loadStats(); } catch (e) { console.warn("stats fetch error", e); }
+    //     setTimeout(loop, POLL_MS);
+    // }
+
     async function loop() {
-        try { await loadStats(); } catch (e) { console.warn("stats fetch error", e); }
+        try {
+            await loadBasicStats();   // sofort
+            loadDockerStats();        // async, blockiert nichts
+        } catch (e) {
+            console.warn("stats fetch error", e);
+        }
         setTimeout(loop, POLL_MS);
     }
+
 
     loop();
 })();

@@ -2,7 +2,7 @@
   "sections": [
     {
       "id": "media",
-      "title": "Media",
+      "title": "Media 🎧📷🎥",
       "thumbnail": "assets/media.png",
       "services": [
         {
@@ -35,7 +35,7 @@
     },
     {
       "id": "kueche",
-      "title": "Küche",
+      "title": "Küche 🔪🍳🍔",
       "thumbnail": "assets/kitchen.png",
       "services": [
         {
@@ -47,7 +47,7 @@
     },
     {
       "id": "smarthome",
-      "title": "Smart Home",
+      "title": "Smart-Home 🌡💡🔈",
       "thumbnail": "assets/smart-home.png",
       "services": [
         {
@@ -63,14 +63,19 @@
       ]
     },
     {
-      "id": "verwaltung",
-      "title": "Verwaltung",
+      "id": "Verwaltung",
+      "title": "Verwaltung 🗂️⚙🔧",
       "thumbnail": "assets/verwaltung.png",
       "services": [
         {
           "title": "OMV Webinterface",
           "url": "http://omv.cube.fritz.box",
           "logo": "assets/omv.png"
+        },
+        {
+          "title": "Filebrowser",
+          "url": "http://filebrowser.cube.fritz.box",
+          "logo": "assets/filebrowser.png"
         },
         {
           "id": "epson",
@@ -94,7 +99,7 @@
     },
     {
       "id": "netzwerk",
-      "title": "Netzwerk",
+      "title": "Netzwerk 📶🌐📡",
       "thumbnail": "assets/network.png",
       "services": [
         {
