@@ -267,16 +267,16 @@ async function readPhysicalDrives() {
 
 // ---------------- Aggregation ----------------
 async function getStats() {
-    //const [{ load, uptime }, ram, tempsCpuChassis, versions, dockerUpdates, drives, containers] = await Promise.all([
-    const [{ load, uptime }, ram, tempsCpuChassis, versions, docker, drives, containers] = await Promise.all([
-        readLoadUptime(),
-        readMem(),
-        readTempsCpuChassis(),
-        readOMV(),
-        readDockerUpdates(),
-        readPhysicalDrives(),
-        readDockerContainers(),
-    ]);
+    const [{ load, uptime }, ram, tempsCpuChassis, versions, dockerUpdates, drives, containers] = await Promise.all([
+    // const [{ load, uptime }, ram, tempsCpuChassis, versions, docker, drives, containers] = await Promise.all([
+    //     readLoadUptime(),
+    //     readMem(),
+    //     readTempsCpuChassis(),
+    //     readOMV(),
+    //     readDockerUpdates(),
+    //     readPhysicalDrives(),
+    //     readDockerContainers(),
+    // ]);
 
     return {
         ts: Date.now(),
@@ -285,7 +285,7 @@ async function getStats() {
         uptime,
         temps: tempsCpuChassis, // nur CPU + Chassis
         versions,
-        docker,
+        docker: dockerUpdates,
         disks: drives,
         containers
     };
