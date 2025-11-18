@@ -70,6 +70,6 @@ jobs:
 
               # Re-Deploy
               docker compose down || true
-              docker compose up -d --build
+              docker compose up -d --build --no-cache
               docker compose ps
             '
