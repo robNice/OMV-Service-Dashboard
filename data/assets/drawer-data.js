@@ -140,7 +140,17 @@
 
 
             // setText("#temps .cpu", s.temps.cpu + " °C");
-            setText([data-chassis-temps], s.temps.chassis.map(c => `${c.tempC}°C`).join(" / "));
+
+            const chassisList = Array.isArray(s.temps.chassis) ? s.temps.chassis : [];
+            const ch = chassisList
+                .filter(x => x && typeof x.tempC !== "undefined")
+                .map(x => `${x.label || "Chassis"}:${x.tempC}°C`)
+                .join(" · ");
+
+            const el = document.querySelector("[data-chassis-temps]");
+            if (el) el.textContent = ch || "–";
+
+
         }
 
         // --- Versions ---
