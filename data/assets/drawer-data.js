@@ -183,86 +183,88 @@
 
 
     async function loadStats() {
-        const res = await fetch(host, { cache: "no-store" });
-        if (!res.ok) throw new Error(res.statusText);
-        const s = await res.json();
-
-        fetch("/api/stats/docker", { cache: "no-store" })
-            .then(r => r.json())
-            .then(d => {
-                if (d.dockerUpdates)
-                    setText("[data-updates]", d.dockerUpdates.total > 0
-                        ? `${d.dockerUpdates.total} Container haben Updates`
-                        : "Keine Updates");
-
-                // if (d.containers)
-                //     renderContainerList(d.containers);
-            })
-            .catch(err => console.warn("docker load error:", err));
-
+        // ====== 1) Basisinfos schnell laden ======
+        const basic = await fetch("/api/stats", { cache: "no-store" }).then(r => r.json());
 
         // RAM
-        if (s.ram) {
-            const p = s.ram.percent ?? 0;
-            const used = (s.ram.used / (1024 ** 3)).toFixed(1);
-            const total = (s.ram.total / (1024 ** 3)).toFixed(1);
+        if (basic.ram) {
+            const p = basic.ram.percent ?? 0;
+            const used = (basic.ram.used / (1024 ** 3)).toFixed(1);
+            const total = (basic.ram.total / (1024 ** 3)).toFixed(1);
             setText("[data-label-for='ram-usage']", p + "%");
             const bar = document.querySelector("#ram-usage i");
-            if (bar) { bar.style.width = p + "%"; bar.style.background = usageColor(p); }
-            setText("[data-ram-used]", `${used}/${total} GB`);
+            if (bar) bar.style.width = p + "%";
+            setText("[data-ram-used]", used + " GB");
+            setText("[data-ram-total]", total + " GB");
         }
 
-        // HDDs (physische Drives)
-        const cont = document.getElementById("drawer-disks");
+        // Laufwerke
+        const cont = document.querySelector("[data-disks]");
         if (cont) {
             cont.innerHTML = "";
-            if (Array.isArray(s.disks) && s.disks.length) {
-                cont.innerHTML = s.disks.map(renderDisk).join("");
+            if (Array.isArray(basic.disks) && basic.disks.length) {
+                cont.innerHTML = basic.disks.map(renderDisk).join("");
             } else {
                 cont.innerHTML = `<div class="kv"><span>Keine Laufwerke erkannt</span></div>`;
             }
         }
 
-        // HDD Ø-Temperatur (aus disks[].tempC)
+        // Disk Durchschnittstemperatur
         const avgDiskTemp = (() => {
-            const arr = (s.disks || []).map(d => d && typeof d.tempC === "number" ? d.tempC : null).filter(x => x != null);
+            const arr = (basic.disks || [])
+                .map(d => d && typeof d.tempC === "number" ? d.tempC : null)
+                .filter(x => x != null);
             return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0) / arr.length) : null;
         })();
         setText("[data-hdd-temp]", avgDiskTemp !== null ? `${avgDiskTemp}°C` : "–");
 
-        // Temperaturen (nur CPU + optional Chassis)
-        if (s.temps) {
-            setText("[data-cpu-temp]", s.temps.cpu || "–");
-            const ch = Array.isArray(s.temps.chassis) ? s.temps.chassis.map(x => `${x.label}:${x.tempC}°C`).join(" · ") : "";
+        // Temperaturen
+        if (basic.temps) {
+            setText("[data-cpu-temp]", basic.temps.cpu || "–");
+            const ch = Array.isArray(basic.temps.chassis)
+                ? basic.temps.chassis.map(x => `${x.label}:${x.tempC}°C`).join(" · ") : "";
             const el = document.querySelector("[data-chassis-temps]");
             if (el) el.textContent = ch || "–";
         }
 
         // Uptime & Load
-        if (s.uptime) setText("[data-uptime]", `${s.uptime.days} Tage ${s.uptime.hours} Std`);
-        if (s.load)   setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
+        if (basic.uptime) setText("[data-uptime]", `${basic.uptime.days} Tage ${basic.uptime.hours} Std`);
+        if (basic.load)   setText("[data-load]", basic.load.map(v => Number(v).toFixed(2)).join(" / "));
 
         // Versionen
-        if (s.versions) {
-            setText("[data-omv-version]", s.versions.omv || "–");
-            const plugins = s.versions.plugins?.slice(0, 5).map(p => `${p.name} ${p.version}`).join(" · ") || "–";
-            setText("[data-plugins]", plugins);
+        if (basic.versions) {
+            setText("[data-version-os]", basic.versions.os || "–");
+            setText("[data-version-kernel]", basic.versions.kernel || "–");
+            setText("[data-version-omv]", basic.versions.omv || "–");
         }
 
-
-        if (s.docker)
-            setText("[data-updates]", s.docker.total > 0 ? `${s.docker.total} Container haben Updates` : "Keine Updates");
-
-
-        // Docker-Container
-        if (s.containers)
-            renderContainerList(s.containers); // <-- NEU
-
-        // Zeitstempel
-        const date = new Date(s.ts || Date.now());
-        const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        // Zeitstempel für Basisdaten
+        const now = new Date();
+        const ts = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
         const chip = document.querySelector("#info-drawer footer .chip");
-        if (chip) chip.textContent = t;
+        if (chip) chip.textContent = ts;
+
+        // ====== 2) Docker-Infos asynchron nachladen ======
+        fetch("/api/stats/docker", { cache: "no-store" })
+            .then(r => r.json())
+            .then(docker => {
+                // Docker Container
+                if (docker.containers) {
+                    renderContainerList(docker.containers);
+                }
+
+                // Updates
+                const uzone = document.querySelector("[data-docker-updates]");
+                if (uzone && docker.dockerUpdates) {
+                    uzone.innerHTML = docker.dockerUpdates.updates.map(u => `
+                    <div class="kv">
+                        <span>${u.container}</span>
+                        <span class="chip status-warn">Update</span>
+                    </div>
+                `).join("");
+                }
+            })
+            .catch(err => console.warn("Docker async load failed:", err));
     }
 
     // async function loop() {
