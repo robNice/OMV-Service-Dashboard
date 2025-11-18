@@ -11,7 +11,6 @@ const fs = require("fs/promises");
 const path = require("path");
 const { exec } = require("child_process");
 const { promisify } = require("util");
-const shWithTimeout = (cmd, timeout = 5000) => promisify(exec)(cmd, { timeout });
 const sh = promisify(exec);
 
 const PROC = process.env.PROC_ROOT || "/host/proc";
@@ -267,130 +266,26 @@ async function readPhysicalDrives() {
 }
 
 // ---------------- Aggregation ----------------
-// async function getStats() {
-//     //const [{ load, uptime }, ram, tempsCpuChassis, versions, dockerUpdates, drives, containers] = await Promise.all([
-//     const [{ load, uptime }, ram, tempsCpuChassis, versions, docker, drives, containers] = await Promise.all([
-//         readLoadUptime(),
-//         readMem(),
-//         readTempsCpuChassis(),
-//         readOMV(),
-//         readDockerUpdates(),
-//         readPhysicalDrives(),
-//         readDockerContainers()
-//     ]);
-//
-//     return {
-//         ts: Date.now(),
-//         ram,
-//         load,
-//         uptime,
-//         temps: tempsCpuChassis, // nur CPU + Chassis
-//         versions,
-//         docker,
-//         disks: drives,
-//         containers
-//     };
-// }
-
 async function getStats() {
-    // Basisinfos (schnell!)
-    const [loaduptime, ram, temps, versions, drives] = await Promise.all([
+    const [{ load, uptime }, ram, tempsCpuChassis, versions, docker, drives] = await Promise.all([
         readLoadUptime(),
         readMem(),
         readTempsCpuChassis(),
         readOMV(),
-        readPhysicalDrives()
+        readDockerUpdates(),
+        readPhysicalDrives(),
     ]);
 
     return {
-        load: loaduptime.load,
-        uptime: loaduptime.uptime,
+        ts: Date.now(),
         ram,
-        temps,
+        load,
+        uptime,
+        temps: tempsCpuChassis, // nur CPU + Chassis
         versions,
-        drives
-    };
-}
-async function getDockerStats() {
-    const [containers, dockerUpdates] = await Promise.all([
-        readDockerContainers(),
-        readDockerUpdates()
-    ]);
-
-    return {
-        containers,
-        dockerUpdates,
-        totalUpdates: dockerUpdates.total
+        docker,
+        disks: drives           // physische Laufwerke
     };
 }
 
-
-
-async function readDockerContainers() {
-    try {
-        // Ruft Container-ID (kurz), Name und Status ab
-        const { stdout } = await shWithTimeout('docker ps --format "{{.ID}}|{{.Names}}|{{.Status}}"', 5000);
-
-        const lines = stdout.trim().split('\n').filter(l => l.length > 0);
-
-        const containers = lines.map(line => {
-            const parts = line.split('|');
-            const id = parts[0].substring(0, 4);
-            const name = parts[1];
-            const status = parts[2].trim();
-
-            return { id, name, status };
-        });
-
-        return containers;
-
-    } catch (e) {
-        // Fehler, falls Docker nicht läuft oder der Befehl fehlschlägt
-        console.warn("Could not read Docker container status:", e.message);
-        return [];
-    }
-}
-
-async function readDockerUpdates() {
-    const out = { updates: [], total: 0 };
-    try {
-        // Wir verwenden shWithTimeout mit 15 Sekunden
-        const { stdout } = await shWithTimeout("docker ps --format '{{.Names}}|{{.Image}}'", 15000);
-        const lines = stdout.trim() ? stdout.trim().split("\n") : [];
-
-        // Die Pull-Vorgänge einzeln ausführen, um eine lange Blockade zu verhindern
-        for (const line of lines) {
-            const [name, image] = line.split("|");
-            if (!name || !image) continue;
-            try {
-                // IDs abrufen (vor und nach Pull) – hier verwenden wir wieder shWithTimeout
-                const { stdout: before } = await shWithTimeout(`docker image inspect --format='{{.Id}}' ${image}`, 5000);
-
-                // Pull mit einem etwas längeren Timeout (z.B. 15s)
-                await shWithTimeout(`docker pull -q ${image}`, 15000);
-
-                const { stdout: after } = await shWithTimeout(`docker image inspect --format='{{.Id}}' ${image}`, 5000);
-
-                if (before.trim() !== after.trim()) {
-                    out.updates.push({ container: name, image, current: before.trim(), latest: after.trim() });
-                }
-            } catch (e) {
-                // Fehler beim Pull oder Inspect ignorieren
-                // console.warn(`Docker update check failed for ${name}: ${e.message}`);
-            }
-        }
-        out.total = out.updates.length;
-    } catch (e) {
-        // Fehler, falls docker ps fehlschlägt (z.B. Timeout)
-        console.warn(`Docker updates check failed: ${e.message}`);
-    }
-    return out;
-}
-
-
-
-
-module.exports = {
-    getStats,
-    getDockerStats
-};
+module.exports = { getStats };

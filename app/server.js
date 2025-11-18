@@ -1,12 +1,9 @@
-const { getStats, getDockerStats } = require("./server/stats");
-
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
 
 const app = express();
-
-//const { getStats } = require("./server/stats"); // <— neu
+const { getStats } = require("./server/stats"); // <— neu
 
 const PORT = 3000;
 
@@ -62,40 +59,16 @@ app.get("/favicon.ico", (req, res) => {
 });
 app.head("/favicon.ico", (req, res) => res.status(200).end());
 
-// app.get("/api/stats", async (req, res) => {
-//     try {
-//         const data = await getStats();
-//         res.set("Cache-Control", "no-store");
-//         res.json(data);
-//     } catch (err) {
-//         console.error("GET /api/stats failed:", err);
-//         res.status(500).json({ error: "stats_failed" });
-//     }
-// });
-
-// Schnelle Basis-Infos
 app.get("/api/stats", async (req, res) => {
     try {
-        const basic = await getStats();
-        res.json(basic);
+        const data = await getStats();
+        res.set("Cache-Control", "no-store");
+        res.json(data);
     } catch (err) {
-        console.error("Error in /api/stats:", err);
-        res.status(500).json({ error: "Failed to read basic stats" });
+        console.error("GET /api/stats failed:", err);
+        res.status(500).json({ error: "stats_failed" });
     }
 });
-
-// Docker später nachladen
-app.get("/api/stats/docker", async (req, res) => {
-    try {
-        const dockerStats = await getDockerStats();
-        res.json(dockerStats);
-    } catch (err) {
-        console.error("Error in /api/stats/docker:", err);
-        res.status(500).json({ error: "Failed to read docker stats" });
-    }
-});
-
-
 
 
 // ... dein bestehender app.listen(...)
