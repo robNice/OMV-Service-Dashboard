@@ -184,17 +184,6 @@ async function readDockerContainers() {
     }
 }
 
-// ---------------- Docker Versions (running containers -> image/tag) ----------------
-async function readDockerVersions() {
-    try {
-        const { stdout } = await sh(`docker ps --format '{{.Names}}|{{.Image}}'`);
-        const lines = stdout.trim() ? stdout.trim().split("\n") : [];
-        const out = [];
-        for (const line of lines) {
-            const [name, image] = line.split("|");
-            if (!name || !image) continue;
-            out.append ? out.append({ name, version: image }) : out.push({ name, version: image });
-        }
         return out;
     } catch (e) {
         return [];
