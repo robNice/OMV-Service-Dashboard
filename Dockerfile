@@ -12,7 +12,8 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 COPY app/package.json app/package-lock.json ./
-RUN npm install
+#RUN npm install
+RUN npm ci --omit=dev
 
 COPY app/ .
 
