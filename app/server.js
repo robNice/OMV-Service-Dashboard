@@ -19,7 +19,8 @@ i18n.configure({
         'de': 'de-de',
         'de-DE': 'de-de',
         'en': 'en-GB',
-        'en-US': 'en-GB'
+        'en-US': 'en-GB',
+        'en-us': 'en-GB',
     },
 });
 app.use(i18n.init);
