@@ -178,7 +178,7 @@ app.get("/section/:id", (req, res) => {
     const services = (section.services || []).map(renderService).join("\n");
     const html = setTemplate(
         loadTemplate(),
-        '<a href="/" style="margin: 1rem; display: inline-block;">← '+__('ui.back')+'</a>',
+        '<a href="/" style="margin: 1rem; display: inline-block;">← '+__('label.back')+'</a>',
         config.version,
         config.title + ' - ' + section.title,
         services
