@@ -144,6 +144,12 @@
             setText("[data-plugins]", plugins);
         }
 
+        const contDocker = document.getElementById("drawer-docker");
+        if (contDocker) {
+            const items = Array.isArray(s.containers) ? s.containers : [];
+            contDocker.innerHTML = items.map(renderContainerItem).join("\n");
+        }
+
         // Docker Updates
         if (s.docker)
             setText("[data-updates]", s.docker.total > 0 ? `${s.docker.total} Container haben Updates` : "Keine Updates");
