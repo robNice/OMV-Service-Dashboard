@@ -1,33 +1,51 @@
 {
-  "label.back": "Back",
-  "label.liveStats": "Live stats",
-  "label.close": "Close",
-  "label.info": "Info",
-  "label.days": "days",
-  "label.hours_short": "hrs",
-  "status.updatedAt": "Last update",
-  "status.now": "now",
-  "label.storage": "Storage (HDDs)",
-  "label.temps": "Temperatures",
-  "label.versions": "Versions",
-  "label.system": "System",
-  "label.docker": "Docker containers",
-  "tooltip.infodrawer" : "open/close system informationen",
-  "label.cpu": "CPU",
-  "label.uptime": "Uptime",
-  "label.hddAvg": "HDD avg",
-  "label.chassis": "Chassis",
-  "label.cpuLoad": "Load",
-  "label.plugins": "Extensions",
-  "label.ram": "RAM",
-  "label.used": "Used",
-  "label.gb": "GB",
-  "docker.status.up": "Up",
-  "docker.status.created": "Created",
-  "errors.missingKey": "Missing translation: {key}",
-  "log.listening" : "Landingpage listening on port",
+  "label": {
+    "back": "Back",
+    "liveStats": "Live stats",
+    "close": "Close",
+    "info": "Info",
+    "days": "days",
+    "hours_short": "hrs",
+    "storage": "Storage (HDDs)",
+    "temps": "Temperatures",
+    "versions": "Versions",
+    "system": "System",
+    "docker": "Docker containers",
+    "cpu": "CPU",
+    "uptime": "Uptime",
+    "hddAvg": "HDD avg",
+    "chassis": "Chassis",
+    "cpuLoad": "Load",
+    "plugins": "Extensions",
+    "ram": "RAM",
+    "used": "Used",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Last update",
+    "now": "now"
+  },
+  "tooltip": {
+    "infodrawer": "open/close system information"
+  },
+  "docker": {
+    "status": {
+      "up": "Up",
+      "created": "Created"
+    }
+  },
+  "errors": {
+    "missingKey": "Missing translation: {key}"
+  },
+  "log": {
+    "listening": "Landingpage listening on port"
+  },
   "units": {
-    "byte": "B", "kilobyte": "KB", "megabyte": "MB",
-    "gigabyte": "GB", "terabyte": "TB", "petabyte": "PB"
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
   }
 }
