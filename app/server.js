@@ -15,13 +15,11 @@ app.use("/assets", express.static("/data/assets", {
 }));
 
 
-// Hilfsfunktion zum Einlesen und Parsen der services.json
 function loadData() {
   const raw = fs.readFileSync("/data/services.json", "utf-8");
   return JSON.parse(raw);
 }
 
-// Hilfsfunktion: ein einzelner Service als HTML-Kachel
 function renderService(service) {
   return `
     <div class="service">
@@ -42,10 +40,6 @@ function renderSection(section) {
       </a>
     </div>`;
 }
-
-// Route: Startseite mit Sektionen
-
-
 
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
@@ -71,17 +65,19 @@ app.get("/api/stats", async (req, res) => {
 });
 
 
-// ... dein bestehender app.listen(...)
-
-
 app.get("/", (req, res) => {
   const data = loadData();
   const sections = data.sections.map(renderSection).join("\n");
   const template = fs.readFileSync("/app/templates/index.html", "utf-8");
-  res.send(template.replace("{{SECTIONS}}", sections));
+
+    const html = template
+        .replace(/{{BACKLINK}}/g, '')
+        .replace(/{{SECTION_NAME}}/g, 'Dein Cube')
+        .replace(/{{SECTIONS_SERVICES}}/g, sections);
+    res.send(html);
+  //res.send(template.replace("{{SECTIONS}}", sections));
 });
 
-// Route: Detailansicht einer Sektion
 app.get("/section/:id", (req, res) => {
   const data = loadData();
   const section = data.sections.find(s => s.id === req.params.id);
@@ -91,10 +87,11 @@ app.get("/section/:id", (req, res) => {
   }
 
   const services = (section.services || []).map(renderService).join("\n");
-  const template = fs.readFileSync("/app/templates/section.html", "utf-8");
+  const template = fs.readFileSync("/app/templates/index.html", "utf-8");
   const html = template
+    .replace(/{{BACKLINK}}/g, '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>')
     .replace(/{{SECTION_NAME}}/g, section.title)
-    .replace("{{SERVICES}}", services);
+    .replace(/{{SECTIONS_SERVICES}}/g, services);
 
   res.send(html);
 });
