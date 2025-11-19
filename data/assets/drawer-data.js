@@ -157,7 +157,7 @@
 
         // Zeitstempel
         const date = new Date(s.ts || Date.now());
-        const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
         const chip = document.querySelector("#info-drawer footer .chip");
         if (chip) chip.textContent = t;
     }
