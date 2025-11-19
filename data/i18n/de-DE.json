@@ -9,6 +9,7 @@
   "sec.versions": "Versionen",
   "sec.system": "System",
   "sec.docker": "Docker-Container",
+  "tooltip.infodrawer" : "Systeminformationen öffnen/schließen!",
   "label.cpu": "CPU",
   "label.hddAvg": "HDD Ø",
   "label.chassis": "Chassis",

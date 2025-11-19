@@ -9,12 +9,18 @@ const PORT = 3000;
 
 const i18n = require('i18n');
 i18n.configure({
-    locales: ['en-gb','de-DE'],
+    locales: ['en-gb', 'en', 'en-US', 'de-de', 'de', 'de-DE'],
     defaultLocale: 'en-gb',
     directory: '/data/i18n',
     objectNotation: false,
     header: 'accept-language',
     register: global,
+    fallbacks: {
+        'de': 'de-de',
+        'de-DE': 'de-de',
+        'en': 'en-gb',
+        'en-US': 'en-gb'
+    },
 });
 app.use(i18n.init);
 
@@ -82,12 +88,40 @@ function renderSection(section) {
  * @returns {*}
  */
 function setTemplate( template, backlink, version, title, cards )  {
-    return  template
+    return  translateHtmlI18n(
+        template
         .replace(/{{BACKLINK}}/g, backlink)
         .replace(/{{VERSION}}/g, version)
         .replace(/{{TITLE}}/g, title)
         .replace(/{{SECTION_NAME}}/g, title)
-        .replace(/{{SECTIONS_SERVICES}}/g, cards);
+        .replace(/{{SECTIONS_SERVICES}}/g, cards)
+    );
+}
+
+function translateHtmlI18n(html, { locale } = {}) {
+    if (typeof html !== 'string' || html.length === 0) return html || '';
+
+    // Optional temporär die Locale umschalten
+    let prevLocale;
+    if (locale) {
+        prevLocale = i18n.getLocale();
+        i18n.setLocale(locale);
+    }
+
+    // {{__.key.path}} oder {{__.key.path|{"name":"Manfred"}} (JSON-Args optional)
+    const rx = /\{\{\s*__\.([a-zA-Z0-9_.-]+)(?:\s*\|\s*(\{[\s\S]*?\}))?\s*\}\}/g;
+
+    const out = html.replace(rx, (_m, key, jsonArgs) => {
+        let vars;
+        if (jsonArgs) {
+            try { vars = JSON.parse(jsonArgs); } catch { /* ignore bad args */ }
+        }
+        const val = __(key, vars); // global __
+        return (typeof val === 'string' && val.length) ? val : `??${key}??`;
+    });
+
+    if (locale) i18n.setLocale(prevLocale);
+    return out;
 }
 
 /**
