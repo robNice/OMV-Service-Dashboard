@@ -3,7 +3,7 @@
   "label.liveStats": "Live stats",
   "label.close": "Close",
   "label.info": "Info",
-  "status.updatedAt": "Last update: {time}",
+  "status.updatedAt": "Last update",
   "status.now": "now",
   "label.storage": "Storage (HDDs)",
   "label.temps": "Temperatures",
