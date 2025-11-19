@@ -25,5 +25,9 @@
   "docker.status.up": "Läuft",
   "docker.status.created": "Erstellt",
   "errors.missingKey": "Fehlende Übersetzung: {key}",
-  "log.listening" : "Landingpage läuft auf Port"
+  "log.listening" : "Landingpage läuft auf Port",
+  "units": {
+    "byte": "B", "kilobyte": "KB", "megabyte": "MB",
+    "gigabyte": "GB", "terabyte": "TB", "petabyte": "PB"
+  }
 }

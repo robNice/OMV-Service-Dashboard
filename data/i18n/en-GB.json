@@ -25,5 +25,9 @@
   "docker.status.up": "Up",
   "docker.status.created": "Created",
   "errors.missingKey": "Missing translation: {key}",
-  "log.listening" : "Landingpage listening on port"
+  "log.listening" : "Landingpage listening on port",
+  "units": {
+    "byte": "B", "kilobyte": "KB", "megabyte": "MB",
+    "gigabyte": "GB", "terabyte": "TB", "petabyte": "PB"
+  }
 }
