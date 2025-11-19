@@ -183,8 +183,7 @@ async function readDockerContainers() {
         return [];
     }
 }
-async function readTempsCpuChassis(),
-        readDockerContainers() {
+async function readTempsCpuChassis() {
     let cpu = null;
     try {
         const hwmons = await readdirSafe(`${SYS}/class/hwmon`);
