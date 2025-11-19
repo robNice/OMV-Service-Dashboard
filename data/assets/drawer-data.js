@@ -55,6 +55,21 @@
         return { name, model, tempC, status, sizeBytes, usedBytes, usedPercent };
     }
 
+    
+    function containerStatusStyle(status) {
+        const s = String(status || "").toLowerCase();
+        if (s.startsWith("up")) {
+            return "background:rgba(34,197,94,.18);border:1px solid rgba(34,197,94,.35);color:#bbf7d0;";
+        }
+        return "background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.35);color:#fecaca;";
+    }
+    function renderContainerItem(it) {
+        const name = it.name || it.Names || it.Names || "";
+        const status = it.status || it.Status || "";
+        return `<div class="kv"><span>${name}</span><span class="chip" style="${containerStatusStyle(status)}">${status || "–"}</span></div>`;
+    }
+
+
     function renderDisk(raw) {
         const d = normalizeDisk(raw);
         const total = humanBytes(d.sizeBytes);
@@ -132,10 +147,7 @@
             setText("[data-plugins]", plugins);
         }
 
-        // Docker Updates
-        if (s.docker)
-            setText("[data-updates]", s.docker.total > 0 ? `${s.docker.total} Container haben Updates` : "Keine Updates");
-
+        
         // Zeitstempel
         const date = new Date(s.ts || Date.now());
         const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });

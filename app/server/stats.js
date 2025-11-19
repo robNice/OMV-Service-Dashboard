@@ -165,7 +165,26 @@ async function readDockerUpdates() {
 }
 
 // ---------------- Temperaturen (nur CPU + Chassis) ----------------
-async function readTempsCpuChassis() {
+
+// ---------------- Docker Containers (ps -a) ----------------
+async function readDockerContainers() {
+    try {
+        const { stdout } = await sh(`docker ps -a --format '{{json .}}'`);
+        const lines = stdout.trim() ? stdout.trim().split("\n") : [];
+        const items = [];
+        for (const line of lines) {
+            try {
+                const obj = JSON.parse(line);
+                items.push({ name: obj.Names || obj.Names || obj.Name || "", status: obj.Status || "" });
+            } catch {}
+        }
+        return items;
+    } catch (e) {
+        return [];
+    }
+}
+async function readTempsCpuChassis(),
+        readDockerContainers() {
     let cpu = null;
     try {
         const hwmons = await readdirSafe(`${SYS}/class/hwmon`);
@@ -268,11 +287,12 @@ async function readPhysicalDrives() {
 // ---------------- Aggregation ----------------
 async function getStats() {
     const [{ load, uptime }, ram, tempsCpuChassis, versions,
-        //docker,
+        containers,
         drives] = await Promise.all([
         readLoadUptime(),
         readMem(),
         readTempsCpuChassis(),
+        readDockerContainers(),
         readOMV(),
         //readDockerUpdates(),
         readPhysicalDrives(),
@@ -285,7 +305,7 @@ async function getStats() {
         uptime,
         temps: tempsCpuChassis, // nur CPU + Chassis
         versions,
-        //docker,
+        containers,
         disks: drives           // physische Laufwerke
     };
 }
