@@ -34,7 +34,6 @@ function renderService(service) {
     </div>`;
 }
 
-// Hilfsfunktion: eine Sektion als Kachel auf der Startseite
 function renderSection(section) {
     return `
     <div class="service">
