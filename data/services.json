@@ -2,7 +2,7 @@
   "sections": [
     {
       "id": "media",
-      "title": "Media 🎧📷🎥 {{__.label.info}}",
+      "title": "Media 🎧📷🎥",
       "thumbnail": "media.png",
       "services": [
         {

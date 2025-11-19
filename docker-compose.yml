@@ -5,8 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: omv-landingpage-with-docker
-    #container_name: omv-landingpage
-    pid: "host"                 # sieht Host-/proc PIDs
+    pid: "host"
     privileged: true
     devices:
       - "/dev:/dev"

@@ -1,12 +1,3 @@
-// server/stats.js — OMV-gestützte physische Laufwerke + RAM/Load/Temps/Docker
-// Voraussetzungen: Container mit privileged + Mounts:
-//  - /:/hostroot:ro,rslave
-//  - /proc:/host/proc:ro
-//  - /sys:/host/sys:ro
-//  - /var/lib/dpkg:/host/var/lib/dpkg:ro
-//
-// Host muss das Script /usr/local/bin/omv-smart-json.sh bereitstellen (liefert OMV "Smart getList")
-
 const fs = require("fs/promises");
 const path = require("path");
 const { exec } = require("child_process");
@@ -24,7 +15,7 @@ const statfsSafe  = async (p) => { try { return await fs.statfs(p); } catch { re
 const clamp       = (n, a, b) => Math.max(a, Math.min(b, n));
 const pct         = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
-// ---------------- RAM / Load / Uptime ----------------
+
 async function readMem() {
     const txt = await readFileSafe(`${PROC}/meminfo`);
     if (!txt) return { total: 0, used: 0, percent: 0 };
@@ -55,7 +46,6 @@ async function readLoadUptime() {
     return { load, uptime };
 }
 
-// ---------------- OMV SMART JSON (Host) ----------------
 async function readOmvSmartList() {
     // nutzt den Host-Stack via chroot; NOCH autonom aus dem Container aufrufbar
     try {
@@ -67,7 +57,6 @@ async function readOmvSmartList() {
     }
 }
 
-// by-id → /dev/sdX
 async function resolveByIdToDev(byIdPath) {
     try {
         const full = path.posix.join(HOST, byIdPath);
@@ -77,7 +66,6 @@ async function resolveByIdToDev(byIdPath) {
     } catch { return null; }
 }
 
-// ---------------- Drive Usage (Gesamt pro physischem Laufwerk) ----------------
 async function readDriveUsageMap() {
     // lsblk auf dem Host (alle Devices, inkl. Mountpoints)
     let lb;
@@ -124,7 +112,6 @@ async function readDriveUsageMap() {
     return usage;
 }
 
-// ---------------- Versionen / Docker ----------------
 async function readOMV() {
     const status = await readFileSafe(`${DPKG}/status`);
     if (!status) return { omv: null, plugins: [] };
@@ -164,9 +151,7 @@ async function readDockerUpdates() {
     return out;
 }
 
-// ---------------- Temperaturen (nur CPU + Chassis) ----------------
 
-// ---------------- Docker Containers (ps -a) ----------------
 async function readDockerContainers() {
     try {
         const { stdout } = await sh(`docker ps -a --format '{{json .}}'`);
@@ -223,12 +208,7 @@ async function readTempsCpuChassis() {
     return { cpu, chassis };
 }
 
-// ---------------- Drives (physisch) aus OMV + Usage ----------------
-
-
-
 async function readPhysicalDrives() {
-    // OMV SMART-Liste
     const list = await readOmvSmartList();
     if (!list.length) return [];
 
@@ -236,7 +216,6 @@ async function readPhysicalDrives() {
 
     const drives = [];
     for (const d of list) {
-        // OMV-Felder: devicefile (by-id ODER /dev/*), model, temperature, overallstatus (oder ähnliche Schreibweise)
         const byIdOrDev = d?.devicefile || "";
         let dev = byIdOrDev;
         if (byIdOrDev.startsWith("/dev/disk/by-id/")) {
@@ -247,43 +226,32 @@ async function readPhysicalDrives() {
         if (!dev || !/^\/dev\/(sd[a-z]+|nvme\d+n\d+)$/.test(dev)) continue;
 
         const model = (d?.model && String(d.model).trim()) ? String(d.model).trim() : null;
-        // const tempC = (typeof d?.temperature === "number") ? d.temperature : null;
         let tempC = (typeof d?.temperature === "number") ? d.temperature : null;
-        // SandForce-basiert: Corsair Force LS meldet oft keine verlässliche Temperatur → auf NULL setzen
-        // if (model && model.toLowerCase() === "corsair force ls ssd") {
-        //     tempC = null;
-        // }
 
-
-        // overallstatus: robuste Extraktion (verschiedene OMV-Versionen nutzen abweichende Keys)
         const rawStatus = d?.overallstatus || d?.overall_status || d?.overall || d?.smart_status || d?.health || "";
         const status = String(rawStatus || "").toUpperCase() || "UNKNOWN";
-
         const u = usageMap.get(dev) || { sizeBytes: 0, usedBytes: 0 };
         const sizeBytes = u.sizeBytes;
         const usedBytes = u.usedBytes;
         const usedPercent = sizeBytes > 0 ? clamp(Math.round((usedBytes / sizeBytes) * 100), 0, 100) : null;
 
-
         drives.push({
-            device: dev,              // /dev/sdX
-            byId: byIdOrDev,          // /dev/disk/by-id/...
-            model,                    // z. B. "Corsair Force LS SSD"
-            tempC,                    // z. B. 77
-            status,                   // GOOD / WARNING / FAILING / UNKNOWN ...
+            device: dev,
+            byId: byIdOrDev,
+            model,
+            tempC,
+            status,
             sizeBytes,
             usedBytes,
             usedPercent
         });
     }
 
-    // deduplizieren (falls OMV-Duplikate liefert)
     const seen = new Map();
     for (const d of drives) if (!seen.has(d.device)) seen.set(d.device, d);
     return Array.from(seen.values()).sort((a,b)=>a.device.localeCompare(b.device));
 }
 
-// ---------------- Aggregation ----------------
 async function getStats() {
     const [{ load, uptime }, ram, tempsCpuChassis, container, containers, drives] = await Promise.all([
         readLoadUptime(),
@@ -299,10 +267,10 @@ async function getStats() {
         ram,
         load,
         uptime,
-        temps: tempsCpuChassis, // nur CPU + Chassis
+        temps: tempsCpuChassis,
         container,
         containers,
-        disks: drives           // physische Laufwerke
+        disks: drives
     };
 }
 

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
     <head>
-
         <script>
             window.I18N_UNITS = {
                 B: "{{__.units.byte}}",
@@ -14,6 +13,9 @@
             window.I18N_LABELS = {
                 DAYS: "{{__.label.days}}",
                 HOURS_SHORT: "{{__.label.hours_short}}",
+            }
+            window.I18N_ERRORS = {
+                NO_DISKS_FOUND: "{{__.errors.noDisksFound}}",
             }
         </script>
 
@@ -33,7 +35,6 @@
             {{SECTIONS_SERVICES}}
         </div>
 
-
         <div id="info-drawer" aria-live="polite">
             <div class="panel">
                 <div class="tab" title="{{__.tooltip.infodrawer}}">{{__.label.info}}</div>
@@ -44,7 +45,7 @@
                 </header>
 
                 <div class="content">
-                    <!-- RAM -->
+
                     <div class="section">
                         <h3>{{__.label.ram}}</h3>
                         <div class="kv" style="flex-direction:column;align-items:stretch">
@@ -56,13 +57,11 @@
                         </div>
                     </div>
 
-                    <!-- Disks -->
                     <div class="section">
                         <h3>{{__.label.storage}}</h3>
                         <div id="drawer-disks" class="space-y-2"></div>
                     </div>
 
-                    <!-- Temps -->
                     <div class="section">
                         <h3>{{__.label.temps}}</h3>
                         <div class="kv"><span>{{__.label.cpu}}</span><span class="chip" data-cpu-temp>–</span></div>
@@ -70,7 +69,6 @@
                         <div class="kv"><span>{{__.label.chassis}}</span><span class="chip" data-chassis-temps>–</span></div>
                     </div>
 
-                    <!-- Versions / Updates -->
                     <div class="section">
                         <h3>{{__.label.versions}}</h3>
                         <div class="kv"><span>OMV</span><span class="chip" data-omv-version>–</span></div>
@@ -85,12 +83,10 @@
                         <div class="kv"><span>{{__.label.cpuLoad}}</span><span class="chip" data-load>–</span></div>
                     </div>
 
-                    <!-- Docker -->
                     <div class="section">
                         <h3>{{__.label.docker}}</h3>
                         <div id="drawer-docker" class="space-y-1"></div>
                     </div>
-
 
                 </div>
 

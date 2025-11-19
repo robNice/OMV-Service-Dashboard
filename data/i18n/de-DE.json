@@ -35,7 +35,8 @@
     }
   },
   "errors": {
-    "missingKey": "Fehlende Übersetzung: {key}"
+    "missingKey": "Fehlende Übersetzung: {key}",
+    "noDisksFound": "Keine Laufwerke erkannt"
   },
   "log": {
     "listening": "Landingpage läuft auf Port"

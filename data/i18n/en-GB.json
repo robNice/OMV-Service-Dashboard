@@ -35,7 +35,8 @@
     }
   },
   "errors": {
-    "missingKey": "Missing translation: {key}"
+    "missingKey": "Missing translation: {key}",
+    "noDisksFound": "No Disks detectedd Laufwerke erkannt"
   },
   "log": {
     "listening": "Landingpage listening on port"

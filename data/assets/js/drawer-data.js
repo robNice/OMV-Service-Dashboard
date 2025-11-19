@@ -1,9 +1,7 @@
-// Rendert RAM, physische HDDs (Model + Temp + Status), CPU-/Chassis-Temps, Versionen, Updates
 (async function () {
     const $ = (sel) => document.querySelector(sel);
     const host = "/api/stats";
     const POLL_MS = 30000;
-
 
     function humanBytes(b) {
         const n = Number(b || 0);
@@ -14,14 +12,7 @@
         const unit = (window.I18N_UNITS && window.I18N_UNITS[keys[i]]) || keys[i];
         return (x >= 10 ? x.toFixed(0) : x.toFixed(1)) + " " + unit;
     }
-    function humanBytes_old(b) {
-        const n = Number(b || 0);
-        if (!n || n <= 0) return "–";
-        const u = ["B", "KB", "MB", "GB", "TB", "PB"];
-        let i = 0, x = n;
-        while (x >= 1024 && i < u.length - 1) { x /= 1024; i++; }
-        return x.toFixed(x >= 10 ? 0 : 1) + " " + u[i];
-    }
+
     function setText(sel, val) { const el = $(sel); if (el) el.textContent = val; }
 
     function usageColor(p) {
@@ -72,11 +63,13 @@
         }
         return "background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.35);color:#fecaca;";
     }
+
     function renderContainerItem(it) {
         const name = it.name || it.Names || "";
         const status = it.status || it.Status || "";
         return `<div class="kv"><span>${name}</span><span class="chip" style="${containerStatusStyle(status)}">${status || "–"}</span></div>`;
     }
+
     function renderDisk(raw) {
         const d = normalizeDisk(raw);
         const total = humanBytes(d.sizeBytes);
@@ -106,7 +99,6 @@
         if (!res.ok) throw new Error(res.statusText);
         const s = await res.json();
 
-        // RAM
         if (s.ram) {
             const p = s.ram.percent ?? 0;
             const used = (s.ram.used / (1024 ** 3)).toFixed(1);
@@ -117,25 +109,22 @@
             setText("[data-ram-used]", `${used}/${total} GB`);
         }
 
-        // HDDs (physische Drives)
         const cont = document.getElementById("drawer-disks");
         if (cont) {
             cont.innerHTML = "";
             if (Array.isArray(s.disks) && s.disks.length) {
                 cont.innerHTML = s.disks.map(renderDisk).join("");
             } else {
-                cont.innerHTML = `<div class="kv"><span>Keine Laufwerke erkannt</span></div>`;
+                cont.innerHTML = `<div class="kv"><span>`+window.I18N_ERRORS.NO_DISKS_FOUND+`</span></div>`;
             }
         }
 
-        // HDD Ø-Temperatur (aus disks[].tempC)
         const avgDiskTemp = (() => {
             const arr = (s.disks || []).map(d => d && typeof d.tempC === "number" ? d.tempC : null).filter(x => x != null);
             return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0) / arr.length) : null;
         })();
         setText("[data-hdd-temp]", avgDiskTemp !== null ? `${avgDiskTemp}°C` : "–");
 
-        // Temperaturen (nur CPU + optional Chassis)
         if (s.temps) {
             setText("[data-cpu-temp]", s.temps.cpu || "–");
             const ch = Array.isArray(s.temps.chassis) ? s.temps.chassis.map(x => `${x.label}:${x.tempC}°C`).join(" · ") : "";
@@ -143,29 +132,23 @@
             if (el) el.textContent = ch || "–";
         }
 
-        // Uptime & Load
         if (s.uptime) setText("[data-uptime]", `${s.uptime.days} `+window.I18N_LABELS.DAYS+` ${s.uptime.hours} `+window.I18N_LABELS.HOURS_SHORT);
         if (s.load)   setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
 
-        // Versionen
         if (s.container) {
             setText("[data-omv-version]", s.container.omv || "–");
             const plugins = Array.isArray(s.container.plugins) ? s.container.plugins.slice(0,5).map(p => `${p.name} ${p.version}`).join(" · ") : "–";
             setText("[data-plugins]", plugins);
         }
-        // Docker-Container
         const contDocker = document.getElementById("drawer-docker");
         if (contDocker) {
             const items = Array.isArray(s.containers) ? s.containers : [];
             contDocker.innerHTML = items.map(renderContainerItem).join("\n");
         }
 
+        // if (s.docker)
+        //     setText("[data-updates]", s.docker.total > 0 ? `${s.docker.total} Container haben Updates` : "Keine Updates");
 
-        // Docker Updates
-        if (s.docker)
-            setText("[data-updates]", s.docker.total > 0 ? `${s.docker.total} Container haben Updates` : "Keine Updates");
-
-        // Zeitstempel
         const date = new Date(s.ts || Date.now());
         const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
         const chip = document.querySelector("#info-drawer footer .chip");

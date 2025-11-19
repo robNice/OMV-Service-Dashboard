@@ -1,22 +1,22 @@
-/* Fixed Info Drawer — dark UI with smooth gradients */
 :root {
     --drawer-w: 360px;
     --drawer-bg: rgba(17, 24, 39, 0.92);
-    --drawer-border: rgba(255,255,255,.08);
-    --chip-bg: rgba(255,255,255,.08);
+    --drawer-border: rgba(255, 255, 255, .08);
+    --chip-bg: rgba(255, 255, 255, .08);
     --text: #e5e7eb;
     --muted: #9ca3af;
     --accent: #60a5fa;
 
-    /* Balkenfarben */
-    --bar-green: linear-gradient(to right,#22c55e,#15803d);
-    --bar-yellow: linear-gradient(to right,#eab308,#ca8a04);
-    --bar-orange: linear-gradient(to right,#f97316,#ea580c);
-    --bar-red: linear-gradient(to right,#ef4444,#b91c1c);
+    --bar-green: linear-gradient(to right, #22c55e, #15803d);
+    --bar-yellow: linear-gradient(to right, #eab308, #ca8a04);
+    --bar-orange: linear-gradient(to right, #f97316, #ea580c);
+    --bar-red: linear-gradient(to right, #ef4444, #b91c1c);
 }
 
 #info-drawer,
-#info-drawer * { box-sizing: border-box; }
+#info-drawer * {
+    box-sizing: border-box;
+}
 
 #info-drawer {
     position: fixed;
@@ -26,7 +26,10 @@
     transition: transform .28s ease;
     z-index: 1100;
 }
-#info-drawer.open { transform: translateX(0); }
+
+#info-drawer.open {
+    transform: translateX(0);
+}
 
 #info-drawer .panel {
     height: 100%;
@@ -34,16 +37,16 @@
     border-right: 1px solid var(--drawer-border);
     backdrop-filter: blur(6px);
     color: var(--text);
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
     display: grid;
     grid-template-rows: auto 1fr auto;
 }
+
 #info-drawer .diskpart {
-    border-bottom: 1px solid rgba(255,255,255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     margin: 10px 0;
 }
 
-/* Header & Footer */
 #info-drawer header {
     display: flex;
     align-items: center;
@@ -53,6 +56,7 @@
     font-weight: 600;
     letter-spacing: .2px;
 }
+
 #info-drawer footer {
     padding: .7rem 1rem;
     border-top: 1px solid var(--drawer-border);
@@ -63,9 +67,15 @@
     color: var(--muted);
 }
 
-/* Sections */
-#info-drawer .content { overflow: auto; padding: .9rem 1rem 1rem; }
-#info-drawer .section { margin-bottom: 1rem; }
+#info-drawer .content {
+    overflow: auto;
+    padding: .9rem 1rem 1rem;
+}
+
+#info-drawer .section {
+    margin-bottom: 1rem;
+}
+
 #info-drawer .section h3 {
     font-size: .85rem;
     color: var(--muted);
@@ -74,7 +84,6 @@
     margin: .2rem 0 .5rem;
 }
 
-/* Key-Value & Chips */
 #info-drawer .kv {
     display: flex;
     align-items: center;
@@ -85,7 +94,10 @@
     background: transparent;
     border-radius: .5rem;
 }
-#info-drawer .kv:hover { background: rgba(255,255,255,.03); }
+
+#info-drawer .kv:hover {
+    background: rgba(255, 255, 255, .03);
+}
 
 #info-drawer .chip {
     display: inline-flex;
@@ -98,15 +110,15 @@
     color: var(--text);
 }
 
-/* Progress Bars */
 #info-drawer .bar {
     width: 100%;
     height: 8px;
     border-radius: 9999px;
-    background: rgba(255,255,255,.08);
+    background: rgba(255, 255, 255, .08);
     overflow: hidden;
     margin-top: .35rem;
 }
+
 #info-drawer .bar > i {
     display: block;
     height: 100%;
@@ -114,10 +126,9 @@
     background: var(--bar-green);
     border-radius: inherit;
     transition: width .6s ease, background .6s ease;
-    box-shadow: 0 0 6px rgba(255,255,255,.15);
+    box-shadow: 0 0 6px rgba(255, 255, 255, .15);
 }
 
-/* Rotierter Tab „INFO“ */
 #info-drawer .tab {
     position: absolute;
     top: 50%;
@@ -135,17 +146,25 @@
     cursor: pointer;
     user-select: none;
     text-align: center;
-    box-shadow: 0 6px 20px rgba(0,0,0,.35);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
     transition: background .25s ease, color .25s ease;
 }
+
 #info-drawer .tab:hover {
     background: var(--accent);
     color: #fff;
 }
 
-/* Mobile */
 @media (max-width: 720px) {
-    :root { --drawer-w: 86vw; }
-    #info-drawer { transform: translateX(calc(-1 * (var(--drawer-w) - 0px))); }
-    #info-drawer .tab { right: -19px; }
+    :root {
+        --drawer-w: 86vw;
+    }
+
+    #info-drawer {
+        transform: translateX(calc(-1 * (var(--drawer-w) - 0px)));
+    }
+
+    #info-drawer .tab {
+        right: -19px;
+    }
 }
