@@ -12,7 +12,7 @@ i18n.configure({
     locales: ['en-gb','de-de'],
     defaultLocale: 'en-gb',
     directory: '/data/i18n',
-    objectNotation: true,
+    objectNotation: false,
     header: 'accept-language',
     register: global,
 });
