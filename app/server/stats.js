@@ -175,10 +175,27 @@ async function readDockerContainers() {
         for (const line of lines) {
             try {
                 const obj = JSON.parse(line);
-                items.push({ name: obj.Names || obj.Names || obj.Name || "", status: obj.Status || "" });
+                items.push({ name: obj.Names || obj.Name || "", status: obj.Status || "" });
             } catch {}
         }
         return items;
+    } catch (e) {
+        return [];
+    }
+}
+
+// ---------------- Docker Versions (running containers -> image/tag) ----------------
+async function readDockerVersions() {
+    try {
+        const { stdout } = await sh(`docker ps --format '{{.Names}}|{{.Image}}'`);
+        const lines = stdout.trim() ? stdout.trim().split("\n") : [];
+        const out = [];
+        for (const line of lines) {
+            const [name, image] = line.split("|");
+            if (!name || !image) continue;
+            out.append ? out.append({ name, version: image }) : out.push({ name, version: image });
+        }
+        return out;
     } catch (e) {
         return [];
     }
@@ -285,15 +302,16 @@ async function readPhysicalDrives() {
 
 // ---------------- Aggregation ----------------
 async function getStats() {
-    const [{ load, uptime }, ram, tempsCpuChassis, versions,
+    const [{ load, uptime }, ram, tempsCpuChassis, container,
+        versions,
         containers,
         drives] = await Promise.all([
         readLoadUptime(),
         readMem(),
         readTempsCpuChassis(),
-        readDockerContainers(),
         readOMV(),
-        //readDockerUpdates(),
+        readDockerVersions(),
+        readDockerContainers(),
         readPhysicalDrives(),
     ]);
 
@@ -302,7 +320,8 @@ async function getStats() {
         ram,
         load,
         uptime,
-        temps: tempsCpuChassis, // nur CPU + Chassis
+        temps: tempsCpuChassis,
+        container,
         versions,
         containers,
         disks: drives           // physische Laufwerke

@@ -64,13 +64,11 @@
         return "background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.35);color:#fecaca;";
     }
     function renderContainerItem(it) {
-        const name = it.name || it.Names || it.Names || "";
+        const name = it.name || it.Names || "";
         const status = it.status || it.Status || "";
         return `<div class="kv"><span>${name}</span><span class="chip" style="${containerStatusStyle(status)}">${status || "–"}</span></div>`;
     }
-
-
-    function renderDisk(raw) {
+function renderDisk(raw) {
         const d = normalizeDisk(raw);
         const total = humanBytes(d.sizeBytes);
         const used  = humanBytes(d.usedBytes);
@@ -141,9 +139,9 @@
         if (s.load)   setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
 
         // Versionen
-        if (s.versions) {
-            setText("[data-omv-version]", s.versions.omv || "–");
-            const plugins = s.versions.plugins?.slice(0, 5).map(p => `${p.name} ${p.version}`).join(" · ") || "–";
+        if (s.container) {
+            setText("[data-omv-version]", s.container.omv || "–");
+            const plugins = Array.isArray(s.container.plugins) ? s.container.plugins.slice(0,5).map(p => `${p.name} ${p.version}`).join(" · ") : "–";
             setText("[data-plugins]", plugins);
         }
 
