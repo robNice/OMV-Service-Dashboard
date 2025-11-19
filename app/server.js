@@ -28,7 +28,7 @@ function renderService(service) {
     return `
     <div class="service">
       <a href="${service.url}" target="_blank">
-        <img src="/${service.logo}" alt="${service.title}" />
+        <img src="/cards/services/${service.logo}" alt="${service.title}" />
         <div class="service-title">${service.title}</div>
       </a>
     </div>`;
@@ -38,7 +38,7 @@ function renderSection(section) {
     return `
     <div class="service">
       <a href="/section/${encodeURIComponent(section.id)}">
-        <img src="/${section.thumbnail}" alt="${section.title}" />
+        <img src="/cards/sections/${section.thumbnail}" alt="${section.title}" />
         <div class="service-title">${section.title}</div>
       </a>
     </div>`;
