@@ -3,10 +3,9 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
-const { getStats } = require("./server/stats"); // <— neu
+const {getStats} = require("./server/stats"); // <— neu
 
 const PORT = 3000;
-
 
 
 app.use("/assets", express.static("/data/assets", {
@@ -16,12 +15,17 @@ app.use("/assets", express.static("/data/assets", {
 
 
 function loadData() {
-  const raw = fs.readFileSync("/data/services.json", "utf-8");
-  return JSON.parse(raw);
+    const raw = fs.readFileSync("/data/services.json", "utf-8");
+    return JSON.parse(raw);
+}
+
+function loadConfig() {
+    const raw = fs.readFileSync("/data/config.json", "utf-8");
+    return JSON.parse(raw);
 }
 
 function renderService(service) {
-  return `
+    return `
     <div class="service">
       <a href="${service.url}" target="_blank">
         <img src="/${service.logo}" alt="${service.title}" />
@@ -32,7 +36,7 @@ function renderService(service) {
 
 // Hilfsfunktion: eine Sektion als Kachel auf der Startseite
 function renderSection(section) {
-  return `
+    return `
     <div class="service">
       <a href="/section/${encodeURIComponent(section.id)}">
         <img src="/${section.thumbnail}" alt="${section.title}" />
@@ -44,7 +48,7 @@ function renderSection(section) {
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
     res.set("Cache-Control", "public, max-age=31536000, immutable");
-    res.sendFile("favicon.ico", { root: "/data/assets" }, (err) => {
+    res.sendFile("favicon.ico", {root: "/data/assets"}, (err) => {
         if (err) {
             console.error("favicon send failed:", err);
             res.status(404).end();
@@ -60,44 +64,45 @@ app.get("/api/stats", async (req, res) => {
         res.json(data);
     } catch (err) {
         console.error("GET /api/stats failed:", err);
-        res.status(500).json({ error: "stats_failed" });
+        res.status(500).json({error: "stats_failed"});
     }
 });
 
 
 app.get("/", (req, res) => {
-  const data = loadData();
-  const sections = data.sections.map(renderSection).join("\n");
-  const template = fs.readFileSync("/app/templates/index.html", "utf-8");
+    const data = loadData();
+    const config = loadConfig()
+    const sections = data.sections.map(renderSection).join("\n");
+    const template = fs.readFileSync("/app/templates/index.html", "utf-8");
 
     const html = template
         .replace(/{{BACKLINK}}/g, '')
-        .replace(/{{TITLE}}/g, 'Dein Heim-Netzwek')
-        .replace(/{{SECTION_NAME}}/g, 'Deine Heim-Netzwerk')
+        .replace(/{{TITLE}}/g, config.title)
+        .replace(/{{SECTION_NAME}}/g, config.title)
         .replace(/{{SECTIONS_SERVICES}}/g, sections);
     res.send(html);
-  //res.send(template.replace("{{SECTIONS}}", sections));
 });
 
 app.get("/section/:id", (req, res) => {
-  const data = loadData();
-  const section = data.sections.find(s => s.id === req.params.id);
+    const data = loadData();
+    const config = loadConfig()
+    const section = data.sections.find(s => s.id === req.params.id);
+    const template = fs.readFileSync("/app/templates/index.html", "utf-8");
 
-  if (!section) {
-    return res.status(404).send("Sektion nicht gefunden");
-  }
+    if (!section) {
+        return res.status(404).send("Sektion nicht gefunden");
+    }
 
-  const services = (section.services || []).map(renderService).join("\n");
-  const template = fs.readFileSync("/app/templates/index.html", "utf-8");
-  const html = template
-    .replace(/{{BACKLINK}}/g, '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>')
-      .replace(/{{TITLE}}/g, 'Dein Heim-Netzwerk - ' + section.title)
-    .replace(/{{SECTION_NAME}}/g, 'Dein Heim-Netzwerk - ' + section.title)
-    .replace(/{{SECTIONS_SERVICES}}/g, services);
+    const services = (section.services || []).map(renderService).join("\n");
+    const html = template
+        .replace(/{{BACKLINK}}/g, '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>')
+        .replace(/{{TITLE}}/g, config.title + ' - ' + section.title)
+        .replace(/{{SECTION_NAME}}/g, config.title + ' - ' + section.title)
+        .replace(/{{SECTIONS_SERVICES}}/g, services);
 
-  res.send(html);
+    res.send(html);
 });
 
 app.listen(PORT, () => {
-  console.log(`Landingpage läuft auf Port ${PORT}`);
+    console.log(`Landingpage läuft auf Port ${PORT}`);
 });
