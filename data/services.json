@@ -3,146 +3,146 @@
     {
       "id": "media",
       "title": "Media 🎧📷🎥",
-      "thumbnail": "assets/media.png",
+      "thumbnail": "media.png",
       "services": [
         {
           "title": "Jellyfin Media",
           "url": "https://jellyfin.cube.fritz.box",
-          "logo": "assets/jellyfin.png"
+          "logo": "jellyfin.png"
         },
         {
           "title": "Lyron Music Server",
           "url": "http://lyron.cube.fritz.box",
-          "logo": "assets/lms.png"
+          "logo": "lms.png"
         },
         {
           "title": "Denon",
           "url": "http://Denon-AVR-X1100W",
-          "logo": "assets/denon.png"
+          "logo": "denon.png"
         },
         {
           "title": "Bad-Player",
           "url": "http://badplayer",
-          "logo": "assets/badplayer.png"
+          "logo": "badplayer.png"
         },
         {
           "id": "jdownloader",
           "title": "JDownloader",
           "url": "http://jdownloader.cube.fritz.box",
-          "logo": "assets/jdownloader.png"
+          "logo": "jdownloader.png"
         }
       ]
     },
     {
       "id": "kueche",
       "title": "Küche 🔪🍳🍔",
-      "thumbnail": "assets/kitchen.png",
+      "thumbnail": "kitchen.png",
       "services": [
         {
           "title": "Mealie Rezepte",
           "url": "http://mealie.cube.fritz.box",
-          "logo": "assets/mealie.png"
+          "logo": "mealie.png"
         }
       ]
     },
     {
       "id": "smarthome",
       "title": "Smart-Home 🌡💡🔈",
-      "thumbnail": "assets/smart-home.png",
+      "thumbnail": "smart-home.png",
       "services": [
         {
           "title": "Homeassistant",
           "url": "http://homeassistant:8123",
-          "logo": "assets/homeassistant.png"
+          "logo": "homeassistant.png"
         },
         {
           "title": "Shelly PipiLounge",
           "url": "http://shellyplus2pm-ecc9ff5fbd8c",
-          "logo": "assets/shelly.png"
+          "logo": "shelly.png"
         }
       ]
     },
     {
       "id": "Verwaltung",
       "title": "Verwaltung 🗂️⚙🔧",
-      "thumbnail": "assets/verwaltung.png",
+      "thumbnail": "verwaltung.png",
       "services": [
         {
           "title": "OMV Webinterface",
           "url": "http://omv.cube.fritz.box",
-          "logo": "assets/omv.png"
+          "logo": "omv.png"
         },
         {
           "title": "Filebrowser",
           "url": "http://filebrowser.cube.fritz.box",
-          "logo": "assets/filebrowser.png"
+          "logo": "filebrowser.png"
         },
         {
           "id": "epson",
           "title": "Epson",
           "url": "http://192.168.1.168/",
-          "logo": "assets/epson.png"
+          "logo": "epson.png"
         },
         {
           "id": "syncthing",
           "title": "Syncthing",
           "url": "http://syncthing.cube.fritz.box",
-          "logo": "assets/syncthing.png"
+          "logo": "syncthing.png"
         },
         {
           "id": "forgejo",
           "title": "Forgejo",
           "url": "http://git.cube.fritz.box",
-          "logo": "assets/forgejo.png"
+          "logo": "forgejo.png"
         }
       ]
     },
     {
       "id": "netzwerk",
       "title": "Netzwerk 📶🌐📡",
-      "thumbnail": "assets/network.png",
+      "thumbnail": "network.png",
       "services": [
         {
           "id": "pihole",
           "title": "Pi-hole",
           "url": "http://pihole.cube.fritz.box/admin/login",
-          "logo": "assets/pihole.png"
+          "logo": "pihole.png"
         },
         {
           "id": "fritzbox",
           "title": "Fritz!Box",
           "url": "http://fritz.box",
-          "logo": "assets/fritzbox.png"
+          "logo": "fritzbox.png"
         },
         {
           "id": "hotspot2",
           "title": "Hotspot (2)",
           "url": "http://192.168.1.4",
-          "logo": "assets/tplink.png"
+          "logo": "tplink.png"
         },
         {
           "id": "hotspot3",
           "title": "Hotspot (3)",
           "url": "http://192.168.1.3/",
-          "logo": "assets/tplink.png"
+          "logo": "tplink.png"
         },
         {
           "id": "gigacopper1",
           "title": "GIGA Copper G4201C (1)",
           "url": "http://gigacopperg4201c/",
-          "logo": "assets/gigacopper.png"
+          "logo": "gigacopper.png"
         },
         {
           "id": "gigacopper2",
           "title": "GIGA Copper G4201C (2)",
           "url": "http://gigacopperg4201c2/",
-          "logo": "assets/gigacopper.png"
+          "logo": "gigacopper.png"
         },
         {
           "id": "gigacopper3",
           "title": "GIGA Copper G4201C (3)",
           "url": "http://gigacopperg4201c3/",
-          "logo": "assets/gigacopper.png"
+          "logo": "gigacopper.png"
         }
       ]
     }
