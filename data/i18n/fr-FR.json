@@ -1,0 +1,51 @@
+{
+  "label": {
+    "back": "Retour",
+    "liveStats": "Statistiques en direct",
+    "close": "Fermer",
+    "info": "Infos",
+    "days": "jours",
+    "hours_short": "h",
+    "storage": "Stockage (HDD)",
+    "temps": "Températures",
+    "versions": "Versions",
+    "system": "Système",
+    "docker": "Conteneurs Docker",
+    "cpu": "CPU",
+    "uptime": "Temps de fonctionnement",
+    "hddAvg": "HDD moy.",
+    "chassis": "Châssis",
+    "cpuLoad": "Charge",
+    "plugins": "Extensions",
+    "ram": "RAM",
+    "used": "Utilisé",
+    "gb": "Go"
+  },
+  "status": {
+    "updatedAt": "Dernière mise à jour",
+    "now": "maintenant"
+  },
+  "tooltip": {
+    "infodrawer": "ouvrir/fermer les informations système"
+  },
+  "docker": {
+    "status": {
+      "up": "Actif",
+      "created": "Créé"
+    }
+  },
+  "errors": {
+    "missingKey": "Traduction manquante : {key}"
+  },
+  "log": {
+    "listening": "Landingpage à l'écoute sur le port"
+  },
+  "units": {
+    "byte": "o",
+    "kilobyte": "Ko",
+    "megabyte": "Mo",
+    "gigabyte": "Go",
+    "terabyte": "To",
+    "petabyte": "Po"
+  }
+}

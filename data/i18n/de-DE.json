@@ -1,33 +1,51 @@
 {
-  "label.back": "Zurück",
-  "label.liveStats": "Live-Stats",
-  "label.close": "Schließen",
-  "label.info": "Info",
-  "label.days": "Tage",
-  "label.hours_short": "Std",
-  "status.updatedAt": "Letztes Update",
-  "status.now": "jetzt",
-  "label.storage": "Speicher (HDDs)",
-  "label.temps": "Temperaturen",
-  "label.versions": "Versionen",
-  "label.system": "System",
-  "label.docker": "Docker-Container",
-  "tooltip.infodrawer" : "Systeminformationen öffnen/schließen",
-  "label.cpu": "CPU",
-  "label.uptime": "Uptime",
-  "label.hddAvg": "HDD Ø",
-  "label.chassis": "Chassis",
-  "label.cpuLoad": "Load",
-  "label.plugins": "Erweiterungen",
-  "label.ram": "RAM",
-  "label.used": "Belegt",
-  "label.gb": "GB",
-  "docker.status.up": "Läuft",
-  "docker.status.created": "Erstellt",
-  "errors.missingKey": "Fehlende Übersetzung: {key}",
-  "log.listening" : "Landingpage läuft auf Port",
+  "label": {
+    "back": "Zurück",
+    "liveStats": "Live-Stats",
+    "close": "Schließen",
+    "info": "Info",
+    "days": "Tage",
+    "hours_short": "Std",
+    "storage": "Speicher (HDDs)",
+    "temps": "Temperaturen",
+    "versions": "Versionen",
+    "system": "System",
+    "docker": "Docker-Container",
+    "cpu": "CPU",
+    "uptime": "Uptime",
+    "hddAvg": "HDD Ø",
+    "chassis": "Chassis",
+    "cpuLoad": "Load",
+    "plugins": "Erweiterungen",
+    "ram": "RAM",
+    "used": "Belegt",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Letztes Update",
+    "now": "jetzt"
+  },
+  "tooltip": {
+    "infodrawer": "Systeminformationen öffnen/schließen"
+  },
+  "docker": {
+    "status": {
+      "up": "Läuft",
+      "created": "Erstellt"
+    }
+  },
+  "errors": {
+    "missingKey": "Fehlende Übersetzung: {key}"
+  },
+  "log": {
+    "listening": "Landingpage läuft auf Port"
+  },
   "units": {
-    "byte": "B", "kilobyte": "KB", "megabyte": "MB",
-    "gigabyte": "GB", "terabyte": "TB", "petabyte": "PB"
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
   }
 }

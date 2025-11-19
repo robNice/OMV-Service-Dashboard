@@ -9,7 +9,7 @@ const PORT = 3000;
 
 const i18n = require('i18n');
 i18n.configure({
-    locales: ['en-GB', 'de-DE'],
+    locales: ['en-GB', 'de-DE', 'fr-FR'],
     defaultLocale: 'en-GB',
     directory: '/data/i18n',
     objectNotation: true,
@@ -18,7 +18,8 @@ i18n.configure({
     fallbacks: {
         'en': 'en-GB',
         'en-US': 'en-GB',
-        'de': 'de-DE'
+        'de': 'de-DE',
+        'fr': 'fr-FR',
     },
     updateFiles: false,
     syncFiles: false
