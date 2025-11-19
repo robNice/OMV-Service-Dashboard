@@ -44,6 +44,25 @@ function renderSection(section) {
     </div>`;
 }
 
+/**
+ *
+ * @param template
+ * @param backlink
+ * @param version
+ * @param title
+ * @param cards
+ * @returns {*}
+ */
+function setTemplate( template, backlink, version, title, cards )  {
+    return  template
+        .replace(/{{BACKLINK}}/g, backlink)
+        .replace(/{{VERSION}}/g, version)
+        .replace(/{{TITLE}}/g, title)
+        .replace(/{{SECTION_NAME}}/g, title)
+        .replace(/{{SECTIONS_SERVICES}}/g, cards);
+}
+
+
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
     res.set("Cache-Control", "public, max-age=31536000, immutable");
@@ -74,12 +93,13 @@ app.get("/", (req, res) => {
     const sections = data.sections.map(renderSection).join("\n");
     const template = fs.readFileSync("/app/templates/index.html", "utf-8");
 
-    const html = template
-        .replace(/{{BACKLINK}}/g, '')
-        .replace(/{{VERSION}}/g, config.version)
-        .replace(/{{TITLE}}/g, config.title)
-        .replace(/{{SECTION_NAME}}/g, config.title)
-        .replace(/{{SECTIONS_SERVICES}}/g, sections);
+    const html = setTemplate( template, '', config.version, config.title, sections );
+    // const html = template
+    //     .replace(/{{BACKLINK}}/g, '')
+    //     .replace(/{{VERSION}}/g, config.version)
+    //     .replace(/{{TITLE}}/g, config.title)
+    //     .replace(/{{SECTION_NAME}}/g, config.title)
+    //     .replace(/{{SECTIONS_SERVICES}}/g, sections);
     res.send(html);
 });
 
@@ -94,12 +114,21 @@ app.get("/section/:id", (req, res) => {
     }
 
     const services = (section.services || []).map(renderService).join("\n");
-    const html = template
-        .replace(/{{BACKLINK}}/g, '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>')
-        .replace(/{{VERSION}}/g, config.version)
-        .replace(/{{TITLE}}/g, config.title + ' - ' + section.title)
-        .replace(/{{SECTION_NAME}}/g, config.title + ' - ' + section.title)
-        .replace(/{{SECTIONS_SERVICES}}/g, services);
+
+    const html = setTemplate(
+        template,
+        '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>',
+        config.version,
+        config.title + ' - ' + section.title,
+        services
+    );
+
+    // const html = template
+    //     .replace(/{{BACKLINK}}/g, '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>')
+    //     .replace(/{{VERSION}}/g, config.version)
+    //     .replace(/{{TITLE}}/g, config.title + ' - ' + section.title)
+    //     .replace(/{{SECTION_NAME}}/g, config.title + ' - ' + section.title)
+    //     .replace(/{{SECTIONS_SERVICES}}/g, services);
 
     res.send(html);
 });
