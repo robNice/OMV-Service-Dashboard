@@ -9,19 +9,19 @@ const PORT = 3000;
 
 const i18n = require('i18n');
 i18n.configure({
-    locales: ['en-GB', 'en', 'en-US', 'de-de', 'de', 'de-DE'],
+    locales: ['en-GB', 'de-DE'],
     defaultLocale: 'en-GB',
     directory: '/data/i18n',
     objectNotation: false,
     header: 'accept-language',
     register: global,
     fallbacks: {
-        'de': 'de-de',
-        'de-DE': 'de-de',
         'en': 'en-GB',
         'en-US': 'en-GB',
-        'en-us': 'en-GB',
+        'de': 'de-DE'
     },
+    updateFiles: false,
+    syncFiles: false
 });
 app.use(i18n.init);
 
@@ -88,14 +88,15 @@ function renderSection(section) {
  * @param cards
  * @returns {*}
  */
-function setTemplate( template, backlink, version, title, cards )  {
+function setTemplate( req, template, backlink, version, title, cards )  {
     return  translateHtmlI18n(
         template
         .replace(/{{BACKLINK}}/g, backlink)
         .replace(/{{VERSION}}/g, version)
         .replace(/{{TITLE}}/g, title)
         .replace(/{{SECTION_NAME}}/g, title)
-        .replace(/{{SECTIONS_SERVICES}}/g, cards)
+        .replace(/{{SECTIONS_SERVICES}}/g, cards),
+        { locale: req.getLocale() }
     );
 }
 
@@ -162,7 +163,7 @@ app.get("/", (req, res) => {
     const data = loadData();
     const config = loadConfig()
     const sections = data.sections.map(renderSection).join("\n");
-    const html = setTemplate( loadTemplate(), '', config.version, config.title, sections );
+    const html = setTemplate( req, loadTemplate(), '', config.version, config.title, sections );
 
     res.send(html);
 });
@@ -177,6 +178,7 @@ app.get("/section/:id", (req, res) => {
     }
     const services = (section.services || []).map(renderService).join("\n");
     const html = setTemplate(
+        req,
         loadTemplate(),
         '<a href="/" style="margin: 1rem; display: inline-block;">← '+__('label.back')+'</a>',
         config.version,
