@@ -4,7 +4,24 @@
     const host = "/api/stats";
     const POLL_MS = 30000;
 
-    function humanBytes(b) {
+
+    function humanBytes(b, lang = navigator.language) {
+        const n = Number(b || 0);
+        if (!n || n <= 0) return "–";
+        const units = ["byte", "kilobyte", "megabyte", "gigabyte", "terabyte", "petabyte"];
+        let i = 0, x = n;
+        while (x >= 1024 && i < units.length - 1) { x /= 1024; i++; }
+
+        const fmt = new Intl.NumberFormat(lang, {
+            style: "unit",
+            unit: units[i],
+            unitDisplay: "short",
+            maximumFractionDigits: x >= 10 ? 0 : 1
+        });
+
+        return fmt.format(x);
+    }
+    function humanBytes_old(b) {
         const n = Number(b || 0);
         if (!n || n <= 0) return "–";
         const u = ["B", "KB", "MB", "GB", "TB", "PB"];
