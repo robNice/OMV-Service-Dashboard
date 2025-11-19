@@ -72,7 +72,8 @@ app.get("/", (req, res) => {
 
     const html = template
         .replace(/{{BACKLINK}}/g, '')
-        .replace(/{{SECTION_NAME}}/g, '')
+        .replace(/{{TITLE}}/g, 'Dein Heim-Netzwek')
+        .replace(/{{SECTION_NAME}}/g, 'Deine Heim-Netzwerk')
         .replace(/{{SECTIONS_SERVICES}}/g, sections);
     res.send(html);
   //res.send(template.replace("{{SECTIONS}}", sections));
@@ -90,7 +91,8 @@ app.get("/section/:id", (req, res) => {
   const template = fs.readFileSync("/app/templates/index.html", "utf-8");
   const html = template
     .replace(/{{BACKLINK}}/g, '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>')
-    .replace(/{{SECTION_NAME}}/g, section.title)
+      .replace(/{{TITLE}}/g, 'Dein Heim-Netzwerk - ' + section.title)
+    .replace(/{{SECTION_NAME}}/g, 'Dein Heim-Netzwerk - ' + section.title)
     .replace(/{{SECTIONS_SERVICES}}/g, services);
 
   res.send(html);
