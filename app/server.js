@@ -13,7 +13,8 @@ i18n.configure({
     defaultLocale: 'en-gb',
     directory: '/data/i18n',
     objectNotation: true,
-    header: 'accept-language'
+    header: 'accept-language',
+    register: global,
 });
 app.use(i18n.init);
 
@@ -142,7 +143,7 @@ app.get("/section/:id", (req, res) => {
     const services = (section.services || []).map(renderService).join("\n");
     const html = setTemplate(
         loadTemplate(),
-        '<a href="/" style="margin: 1rem; display: inline-block;">← '+req.__('ui.back')+'</a>',
+        '<a href="/" style="margin: 1rem; display: inline-block;">← '+__('ui.back')+'</a>',
         config.version,
         config.title + ' - ' + section.title,
         services
