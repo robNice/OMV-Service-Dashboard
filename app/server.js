@@ -9,7 +9,7 @@ const PORT = 3000;
 
 const i18n = require('i18n');
 i18n.configure({
-    locales: ['en-gb','de-de'],
+    locales: ['en-gb','de-DE'],
     defaultLocale: 'en-gb',
     directory: '/data/i18n',
     objectNotation: false,
