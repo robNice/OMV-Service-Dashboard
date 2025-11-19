@@ -14,16 +14,29 @@ app.use("/assets", express.static("/data/assets", {
 }));
 
 
+/**
+ *
+ * @returns {any}
+ */
 function loadData() {
     const raw = fs.readFileSync("/data/services.json", "utf-8");
     return JSON.parse(raw);
 }
 
+/**
+ *
+ * @returns {any}
+ */
 function loadConfig() {
     const raw = fs.readFileSync("/data/config.json", "utf-8");
     return JSON.parse(raw);
 }
 
+/**
+ *
+ * @param service
+ * @returns {string}
+ */
 function renderService(service) {
     return `
     <div class="service">
@@ -34,6 +47,11 @@ function renderService(service) {
     </div>`;
 }
 
+/**
+ *
+ * @param section
+ * @returns {string}
+ */
 function renderSection(section) {
     return `
     <div class="service">
@@ -60,6 +78,14 @@ function setTemplate( template, backlink, version, title, cards )  {
         .replace(/{{TITLE}}/g, title)
         .replace(/{{SECTION_NAME}}/g, title)
         .replace(/{{SECTIONS_SERVICES}}/g, cards);
+}
+
+/**
+ *
+ * @returns {string}
+ */
+function loadTemplate() {
+    return fs.readFileSync("/app/templates/index.html", "utf-8");
 }
 
 
@@ -91,45 +117,27 @@ app.get("/", (req, res) => {
     const data = loadData();
     const config = loadConfig()
     const sections = data.sections.map(renderSection).join("\n");
-    const template = fs.readFileSync("/app/templates/index.html", "utf-8");
+    const html = setTemplate( loadTemplate(), '', config.version, config.title, sections );
 
-    const html = setTemplate( template, '', config.version, config.title, sections );
-    // const html = template
-    //     .replace(/{{BACKLINK}}/g, '')
-    //     .replace(/{{VERSION}}/g, config.version)
-    //     .replace(/{{TITLE}}/g, config.title)
-    //     .replace(/{{SECTION_NAME}}/g, config.title)
-    //     .replace(/{{SECTIONS_SERVICES}}/g, sections);
     res.send(html);
 });
+
 
 app.get("/section/:id", (req, res) => {
     const data = loadData();
     const config = loadConfig()
     const section = data.sections.find(s => s.id === req.params.id);
-    const template = fs.readFileSync("/app/templates/index.html", "utf-8");
-
     if (!section) {
         return res.status(404).send("Sektion nicht gefunden");
     }
-
     const services = (section.services || []).map(renderService).join("\n");
-
     const html = setTemplate(
-        template,
+        loadTemplate(),
         '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>',
         config.version,
         config.title + ' - ' + section.title,
         services
     );
-
-    // const html = template
-    //     .replace(/{{BACKLINK}}/g, '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>')
-    //     .replace(/{{VERSION}}/g, config.version)
-    //     .replace(/{{TITLE}}/g, config.title + ' - ' + section.title)
-    //     .replace(/{{SECTION_NAME}}/g, config.title + ' - ' + section.title)
-    //     .replace(/{{SECTIONS_SERVICES}}/g, services);
-
     res.send(html);
 });
 
