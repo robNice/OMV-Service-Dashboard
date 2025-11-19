@@ -152,5 +152,5 @@ app.get("/section/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(__('log.listening', { port: PORT }));
+    //console.log(__('log.listening', { port: PORT }));
 });
