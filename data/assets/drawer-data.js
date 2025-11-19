@@ -55,7 +55,6 @@
         return { name, model, tempC, status, sizeBytes, usedBytes, usedPercent };
     }
 
-    
     function containerStatusStyle(status) {
         const s = String(status || "").toLowerCase();
         if (s.startsWith("up")) {
@@ -68,7 +67,7 @@
         const status = it.status || it.Status || "";
         return `<div class="kv"><span>${name}</span><span class="chip" style="${containerStatusStyle(status)}">${status || "–"}</span></div>`;
     }
-function renderDisk(raw) {
+    function renderDisk(raw) {
         const d = normalizeDisk(raw);
         const total = humanBytes(d.sizeBytes);
         const used  = humanBytes(d.usedBytes);
@@ -145,7 +144,10 @@ function renderDisk(raw) {
             setText("[data-plugins]", plugins);
         }
 
-        
+        // Docker Updates
+        if (s.docker)
+            setText("[data-updates]", s.docker.total > 0 ? `${s.docker.total} Container haben Updates` : "Keine Updates");
+
         // Zeitstempel
         const date = new Date(s.ts || Date.now());
         const t = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
