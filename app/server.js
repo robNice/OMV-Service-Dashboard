@@ -6,7 +6,17 @@ const app = express();
 const {getStats} = require("./server/stats"); // <— neu
 
 const PORT = 3000;
-
+const i18n = require('i18n');
+i18n.configure({
+    locales: ['en-gb','de-de'],
+    defaultLocale: 'en-gb',
+    directory: '/data/i18n',
+    objectNotation: true,
+    queryParameter: 'lang',
+    header: 'accept-language',
+    autoReload: process.env.NODE_ENV !== 'production'
+});
+app.use(i18n.init);
 
 app.use("/assets", express.static("/data/assets", {
     maxAge: "1h",
@@ -142,5 +152,5 @@ app.get("/section/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Landingpage läuft auf Port ${PORT}`);
+    console.log(__('log.listening', { port: PORT }));
 });

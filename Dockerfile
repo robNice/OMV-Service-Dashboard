@@ -12,7 +12,7 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 COPY app/package.json .
-RUN npm install
+RUN npm install i18n --save
 
 COPY app/ .
 
