@@ -20,20 +20,20 @@
 
         <div id="info-drawer" aria-live="polite">
             <div class="panel">
-                <div class="tab" title="{{__.tooltip.infodrawer}}">INFO</div>
+                <div class="tab" title="{{__.tooltip.infodrawer}}">{{__.label.info}}</div>
 
                 <header>
-                    <span class="chip">Live-Stats</span>
-                    <span class="chip" style="margin-left:auto">Uptime: <span data-uptime>–</span></span>
+                    <span class="chip">{{__.label.liveStats}}</span>
+                    <span class="chip" style="margin-left:auto">{{__.label.uptime}}: <span data-uptime>–</span></span>
                 </header>
 
                 <div class="content">
                     <!-- RAM -->
                     <div class="section">
-                        <h3>RAM</h3>
+                        <h3>{{__.label.ram}}</h3>
                         <div class="kv" style="flex-direction:column;align-items:stretch">
                             <div class="flex" style="display:flex;justify-content:space-between;">
-                                <span>Belegt</span><span class="chip" data-label-for="ram-usage">–%</span>
+                                <span>{{__.label.used}}</span><span class="chip" data-label-for="ram-usage">–%</span>
                             </div>
                             <div id="ram-usage" class="bar"><i></i></div>
                             <div style="text-align:right;font-size:.8rem;opacity:.8" data-ram-used>–</div>
@@ -42,36 +42,36 @@
 
                     <!-- Disks -->
                     <div class="section">
-                        <h3>Speicher (HDDs)</h3>
+                        <h3>{{__.label.storage}}</h3>
                         <div id="drawer-disks" class="space-y-2"></div>
                     </div>
 
                     <!-- Temps -->
                     <div class="section">
-                        <h3>Temperaturen</h3>
-                        <div class="kv"><span>CPU</span><span class="chip" data-cpu-temp>–</span></div>
-                        <div class="kv"><span>HDD Ø</span><span class="chip" data-hdd-temp>–</span></div>
-                        <div class="kv"><span>Chassis</span><span class="chip" data-chassis-temps>–</span></div>
+                        <h3>{{__.label.temps}}</h3>
+                        <div class="kv"><span>{{__.label.cpu}}</span><span class="chip" data-cpu-temp>–</span></div>
+                        <div class="kv"><span>{{__.label.hddAvg}}</span><span class="chip" data-hdd-temp>–</span></div>
+                        <div class="kv"><span>{{__.label.chassis}}</span><span class="chip" data-chassis-temps>–</span></div>
                     </div>
 
                     <!-- Versions / Updates -->
                     <div class="section">
-                        <h3>Versionen</h3>
+                        <h3>{{__.label.versions}}</h3>
                         <div class="kv"><span>OMV</span><span class="chip" data-omv-version>–</span></div>
                         <div class="kv" style="align-items:flex-start">
-                            <span>Erweiterungen</span>
+                            <span>{{__.label.plugins}}</span>
                             <span class="chip" data-plugins>–</span>
                         </div>
                     </div>
 
                     <div class="section">
-                        <h3>System</h3>
-                        <div class="kv"><span>Load</span><span class="chip" data-load>–</span></div>
+                        <h3>{{__.label.system}}</h3>
+                        <div class="kv"><span>{{__.label.cpuLoad}}</span><span class="chip" data-load>–</span></div>
                     </div>
 
                     <!-- Docker -->
                     <div class="section">
-                        <h3>Docker-Container</h3>
+                        <h3>{{__.label.docker}}</h3>
                         <div id="drawer-docker" class="space-y-1"></div>
                     </div>
 
@@ -80,8 +80,8 @@
 
 
                 <footer>
-                    <span>Letztes Update: <span class="chip">jetzt</span></span>
-                    <button data-i18n="ui.close" data-close class="chip" style="cursor:pointer">Schließen</button>
+                    <span>{{__.status.updatedAt}}: <span class="chip">{{__.status.now}}</span></span>
+                    <button data-i18n="label.close" data-close class="chip" style="cursor:pointer">{{__.label.close}}</button>
                 </footer>
             </div>
         </div>
