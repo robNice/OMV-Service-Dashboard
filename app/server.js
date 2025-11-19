@@ -9,8 +9,8 @@ const PORT = 3000;
 
 const i18n = require('i18n');
 i18n.configure({
-    locales: ['en-gb', 'en', 'en-US', 'de-de', 'de', 'de-DE'],
-    defaultLocale: 'en-gb',
+    locales: ['en-GB', 'en', 'en-US', 'de-de', 'de', 'de-DE'],
+    defaultLocale: 'en-GB',
     directory: '/data/i18n',
     objectNotation: false,
     header: 'accept-language',
@@ -18,8 +18,8 @@ i18n.configure({
     fallbacks: {
         'de': 'de-de',
         'de-DE': 'de-de',
-        'en': 'en-gb',
-        'en-US': 'en-gb'
+        'en': 'en-GB',
+        'en-US': 'en-GB'
     },
 });
 app.use(i18n.init);
