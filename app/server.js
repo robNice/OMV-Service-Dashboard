@@ -71,7 +71,7 @@ app.get("/", (req, res) => {
   const template = fs.readFileSync("/app/templates/index.html", "utf-8");
 
     const html = template
-        .replace(/{{BACKLINK}}/g, '')
+        .replace(/{{BACKLINK}}/g, 'x')
         .replace(/{{SECTION_NAME}}/g, 'Dein Cube')
         .replace(/{{SECTIONS_SERVICES}}/g, sections);
     res.send(html);
