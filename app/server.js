@@ -77,6 +77,7 @@ app.get("/", (req, res) => {
 
     const html = template
         .replace(/{{BACKLINK}}/g, '')
+        .replace(/{{VERSION}}/g, config.version)
         .replace(/{{TITLE}}/g, config.title)
         .replace(/{{SECTION_NAME}}/g, config.title)
         .replace(/{{SECTIONS_SERVICES}}/g, sections);
@@ -96,6 +97,7 @@ app.get("/section/:id", (req, res) => {
     const services = (section.services || []).map(renderService).join("\n");
     const html = template
         .replace(/{{BACKLINK}}/g, '<a href="/" style="margin: 1rem; display: inline-block;">← Zurück</a>')
+        .replace(/{{VERSION}}/g, config.version)
         .replace(/{{TITLE}}/g, config.title + ' - ' + section.title)
         .replace(/{{SECTION_NAME}}/g, config.title + ' - ' + section.title)
         .replace(/{{SECTIONS_SERVICES}}/g, services);
