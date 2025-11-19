@@ -143,12 +143,13 @@
             const plugins = Array.isArray(s.container.plugins) ? s.container.plugins.slice(0,5).map(p => `${p.name} ${p.version}`).join(" · ") : "–";
             setText("[data-plugins]", plugins);
         }
-
+        // Docker-Container
         const contDocker = document.getElementById("drawer-docker");
         if (contDocker) {
             const items = Array.isArray(s.containers) ? s.containers : [];
             contDocker.innerHTML = items.map(renderContainerItem).join("\n");
         }
+
 
         // Docker Updates
         if (s.docker)
