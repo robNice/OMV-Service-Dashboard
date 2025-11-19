@@ -1,5 +1,6 @@
 services:
   landingpage:
+    container_name: omv-landingpage
     build:
       context: .
       dockerfile: Dockerfile
