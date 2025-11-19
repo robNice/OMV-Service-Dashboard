@@ -3,6 +3,8 @@
   "label.liveStats": "Live-Stats",
   "label.close": "Schließen",
   "label.info": "Info",
+  "label.days": "Tage",
+  "label.hours_short": "Std",
   "status.updatedAt": "Letztes Update",
   "status.now": "jetzt",
   "label.storage": "Speicher (HDDs)",

@@ -5,21 +5,14 @@
     const POLL_MS = 30000;
 
 
-    function humanBytes(b, lang = navigator.language) {
+    function humanBytes(b) {
         const n = Number(b || 0);
         if (!n || n <= 0) return "–";
-        const units = ["byte", "kilobyte", "megabyte", "gigabyte", "terabyte", "petabyte"];
+        const keys = ["B","KB","MB","GB","TB","PB"];
         let i = 0, x = n;
-        while (x >= 1024 && i < units.length - 1) { x /= 1024; i++; }
-
-        const fmt = new Intl.NumberFormat(lang, {
-            style: "unit",
-            unit: units[i],
-            unitDisplay: "short",
-            maximumFractionDigits: x >= 10 ? 0 : 1
-        });
-
-        return fmt.format(x);
+        while (x >= 1024 && i < keys.length - 1) { x /= 1024; i++; }
+        const unit = (window.I18N_UNITS && window.I18N_UNITS[keys[i]]) || keys[i];
+        return (x >= 10 ? x.toFixed(0) : x.toFixed(1)) + " " + unit;
     }
     function humanBytes_old(b) {
         const n = Number(b || 0);
@@ -151,7 +144,7 @@
         }
 
         // Uptime & Load
-        if (s.uptime) setText("[data-uptime]", `${s.uptime.days} Tage ${s.uptime.hours} Std`);
+        if (s.uptime) setText("[data-uptime]", `${s.uptime.days} `+window.I18N_LABELS.DAYS+` ${s.uptime.hours} `+window.I18N_LABELS.HOURS_SHORT);
         if (s.load)   setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
 
         // Versionen
