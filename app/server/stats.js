@@ -2,6 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const { exec } = require("child_process");
 const { promisify } = require("util");
+const execFileAsync = promisify(exec);
 const sh = promisify(exec);
 
 const PROC = process.env.PROC_ROOT || "/host/proc";
@@ -15,9 +16,6 @@ const statfsSafe  = async (p) => { try { return await fs.statfs(p); } catch { re
 const clamp       = (n, a, b) => Math.max(a, Math.min(b, n));
 const pct         = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
-const { execFile } = require("node:child_process");
-const { promisify } = require("node:util");
-const execFileAsync = promisify(execFile);
 
 const SMART_PARAMS = {
     start: 0,
