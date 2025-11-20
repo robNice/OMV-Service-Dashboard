@@ -63,7 +63,7 @@ async function readLoadUptime() {
 
 async function readSmartListViaOmvRpc(HOST) {
     const config = loadConfig();
-    const cmd = `chroot ${HOST} ${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
+    const cmd = `chroot ${HOST} `+config.omvRpcPath+` Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
     const { stdout } = await sh(cmd, EXE_OPTS);
     return JSON.parse(stdout);
 }
