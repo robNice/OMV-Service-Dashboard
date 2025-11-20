@@ -1,0 +1,28 @@
+
+/* Info-Drawer icons via CSS only, no template changes */
+#info-drawer .section > h3 {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+#info-drawer .section > h3::before {
+  content: "";
+  inline-size: 1.1em;
+  block-size: 1.1em;
+  /* Use mask so icons inherit current text color */
+  -webkit-mask: var(--ico) center / contain no-repeat;
+  mask: var(--ico) center / contain no-repeat;
+  background: currentColor;
+}
+
+/* Map sections to icons using :has() with existing markers in your DOM */
+#info-drawer .section:has([data-ram-used]) > h3::before {         --ico: url('/assets/icons/ico-ram.svg'); }
+#info-drawer .section:has(#drawer-disks) > h3::before {           --ico: url('/assets/icons/ico-hdd.svg'); }
+#info-drawer .section:has(#temps) > h3::before {                  --ico: url('/assets/icons/ico-temp.svg'); }
+#info-drawer .section:has([data-omv-version]) > h3::before {      --ico: url('/assets/icons/ico-versions.svg'); }
+#info-drawer .section:has([data-uptime]) > h3::before {           --ico: url('/assets/icons/ico-system.svg'); }
+#info-drawer .section:has(#drawer-docker) > h3::before {          --ico: url('/assets/icons/ico-containers.svg'); }
+
+/* Optional: icon sizing tweaks per section (if you need) */
+/* #info-drawer .section:has(#drawer-docker) > h3::before { inline-size: 1.2em; } */
