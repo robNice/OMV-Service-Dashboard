@@ -15,6 +15,15 @@ const statfsSafe  = async (p) => { try { return await fs.statfs(p); } catch { re
 const clamp       = (n, a, b) => Math.max(a, Math.min(b, n));
 const pct         = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
+const { execFile } = require("node:child_process");
+const { promisify } = require("node:util");
+const execFileAsync = promisify(execFile);
+
+const SMART_PARAMS = {
+    start: 0,
+    limit: -1,
+    sort: [{ property: "devicefile", direction: "ASC" }],
+};
 
 async function readMem() {
     const txt = await readFileSafe(`${PROC}/meminfo`);
@@ -46,12 +55,34 @@ async function readLoadUptime() {
     return { load, uptime };
 }
 
+
+async function readSmartListViaOmvRpc(HOST) {
+    const args = [
+        HOST,
+        "/usr/sbin/omv-rpc",
+        "Smart",
+        "getList",
+        JSON.stringify(SMART_PARAMS),
+    ];
+
+    // LC_ALL=C hält die Ausgabe „rein“
+    const { stdout } = await execFileAsync("chroot", args, {
+        timeout: 15000,
+        env: { LC_ALL: "C", LANG: "C" },
+        maxBuffer: 10 * 1024 * 1024, // falls viele Disks
+    });
+
+    // omv-rpc liefert valid JSON
+    return JSON.parse(stdout);
+}
+
 async function readOmvSmartList() {
     // nutzt den Host-Stack via chroot; NOCH autonom aus dem Container aufrufbar
     try {
         // const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/local/bin/omv-smart-json.sh'`);
-        const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/sbin/omv-rpc Smart getList {"start":0,"limit":-1,"sort":[{"property":"devicefile","direction":"ASC"}]}'`);
-        const j = JSON.parse(stdout);
+        // const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/sbin/omv-rpc Smart getList {"start":0,"limit":-1,"sort":[{"property":"devicefile","direction":"ASC"}]}'`);
+        // const j = JSON.parse(stdout);
+        const j = await readSmartListViaOmvRpc(HOST);
         return Array.isArray(j?.data) ? j.data : [];
     } catch {
         return [];
