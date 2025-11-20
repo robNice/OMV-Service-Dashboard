@@ -1,9 +1,15 @@
 const fs = require("fs/promises");
 const path = require("path");
+
 const { exec } = require("child_process");
 const { promisify } = require("util");
-const execFileAsync = promisify(exec);
 const sh = promisify(exec);
+
+const { execFile } = require('node:child_process');
+const { promisifyEf } = require('node:util');
+const execFileAsync = promisifyEf(execFile);
+
+
 
 const PROC = process.env.PROC_ROOT || "/host/proc";
 const SYS  = process.env.SYS_ROOT  || "/host/sys";
