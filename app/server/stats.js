@@ -1,4 +1,5 @@
 const fs = require("fs/promises");
+const fsSync = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
 const { promisify } = require("util");
@@ -27,7 +28,7 @@ const EXE_OPTS = {
     maxBuffer: 10 * 1024 * 1024,
 };
 function loadConfig() {
-    const raw = fs.readFileSync("/data/config.json", "utf-8");
+    const raw = fsSync.readFileSync("/data/config.json", "utf-8");
     return JSON.parse(raw);
 }
 async function readMem() {
@@ -64,7 +65,7 @@ async function readLoadUptime() {
 async function readSmartListViaOmvRpc(HOST) {
     const config = loadConfig();
     console.log(config.omvRpcPath);
-    const cmd = `chroot ${HOST} /usr/sbin/omv-rpc Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
+    const cmd = `chroot ${HOST} ${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
     const { stdout } = await sh(cmd, EXE_OPTS);
     return JSON.parse(stdout);
 }
