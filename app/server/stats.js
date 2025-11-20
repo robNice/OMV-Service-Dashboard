@@ -79,6 +79,11 @@ async function readSmartListViaOmvRpc(HOST) {
     const { stdout } = await runFile('chroot', args, EXE_OPTS);
     return JSON.parse(stdout);
 }
+async function readSmartListViaOmvRpc_sh(HOST) {
+    const cmd = `chroot ${HOST} /usr/sbin/omv-rpc Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
+    const { stdout } = await sh(cmd, EXE_OPTS);
+    return JSON.parse(stdout);
+}
 
 async function readOmvSmartList() {
     // nutzt den Host-Stack via chroot; NOCH autonom aus dem Container aufrufbar
@@ -86,7 +91,7 @@ async function readOmvSmartList() {
         // const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/local/bin/omv-smart-json.sh'`);
         // const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/sbin/omv-rpc Smart getList {"start":0,"limit":-1,"sort":[{"property":"devicefile","direction":"ASC"}]}'`);
         // const j = JSON.parse(stdout);
-        const j = await readSmartListViaOmvRpc(HOST);
+        const j = await readSmartListViaOmvRpc_sh(HOST);
         return Array.isArray(j?.data) ? j.data : [];
     } catch {
         return [];
