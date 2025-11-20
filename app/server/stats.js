@@ -1,12 +1,8 @@
 const fs = require("fs/promises");
 const path = require("path");
-
 const { exec } = require("child_process");
 const { promisify } = require("util");
 const sh = promisify(exec);
-
-
-
 
 const PROC = process.env.PROC_ROOT || "/host/proc";
 const SYS  = process.env.SYS_ROOT  || "/host/sys";
@@ -38,7 +34,7 @@ async function readMem() {
     for (const line of txt.split("\n")) {
         const [k, v] = line.split(":");
         if (!k || !v) continue;
-        map[k.trim()] = parseInt(v, 10) * 1024; // kB -> B
+        map[k.trim()] = parseInt(v, 10) * 1024;
     }
     const total = map.MemTotal || 0;
     const free  = (map.MemFree || 0) + (map.Buffers || 0) + (map.Cached || 0);
@@ -80,21 +76,19 @@ async function readOmvSmartList() {
 async function resolveByIdToDev(byIdPath) {
     try {
         const full = path.posix.join(HOST, byIdPath);
-        const real = await fs.realpath(full); // z.B. /hostroot/dev/sdb
-        const dev  = real.replace(`${HOST}`, ""); // /dev/sdb
-        return dev;
+        const real = await fs.realpath(full);
+        return real.replace(`${HOST}`, "");
     } catch { return null; }
 }
 
 async function readDriveUsageMap() {
-    // lsblk auf dem Host (alle Devices, inkl. Mountpoints)
     let lb;
     try {
         const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT"`);
         lb = JSON.parse(stdout);
     } catch { return new Map(); }
 
-    const usage = new Map(); // "/dev/sdX" -> { sizeBytes, usedBytes }
+    const usage = new Map();
 
     async function partUsage(mount) {
         const hostMount = path.posix.join(HOST, mount);
@@ -109,7 +103,7 @@ async function readDriveUsageMap() {
 
     async function walk(dev, parentDisk = null) {
         const isDisk = dev.type === "disk";
-        const name   = dev.name; // sda / nvme0n1 etc.
+        const name   = dev.name;
         if (isDisk) {
             usage.set(`/dev/${name}`, { sizeBytes: Number(dev.size||0), usedBytes: 0 });
             parentDisk = `/dev/${name}`;
@@ -239,10 +233,9 @@ async function readPhysicalDrives() {
         const byIdOrDev = d?.devicefile || "";
         let dev = byIdOrDev;
         if (byIdOrDev.startsWith("/dev/disk/by-id/")) {
-            dev = await resolveByIdToDev(byIdOrDev) || byIdOrDev; // versuche /dev/sdX
+            dev = await resolveByIdToDev(byIdOrDev) || byIdOrDev;
         }
 
-        // nur physische Blockgeräte
         if (!dev || !/^\/dev\/(sd[a-z]+|nvme\d+n\d+)$/.test(dev)) continue;
 
         const model = (d?.model && String(d.model).trim()) ? String(d.model).trim() : null;
