@@ -112,7 +112,6 @@ function translateHtmlI18n(html, { locale } = {}) {
         i18n.setLocale(locale);
     }
 
-    // {{__.key.path}} oder {{__.key.path|{"name":"Manfred"}} (JSON-Args optional)
     const rx = /\{\{\s*__\.([a-zA-Z0-9_.-]+)(?:\s*\|\s*(\{[\s\S]*?\}))?\s*\}\}/g;
 
     const out = html.replace(rx, (_m, key, jsonArgs) => {
@@ -191,5 +190,5 @@ app.get("/section/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(i18n.__('log.listening', { port: PORT }));
+    console.log('Landingpage listening on port '+PORT);
 });

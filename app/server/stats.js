@@ -26,7 +26,10 @@ const EXE_OPTS = {
     env: { LC_ALL: 'C', LANG: 'C' },
     maxBuffer: 10 * 1024 * 1024,
 };
-
+function loadConfig() {
+    const raw = fs.readFileSync("/data/config.json", "utf-8");
+    return JSON.parse(raw);
+}
 async function readMem() {
     const txt = await readFileSafe(`${PROC}/meminfo`);
     if (!txt) return { total: 0, used: 0, percent: 0 };
@@ -59,7 +62,8 @@ async function readLoadUptime() {
 
 
 async function readSmartListViaOmvRpc(HOST) {
-    const cmd = `chroot ${HOST} /usr/sbin/omv-rpc Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
+    const config = loadConfig();
+    const cmd = `chroot ${HOST} ${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
     const { stdout } = await sh(cmd, EXE_OPTS);
     return JSON.parse(stdout);
 }
