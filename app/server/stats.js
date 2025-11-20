@@ -49,7 +49,8 @@ async function readLoadUptime() {
 async function readOmvSmartList() {
     // nutzt den Host-Stack via chroot; NOCH autonom aus dem Container aufrufbar
     try {
-        const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/local/bin/omv-smart-json.sh'`);
+        // const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/local/bin/omv-smart-json.sh'`);
+        const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/sbin/omv-rpc Smart getList {"start":0,"limit":-1,"sort":[{"property":"devicefile","direction":"ASC"}]}'`);
         const j = JSON.parse(stdout);
         return Array.isArray(j?.data) ? j.data : [];
     } catch {
