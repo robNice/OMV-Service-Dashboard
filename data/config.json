@@ -1,6 +1,5 @@
 {
-  "version": "1.0.0-1",
   "title": "Heimnetz",
   "defaultLang": "en-gb",
-  "x": "x"
+  "omv-rpc": "/usr/sbin/omv-rpc "
 }

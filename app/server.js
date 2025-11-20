@@ -1,3 +1,4 @@
+const version = "1.0.0-15";
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
@@ -164,7 +165,7 @@ app.get("/", (req, res) => {
     const data = loadData();
     const config = loadConfig()
     const sections = data.sections.map(renderSection).join("\n");
-    const html = setTemplate( req, loadTemplate(), '', config.version, config.title, sections );
+    const html = setTemplate( req, loadTemplate(), '', version, config.title, sections );
 
     res.send(html);
 });
@@ -182,7 +183,7 @@ app.get("/section/:id", (req, res) => {
         req,
         loadTemplate(),
         '<a href="/" style="margin: 1rem; display: inline-block;">← '+__('label.back')+'</a>',
-        config.version,
+        version,
         config.title + ' - ' + section.title,
         services
     );
