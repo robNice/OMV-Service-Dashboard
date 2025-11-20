@@ -1,13 +1,15 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-const { exec } = require("child_process");
-const { promisify } = require("util");
-const sh = promisify(exec);
+// const { exec } = require("child_process");
+// const { promisify } = require("util");
+// const sh = promisify(exec);
 
-const { execFile } = require('child_process');
-const { promisifyEf } = require('util');
-const execFileAsync = promisifyEf(execFile);
+const { exec, execFile } = require('node:child_process');
+const { promisify } = require('node:util');
+
+const sh = promisify(exec);
+const runFile = promisify(execFile);
 
 
 
@@ -22,6 +24,12 @@ const statfsSafe  = async (p) => { try { return await fs.statfs(p); } catch { re
 const clamp       = (n, a, b) => Math.max(a, Math.min(b, n));
 const pct         = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
+
+const EXE_OPTS = {
+    timeout: 15000,
+    env: { LC_ALL: 'C', LANG: 'C' },
+    maxBuffer: 10 * 1024 * 1024,
+};
 
 const SMART_PARAMS = {
     start: 0,
@@ -63,20 +71,12 @@ async function readLoadUptime() {
 async function readSmartListViaOmvRpc(HOST) {
     const args = [
         HOST,
-        "/usr/sbin/omv-rpc",
-        "Smart",
-        "getList",
+        '/usr/sbin/omv-rpc',
+        'Smart',
+        'getList',
         JSON.stringify(SMART_PARAMS),
     ];
-
-    // LC_ALL=C hält die Ausgabe „rein“
-    const { stdout } = await execFileAsync("chroot", args, {
-        timeout: 15000,
-        env: { LC_ALL: "C", LANG: "C" },
-        maxBuffer: 10 * 1024 * 1024, // falls viele Disks
-    });
-
-    // omv-rpc liefert valid JSON
+    const { stdout } = await runFile('chroot', args, EXE_OPTS);
     return JSON.parse(stdout);
 }
 
