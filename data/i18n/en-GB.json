@@ -26,7 +26,8 @@
     "now": "now"
   },
   "tooltip": {
-    "infodrawer": "open/close system information"
+    "infodrawer": "open/close system information",
+    "systemLoad": "Average system load: last minute / last 5 minutes / last 15 minutes"
   },
   "docker": {
     "status": {
@@ -36,7 +37,7 @@
   },
   "errors": {
     "missingKey": "Missing translation: {key}",
-    "noDisksFound": "No Disks detectedd Laufwerke erkannt"
+    "noDisksFound": "No Disks detected"
   },
   "log": {
     "listening": "Landingpage listening on port"

@@ -26,7 +26,8 @@
     "now": "maintenant"
   },
   "tooltip": {
-    "infodrawer": "ouvrir/fermer les informations système"
+    "infodrawer": "ouvrir/fermer les informations système",
+    "systemLoad": "Moyenne de la charge système : dernière minute / 5 dernières minutes / 15 dernières minutes"
   },
   "docker": {
     "status": {
@@ -36,7 +37,7 @@
   },
   "errors": {
     "missingKey": "Traduction manquante : {key}",
-    "noDisksFound": "No Disks detectedd Laufwerke erkannt"
+    "noDisksFound": "Aucun disque détecté"
   },
   "log": {
     "listening": "Landingpage à l'écoute sur le port"

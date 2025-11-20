@@ -26,7 +26,8 @@
     "now": "jetzt"
   },
   "tooltip": {
-    "infodrawer": "Systeminformationen öffnen/schließen"
+    "infodrawer": "Systeminformationen öffnen/schließen",
+    "systemLoad": "Durschnitt der Systemlast: letzte Minute / letzte 5 Minuten / letzte 15 Minuten"
   },
   "docker": {
     "status": {
