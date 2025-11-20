@@ -5,8 +5,8 @@ const { exec } = require("child_process");
 const { promisify } = require("util");
 const sh = promisify(exec);
 
-const { execFile } = require('node:child_process');
-const { promisifyEf } = require('node:util');
+const { execFile } = require('child_process');
+const { promisifyEf } = require('util');
 const execFileAsync = promisifyEf(execFile);
 
 
