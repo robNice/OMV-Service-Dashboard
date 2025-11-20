@@ -1,15 +1,10 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-// const { exec } = require("child_process");
-// const { promisify } = require("util");
-// const sh = promisify(exec);
-
-const { exec, execFile } = require('node:child_process');
-const { promisify } = require('node:util');
-
+const { exec } = require("child_process");
+const { promisify } = require("util");
 const sh = promisify(exec);
-const runFile = promisify(execFile);
+
 
 
 
@@ -25,16 +20,15 @@ const clamp       = (n, a, b) => Math.max(a, Math.min(b, n));
 const pct         = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
 
-const EXE_OPTS = {
-    timeout: 15000,
-    env: { LC_ALL: 'C', LANG: 'C' },
-    maxBuffer: 10 * 1024 * 1024,
-};
-
 const SMART_PARAMS = {
     start: 0,
     limit: -1,
     sort: [{ property: "devicefile", direction: "ASC" }],
+};
+const EXE_OPTS = {
+    timeout: 15000,
+    env: { LC_ALL: 'C', LANG: 'C' },
+    maxBuffer: 10 * 1024 * 1024,
 };
 
 async function readMem() {
@@ -69,17 +63,6 @@ async function readLoadUptime() {
 
 
 async function readSmartListViaOmvRpc(HOST) {
-    const args = [
-        HOST,
-        '/usr/sbin/omv-rpc',
-        'Smart',
-        'getList',
-        JSON.stringify(SMART_PARAMS),
-    ];
-    const { stdout } = await runFile('chroot', args, EXE_OPTS);
-    return JSON.parse(stdout);
-}
-async function readSmartListViaOmvRpc_sh(HOST) {
     const cmd = `chroot ${HOST} /usr/sbin/omv-rpc Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
     const { stdout } = await sh(cmd, EXE_OPTS);
     return JSON.parse(stdout);
@@ -91,7 +74,7 @@ async function readOmvSmartList() {
         // const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/local/bin/omv-smart-json.sh'`);
         // const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc '/usr/sbin/omv-rpc Smart getList {"start":0,"limit":-1,"sort":[{"property":"devicefile","direction":"ASC"}]}'`);
         // const j = JSON.parse(stdout);
-        const j = await readSmartListViaOmvRpc_sh(HOST);
+        const j = await readSmartListViaOmvRpc(HOST);
         return Array.isArray(j?.data) ? j.data : [];
     } catch {
         return [];
