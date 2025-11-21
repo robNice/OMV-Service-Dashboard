@@ -1,8 +1,37 @@
+/* Outfit + Inter — self-hosted (TTF-ready) */
 
+/* Outfit Bold (headline) */
+@font-face {
+    font-family: "OutfitLocal";
+    src:
+            url("/assets/fonts/Outfit/Outfit-Variable.woff2") format("woff2-variations"),
+            url("/assets/fonts/Outfit/Outfit-Bold.woff2") format("woff2"),
+            url("/assets/fonts/Outfit/Outfit-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Inter SemiBold (card titles) */
+@font-face {
+    font-family: "InterLocal";
+    src:
+            url("/assets/fonts/Inter/Inter_24pt-SemiBold.woff2") format("woff2-variations"),
+            url("/assets/fonts/Inter/Inter_24pt-SemiBold.woff2") format("woff2"),
+            url("/assets/fonts/Inter/Inter_24pt-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
 :root {
     --bg-color: #f2f2f2;
     --text-color: #111;
     --tile-bg: #fff;
+    --font-h1: "OutfitLocal", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-card: "InterLocal", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+    --h1-weight: 700;
+    --card-weight: 600;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,10 +55,15 @@ body > a {
     text-decoration: none;
 }
 
-h1 {
+h1, .h1 {
     text-align: center;
     margin-bottom: 2rem;
+    font-family: var(--font-h1), serif;
+    font-weight: var(--h1-weight);
+    letter-spacing: .2px;
+    line-height: 1.1;
 }
+
 
 .grid {
     display: flex;
@@ -63,12 +97,16 @@ h1 {
 .service-title {
     padding: 1rem;
     text-align: center;
-    font-weight: 600;
     font-size: 1.1rem;
     flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    font-family: var(--font-card), serif;
+    font-weight: var(--card-weight);
+    letter-spacing: .15px;
+    line-height: 1.2;
 }
 
 
