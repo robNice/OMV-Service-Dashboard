@@ -361,7 +361,7 @@ async function readPhysicalDrives() {
 }
 
 async function getStats() {
-    const [{ load, uptime }, ram, tempsCpuChassis, container, containers, drives] = await Promise.all([
+    const [{ load, uptime }, ram, tempsCpuChassis, container, containers, drives, system] = await Promise.all([
         readLoadUptime(),
         readMem(),
         readTempsCpuChassis(),
@@ -379,7 +379,8 @@ async function getStats() {
         temps: tempsCpuChassis,
         container,
         containers,
-        disks: drives
+        disks: drives,
+        system
     };
 }
 
