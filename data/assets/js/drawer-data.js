@@ -96,7 +96,7 @@
     }
 
     function removeRamInfos()   {
-        let nodes = document.querySelectorAll('#info-drawer .section.system .kv.raminfo');
+        let nodes = document.querySelectorAll('#info-drawer .section.system .kv.raminfo:not(.template)');
         nodes.forEach(node => {
             if (node instanceof Element && node.parentNode) {
                 node.parentNode.removeChild(node);
@@ -133,10 +133,12 @@
                 let ramInfo = system.ram[i];
                 let node = createRamInfoClone();
                 node.querySelector('.label').text(ramInfo.slot);
-                node.querySelector('.chip').text( ramInfo.size + ' / ' + ramInfo.speed + ' / ' +ramInfo.manufacturer )
+                node.querySelector('.chip').text( ramInfo.size + ' / ' + ramInfo.speed + ' / ' +ramInfo.manufacturer );
+                addRamInfo(node);
+
             }
         }
-        setHtml('[data-ram-info]', ramInfoArray.join('<br />'));
+
     }
 
     async function loadStats() {
