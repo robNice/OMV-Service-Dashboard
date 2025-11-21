@@ -94,6 +94,10 @@
     `;
     }
 
+    function setSystem(system)  {
+        setText("[data-host]",system.host );
+    }
+
     async function loadStats() {
         const res = await fetch(host, { cache: "no-store" });
         if (!res.ok) throw new Error(res.statusText);
@@ -135,7 +139,7 @@
         if (s.uptime) setText("[data-uptime]", `${s.uptime.days} `+window.I18N_LABELS.DAYS+` ${s.uptime.hours} `+window.I18N_LABELS.HOURS_SHORT);
         if (s.load)   setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
 
-        if( s.host )  setText(['data-host'], s.host);
+        if( s.system )  setSystem(s.system)
 
 
 
