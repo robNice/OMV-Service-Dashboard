@@ -130,6 +130,7 @@ async function readSystemInfo() {
     // RAM: erst dmidecode, Fallback lshw
     let ram = [], ramtool = "";
 
+
     try {
         const { stdout: dmiOut } = await sh(
             `chroot ${HOST} /bin/bash -lc 'DMID=$(command -v dmidecode || echo); ` +
@@ -145,6 +146,7 @@ async function readSystemInfo() {
                 ramtool = "dmidecode";
             }
         }
+        console.log('[dmidecode bytes]', dmi.length, 'devices', (dmi.match(/Memory Device\b/gi) || []).length);
     } catch { /* ignorieren */ }
 
     return { host, os, kernel, cpu, gpu, ram, ramtool };
