@@ -22,6 +22,7 @@
     "cpuLoad": "Load",
     "plugins": "Erweiterungen",
     "ram": "RAM",
+    "ramSlot": "RAM-Slot",
     "used": "Belegt",
     "gb": "GB"
   },
