@@ -1,4 +1,6 @@
-
+#info-drawer .template {
+    display: none;
+}
 /* Info-Drawer icons via CSS only, no template changes */
 #info-drawer .section > h3 {
   display: flex;

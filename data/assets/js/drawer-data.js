@@ -95,19 +95,45 @@
     `;
     }
 
+    function removeRamInfos()   {
+        let nodes = document.querySelectorAll('#info-drawer .section.system .kv.raminfo');
+        nodes.forEach(node => {
+            if (node instanceof Element && node.parentNode) {
+                node.parentNode.removeChild(node);
+            }
+        });
+    }
+
+    function createRamInfoClone()   {
+        let clone = document.querySelector('#info-drawer .section.system .kv.raminfo.template').cloneNode(true);
+        clone.classList.remove('template');
+        return clone;
+    }
+
+    function addRamInfo( node ) {
+        const last = document.querySelectorAll("#info-drawer .section.system .kv.raminfo");
+        const el = last[last.length - 1] || null;
+        if( el )    {
+            el.after(node);
+        }
+    }
+
+
     function setSystem(system)  {
         setText("[data-host]",system.host );
         setText("[data-os]",system.os );
         setText("[data-kernel]",system.kernel );
         setText("[data-cpu]",system.cpu );
         setText("[data-gpu]",system.gpu );
-        let ramInfoArray = [];
+
+        removeRamInfos();
+
         if( system.ram && system.ram.length > 0 )  {
             for( let i in system.ram )  {
                 let ramInfo = system.ram[i];
-                ramInfoArray.push(
-                    ramInfo.size + ' / ' + ramInfo.speed + ' / ' +ramInfo.manufacturer + ' / ' + ramInfo.slot
-                )
+                let node = createRamInfoClone();
+                node.querySelector('.label').text(ramInfo.slot);
+                node.querySelector('.chip').text( ramInfo.size + ' / ' + ramInfo.speed + ' / ' +ramInfo.manufacturer )
             }
         }
         setHtml('[data-ram-info]', ramInfoArray.join('<br />'));
