@@ -38,13 +38,13 @@ function loadConfig() {
 
 
 async function chrootOut(HOST, file, args = []) {
-    const { stdout } = await runFile("chroot", [HOST, file, ...args], EXEC_OPTS);
+    const { stdout } = await runFile("chroot", [HOST, file, ...args], EXE_OPTS);
     return String(stdout || "").trim();
 }
 
 async function chrootBash(HOST, cmd) {
     // wenn du Pipes/Greps brauchst
-    const { stdout } = await runFile("chroot", [HOST, "/bin/bash", "-lc", cmd], EXEC_OPTS);
+    const { stdout } = await runFile("chroot", [HOST, "/bin/bash", "-lc", cmd], EXE_OPTS);
     return String(stdout || "").trim();
 }
 
