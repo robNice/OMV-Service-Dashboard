@@ -130,9 +130,7 @@ async function readSystemInfo() {
     // RAM: erst dmidecode, Fallback lshw
     let ram = [], ramtool = "";
 
-
     try {
-        // 1) dmidecode im chroot finden und ausführen; Fehler nicht eskalieren
         const { stdout: dmiOut } = await sh(
             `chroot ${HOST} /bin/bash -lc 'DMID=$(command -v dmidecode || echo); ` +
             `if [ -n "$DMID" ]; then LC_ALL=C LANG=C "$DMID" -t memory || true; fi'`,
@@ -141,15 +139,13 @@ async function readSystemInfo() {
 
         const dmi = String(dmiOut || "");
         if (dmi && /Memory Device\b/i.test(dmi)) {
-            const parsed = parseDmidecodeMemory(dmi);  // deine Parser-Funktion (mit match(...))
+            const parsed = parseDmidecodeMemory(dmi);
             if (Array.isArray(parsed) && parsed.length > 0) {
                 ram = parsed;
                 ramtool = "dmidecode";
             }
         }
-    } catch {
-        // ignorieren – ram bleibt []
-    }
+    } catch { /* ignorieren */ }
 
     return { host, os, kernel, cpu, gpu, ram, ramtool };
 }
