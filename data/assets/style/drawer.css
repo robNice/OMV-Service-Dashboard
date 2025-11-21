@@ -36,6 +36,7 @@
     background: transparent;
     border: 0;
     border-bottom: 1px dashed #0f0;
+    margin-bottom: 25px;
 }
 
 #info-drawer .panel {

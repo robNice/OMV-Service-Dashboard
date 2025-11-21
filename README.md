@@ -3,6 +3,8 @@
 A small Node.js–based landing page for an OpenMediaVault (OMV) host.  
 It shows your main services as cards, grouped into sections, and can display live system statistics (uptime, disk usage, temperatures, Docker containers, …).
 
+
+
 The app is designed to run either:
 
 - directly on the OMV host (“standalone”), or
@@ -212,7 +214,9 @@ Treat config.json as the single place to configure global behavior and default l
 
 Location
 
-data/services.json
+> data/services.json 
+
+(create your own services.json, see example.services.json in that same directory)
 
 This file defines:
 
@@ -226,7 +230,7 @@ General structure (with two sections. First section containing two and the secon
   "sections": [
     {
       "id": "media",
-      "title": "Media 🎧📷🎥",
+      "title": "Media",
       "thumbnail": "media.png",
       "services": [
         {
