@@ -140,6 +140,79 @@ async function readSystemInfo() {
         // ignore -> ram bleibt []
     }
 
+    // --- Fallback: lshw (JSON bevorzugt, sonst Text) ---
+    if ( 1 === 1 /*!ram.length*/) {
+        try {
+            // 1) JSON versuchen (bei neueren lshw-Versionen vorhanden)
+            const { stdout: jraw } = await sh(
+                `chroot ${HOST} /bin/bash -lc "command -v lshw >/dev/null 2>&1 && lshw -quiet -json -class memory 2>/dev/null || true"`,
+                EXE_OPTS
+            );
+
+            let parsed = [];
+            if (jraw && jraw.trim().startsWith("{")) {
+                try {
+                    const jobj = JSON.parse(jraw);
+
+                    // rekursiv alle *-bank Knoten einsammeln
+                    const banks = [];
+                    (function walk(n) {
+                        if (!n || typeof n !== "object") return;
+                        if (n.id && /^bank:/i.test(String(n.id))) banks.push(n);
+                        if (Array.isArray(n.children)) n.children.forEach(walk);
+                    })(jobj);
+
+                    parsed = banks
+                        .map(n => {
+                            // lshw -json gibt Größe oft als Bytes (number) und/oder als string in 'size'/'description'
+                            const slot =
+                                (n.slot && String(n.slot)) ||
+                                (n.id && String(n.id).replace(/^bank:/i, "").trim()) ||
+                                "";
+                            const manufacturer = (n.vendor && String(n.vendor)) || "";
+                            const serial = (n.serial && String(n.serial)) || "";
+                            // Versuche “size” lesbar zu bekommen; wenn nur Bytes da sind, konvertiere grob zu MB/GB Anzeige
+                            let size = "";
+                            if (n.size != null) {
+                                const bytes = Number(n.size);
+                                if (Number.isFinite(bytes) && bytes > 0) {
+                                    // einfache menschenlesbare Größe (deckt deinen Drawer-Fall ab, nicht supergenau)
+                                    const units = ["B","KB","MB","GB","TB","PB"];
+                                    let i = 0, x = bytes;
+                                    while (x >= 1024 && i < units.length - 1) { x /= 1024; i++; }
+                                    size = (x >= 10 ? x.toFixed(0) : x.toFixed(1)) + " " + units[i];
+                                } else {
+                                    size = String(n.size);
+                                }
+                            } else if (n.description) {
+                                // manchmal steht die Größe in der description
+                                size = String(n.description);
+                            }
+                            return size ? { slot, size, manufacturer, serial } : null;
+                        })
+                        .filter(Boolean);
+                } catch {}
+            }
+
+            // 2) Falls JSON nicht ging/leer war: Textausgabe parsen
+            if (!parsed.length) {
+                const { stdout: traw } = await sh(
+                    `chroot ${HOST} /usr/bin/lshw -quiet -class memory 2>/dev/null || true`,
+                    EXE_OPTS
+                );
+                parsed = parseLshwMemory(traw); // siehe Funktion unten
+            }
+
+            if (parsed.length) {
+                ram = parsed;
+                ramtool = "lshw";
+            }
+        } catch {
+            // lshw fehlt / Fehler ignorieren
+        }
+    }
+
+
     return { host, os, kernel, cpu, gpu, ram, ramtool };
 }
 
