@@ -31,6 +31,13 @@
     transform: translateX(0);
 }
 
+
+#info-drawer hr {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px dashed #0f0;
+}
+
 #info-drawer .panel {
     height: 100%;
     background: var(--drawer-bg);
