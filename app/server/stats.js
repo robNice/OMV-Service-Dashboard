@@ -85,7 +85,8 @@ function parseLshwMemory(text) {
 async function readSystemInfo() {
     // Basisinfos
     const [{ stdout: h1 }, { stdout: os1 }, { stdout: k1 }, { stdout: c1 }, { stdout: g1 }] = await Promise.all([
-        sh(`chroot ${HOST} /bin/hostname`, EXE_OPTS),
+        // sh(`chroot ${HOST} /bin/hostname`, EXE_OPTS),
+        sh(`chroot ${HOST} /bin/cat /etc/hostname || chroot ${HOST} /bin/cat /proc/sys/kernel/hostname`, EXE_OPTS),
         sh(`chroot ${HOST} /bin/bash -lc "grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '\\\"'"`, EXE_OPTS),
         sh(`chroot ${HOST} /bin/uname -r`, EXE_OPTS),
         sh(`chroot ${HOST} /bin/bash -lc "grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2- | sed 's/^ //'"`, EXE_OPTS),
