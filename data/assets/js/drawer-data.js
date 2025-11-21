@@ -110,7 +110,7 @@
                 )
             }
         }
-        setHtml('data-ram-info', ramInfoArray.join('<br />'));
+        setHtml('[data-ram-info]', ramInfoArray.join('<br />'));
     }
 
     async function loadStats() {
