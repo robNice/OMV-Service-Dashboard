@@ -1,4 +1,4 @@
-const version = "1.0.0-17";
+const version = "1.0.0-17"+'-'+Math.random().toString();
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
