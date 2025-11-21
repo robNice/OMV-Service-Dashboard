@@ -119,6 +119,9 @@ async function readSystemInfo() {
         } catch { /* lshw nicht vorhanden */ }
     }
 
+    return { host, os, kernel, cpu, gpu, ram, ramtool };
+}
+
 
 async function readMem() {
     const txt = await readFileSafe(`${PROC}/meminfo`);
