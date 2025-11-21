@@ -37,19 +37,11 @@ function loadConfig() {
 }
 
 
-async function chrootOut(HOST, file, args = []) {
-    const { stdout } = await runFile("chroot", [HOST, file, ...args], EXE_OPTS);
-    return String(stdout || "").trim();
-}
 
-async function chrootBash(HOST, cmd) {
-    // wenn du Pipes/Greps brauchst
-    const { stdout } = await runFile("chroot", [HOST, "/bin/bash", "-lc", cmd], EXE_OPTS);
-    return String(stdout || "").trim();
-}
 
+// ========== Parser (JS) ==========
 function parseDmidecodeMemory(text) {
-    const lines = text.split(/\r?\n/);
+    const lines = String(text || "").split(/\r?\n/);
     const out = [];
     let inDev = false, slot="", size="", speed="", manufacturer="", part="", serial="";
     const push = () => { if (size && !/^no module/i.test(size)) out.push({ slot,size,speed,manufacturer,part,serial }); };
@@ -60,18 +52,18 @@ function parseDmidecodeMemory(text) {
         if (!inDev) continue;
         let m;
         if ((m = line.match(/^Locator:\s*(.+)$/i)))        { slot = m[1].trim(); continue; }
-        if ((m = line.match(/^Size:\s*(.+)$/i)))           { size = m[1].trim(); continue; }
-        if ((m = line.match(/^Speed:\s*(.+)$/i)))          { speed = m[1].trim(); continue; }
-        if ((m = line.match(/^Manufacturer:\s*(.+)$/i)))   { manufacturer = m[1].trim(); continue; }
-        if ((m = line.match(/^Part Number:\s*(.+)$/i)))    { part = m[1].trim(); continue; }
-        if ((m = line.match(/^Serial Number:\s*(.+)$/i)))  { serial = m[1].trim(); continue; }
+        if ((m = line.match/^Size:\s*(.+)$/i))            { size = m[1].trim(); continue; }
+        if ((m = line.match(/^Speed:\s*(.+)$/i)))         { speed = m[1].trim(); continue; }
+        if ((m = line.match(/^Manufacturer:\s*(.+)$/i)))  { manufacturer = m[1].trim(); continue; }
+        if ((m = line.match(/^Part Number:\s*(.+)$/i)))   { part = m[1].trim(); continue; }
+        if ((m = line.match(/^Serial Number:\s*(.+)$/i))) { serial = m[1].trim(); continue; }
     }
     if (inDev) push();
     return out;
 }
 
 function parseLshwMemory(text) {
-    const lines = text.split(/\r?\n/);
+    const lines = String(text || "").split(/\r?\n/);
     const out = [];
     let inBank=false, slot="", size="", manufacturer="", serial="";
     const push = () => { if (size) out.push({ slot, size, manufacturer, serial }); };
@@ -89,33 +81,43 @@ function parseLshwMemory(text) {
     return out;
 }
 
-async function readSystemInfo(HOST) {
-    const [hostn, osPretty, kernel, cpu, gpu] = await Promise.all([
-        chrootOut(HOST, "/bin/hostname"),
-        chrootBash(HOST, `grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '"'`),
-        chrootOut(HOST, "/bin/uname", ["-r"]),
-        chrootBash(HOST, `grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2- | sed 's/^ //'`),
-        chrootBash(HOST, `lspci | grep -i 'vga\\|3d' | cut -d: -f3- | sed 's/^ //' || true`)
+// ========== Systeminfo (gleiches Muster wie readSmartListViaOmvRpc) ==========
+async function readSystemInfo() {
+    // Basisinfos
+    const [{ stdout: h1 }, { stdout: os1 }, { stdout: k1 }, { stdout: c1 }, { stdout: g1 }] = await Promise.all([
+        sh(`chroot ${HOST} /bin/hostname`, EXE_OPTS),
+        sh(`chroot ${HOST} /bin/bash -lc "grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '\\\"'"`, EXE_OPTS),
+        sh(`chroot ${HOST} /bin/uname -r`, EXE_OPTS),
+        sh(`chroot ${HOST} /bin/bash -lc "grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2- | sed 's/^ //'"`, EXE_OPTS),
+        sh(`chroot ${HOST} /bin/bash -lc "lspci | grep -i 'vga\\|3d' | cut -d: -f3- | sed 's/^ //'"`, EXE_OPTS).catch(() => ({ stdout: "" })),
     ]);
 
+    const host  = String(h1 || "").trim();
+    const os    = String(os1 || "").trim();
+    const kernel= String(k1 || "").trim();
+    const cpu   = String(c1 || "").trim();
+    const gpu   = String(g1 || "").trim();
+
+    // RAM: erst dmidecode, Fallback lshw
     let ram = [], ramtool = "";
+
     try {
-        const dmio = await chrootOut(HOST, "/usr/sbin/dmidecode", ["-t", "memory"]);
-        if (/Memory Device\b/.test(dmio)) {
-            ram = parseDmidecodeMemory(dmio);
-            if (ram.length) ramtool = "dmidecode";
+        const { stdout: dmi } = await sh(`chroot ${HOST} /usr/sbin/dmidecode -t memory`, EXE_OPTS);
+        if (/Memory Device\b/.test(dmi)) {
+            const parsed = parseDmidecodeMemory(dmi);
+            if (parsed.length) { ram = parsed; ramtool = "dmidecode"; }
         }
-    } catch {}
+    } catch { /* dmidecode nicht vorhanden/kein Zugriff */ }
 
     if (!ram.length) {
         try {
-            const lshw = await chrootOut(HOST, "/usr/bin/lshw", ["-class", "memory"]);
+            const { stdout: lshw } = await sh(`chroot ${HOST} /usr/bin/lshw -class memory`, EXE_OPTS);
             const parsed = parseLshwMemory(lshw);
             if (parsed.length) { ram = parsed; ramtool = "lshw"; }
-        } catch {}
+        } catch { /* lshw nicht vorhanden */ }
     }
 
-    return { host: hostn||"", os: osPretty||"", kernel: kernel||"", cpu: (cpu||"").trim(), gpu: (gpu||"").trim(), ram, ramtool };
+    return { host, os, kernel, cpu, gpu, ram, ramtool };
 }
 
 
@@ -366,7 +368,7 @@ async function getStats() {
         readOMV(),
         readDockerContainers(),
         readPhysicalDrives(),
-        readSystemInfo(HOST),
+        readSystemInfo(),
     ]);
 
     return {
