@@ -102,21 +102,25 @@ async function readSystemInfo() {
     // RAM: erst dmidecode, Fallback lshw
     let ram = [], ramtool = "";
 
-    try {
-        const { stdout: dmi } = await sh(`chroot ${HOST} /usr/sbin/dmidecode -t memory 2>/dev/null`, EXE_OPTS);
-        if (/Memory Device\b/.test(dmi)) {
-            const parsed = parseDmidecodeMemory(dmi);   // deine Parser-Funktion (fixe match(...))
-            if (parsed.length > 0) { ram = parsed; ramtool = "dmidecode"; }
-        }
-    } catch { /* Permission/Fehler ignorieren */ }
 
-// 2) Fallback lshw
-    if (ram.length === 0) {
-        try {
-            const { stdout: lshw } = await sh(`chroot ${HOST} /usr/bin/lshw -quiet -class memory 2>/dev/null`, EXE_OPTS);
-            const parsed = parseLshwMemory(lshw);       // deine Parser-Funktion (fixe match(...))
-            if (parsed.length > 0) { ram = parsed; ramtool = "lshw"; }
-        } catch { /* lshw nicht vorhanden */ }
+    try {
+        // 1) dmidecode im chroot finden und ausführen; Fehler nicht eskalieren
+        const { stdout: dmiOut } = await sh(
+            `chroot ${HOST} /bin/bash -lc 'DMID=$(command -v dmidecode || echo); ` +
+            `if [ -n "$DMID" ]; then LC_ALL=C LANG=C "$DMID" -t memory || true; fi'`,
+            EXE_OPTS
+        );
+
+        const dmi = String(dmiOut || "");
+        if (dmi && /Memory Device\b/i.test(dmi)) {
+            const parsed = parseDmidecodeMemory(dmi);  // deine Parser-Funktion (mit match(...))
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                ram = parsed;
+                ramtool = "dmidecode";
+            }
+        }
+    } catch {
+        // ignorieren – ram bleibt []
     }
 
     return { host, os, kernel, cpu, gpu, ram, ramtool };
