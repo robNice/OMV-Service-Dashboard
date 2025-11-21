@@ -43,24 +43,52 @@ function loadConfig() {
 function parseDmidecodeMemory(text) {
     const lines = String(text || "").split(/\r?\n/);
     const out = [];
-    let inDev = false, slot="", size="", speed="", manufacturer="", part="", serial="";
-    const push = () => { if (size && !/^no module/i.test(size)) out.push({ slot,size,speed,manufacturer,part,serial }); };
+
+    let inDev = false;
+    let slot = "", bank = "", size = "", speed = "", manufacturer = "", part = "", serial = "";
+
+    const push = () => {
+        const sz = (size || "").trim();
+        if (!sz || /^no module/i.test(sz)) return;         // leere/„No Module Installed“ überspringen
+        const loc = slot || bank || "";                    // Fallback: Bank Locator verwenden
+        out.push({ slot: loc, size: sz, speed: (speed || "").trim(),
+            manufacturer: (manufacturer || "").trim(),
+            part: (part || "").trim(),
+            serial: (serial || "").trim() });
+    };
 
     for (const raw of lines) {
-        const line = raw.trimRight();
-        if (/^Memory Device\b/.test(line)) { if (inDev) push(); inDev = true; slot=size=speed=manufacturer=part=serial=""; continue; }
+        const line = raw.trimEnd();
+
+        // Block-Start
+        if (/^Memory Device\b/i.test(line)) {
+            if (inDev) push();
+            inDev = true;
+            slot = bank = size = speed = manufacturer = part = serial = "";
+            continue;
+        }
         if (!inDev) continue;
+
         let m;
-        if ((m = line.match(/^Locator:\s*(.+)$/i)))        { slot = m[1].trim(); continue; }
-        if ((m = line.match(/^Size:\s*(.+)$/i)))           { size = m[1].trim(); continue; }
-        if ((m = line.match(/^Speed:\s*(.+)$/i)))         { speed = m[1].trim(); continue; }
-        if ((m = line.match(/^Manufacturer:\s*(.+)$/i)))  { manufacturer = m[1].trim(); continue; }
-        if ((m = line.match(/^Part Number:\s*(.+)$/i)))   { part = m[1].trim(); continue; }
-        if ((m = line.match(/^Serial Number:\s*(.+)$/i))) { serial = m[1].trim(); continue; }
+        if ((m = line.match(/^Locator:\s*(.+)$/i)))              { slot = m[1].trim(); continue; }
+        if ((m = line.match(/^Bank Locator:\s*(.+)$/i)))         { bank = m[1].trim(); continue; }
+
+        // "Size: 8192 MB" oder "Size: 8 GB" oder "Size: No Module Installed"
+        if ((m = line.match(/^Size:\s*(.+)$/i)))                 { size = m[1].trim(); continue; }
+
+        // Speed kann als "Speed:" oder "Configured Memory Speed:" kommen
+        if ((m = line.match(/^Speed:\s*(.+)$/i)))                { speed = m[1].trim(); continue; }
+        if ((m = line.match(/^Configured Memory Speed:\s*(.+)$/i))) { speed = m[1].trim(); continue; }
+
+        if ((m = line.match(/^Manufacturer:\s*(.+)$/i)))         { manufacturer = m[1].trim(); continue; }
+        if ((m = line.match(/^Part Number:\s*(.+)$/i)))          { part = m[1].trim(); continue; }
+        if ((m = line.match(/^Serial Number:\s*(.+)$/i)))        { serial = m[1].trim(); continue; }
     }
     if (inDev) push();
+
     return out;
 }
+
 
 function parseLshwMemory(text) {
     const lines = String(text || "").split(/\r?\n/);
