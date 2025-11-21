@@ -52,7 +52,7 @@ function parseDmidecodeMemory(text) {
         if (!inDev) continue;
         let m;
         if ((m = line.match(/^Locator:\s*(.+)$/i)))        { slot = m[1].trim(); continue; }
-        if ((m = line.match/^Size:\s*(.+)$/i))            { size = m[1].trim(); continue; }
+        if ((m = line.match(/^Size:\s*(.+)$/i)))           { size = m[1].trim(); continue; }
         if ((m = line.match(/^Speed:\s*(.+)$/i)))         { speed = m[1].trim(); continue; }
         if ((m = line.match(/^Manufacturer:\s*(.+)$/i)))  { manufacturer = m[1].trim(); continue; }
         if ((m = line.match(/^Part Number:\s*(.+)$/i)))   { part = m[1].trim(); continue; }
