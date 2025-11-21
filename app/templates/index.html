@@ -56,7 +56,6 @@
                         <div class="kv"><span>{{__.label.cpu}}</span><span class="chip" data-cpu>–</span></div>
                         <div class="kv"><span>{{__.label.gpu}}</span><span class="chip" data-gpu>–</span></div>
 
-
                         <div class="kv" title="{{__.tooltip.systemLoad}}"><span>{{__.label.cpuLoad}}</span><span class="chip" data-load>–</span></div>
                     </div>
                     <hr />
@@ -67,7 +66,11 @@
                                 <span>{{__.label.used}}</span><span class="chip" data-label-for="ram-usage">–%</span>
                             </div>
                             <div id="ram-usage" class="bar"><i></i></div>
-                            <div style="text-align:right;font-size:.8rem;opacity:.8" data-ram-used>–</div>
+<!--                            <div style="text-align:right;font-size:.8rem;opacity:.8" data-ram-used>–</div>-->
+                            <div id="ram-info">
+                                <div data-ram-info></div>
+                                <div data-ram-used></div>
+                            </div>
                         </div>
                     </div>
 

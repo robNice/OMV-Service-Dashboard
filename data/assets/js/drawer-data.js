@@ -14,6 +14,7 @@
     }
 
     function setText(sel, val) { const el = $(sel); if (el) el.textContent = val; }
+    function setHtml(sel, val) { const el = $(sel); if (el) el.innerHTML = val; }
 
     function usageColor(p) {
         if (p >= 85) return "linear-gradient(to right,#ef4444,#b91c1c)";
@@ -100,6 +101,16 @@
         setText("[data-kernel]",system.kernel );
         setText("[data-cpu]",system.cpu );
         setText("[data-gpu]",system.gpu );
+        let ramInfoArray = [];
+        if( system.ram && system.ram.length > 0 )  {
+            for( let i in system.ram )  {
+                let ramInfo = system.ram[i];
+                ramInfoArray.push(
+                    ramInfo.size + ' / ' + ramInfo.speed + ' / ' +ramInfo.manufacturer + ' / ' + ramInfo.slot
+                )
+            }
+        }
+        setHtml('data-ram-info', ramInfoArray.join('<br />'));
     }
 
     async function loadStats() {
