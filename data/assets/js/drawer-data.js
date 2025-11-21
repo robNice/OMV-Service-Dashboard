@@ -132,8 +132,8 @@
             for( let i in system.ram )  {
                 let ramInfo = system.ram[i];
                 let node = createRamInfoClone();
-                node.querySelector('.label').text(ramInfo.slot);
-                node.querySelector('.chip').text( ramInfo.size + ' / ' + ramInfo.speed + ' / ' +ramInfo.manufacturer );
+                node.querySelector('.label').innerText = ramInfo.slot;
+                node.querySelector('.chip').innerText = ramInfo.size + ' / ' + ramInfo.speed + ' / ' +ramInfo.manufacturer;
                 addRamInfo(node);
 
             }
