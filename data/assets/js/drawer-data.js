@@ -96,6 +96,10 @@
 
     function setSystem(system)  {
         setText("[data-host]",system.host );
+        setText("[data-os]",system.os );
+        setText("[data-kernel]",system.kernel );
+        setText("[data-cpu]",system.cpu );
+        setText("[data-gpu]",system.gpu );
     }
 
     async function loadStats() {
