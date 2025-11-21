@@ -132,22 +132,29 @@ async function readSystemInfo() {
     console.log(HOST);
 
     try {
+        // Absoluter Pfad + Fallback, Fehler nicht eskalieren
         const { stdout: dmiOut } = await sh(
-            `chroot ${HOST} /bin/bash -lc 'DMID=$(command -v dmidecode || echo); ` +
+            `chroot ${HOST} /bin/bash -lc 'DMID=""; ` +
+            `if [ -x /usr/sbin/dmidecode ]; then DMID=/usr/sbin/dmidecode; ` +
+            `elif [ -x /sbin/dmidecode ]; then DMID=/sbin/dmidecode; fi; ` +
             `if [ -n "$DMID" ]; then LC_ALL=C LANG=C "$DMID" -t memory || true; fi'`,
             EXE_OPTS
         );
 
         const dmi = String(dmiOut || "");
         if (dmi && /Memory Device\b/i.test(dmi)) {
-            const parsed = parseDmidecodeMemory(dmi);
+            const parsed = parseDmidecodeMemory(dmi);   // -> deine korrigierte Parser-Funktion
             if (Array.isArray(parsed) && parsed.length > 0) {
                 ram = parsed;
                 ramtool = "dmidecode";
             }
         }
-        console.log('[dmidecode bytes]', dmi.length, 'devices', (dmi.match(/Memory Device\b/gi) || []).length);
-    } catch { /* ignorieren */ }
+
+        // --- optionales Debugging, kurzzeitig einschalten ---
+        // console.log('[dmidecode] bytes=', dmi.length, 'devices=', (dmi.match(/Memory Device/gi)||[]).length);
+    } catch {
+        // ignorieren: ram bleibt []
+    }
 
     return { host, os, kernel, cpu, gpu, ram, ramtool };
 }
