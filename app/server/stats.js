@@ -41,53 +41,40 @@ function loadConfig() {
 
 // ========== Parser (JS) ==========
 function parseDmidecodeMemory(text) {
-    const lines = String(text || "").split(/\r?\n/);
     const out = [];
+    const src = String(text || "");
 
-    let inDev = false;
-    let slot = "", bank = "", size = "", speed = "", manufacturer = "", part = "", serial = "";
+    // In einzelne "Memory Device" Blöcke schneiden (DMI type 17)
+    const devices = src.split(/\n(?=Handle .*DMI type 17,)/g);
 
-    const push = () => {
-        const sz = (size || "").trim();
-        if (!sz || /^no module/i.test(sz)) return;         // leere/„No Module Installed“ überspringen
-        const loc = slot || bank || "";                    // Fallback: Bank Locator verwenden
-        out.push({ slot: loc, size: sz, speed: (speed || "").trim(),
-            manufacturer: (manufacturer || "").trim(),
-            part: (part || "").trim(),
-            serial: (serial || "").trim() });
-    };
+    for (const dev of devices) {
+        if (!/DMI type 17\b/.test(dev)) continue;
 
-    for (const raw of lines) {
-        const line = raw.trimEnd();
+        const mSize = dev.match(/^\s*Size:\s*(.+)$/mi);
+        const size = (mSize && mSize[1] ? mSize[1].trim() : "");
+        if (!size || /^no module/i.test(size)) continue; // leere/No Module skippen
 
-        // Block-Start
-        if (/^Memory Device\b/i.test(line)) {
-            if (inDev) push();
-            inDev = true;
-            slot = bank = size = speed = manufacturer = part = serial = "";
-            continue;
-        }
-        if (!inDev) continue;
+        const mLoc  = dev.match(/^\s*Locator:\s*(.+)$/mi);
+        const mBank = dev.match(/^\s*Bank Locator:\s*(.+)$/mi);
+        const locator = ((mLoc && mLoc[1]) || (mBank && mBank[1]) || "").trim();
 
-        let m;
-        if ((m = line.match(/^Locator:\s*(.+)$/i)))              { slot = m[1].trim(); continue; }
-        if ((m = line.match(/^Bank Locator:\s*(.+)$/i)))         { bank = m[1].trim(); continue; }
+        // Speed: nimm "Configured Memory Speed" wenn vorhanden, sonst "Speed"
+        let speed = "";
+        const mCfg = dev.match(/^\s*Configured Memory Speed:\s*(.+)$/mi);
+        const mSpd = dev.match(/^\s*Speed:\s*(.+)$/mi);
+        if (mCfg && mCfg[1]) speed = mCfg[1].trim();
+        else if (mSpd && mSpd[1]) speed = mSpd[1].trim();
 
-        // "Size: 8192 MB" oder "Size: 8 GB" oder "Size: No Module Installed"
-        if ((m = line.match(/^Size:\s*(.+)$/i)))                 { size = m[1].trim(); continue; }
+        const manufacturer = ((dev.match(/^\s*Manufacturer:\s*(.+)$/mi) || [])[1] || "").trim();
+        const part        = ((dev.match(/^\s*Part Number:\s*(.+)$/mi)     || [])[1] || "").trim();
+        const serial      = ((dev.match(/^\s*Serial Number:\s*(.+)$/mi)   || [])[1] || "").trim();
 
-        // Speed kann als "Speed:" oder "Configured Memory Speed:" kommen
-        if ((m = line.match(/^Speed:\s*(.+)$/i)))                { speed = m[1].trim(); continue; }
-        if ((m = line.match(/^Configured Memory Speed:\s*(.+)$/i))) { speed = m[1].trim(); continue; }
-
-        if ((m = line.match(/^Manufacturer:\s*(.+)$/i)))         { manufacturer = m[1].trim(); continue; }
-        if ((m = line.match(/^Part Number:\s*(.+)$/i)))          { part = m[1].trim(); continue; }
-        if ((m = line.match(/^Serial Number:\s*(.+)$/i)))        { serial = m[1].trim(); continue; }
+        out.push({ slot: locator, size, speed, manufacturer, part, serial });
     }
-    if (inDev) push();
 
     return out;
 }
+
 
 
 function parseLshwMemory(text) {
@@ -132,28 +119,25 @@ async function readSystemInfo() {
     console.log(HOST);
 
     try {
-        // Absoluter Pfad + Fallback, Fehler nicht eskalieren
         const { stdout: dmiOut } = await sh(
-            `chroot ${HOST} /bin/bash -lc 'DMID=""; ` +
-            `if [ -x /usr/sbin/dmidecode ]; then DMID=/usr/sbin/dmidecode; ` +
-            `elif [ -x /sbin/dmidecode ]; then DMID=/sbin/dmidecode; fi; ` +
-            `if [ -n "$DMID" ]; then LC_ALL=C LANG=C "$DMID" -t memory || true; fi'`,
+            // absoluter Pfad, keine Shell-Magie nötig; Fehler werfen wir NICHT
+            `chroot ${HOST} /usr/sbin/dmidecode -t memory 2>/dev/null || true`,
             EXE_OPTS
         );
 
         const dmi = String(dmiOut || "");
-        if (dmi && /Memory Device\b/i.test(dmi)) {
-            const parsed = parseDmidecodeMemory(dmi);   // -> deine korrigierte Parser-Funktion
+        if (dmi && /DMI type 17\b/i.test(dmi)) {
+            const parsed = parseDmidecodeMemory(dmi);
             if (Array.isArray(parsed) && parsed.length > 0) {
                 ram = parsed;
                 ramtool = "dmidecode";
             }
         }
 
-        // --- optionales Debugging, kurzzeitig einschalten ---
-        // console.log('[dmidecode] bytes=', dmi.length, 'devices=', (dmi.match(/Memory Device/gi)||[]).length);
+        // Debug (kurzzeitig anmachen, falls nötig)
+        // console.log('[dmidecode] bytes=', dmi.length, 'devices=', (dmi.match(/DMI type 17/g) || []).length, 'parsed=', ram.length);
     } catch {
-        // ignorieren: ram bleibt []
+        // ignore -> ram bleibt []
     }
 
     return { host, os, kernel, cpu, gpu, ram, ramtool };
