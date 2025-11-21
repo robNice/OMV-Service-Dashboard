@@ -129,7 +129,7 @@ async function readSystemInfo() {
 
     // RAM: erst dmidecode, Fallback lshw
     let ram = [], ramtool = "";
-
+    console.log(HOST);
 
     try {
         const { stdout: dmiOut } = await sh(
