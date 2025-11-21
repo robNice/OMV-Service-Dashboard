@@ -103,23 +103,21 @@ async function readSystemInfo() {
     let ram = [], ramtool = "";
 
     try {
-        const { stdout: dmi } = await sh(`chroot ${HOST} /usr/sbin/dmidecode -t memory`, EXE_OPTS);
+        const { stdout: dmi } = await sh(`chroot ${HOST} /usr/sbin/dmidecode -t memory 2>/dev/null`, EXE_OPTS);
         if (/Memory Device\b/.test(dmi)) {
-            const parsed = parseDmidecodeMemory(dmi);
-            if (parsed.length) { ram = parsed; ramtool = "dmidecode"; }
+            const parsed = parseDmidecodeMemory(dmi);   // deine Parser-Funktion (fixe match(...))
+            if (parsed.length > 0) { ram = parsed; ramtool = "dmidecode"; }
         }
-    } catch { /* dmidecode nicht vorhanden/kein Zugriff */ }
+    } catch { /* Permission/Fehler ignorieren */ }
 
-    if (!ram.length) {
+// 2) Fallback lshw
+    if (ram.length === 0) {
         try {
-            const { stdout: lshw } = await sh(`chroot ${HOST} /usr/bin/lshw -class memory`, EXE_OPTS);
-            const parsed = parseLshwMemory(lshw);
-            if (parsed.length) { ram = parsed; ramtool = "lshw"; }
+            const { stdout: lshw } = await sh(`chroot ${HOST} /usr/bin/lshw -quiet -class memory 2>/dev/null`, EXE_OPTS);
+            const parsed = parseLshwMemory(lshw);       // deine Parser-Funktion (fixe match(...))
+            if (parsed.length > 0) { ram = parsed; ramtool = "lshw"; }
         } catch { /* lshw nicht vorhanden */ }
     }
-
-    return { host, os, kernel, cpu, gpu, ram, ramtool };
-}
 
 
 async function readMem() {
