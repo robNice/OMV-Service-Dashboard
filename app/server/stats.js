@@ -141,7 +141,7 @@ async function readSystemInfo() {
     }
 
     // --- Fallback: lshw (JSON bevorzugt, sonst Text) ---
-    if ( 1 === 1 /*!ram.length*/) {
+    if (!ram.length) {
         try {
             // 1) JSON versuchen (bei neueren lshw-Versionen vorhanden)
             const { stdout: jraw } = await sh(

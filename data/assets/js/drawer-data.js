@@ -135,6 +135,10 @@
         if (s.uptime) setText("[data-uptime]", `${s.uptime.days} `+window.I18N_LABELS.DAYS+` ${s.uptime.hours} `+window.I18N_LABELS.HOURS_SHORT);
         if (s.load)   setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
 
+        if( s.host )  setText(['data-host'], s.host);
+
+
+
         if (s.container) {
             setText("[data-omv-version]", s.container.omv || "–");
             const plugins = Array.isArray(s.container.plugins) ? s.container.plugins.slice(0,5).map(p => `${p.name} ${p.version}`).join(" · ") : "–";
