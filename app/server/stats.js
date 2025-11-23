@@ -169,7 +169,7 @@ async function readSystemInfo() {
         console.error('Dmidecode failed.');
     }
 
-    if (!ram.length) {
+    if (1===1 || !ram.length) {
         try {
             const { stdout: jraw } = await sh(
                 `chroot ${HOST} /bin/bash -lc "command -v lshw >/dev/null 2>&1 && lshw -quiet -json -class memory 2>/dev/null || true"`,
