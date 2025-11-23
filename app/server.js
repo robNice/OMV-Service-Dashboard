@@ -1,4 +1,4 @@
-const version = "1.0.0-19";//+'-'+Math.random().toString();
+const version = "1.0.0-19";  // my lazy ass anti cache: +'-'+Math.random().toString();
 const express = require("express");
 const fs = require("fs");
 const path = require("path");

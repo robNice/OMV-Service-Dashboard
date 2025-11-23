@@ -21,6 +21,7 @@ const clamp       = (n, a, b) => Math.max(a, Math.min(b, n));
 const pct         = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
 
+
 const SMART_PARAMS = {
     start: 0,
     limit: -1,
@@ -37,14 +38,10 @@ function loadConfig() {
 }
 
 
-
-
-// ========== Parser (JS) ==========
 function parseDmidecodeMemory(text) {
     const out = [];
     const src = String(text || "");
 
-    // In einzelne "Memory Device" Blöcke schneiden (DMI type 17)
     const devices = src.split(/\n(?=Handle .*DMI type 17,)/g);
 
     for (const dev of devices) {
@@ -52,13 +49,12 @@ function parseDmidecodeMemory(text) {
 
         const mSize = dev.match(/^\s*Size:\s*(.+)$/mi);
         const size = (mSize && mSize[1] ? mSize[1].trim() : "");
-        if (!size || /^no module/i.test(size)) continue; // leere/No Module skippen
+        if (!size || /^no module/i.test(size)) continue;
 
         const mLoc  = dev.match(/^\s*Locator:\s*(.+)$/mi);
         const mBank = dev.match(/^\s*Bank Locator:\s*(.+)$/mi);
         const locator = ((mLoc && mLoc[1]) || (mBank && mBank[1]) || "").trim();
 
-        // Speed: nimm "Configured Memory Speed" wenn vorhanden, sonst "Speed"
         let speed = "";
         const mCfg = dev.match(/^\s*Configured Memory Speed:\s*(.+)$/mi);
         const mSpd = dev.match(/^\s*Speed:\s*(.+)$/mi);
@@ -74,8 +70,6 @@ function parseDmidecodeMemory(text) {
 
     return out;
 }
-
-
 
 function parseLshwMemory(text) {
     const lines = String(text || "").split(/\r?\n/);
@@ -96,11 +90,8 @@ function parseLshwMemory(text) {
     return out;
 }
 
-// ========== Systeminfo (gleiches Muster wie readSmartListViaOmvRpc) ==========
 async function readSystemInfo() {
-    // Basisinfos
     const [{ stdout: h1 }, { stdout: os1 }, { stdout: k1 }, { stdout: c1 }, { stdout: g1 }] = await Promise.all([
-        // sh(`chroot ${HOST} /bin/hostname`, EXE_OPTS),
         sh(`chroot ${HOST} /bin/cat /etc/hostname || chroot ${HOST} /bin/cat /proc/sys/kernel/hostname`, EXE_OPTS),
         sh(`chroot ${HOST} /bin/bash -lc "grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '\\\"'"`, EXE_OPTS),
         sh(`chroot ${HOST} /bin/uname -r`, EXE_OPTS),
@@ -114,13 +105,10 @@ async function readSystemInfo() {
     const cpu   = String(c1 || "").trim();
     const gpu   = String(g1 || "").trim();
 
-    // RAM: erst dmidecode, Fallback lshw
     let ram = [], ramtool = "";
-    console.log(HOST);
 
     try {
         const { stdout: dmiOut } = await sh(
-            // absoluter Pfad, keine Shell-Magie nötig; Fehler werfen wir NICHT
             `chroot ${HOST} /usr/sbin/dmidecode -t memory 2>/dev/null || true`,
             EXE_OPTS
         );
@@ -133,17 +121,12 @@ async function readSystemInfo() {
                 ramtool = "dmidecode";
             }
         }
-
-        // Debug (kurzzeitig anmachen, falls nötig)
-        // console.log('[dmidecode] bytes=', dmi.length, 'devices=', (dmi.match(/DMI type 17/g) || []).length, 'parsed=', ram.length);
     } catch {
-        // ignore -> ram bleibt []
+        console.error('Dmidecode failed.');
     }
 
-    // --- Fallback: lshw (JSON bevorzugt, sonst Text) ---
-    if (!ram.length) {
+    if (1===1 || !ram.length) {
         try {
-            // 1) JSON versuchen (bei neueren lshw-Versionen vorhanden)
             const { stdout: jraw } = await sh(
                 `chroot ${HOST} /bin/bash -lc "command -v lshw >/dev/null 2>&1 && lshw -quiet -json -class memory 2>/dev/null || true"`,
                 EXE_OPTS
@@ -154,7 +137,6 @@ async function readSystemInfo() {
                 try {
                     const jobj = JSON.parse(jraw);
 
-                    // rekursiv alle *-bank Knoten einsammeln
                     const banks = [];
                     (function walk(n) {
                         if (!n || typeof n !== "object") return;
@@ -164,19 +146,16 @@ async function readSystemInfo() {
 
                     parsed = banks
                         .map(n => {
-                            // lshw -json gibt Größe oft als Bytes (number) und/oder als string in 'size'/'description'
                             const slot =
                                 (n.slot && String(n.slot)) ||
                                 (n.id && String(n.id).replace(/^bank:/i, "").trim()) ||
                                 "";
                             const manufacturer = (n.vendor && String(n.vendor)) || "";
                             const serial = (n.serial && String(n.serial)) || "";
-                            // Versuche “size” lesbar zu bekommen; wenn nur Bytes da sind, konvertiere grob zu MB/GB Anzeige
                             let size = "";
                             if (n.size != null) {
                                 const bytes = Number(n.size);
                                 if (Number.isFinite(bytes) && bytes > 0) {
-                                    // einfache menschenlesbare Größe (deckt deinen Drawer-Fall ab, nicht supergenau)
                                     const units = ["B","KB","MB","GB","TB","PB"];
                                     let i = 0, x = bytes;
                                     while (x >= 1024 && i < units.length - 1) { x /= 1024; i++; }
@@ -185,22 +164,22 @@ async function readSystemInfo() {
                                     size = String(n.size);
                                 }
                             } else if (n.description) {
-                                // manchmal steht die Größe in der description
                                 size = String(n.description);
                             }
                             return size ? { slot, size, manufacturer, serial } : null;
                         })
                         .filter(Boolean);
-                } catch {}
+                } catch {
+                    console.error('lshw failed.');
+                }
             }
 
-            // 2) Falls JSON nicht ging/leer war: Textausgabe parsen
             if (!parsed.length) {
                 const { stdout: traw } = await sh(
                     `chroot ${HOST} /usr/bin/lshw -quiet -class memory 2>/dev/null || true`,
                     EXE_OPTS
                 );
-                parsed = parseLshwMemory(traw); // siehe Funktion unten
+                parsed = parseLshwMemory(traw);
             }
 
             if (parsed.length) {
@@ -208,14 +187,12 @@ async function readSystemInfo() {
                 ramtool = "lshw";
             }
         } catch {
-            // lshw fehlt / Fehler ignorieren
+            console.error('lshw not installed.');
         }
     }
 
-
     return { host, os, kernel, cpu, gpu, ram, ramtool };
 }
-
 
 async function readMem() {
     const txt = await readFileSafe(`${PROC}/meminfo`);
