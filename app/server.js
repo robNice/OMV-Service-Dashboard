@@ -7,25 +7,11 @@ const app = express();
 const {getStats} = require("./server/stats"); // <— neu
 
 const PORT = 3000;
-const { translateHtmlI18n, withLocale } = require('./lib/i18n-util');
-const i18n = require('i18n');
-i18n.configure({
-    locales: ['en-GB', 'de-DE', 'fr-FR'],
-    defaultLocale: 'en-GB',
-    directory: '/data/i18n',
-    objectNotation: true,
-    header: 'accept-language',
-    register: global,
-    fallbacks: {
-        'en': 'en-GB',
-        'en-US': 'en-GB',
-        'de': 'de-DE',
-        'fr': 'fr-FR',
-    },
-    updateFiles: false,
-    syncFiles: false
-});
-app.use(i18n.init);
+
+const { initI18n } = require('./lib/i18n-config');
+initI18n({ app }); // konfiguriert i18n & registriert app.use(i18n.init)
+
+const { translateHtmlI18n } = require('./lib/i18n-util');
 
 app.use("/assets", express.static("/data/assets", {
     maxAge: "1h",

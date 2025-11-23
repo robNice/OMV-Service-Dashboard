@@ -2,24 +2,24 @@
  * i18n-util.js
  * Reusable helpers for server-side translations in templates and utilities.
  *
- * Usage:
- *   const { translateHtmlI18n, withLocale, i18n } = require('./lib/i18n-util');
- *   // Make sure i18n is configured once in server.js (i18n.configure(...); app.use(i18n.init);)
+ * Requires i18n to be configured once via initI18n() from i18n-config.
  */
 
 'use strict';
 
-const i18n = require('i18n');
+const { getI18n } = require('./i18n-config');
 
 /**
  * Replace {{__.path.to.key}} or {{__.path.to.key|{"name":"Manfred"}} in a given HTML string.
- * - Uses the shared i18n instance (configured elsewhere) and supports a temporary locale override.
+ * - Uses the shared i18n instance and supports a temporary locale override.
  */
 function translateHtmlI18n(html, { locale } = {}) {
   if (typeof html !== 'string' || html.length === 0) return html || '';
 
+  const i18n = getI18n();
+
   let prevLocale;
-  if (locale) {
+  if (locale && typeof i18n.getLocale === 'function') {
     try { prevLocale = i18n.getLocale(); } catch {}
     try { i18n.setLocale(locale); } catch {}
   }
@@ -32,12 +32,11 @@ function translateHtmlI18n(html, { locale } = {}) {
     if (jsonArgs) {
       try { vars = JSON.parse(jsonArgs); } catch {}
     }
-    // Use i18n.__ directly to avoid relying on global __
     const val = i18n.__(key, vars);
     return (typeof val === 'string' && val.length) ? val : `??${key}??`;
   });
 
-  if (locale) {
+  if (locale && typeof i18n.setLocale === 'function') {
     try { i18n.setLocale(prevLocale); } catch {}
   }
   return out;
@@ -48,6 +47,7 @@ function translateHtmlI18n(html, { locale } = {}) {
  * Handy for logging or ad-hoc translations without a request.
  */
 function withLocale(locale, fn) {
+  const i18n = getI18n();
   const hadLocale = typeof i18n.getLocale === 'function';
   const prev = hadLocale ? i18n.getLocale() : undefined;
   try {
@@ -61,5 +61,4 @@ function withLocale(locale, fn) {
 module.exports = {
   translateHtmlI18n,
   withLocale,
-  i18n, // export the shared instance in case consumers need i18n.__ directly
 };
