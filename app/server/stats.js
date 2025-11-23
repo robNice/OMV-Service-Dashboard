@@ -20,6 +20,10 @@ const statfsSafe  = async (p) => { try { return await fs.statfs(p); } catch { re
 const clamp       = (n, a, b) => Math.max(a, Math.min(b, n));
 const pct         = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
+const { initI18n } = require('./lib/i18n-config');
+initI18n();
+const { translateTextI18n, withLocale } = require('./lib/i18n-util');
+
 
 
 const SMART_PARAMS = {

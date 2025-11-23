@@ -9,9 +9,8 @@ const {getStats} = require("./server/stats"); // <— neu
 const PORT = 3000;
 
 const { initI18n } = require('./lib/i18n-config');
-initI18n({ app }); // konfiguriert i18n & registriert app.use(i18n.init)
-
-const { translateHtmlI18n } = require('./lib/i18n-util');
+initI18n({ app });
+const { translateTextI18n } = require('./lib/i18n-util');
 
 app.use("/assets", express.static("/data/assets", {
     maxAge: "1h",
@@ -77,7 +76,7 @@ function renderSection(section) {
  * @returns {*}
  */
 function setTemplate( req, template, backlink, version, title, cards )  {
-    return  translateHtmlI18n(
+    return  translateTextI18n(
         template
         .replace(/{{BACKLINK}}/g, backlink)
         .replace(/{{VERSION}}/g, version)

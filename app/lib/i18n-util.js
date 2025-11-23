@@ -1,10 +1,7 @@
 /**
  * i18n-util.js
- * Reusable helpers for server-side translations in templates and utilities.
- *
- * Requires i18n to be configured once via initI18n() from i18n-config.
+ * Reusable helpers for server-side translations using the shared i18n instance.
  */
-
 'use strict';
 
 const { getI18n } = require('./i18n-config');
@@ -13,7 +10,7 @@ const { getI18n } = require('./i18n-config');
  * Replace {{__.path.to.key}} or {{__.path.to.key|{"name":"Manfred"}} in a given HTML string.
  * - Uses the shared i18n instance and supports a temporary locale override.
  */
-function translateHtmlI18n(html, { locale } = {}) {
+function translateTextI18n(html, { locale } = {}) {
   if (typeof html !== 'string' || html.length === 0) return html || '';
 
   const i18n = getI18n();
@@ -24,7 +21,6 @@ function translateHtmlI18n(html, { locale } = {}) {
     try { i18n.setLocale(locale); } catch {}
   }
 
-  // {{__.key.path}}  or  {{__.key.path|{"a":1}}  (JSON args optional)
   const rx = /\{\{\s*__\.([a-zA-Z0-9_.-]+)(?:\s*\|\s*(\{[\s\S]*?\}))?\s*\}\}/g;
 
   const out = html.replace(rx, (_m, key, jsonArgs) => {
@@ -59,6 +55,6 @@ function withLocale(locale, fn) {
 }
 
 module.exports = {
-  translateHtmlI18n,
+    translateTextI18n,
   withLocale,
 };
