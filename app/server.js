@@ -7,7 +7,7 @@ const app = express();
 const {getStats} = require("./server/stats"); // <— neu
 
 const PORT = 3000;
-
+const { normalizeRamModules } = require('./lib/ramsize-util');
 const { initI18n } = require('./lib/i18n-config');
 initI18n({ app });
 const { translateTextI18n } = require('./lib/i18n-util');
@@ -112,7 +112,12 @@ app.head("/favicon.ico", (req, res) => res.status(200).end());
 
 app.get("/api/stats", async (req, res) => {
     try {
+
         const data = await getStats();
+        const locale = req.getLocale ? req.getLocale() : 'en-GB';
+        if (data.system && Array.isArray(data.system.ram)) {
+            data.system.ram = normalizeRamModules(data.system.ram, { locale });
+        }
         res.set("Cache-Control", "no-store");
         res.json(data);
     } catch (err) {

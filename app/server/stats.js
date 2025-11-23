@@ -501,7 +501,7 @@ async function getStats() {
         container,
         containers,
         disks: drives,
-        system
+        system: system
     };
 }
 
