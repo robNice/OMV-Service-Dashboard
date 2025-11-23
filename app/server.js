@@ -60,7 +60,7 @@ function renderSection(section) {
     return `
     <div class="service">
       <a href="/section/${encodeURIComponent(section.id)}">
-        <img src="/assets/cards/sections/${section.thumbnail}" alt="${section.title}" />
+        <img src="/assets/cards/sections/${section.id}.png" alt="${section.title}" />
         <div class="service-title">${section.title}</div>
       </a>
     </div>`;
