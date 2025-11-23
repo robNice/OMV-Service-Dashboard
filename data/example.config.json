@@ -1,0 +1,6 @@
+{
+  "title": "My Home",
+  "defaultLang": "en-gb",
+  "omvRpcPath": "/usr/sbin/omv-rpc",
+  "omvurl"    : "https://omv.homenet.local"
+}
