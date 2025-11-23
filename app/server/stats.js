@@ -74,21 +74,65 @@ function parseDmidecodeMemory(text) {
 function parseLshwMemory(text) {
     const lines = String(text || "").split(/\r?\n/);
     const out = [];
-    let inBank=false, slot="", size="", manufacturer="", serial="";
-    const push = () => { if (size) out.push({ slot, size, manufacturer, serial }); };
 
-    for (const line of lines) {
-        if (/^\s*\*-bank:/.test(line)) { if (inBank) push(); inBank = true; slot=size=manufacturer=serial=""; continue; }
+    let inBank = false;
+    let slot = "", size = "", manufacturer = "", serial = "";
+
+    const pushIfComplete = () => {
+        const sz = (size || "").trim();
+        if (!sz || /^empty$/i.test(sz)) return;           // leere Slots ignorieren
+        // Falls lshw bei Cache o.ä. landet: Slot "… Cache" ignorieren
+        if (/cache$/i.test(slot || "")) return;
+        out.push({
+            slot: (slot || "").trim(),
+            size: sz,
+            manufacturer: (manufacturer || "").trim(),
+            serial: (serial || "").trim()
+        });
+    };
+
+    for (const raw of lines) {
+        const line = raw;
+        const nodeStart = line.match(/^\s*\*-(\S+):/);
+        if (nodeStart) {
+            const kind = nodeStart[1].toLowerCase();
+            if (inBank) {
+                pushIfComplete();
+                inBank = false;
+            }
+            if (kind === "bank" || kind.startsWith("bank")) {
+                inBank = true;
+                slot = size = manufacturer = serial = "";
+            }
+            continue;
+        }
+
         if (!inBank) continue;
+
         let m;
-        if ((m = line.match(/^\s*slot:\s*(.+)$/i)))    { slot = m[1].trim(); continue; }
-        if ((m = line.match(/^\s*size:\s*(.+)$/i)))    { size = m[1].trim(); continue; }
-        if ((m = line.match(/^\s*vendor:\s*(.+)$/i)))  { manufacturer = m[1].trim(); continue; }
-        if ((m = line.match(/^\s*serial:\s*(.+)$/i)))  { serial = m[1].trim(); continue; }
+        if ((m = line.match(/^\s*slot:\s*(.+)$/i))) {
+            slot = m[1].trim();
+            continue;
+        }
+        if ((m = line.match(/^\s*size:\s*(.+)$/i))) {
+            size = m[1].trim();                              // z.B. "8GiB", "8192MiB"
+            continue;
+        }
+        if ((m = line.match(/^\s*vendor:\s*(.+)$/i))) {
+            manufacturer = m[1].trim();
+            continue;
+        }
+        if ((m = line.match(/^\s*serial:\s*(.+)$/i))) {
+            serial = m[1].trim();
+            continue;
+        }
     }
-    if (inBank) push();
+
+    if (inBank) pushIfComplete();
+
     return out;
 }
+
 
 async function readSystemInfo() {
     const [{ stdout: h1 }, { stdout: os1 }, { stdout: k1 }, { stdout: c1 }, { stdout: g1 }] = await Promise.all([
@@ -125,7 +169,7 @@ async function readSystemInfo() {
         console.error('Dmidecode failed.');
     }
 
-    if (1===1 || !ram.length) {
+    if (!ram.length) {
         try {
             const { stdout: jraw } = await sh(
                 `chroot ${HOST} /bin/bash -lc "command -v lshw >/dev/null 2>&1 && lshw -quiet -json -class memory 2>/dev/null || true"`,
