@@ -1,0 +1,9 @@
+{
+  "locales": ["en-GB", "de-DE", "fr-FR"],
+  "fallbacks": {
+    "en": "en-GB",
+    "en-US": "en-GB",
+    "de": "de-DE",
+    "fr": "fr-FR"
+  }
+}

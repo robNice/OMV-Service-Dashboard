@@ -5,6 +5,12 @@ const path = require("path");
 const { CONFIG_DIR } = require('./lib/paths');
 const { resolveAssetPath } = require('./lib/asset-resolver');
 const app = express();
+
+if (!fs.existsSync('/config')) {
+    console.log('[config] No /config directory found.');
+    console.log('[config] Copy config.example to config to customize the landingpage.');
+}
+
 const {getStats} = require("./server/stats"); // <— neu
 
 const PORT = 3000;
@@ -14,8 +20,6 @@ initI18n({ app });
 const { translateTextI18n } = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
 const {loadConfiguration} = require("./lib/load-config");
-
-
 
 
 /**
@@ -107,7 +111,6 @@ function loadTemplate() {
     return fs.readFileSync("/app/templates/index.html", "utf-8");
 }
 
-
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
     res.set("Cache-Control", "public, max-age=31536000, immutable");
@@ -118,6 +121,7 @@ app.get("/favicon.ico", (req, res) => {
         }
     });
 });
+
 app.head("/favicon.ico", (req, res) => res.status(200).end());
 
 app.get("/api/stats", async (req, res) => {
