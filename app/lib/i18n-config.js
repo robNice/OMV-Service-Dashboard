@@ -12,6 +12,8 @@
 
 const fs = require('fs');
 const i18n = require('i18n');
+const path = require('path');
+const { APP_DATA, CONFIG_DIR } = require('./paths');
 
 let configured = false;
 
@@ -77,22 +79,33 @@ function sanitizeCustom(input) {
 }
 
 /** Load optional override file but only keep allowed keys */
+
 function readCustomizedFromFile() {
-  const file = '/data/i18n-settings.json';
-  try {
-    if (!fs.existsSync(file)) return null;
-    const raw = fs.readFileSync(file, 'utf8');
-    const parsed = JSON.parse(raw);
-    // pick only allowed keys
-    const picked = {};
-    for (const k of Object.keys(parsed)) {
-      if (ALLOWED_CUSTOM_KEYS.has(k)) picked[k] = parsed[k];
+    const candidates = [
+        path.join(CONFIG_DIR, 'i18n-settings.json'),
+        path.join(APP_DATA, 'i18n-settings.json'),
+    ];
+    try {
+        const file = candidates.find(f => fs.existsSync(f));
+        if (!file) return null;
+
+        const raw = fs.readFileSync(file, 'utf8');
+
+        if (file) {
+            console.log(`[i18n] settings loaded from ${file}`);
+        }
+
+        const parsed = JSON.parse(raw);
+        const picked = {};
+        for (const k of Object.keys(parsed)) {
+            if (ALLOWED_CUSTOM_KEYS.has(k)) picked[k] = parsed[k];
+        }
+        return sanitizeCustom(picked);
+    } catch {
+        return null;
     }
-    return sanitizeCustom(picked);
-  } catch {
-    return null;
-  }
 }
+
 
 /**
  * Initialize i18n once. Safe to call multiple times.
