@@ -2,6 +2,7 @@ const version = "1.0.0-19";  // my lazy ass anti cache: +'-'+Math.random().toStr
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const { CONFIG_DIR } = require('./lib/paths');
 const { resolveAssetPath } = require('./lib/asset-resolver');
 const app = express();
 const {getStats} = require("./server/stats"); // <— neu
