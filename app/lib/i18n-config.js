@@ -18,10 +18,8 @@ const EFFECTIVE_I18N_DIR = '/.cached/omv-landingpage-i18n';
 
 let configured = false;
 
-/** --- SYSTEM-RELEVANT (immutable) --- */
 const SYSTEM_CFG = Object.freeze({
   defaultLocale: 'en-GB',
-  // directory: '/data/i18n',
   objectNotation: true,
   header: 'accept-language',
   register: global,
@@ -29,7 +27,6 @@ const SYSTEM_CFG = Object.freeze({
   syncFiles: false,
 });
 
-/** default customized values (can be overridden by /data/i18n-settings.json) */
 const CUSTOM_DEFAULTS = Object.freeze({
   locales: ['en-GB', 'de-DE', 'fr-FR'],
   fallbacks: {
@@ -42,7 +39,6 @@ const CUSTOM_DEFAULTS = Object.freeze({
 
 const ALLOWED_CUSTOM_KEYS = new Set(['locales', 'fallbacks']);
 
-/** Normalize a BCP47-ish tag to consistent casing for files, e.g. en-GB, de-DE */
 function normalizeTag(tag) {
   if (!tag || typeof tag !== 'string') return '';
   const parts = tag.replace('_', '-').split('-');
@@ -78,8 +74,6 @@ function sanitizeCustom(input) {
   }
   return out;
 }
-
-/** Load optional override file but only keep allowed keys */
 
 function readCustomizedFromFile() {
     const candidates = [
