@@ -13,7 +13,6 @@ if (!fs.existsSync('/config')) {
 
 const {getStats} = require("./server/stats"); // <— neu
 
-const PORT = 3000;
 const { normalizeRamModules } = require('./lib/ramsize-util');
 const { initI18n } = require('./lib/i18n-config');
 initI18n({ app });
@@ -21,6 +20,12 @@ const { translateTextI18n } = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
 const {loadConfiguration} = require("./lib/load-config");
 
+const config = loadConfig();
+
+const PORT =
+    Number(process.env.PORT) ||
+    Number(config.port) ||
+    3000;
 
 /**
  * Load all data from disk and return it as a single object.

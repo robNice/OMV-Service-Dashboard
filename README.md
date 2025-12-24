@@ -68,18 +68,40 @@ User-provided configuration and assets live outside the app code in:
 
 ```yaml
 services:
-  omv-landingpage:
-    image: omv-landingpage
-    ports:
-      - "8069:3000"
+  landingpage:
+    container_name: omv-landingpage
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: omv-landingpage-with-docker
+    pid: "host"
+    privileged: true
+    devices:
+      - "/dev:/dev"
     volumes:
-      - ./config:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/lib/dpkg:/host/var/lib/dpkg:ro  # dpkg-Status vom Host
+      - /:/hostroot:ro,rslave
+      - /your-config-directory:/config
+    environment:
+      PROC_ROOT: /host/proc
+      SYS_ROOT: /host/sys
+      HOST_ROOT: /hostroot
+      DPKG_ROOT: /host/var/lib/dpkg
+    working_dir: /app
+    command: ["node", "server.js"]
+    ports:
+      - "3000:3000"  # 
+    restart: unless-stopped
+
 ```
 
 1. Copy the example configuration:
 
    ```bash
-   cp -r config.example config
+   cp -r config.example path-to-your-config-directory
    ```
 
 2. Start the container:
@@ -91,7 +113,7 @@ services:
 3. Open the landing page:
 
    ```
-   http://<host>:8069/
+   http://<host>:chosenport/
    ```
 
 You can update or recreate the container at any time –  

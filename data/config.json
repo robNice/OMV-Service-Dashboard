@@ -2,5 +2,6 @@
   "title": "OMV Landingpage",
   "defaultLang": "en-gb",
   "omvRpcPath": "/usr/sbin/omv-rpc",
-  "omvurl"    : "https://omv.cube.box"
+  "omvurl"    : "https://omv.cube.box",
+  "port"      : 3000
 }
