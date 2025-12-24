@@ -23,8 +23,10 @@ app.use("/assets", express.static("/data/assets", {
  * @returns {any}
  */
 function loadData() {
-    const raw = fs.readFileSync("/data/services.json", "utf-8");
-    return JSON.parse(raw);
+    // const raw = fs.readFileSync("/data/services.json", "utf-8");
+    // return JSON.parse(raw);
+    const { loadServices } = require('./lib/load-services');
+    return loadServices();
 }
 
 /**
