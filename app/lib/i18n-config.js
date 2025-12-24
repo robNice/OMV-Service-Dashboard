@@ -14,7 +14,7 @@ const fs = require('fs');
 const i18n = require('i18n');
 const path = require('path');
 const { APP_DATA, CONFIG_DIR } = require('./paths');
-const EFFECTIVE_I18N_DIR = '/.cached/omv-landingpage-i18n';
+const EFFECTIVE_I18N_DIR = '/tmp/omv-landingpage-i18n';
 
 let configured = false;
 
