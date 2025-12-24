@@ -11,7 +11,7 @@ if (!fs.existsSync('/config')) {
     console.log('[config] Copy config.example to config to customize the landingpage.');
 }
 
-const {getStats} = require("./server/stats"); // <— neu
+const {getStats} = require("./server/stats");
 
 const { normalizeRamModules } = require('./lib/ramsize-util');
 const { initI18n } = require('./lib/i18n-config');
