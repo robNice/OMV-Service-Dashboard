@@ -2,7 +2,7 @@ const version = "1.0.0-19";  // my lazy ass anti cache: +'-'+Math.random().toStr
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-
+const { resolveAssetPath } = require('./lib/asset-resolver');
 const app = express();
 const {getStats} = require("./server/stats"); // <— neu
 
@@ -128,6 +128,21 @@ app.get("/api/stats", async (req, res) => {
     }
 });
 
+app.get('/assets/*', (req, res) => {
+    const relPath = req.params[0];
+
+    // basic safety: no path traversal
+    if (relPath.includes('..')) {
+        return res.status(400).end();
+    }
+
+    const file = resolveAssetPath(relPath);
+    if (!file) {
+        return res.status(404).end();
+    }
+
+    res.sendFile(file);
+});
 
 app.get("/", (req, res) => {
     const data = loadData();
