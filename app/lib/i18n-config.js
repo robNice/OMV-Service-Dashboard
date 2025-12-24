@@ -87,7 +87,10 @@ function readCustomizedFromFile() {
     ];
     try {
         const file = candidates.find(f => fs.existsSync(f));
-        if (!file) return null;
+        if (!file) {
+            console.log(`[i18n] No settings file found at ${candidates.join(',')}`);
+            return null;
+        }
 
         const raw = fs.readFileSync(file, 'utf8');
 
@@ -102,6 +105,7 @@ function readCustomizedFromFile() {
         }
         return sanitizeCustom(picked);
     } catch {
+        console.log('[i18n] Error reading settings file');
         return null;
     }
 }
