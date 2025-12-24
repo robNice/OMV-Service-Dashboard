@@ -11,7 +11,6 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
 const i18n = require('i18n');
 
 let configured = false;
@@ -136,7 +135,6 @@ function getI18n() {
 module.exports = {
   initI18n,
   getI18n,
-  // export helpers for testing / diagnostics
   _internals: {
     normalizeTag,
     sanitizeCustom,

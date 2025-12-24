@@ -223,7 +223,7 @@ This file defines:
 - the sections (e.g. System, Media, Smart Home),
 - and the services (e.g. OMV, Home Assistant, Mealie, Jellyfin).
 
-General structure (with two sections. First section containing two and the second section containing on service):
+General structure (with two sections. First section containing two services, second section containing one service):
 
 ```json
 {

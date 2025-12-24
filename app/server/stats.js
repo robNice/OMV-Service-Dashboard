@@ -128,7 +128,6 @@ function parseLshwMemory(text) {
         }
         if ((m = line.match(/^\s*serial:\s*(.+)$/i))) {
             serial = m[1].trim();
-            continue;
         }
     }
 
@@ -359,27 +358,7 @@ async function readOMV() {
     return { omv, plugins };
 }
 
-async function readDockerUpdates() {
-    const out = { updates: [], total: 0 };
-    try {
-        const { stdout } = await sh("docker ps --format '{{.Names}}|{{.Image}}'");
-        const lines = stdout.trim() ? stdout.trim().split("\n") : [];
-        for (const line of lines) {
-            const [name, image] = line.split("|");
-            if (!name || !image) continue;
-            try {
-                const { stdout: before } = await sh(`docker image inspect --format='{{.Id}}' ${image}`);
-                await sh(`docker pull -q ${image}`);
-                const { stdout: after } = await sh(`docker image inspect --format='{{.Id}}' ${image}`);
-                if (before.trim() !== after.trim()) {
-                    out.updates.push({ container: name, image, current: before.trim(), latest: after.trim() });
-                }
-            } catch {}
-        }
-        out.total = out.updates.length;
-    } catch {}
-    return out;
-}
+
 
 
 async function readDockerContainers() {

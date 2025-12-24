@@ -21,7 +21,7 @@ function translateTextI18n(html, { locale } = {}) {
     try { i18n.setLocale(locale); } catch {}
   }
 
-  const rx = /\{\{\s*__\.([a-zA-Z0-9_.-]+)(?:\s*\|\s*(\{[\s\S]*?\}))?\s*\}\}/g;
+  const rx = /\{\{\s*__\.([a-zA-Z0-9_.-]+)(?:\s*\|\s*(\{[\s\S]*?}))?\s*}\}/g;
 
   const out = html.replace(rx, (_m, key, jsonArgs) => {
     let vars;
