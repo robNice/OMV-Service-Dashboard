@@ -1,16 +1,13 @@
 const path = require('path');
 
-// liegt in /app/lib
-const APP_ROOT = path.resolve(__dirname, '..');
-
+const APP_CODE = '/app';
+const APP_DATA = '/data';
 const CONFIG_DIR = process.env.OMV_LANDINGPAGE_CONFIG
     ? path.resolve(process.env.OMV_LANDINGPAGE_CONFIG)
-    : path.join(APP_ROOT, 'config');
-
-const APP_DATA = path.join(APP_ROOT, 'data');
+    : '/config';
 
 module.exports = {
-    APP_ROOT,
+    APP_CODE,
     APP_DATA,
     CONFIG_DIR
 };
