@@ -18,7 +18,7 @@ const {loadConfiguration} = require("./lib/load-config");
 
 
 /**
- *
+ * Load all data from disk and return it as a single object.
  * @returns {any}
  */
 function loadData() {
@@ -27,7 +27,16 @@ function loadData() {
 }
 
 /**
- *
+ * Build an ETag header value for a given stat object.
+ * @param stat
+ * @returns {string}
+ */
+function buildEtag(stat) {
+    return `"${stat.size}-${stat.mtimeMs}"`;
+}
+
+/**
+ * Load the configuration from disk and return it as a single object.
  * @returns {any}
  */
 function loadConfig() {
@@ -67,6 +76,7 @@ function renderSection(section) {
 
 /**
  *
+ * @param req
  * @param template
  * @param backlink
  * @param version
@@ -128,7 +138,6 @@ app.get("/api/stats", async (req, res) => {
 app.get('/assets/*', (req, res) => {
     const relPath = req.params[0];
 
-    // basic safety: no path traversal
     if (relPath.includes('..')) {
         return res.status(400).end();
     }
@@ -137,6 +146,21 @@ app.get('/assets/*', (req, res) => {
     if (!file) {
         return res.status(404).end();
     }
+
+    const stat = fs.statSync(file);
+    const etag = buildEtag(stat);
+
+    if (req.headers['if-none-match'] === etag) {
+        return res.status(304).end();
+    }
+    res.setHeader('ETag', etag);
+
+    if (file === CONFIG_DIR || file.startsWith(CONFIG_DIR + path.sep)) {
+        res.setHeader('Cache-Control', 'no-cache');
+    } else {
+        res.setHeader('Cache-Control', 'public, max-age=3600');
+    }
+
     res.sendFile(file);
 });
 
