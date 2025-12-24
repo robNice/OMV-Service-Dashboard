@@ -143,6 +143,7 @@ everything inside `/config` is preserved.
 ## Notes
 
 - The `/config` directory is optional; missing files fall back to built-in defaults.
+  BUT: You should at least define your own services.json
 - JavaScript and CSS are part of the application core and are **not customizable**.
 - Visual customization is limited to backgrounds and card images.
 - Translations from `/config/i18n` are merged on top of built-in translations.
