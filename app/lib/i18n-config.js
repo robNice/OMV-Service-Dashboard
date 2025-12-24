@@ -14,13 +14,14 @@ const fs = require('fs');
 const i18n = require('i18n');
 const path = require('path');
 const { APP_DATA, CONFIG_DIR } = require('./paths');
+const EFFECTIVE_I18N_DIR = '/.cached/omv-landingpage-i18n';
 
 let configured = false;
 
 /** --- SYSTEM-RELEVANT (immutable) --- */
 const SYSTEM_CFG = Object.freeze({
   defaultLocale: 'en-GB',
-  directory: '/data/i18n',
+  // directory: '/data/i18n',
   objectNotation: true,
   header: 'accept-language',
   register: global,
@@ -112,6 +113,71 @@ function readCustomizedFromFile() {
 
 
 /**
+ *
+ * @param base
+ * @param overlay
+ * @returns {*}
+ */
+function deepMerge(base, overlay) {
+    const out = { ...base };
+    for (const [k, v] of Object.entries(overlay || {})) {
+        if (
+            v &&
+            typeof v === 'object' &&
+            !Array.isArray(v) &&
+            typeof base[k] === 'object'
+        ) {
+            out[k] = deepMerge(base[k], v);
+        } else {
+            out[k] = v;
+        }
+    }
+    return out;
+}
+
+/**
+ *
+ * @param locale
+ * @returns {*}
+ */
+function loadMergedLanguage(locale) {
+    const fileName = `${locale}.json`;
+
+    const coreFile   = path.join(APP_DATA, 'i18n', fileName);
+    const configFile = path.join(CONFIG_DIR, 'i18n', fileName);
+
+    let base = {};
+    let overlay = {};
+
+    if (fs.existsSync(coreFile)) {
+        base = JSON.parse(fs.readFileSync(coreFile, 'utf8'));
+    }
+
+    if (fs.existsSync(configFile)) {
+        overlay = JSON.parse(fs.readFileSync(configFile, 'utf8'));
+        console.log(`[i18n] overlay loaded for ${locale}`);
+    }
+
+    return deepMerge(base, overlay);
+}
+
+/**
+ *
+ * @param locales
+ */
+function prepareEffectiveI18nFiles(locales) {
+    if (!fs.existsSync(EFFECTIVE_I18N_DIR)) {
+        fs.mkdirSync(EFFECTIVE_I18N_DIR, { recursive: true });
+    }
+
+    for (const locale of locales) {
+        const data = loadMergedLanguage(locale);
+        const target = path.join(EFFECTIVE_I18N_DIR, `${locale}.json`);
+        fs.writeFileSync(target, JSON.stringify(data, null, 2), 'utf8');
+    }
+}
+
+/**
  * Initialize i18n once. Safe to call multiple times.
  * @param {Object} opts
  * @param {Express} opts.app - Optional express app to register i18n middleware
@@ -119,21 +185,22 @@ function readCustomizedFromFile() {
  */
 function initI18n({ app, custom } = {}) {
   if (!configured) {
-    // Start with defaults, then file overrides, then explicit custom param
     const fromFile = readCustomizedFromFile();
     const sanitized = sanitizeCustom(Object.assign({}, fromFile || {}, custom || {}));
 
     const cfg = Object.assign({}, SYSTEM_CFG, sanitized);
 
-    // Guard: ensure locales is not empty
     if (!cfg.locales || !Array.isArray(cfg.locales) || cfg.locales.length === 0) {
       cfg.locales = CUSTOM_DEFAULTS.locales.slice();
     }
 
-    // Guard: ensure defaultLocale is present in locales list
     if (!cfg.locales.includes(SYSTEM_CFG.defaultLocale)) {
       cfg.locales = Array.from(new Set([SYSTEM_CFG.defaultLocale, ...cfg.locales]));
     }
+
+      prepareEffectiveI18nFiles(cfg.locales);
+
+      cfg.directory = EFFECTIVE_I18N_DIR;
 
     i18n.configure(cfg);
     configured = true;

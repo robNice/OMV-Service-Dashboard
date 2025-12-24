@@ -14,4 +14,65 @@
          └─ services/
 ```
 
+## Example of a i18n/{locales-keys}.json 
+```
+{
+  "label": {
+    "back": "Back",
+    "liveStats": "Live stats",
+    "close": "Close",
+    "info": "Info",
+    "days": "days",
+    "hours_short": "hrs",
+    "storage": "Storage (HDDs)",
+    "temps": "Temperatures",
+    "versions": "Versions",
+    "system": "System",
+    "docker": "Docker containers",
+    "host": "Host",
+    "os": "OS",
+    "kernel": "Kernel",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Uptime",
+    "hddAvg": "HDD avg",
+    "chassis": "Chassis",
+    "cpuLoad": "Load",
+    "plugins": "Extensions",
+    "ram": "RAM",
+    "ramSlot": "RAM slot",
+    "used": "Used",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Last update",
+    "now": "now"
+  },
+  "tooltip": {
+    "infodrawer": "open/close system information",
+    "systemLoad": "Average system load: last minute / last 5 minutes / last 15 minutes"
+  },
+  "docker": {
+    "status": {
+      "up": "Up",
+      "created": "Created"
+    }
+  },
+  "errors": {
+    "missingKey": "Missing translation: {key}",
+    "noDisksFound": "No Disks detected"
+  },
+  "log": {
+    "listening": "Landingpage listening on port"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  }
+}
 
+```
