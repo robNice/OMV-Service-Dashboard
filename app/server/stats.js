@@ -20,6 +20,8 @@ const statfsSafe  = async (p) => { try { return await fs.statfs(p); } catch { re
 const clamp       = (n, a, b) => Math.max(a, Math.min(b, n));
 const pct         = (num, den) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
+
+const {loadConfiguration} = require("/app/lib/load-config");
 const { initI18n } = require('/app/lib/i18n-config');
 initI18n();
 const { translateTextI18n, withLocale } = require('/app/lib/i18n-util');
@@ -37,8 +39,8 @@ const EXE_OPTS = {
     maxBuffer: 10 * 1024 * 1024,
 };
 function loadConfig() {
-    const raw = fsSync.readFileSync("/data/config.json", "utf-8");
-    return JSON.parse(raw);
+    const { loadServices } = require('./lib/load-config');
+    return loadConfiguration();
 }
 
 

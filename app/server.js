@@ -11,6 +11,8 @@ const { normalizeRamModules } = require('./lib/ramsize-util');
 const { initI18n } = require('./lib/i18n-config');
 initI18n({ app });
 const { translateTextI18n } = require('./lib/i18n-util');
+const {loadServices} = require("./lib/load-services");
+const {loadConfiguration} = require("./lib/load-config");
 
 app.use("/assets", express.static("/data/assets", {
     maxAge: "1h",
@@ -23,8 +25,6 @@ app.use("/assets", express.static("/data/assets", {
  * @returns {any}
  */
 function loadData() {
-    // const raw = fs.readFileSync("/data/services.json", "utf-8");
-    // return JSON.parse(raw);
     const { loadServices } = require('./lib/load-services');
     return loadServices();
 }
@@ -34,8 +34,8 @@ function loadData() {
  * @returns {any}
  */
 function loadConfig() {
-    const raw = fs.readFileSync("/data/config.json", "utf-8");
-    return JSON.parse(raw);
+    const { loadServices } = require('./lib/load-config');
+    return loadConfiguration();
 }
 
 /**
