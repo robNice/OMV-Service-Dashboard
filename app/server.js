@@ -14,10 +14,7 @@ const { translateTextI18n } = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
 const {loadConfiguration} = require("./lib/load-config");
 
-app.use("/assets", express.static("/data/assets", {
-    maxAge: "1h",
-    etag: false,
-}));
+
 
 
 /**
