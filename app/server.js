@@ -140,7 +140,6 @@ app.get('/assets/*', (req, res) => {
     if (!file) {
         return res.status(404).end();
     }
-
     res.sendFile(file);
 });
 
