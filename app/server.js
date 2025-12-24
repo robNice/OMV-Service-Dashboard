@@ -2,8 +2,15 @@ const version = "1.0.0-19";  // my lazy ass anti cache: +'-'+Math.random().toStr
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-
+const { CONFIG_DIR } = require('./lib/paths');
+const { resolveAssetPath } = require('./lib/asset-resolver');
 const app = express();
+
+if (!fs.existsSync('/config')) {
+    console.log('[config] No /config directory found.');
+    console.log('[config] Copy config.example to config to customize the landingpage.');
+}
+
 const {getStats} = require("./server/stats"); // <— neu
 
 const PORT = 3000;
@@ -14,14 +21,9 @@ const { translateTextI18n } = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
 const {loadConfiguration} = require("./lib/load-config");
 
-app.use("/assets", express.static("/data/assets", {
-    maxAge: "1h",
-    etag: false,
-}));
-
 
 /**
- *
+ * Load all data from disk and return it as a single object.
  * @returns {any}
  */
 function loadData() {
@@ -30,7 +32,16 @@ function loadData() {
 }
 
 /**
- *
+ * Build an ETag header value for a given stat object.
+ * @param stat
+ * @returns {string}
+ */
+function buildEtag(stat) {
+    return `"${stat.size}-${stat.mtimeMs}"`;
+}
+
+/**
+ * Load the configuration from disk and return it as a single object.
  * @returns {any}
  */
 function loadConfig() {
@@ -70,6 +81,7 @@ function renderSection(section) {
 
 /**
  *
+ * @param req
  * @param template
  * @param backlink
  * @param version
@@ -99,7 +111,6 @@ function loadTemplate() {
     return fs.readFileSync("/app/templates/index.html", "utf-8");
 }
 
-
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
     res.set("Cache-Control", "public, max-age=31536000, immutable");
@@ -110,6 +121,7 @@ app.get("/favicon.ico", (req, res) => {
         }
     });
 });
+
 app.head("/favicon.ico", (req, res) => res.status(200).end());
 
 app.get("/api/stats", async (req, res) => {
@@ -128,6 +140,34 @@ app.get("/api/stats", async (req, res) => {
     }
 });
 
+app.get('/assets/*', (req, res) => {
+    const relPath = req.params[0];
+
+    if (relPath.includes('..')) {
+        return res.status(400).end();
+    }
+
+    const file = resolveAssetPath(relPath);
+    if (!file) {
+        return res.status(404).end();
+    }
+
+    const stat = fs.statSync(file);
+    const etag = buildEtag(stat);
+
+    if (req.headers['if-none-match'] === etag) {
+        return res.status(304).end();
+    }
+    res.setHeader('ETag', etag);
+
+    if (file === CONFIG_DIR || file.startsWith(CONFIG_DIR + path.sep)) {
+        res.setHeader('Cache-Control', 'no-cache');
+    } else {
+        res.setHeader('Cache-Control', 'public, max-age=3600');
+    }
+
+    res.sendFile(file);
+});
 
 app.get("/", (req, res) => {
     const data = loadData();

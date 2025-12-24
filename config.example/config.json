@@ -1,0 +1,6 @@
+{
+  "title": "OMV Landingpage",
+  "defaultLang": "en-gb",
+  "omvRpcPath": "/usr/sbin/omv-rpc",
+  "omvurl"    : "https://omv.cube.box"
+}
