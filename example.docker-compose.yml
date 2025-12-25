@@ -14,7 +14,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
-      - /var/lib/dpkg:/host/var/lib/dpkg:ro  # dpkg-Status vom Host
+      - /var/lib/dpkg:/host/var/lib/dpkg:ro
       - /:/hostroot:ro,rslave
       - ./config:/config
     environment:
