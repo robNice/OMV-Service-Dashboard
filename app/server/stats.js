@@ -39,11 +39,14 @@ const EXE_OPTS = {
     env: { LC_ALL: 'C', LANG: 'C' },
     maxBuffer: 50 * 1024 * 1024,
 };
-function loadConfig() {
-    const { loadServices } = require('./lib/load-config');
-    return loadConfiguration();
-}
 
+const IS_CONTAINER = fsSync.existsSync('/.dockerenv');
+
+function hostCmd(cmd) {
+    return IS_CONTAINER
+        ? `chroot ${HOST} ${cmd}`
+        : cmd;
+}
 
 function parseDmidecodeMemory(text) {
     const out = [];
@@ -141,13 +144,40 @@ function parseLshwMemory(text) {
 
 
 async function readSystemInfo() {
-    const [{ stdout: h1 }, { stdout: os1 }, { stdout: k1 }, { stdout: c1 }, { stdout: g1 }] = await Promise.all([
-        sh(`chroot ${HOST} /bin/cat /etc/hostname || chroot ${HOST} /bin/cat /proc/sys/kernel/hostname`, EXE_OPTS),
-        sh(`chroot ${HOST} /bin/bash -lc "grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '\\\"'"`, EXE_OPTS),
-        sh(`chroot ${HOST} /bin/uname -r`, EXE_OPTS),
-        sh(`chroot ${HOST} /bin/bash -lc "grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2- | sed 's/^ //'"`, EXE_OPTS),
-        sh(`chroot ${HOST} /bin/bash -lc "lspci | grep -i 'vga\\|3d' | cut -d: -f3- | sed 's/^ //'"`, EXE_OPTS).catch(() => ({ stdout: "" })),
-    ]);
+    // const [{ stdout: h1 }, { stdout: os1 }, { stdout: k1 }, { stdout: c1 }, { stdout: g1 }] = await Promise.all([
+    //     sh(`chroot ${HOST} /bin/cat /etc/hostname || chroot ${HOST} /bin/cat /proc/sys/kernel/hostname`, EXE_OPTS),
+    //     sh(`chroot ${HOST} /bin/bash -lc "grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '\\\"'"`, EXE_OPTS),
+    //     sh(`chroot ${HOST} /bin/uname -r`, EXE_OPTS),
+    //     sh(`chroot ${HOST} /bin/bash -lc "grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2- | sed 's/^ //'"`, EXE_OPTS),
+    //     sh(`chroot ${HOST} /bin/bash -lc "lspci | grep -i 'vga\\|3d' | cut -d: -f3- | sed 's/^ //'"`, EXE_OPTS).catch(() => ({ stdout: "" })),
+    // ]);
+
+    const [{ stdout: h1 }, { stdout: os1 }, { stdout: k1 }, { stdout: c1 }, { stdout: g1 }] =
+        await Promise.all([
+            sh(
+                `${hostCmd('/bin/cat /etc/hostname')} || ${hostCmd('/bin/cat /proc/sys/kernel/hostname')}`,
+                EXE_OPTS
+            ),
+            sh(
+                hostCmd(`/bin/bash -lc "grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '\\\"'"`),
+                EXE_OPTS
+            ),
+            sh(
+                hostCmd('/bin/uname -r'),
+                EXE_OPTS
+            ),
+            sh(
+                hostCmd(`/bin/bash -lc "grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2- | sed 's/^ //'"`),
+                EXE_OPTS
+            ),
+            sh(
+                hostCmd(`/bin/bash -lc "lspci | grep -i 'vga\\|3d' | cut -d: -f3- | sed 's/^ //'"`),
+                EXE_OPTS
+            ).catch(() => ({ stdout: "" })),
+        ]);
+
+
+
 
     const host  = String(h1 || "").trim();
     const os    = String(os1 || "").trim();
