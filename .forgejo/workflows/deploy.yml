@@ -2,7 +2,7 @@ name: Deploy OMV Landingpage
 
 on:
   push:
-    branches: [ live ]
+    branches: [ dev ]
 
 jobs:
   deploy:
@@ -14,14 +14,14 @@ jobs:
       - name: Deploy to OMV host (/opt/omv-landingpage)
         env:
           REPO_URL: ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git
-          BRANCH: live
+          BRANCH: dev
           PROJECT_DIR: /opt/omv-landingpage
 
           # NEUES Secret (Base64 des privaten Schlüssels!)
           DEPLOY_SSH_PRIVATE_KEY_B64: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY_B64 }}
           # optional gepinnter Hostkey
           DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
-        run: |
+        run: |dev
           set -euo pipefail
 
           docker run --rm -u 0:0 \
