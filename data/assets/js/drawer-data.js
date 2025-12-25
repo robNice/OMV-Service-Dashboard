@@ -145,7 +145,7 @@
         const res = await fetch(host, { cache: "no-store" });
         if (!res.ok) throw new Error(res.statusText);
         const s = await res.json();
-        console.log(s);
+
         if (s.ram) {
             const p = s.ram.percent ?? 0;
             const used = (s.ram.used / (1024 ** 3)).toFixed(1);
