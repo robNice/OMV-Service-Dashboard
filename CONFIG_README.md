@@ -120,7 +120,7 @@ The following Example defines two sections, one is filled with two services and 
 ```
 > ⚠️ Section IDs must be unique. Section and service titles are used for title tags, h1 and card-titles.
 --- 
-### Section card-image filenames
+#### Section card-image filenames
 
 Section card-image filenames must match the section IDs.
 
@@ -133,10 +133,26 @@ if it doesn't exist in
 
 `/data/assets/cards/sections/` 
 
+If in neither directory, a default image is used.
+
+---
+
+#### Section background-image filenames
 
 Each section also has its own background image. 
-The filename of this image must also match the section id. 
+The filename of this image must also match the section id (with any of the following file extensions: png, gif, jpg, webp). 
 
+The image should exist in
+
+`/{your-config-directory}/assets/backgrounds/`
+
+if it doesn't exist in
+
+`/data/assets/backgrounds/`
+
+If in neither directory, a default image is used.
+---
+#### Available section-ids
 Here is a complete list of already available section-ids, each with their own card and background image:
 
 - admin
@@ -145,12 +161,10 @@ Here is a complete list of already available section-ids, each with their own ca
 - network
 - smart-home
 
-This also means you can already use sections with the corresponding ids (admin, kitchen, media, network, smart-home)
-
 If you are in need of more sections, feel free to add missing images to your config/assets/cards/sections-directory. Just keep in mind: filename is always `{id}.png` 
 
 ---
-## Services
+#### Services
 Services are configured a little bit differently:
 
 ```json
@@ -160,10 +174,26 @@ Services are configured a little bit differently:
   "logo": "omv.png"
 }
 ```
-`title` is used as card-title, `url` is used as card-link and `logo` is used as card-image. They should be placed in `/{your-config-dir}/assets/cards/services/`
 
-All card images should be around 305px x 185px.
+- `title` is used as card-title, 
+- `url` is used as card-link (what to open when clicking on the card)
+- `logo` is used as card-image. They should be placed in `/{your-config-dir}/assets/cards/services/`
 
+If logo is not defined, a default image is used.
+
+> ⚠️ 
+> 
+> All card images should be around 305px x 185px.
+
+---
+
+#### Default images and overrides
+
+The Home background image is `assets/backgrounds/_home.png`. Use your own home-background
+image by placing a `_home` + any extension of png, gif, jpg or webp_ n your config/assets/backgrounds directory.
+
+The default section and service card images are `assets/cards/sections/_default.png` and `assets/cards/services/_default.png`.
+Use your own default images by placing a `_default` + any extension of png, gif, jpg or webp_ in your config/assets/cards/sections and config/assets/cards/services directories.`
 
 ---
 
@@ -195,7 +225,7 @@ If this file is missing, the built-in defaults are used.
 
 ---
 
-## Translations (`/config/i18n`)
+### Translations (`/config/i18n`)
 
 Each file in `/config/i18n` represents **one locale** and must be named:
 
@@ -238,7 +268,7 @@ Example:
 
 ## Custom assets (`/config/assets`)
 
-This directory allows you to override **visual content assets** only.
+Like mentioned above, `/config/assets` allows you to override **visual content assets** only.
 
 ### Allowed asset overrides
 

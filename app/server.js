@@ -110,7 +110,7 @@ function renderService(service) {
     <div class="service">
       <a href="${service.url}" target="_blank">
         <img src="/assets/cards/services/${service.logo || '_default.png'}" alt="${service.title}" />
-        <div class="service-title">${service.title}</div>
+        d<div class="service-title">${service.title}</div>
       </a>
     </div>`;
 }

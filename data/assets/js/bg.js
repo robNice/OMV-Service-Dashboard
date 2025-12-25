@@ -73,6 +73,7 @@
                     return;
                 }
             }
+            setBg( BASE + '/_default.jpg');
         }
     } catch (e) {
         console.warn('[omv-bg] failed:', e);
