@@ -435,6 +435,7 @@ async function readTempsCpuChassis() {
 
 async function readPhysicalDrives() {
     const list = await readOmvSmartList();
+    return list;
     if (!list.length) return [];
 
     const usageMap = await readDriveUsageMap();
