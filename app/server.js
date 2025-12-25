@@ -52,7 +52,7 @@ function resolveSectionCard(id) {
     ];
 
     for (const base of bases) {
-        if (!fs.existsSync(base.fs)) continue;
+        //if (!fs.existsSync(base.fs)) continue;
 
         for (const ext of CARD_EXTS) {
             const file = `${id}.${ext}`;
