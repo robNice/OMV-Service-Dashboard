@@ -30,7 +30,8 @@ const { translateTextI18n, withLocale } = require('/app/lib/i18n-util');
 
 const SMART_PARAMS = {
     start: 0,
-    limit: -1
+    limit: -1,
+    sort: [{ property: "devicefile", direction: "ASC" }],
 };
 const EXE_OPTS = {
     timeout: 15000,
@@ -462,7 +463,19 @@ async function readPhysicalDrives() {
 }
 
 async function getStats() {
-    const [{ load, uptime }, ram, tempsCpuChassis, container, containers, drives, system] = await Promise.all([
+    const [
+        {
+            load,
+            uptime
+        },
+        ram,
+        tempsCpuChassis,
+        container,
+        containers,
+        drives,
+        system,
+        debug
+    ] = await Promise.all([
         readLoadUptime(),
         readMem(),
         readTempsCpuChassis(),
@@ -470,6 +483,7 @@ async function getStats() {
         readDockerContainers(),
         readPhysicalDrives(),
         readSystemInfo(),
+        readSmartListViaOmvRpc()
     ]);
 
     return {
