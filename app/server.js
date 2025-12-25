@@ -5,6 +5,11 @@ const path = require("path");
 const { CONFIG_DIR } = require('./lib/paths');
 const { resolveAssetPath } = require('./lib/asset-resolver');
 const app = express();
+const CARD_EXTS = ['jpg', 'gif', 'webp', 'png'];
+const cardCache = new Map();
+const USER_CARDS = path.join(CONFIG_DIR, 'assets/cards/sections');
+const APP_CARDS  = path.join(__dirname, 'app/assets/cards/sections');
+
 
 if (!fs.existsSync('/config')) {
     console.log('[config] No /config directory found.');
@@ -34,6 +39,35 @@ const PORT =
 function loadData() {
     const { loadServices } = require('./lib/load-services');
     return loadServices();
+}
+
+function resolveSectionCard(id) {
+    if (cardCache.has(id)) {
+        return cardCache.get(id);
+    }
+
+    const bases = [
+        { fs: USER_CARDS, url: '/assets/cards/sections' },
+        { fs: APP_CARDS,  url: '/assets/cards/sections' }
+    ];
+
+    for (const base of bases) {
+        for (const ext of CARD_EXTS) {
+            const file = `${id}.${ext}`;
+            const fsPath = path.join(base.fs, file);
+
+            if (fs.existsSync(fsPath)) {
+                const url = `${base.url}/${file}`;
+                cardCache.set(id, url);
+                return url;
+            }
+        }
+    }
+
+    // optional: Fallback-Icon
+    const fallback = '/assets/cards/sections/_default.png';
+    cardCache.set(id, fallback);
+    return fallback;
 }
 
 /**
@@ -78,7 +112,7 @@ function renderSection(section) {
     return `
     <div class="service">
       <a href="/section/${encodeURIComponent(section.id)}">
-        <img src="/assets/cards/sections/${section.id}.png" alt="${section.title}" />
+        <img src="${resolveSectionCard(section.id)}" alt="${section.title}" />
         <div class="service-title">${section.title}</div>
       </a>
     </div>`;

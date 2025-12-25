@@ -3,7 +3,6 @@
     {
       "id": "admin",
       "title": "Administration",
-      "thumbnail": "admin.png",
       "services": [
         {
           "title": "OMV Webinterface",
