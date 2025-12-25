@@ -96,6 +96,8 @@ services:
       - "3000:3000"  # mapping the desired port to the configured port inside the container
     restart: unless-stopped
 
+
+
 ```
 
 1. Copy the example configuration:
