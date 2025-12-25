@@ -120,9 +120,9 @@ The following Example defines two sections, one is filled with two services and 
 ```
 > ⚠️ Section IDs must be unique. Section and service titles are used for title tags, h1 and card-titles.
 --- 
-#### Section card-image filenames
+#### Section card image filenames
 
-Section card-image filenames must match the section IDs.
+Section card- mage filenames must match the section IDs.
 
 `"id": "admin"`
 => So a 'admin.png', 'admin.gif', 'admin.jpg' or 'admin.webp' image should exist in
@@ -151,6 +151,7 @@ if it doesn't exist in
 `/data/assets/backgrounds/`
 
 If in neither directory, a default image is used.
+
 ---
 #### Available section-ids
 Here is a complete list of already available section-ids, each with their own card and background image:
@@ -176,7 +177,7 @@ Services are configured a little bit differently:
 ```
 
 - `title` is used as card-title, 
-- `url` is used as card-link (what to open when clicking on the card)
+- `url` is used as card link (what to open when clicking on the card)
 - `logo` is used as card-image. They should be placed in `/{your-config-dir}/assets/cards/services/`
 
 If logo is not defined, a default image is used.
