@@ -2,7 +2,7 @@
     try {
         const BASE = '/assets/backgrounds';
         const html = document.documentElement;
-        const EXTS = ['png', 'jpg', 'gif', 'webp'];
+        const EXTS = ['jpg', 'gif', 'webp', 'png'];
         const CACHE_PREFIX = 'omv-bg:';
 
         const override =
