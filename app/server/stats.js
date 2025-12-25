@@ -332,10 +332,6 @@ async function readSmartListViaOmvRpc(HOST) {
         `${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`
     );
     const { stdout } = await sh(cmd, EXE_OPTS);
-    console.log('[stats] raw stdout length:', stdout.length);
-    console.log('[stats] raw stdout start:', stdout.slice(0, 200));
-    console.log('[stats] raw stdout end:', stdout.slice(-200));
-
     return JSON.parse(stdout);
 }
 
