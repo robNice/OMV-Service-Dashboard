@@ -188,8 +188,13 @@ async function readSystemInfo() {
     let ram = [], ramtool = "";
 
     try {
+        // const { stdout: dmiOut } = await sh(
+        //     `chroot ${HOST} /usr/sbin/dmidecode -t memory 2>/dev/null || true`,
+        //     EXE_OPTS
+        // );
+
         const { stdout: dmiOut } = await sh(
-            `chroot ${HOST} /usr/sbin/dmidecode -t memory 2>/dev/null || true`,
+            `${hostCmd('/usr/sbin/dmidecode -t memory')} 2>/dev/null || true`,
             EXE_OPTS
         );
 
@@ -205,10 +210,17 @@ async function readSystemInfo() {
         console.error('Dmidecode failed.');
     }
 
-    if (1===1 || !ram.length) {
+    if (!ram.length) {
         try {
+            // const { stdout: jraw } = await sh(
+            //     `chroot ${HOST} /bin/bash -lc "command -v lshw >/dev/null 2>&1 && lshw -quiet -json -class memory 2>/dev/null || true"`,
+            //     EXE_OPTS
+            // );
+
             const { stdout: jraw } = await sh(
-                `chroot ${HOST} /bin/bash -lc "command -v lshw >/dev/null 2>&1 && lshw -quiet -json -class memory 2>/dev/null || true"`,
+                hostCmd(
+                    `/bin/bash -lc "command -v lshw >/dev/null 2>&1 && lshw -quiet -json -class memory 2>/dev/null || true"`
+                ),
                 EXE_OPTS
             );
 
@@ -255,10 +267,18 @@ async function readSystemInfo() {
             }
 
             if (!parsed.length) {
+                // const { stdout: traw } = await sh(
+                //     `chroot ${HOST} /usr/bin/lshw -quiet -class memory 2>/dev/null || true`,
+                //     EXE_OPTS
+                // );
+
                 const { stdout: traw } = await sh(
-                    `chroot ${HOST} /usr/bin/lshw -quiet -class memory 2>/dev/null || true`,
+                    `${hostCmd('/usr/bin/lshw -quiet -class memory')} 2>/dev/null || true`,
                     EXE_OPTS
                 );
+
+
+
                 parsed = parseLshwMemory(traw);
             }
 
@@ -307,7 +327,10 @@ async function readLoadUptime() {
 
 async function readSmartListViaOmvRpc(HOST) {
     const config = loadConfiguration();
-    const cmd = `chroot ${HOST} ${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
+    // const cmd = `chroot ${HOST} ${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
+    const cmd = hostCmd(
+        `${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`
+    );
     const { stdout } = await sh(cmd, EXE_OPTS);
     console.log('[stats] raw stdout length:', stdout.length);
     console.log('[stats] raw stdout start:', stdout.slice(0, 200));
