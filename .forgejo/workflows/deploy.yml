@@ -21,7 +21,7 @@ jobs:
           DEPLOY_SSH_PRIVATE_KEY_B64: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY_B64 }}
           # optional gepinnter Hostkey
           DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
-        run: |dev
+        run: |
           set -euo pipefail
 
           docker run --rm -u 0:0 \
