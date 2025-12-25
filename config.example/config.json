@@ -1,5 +1,5 @@
 {
-  "title": "OMV Landingpage",
+  "title": "OMV Service Dashboard",
   "defaultLang": "en-gb",
   "omvRpcPath": "/usr/sbin/omv-rpc",
   "omvurl"    : "https://omv.cube.box",

@@ -71,11 +71,11 @@ User-provided configuration and assets live outside the app code in:
 ```yaml
 services:
   landingpage:
-    container_name: omv-landingpage
+    container_name: omv-service-dashboard
     build:
       context: .
       dockerfile: Dockerfile
-    image: omv-landingpage-with-docker
+    image: omv-service-dashboard-with-docker
     pid: "host"
     privileged: true
     devices:

@@ -1,5 +1,5 @@
 {
-  "name": "omv-landingpage",
+  "name": "OMV-Service-Dashboard",
   "version": "1.2.0",
   "description": "Dashboard for your OMV. Shows links to your home services, and displays system info and more. Built with Node.js and Express.js.",
   "main": "server.js",

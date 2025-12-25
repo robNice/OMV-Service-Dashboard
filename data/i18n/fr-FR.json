@@ -45,7 +45,7 @@
     "noDisksFound": "Aucun disque détecté"
   },
   "log": {
-    "listening": "Landingpage à l'écoute sur le port"
+    "listening": "Service Dashboard à l'écoute sur le port"
   },
   "units": {
     "byte": "o",

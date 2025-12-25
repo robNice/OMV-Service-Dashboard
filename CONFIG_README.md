@@ -1,9 +1,9 @@
 # Configuration (`/config`)
 
 
-Whenever this text mentions `/config` it means your very own `/config` directory for this app, mapped in your docker-composer.yml or defined in the env variable `OMV_LANDINGPAGE_CONFIG`.
+Whenever this text mentions `/config` it means your very own `/config` directory for this app, mapped in your docker-composer.yml or defined in the env variable `OMV_SERVICE_DASHBOARD_CONFIG`.
 
-The `/config` directory contains **optional user overrides** for the OMV Landingpage.
+The `/config` directory contains **optional user overrides** for the OMV Service Dashboard.
 
 All files in this directory are **read at runtime** and **override the built-in defaults** shipped with the application.  
 Nothing in `/config` is required – if a file is missing, the application falls back to its internal defaults.
@@ -17,12 +17,12 @@ Anyway: without a customized services.json, you will only see an exmaple landing
 
 ## TL;DR – Docker users
 
-If you are running the OMV Landingpage via Docker, define your personal config directory like this:
+If you are running the OMV Service Dashboard via Docker, define your personal config directory like this:
 
 ```yaml
 services:
-  omv-landingpage:
-    image: omv-landingpage
+  omv-service-dashboard:
+    image: omv-service-dashboard
     volumes:
       - /wherever-your-boat-floats/config:/config
       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -67,7 +67,7 @@ If present, this file **fully replaces** the internal default configuration.
 config.json example:
 ```json
 {
-  "title": "OMV Landingpage",
+  "title": "OMV Service Dashboard",
   "defaultLang": "en-gb",
   "port"      : 3000,
   "omvRpcPath": "/usr/sbin/omv-rpc"

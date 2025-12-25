@@ -1,7 +1,7 @@
 services:
   landingpage:
-    container_name: omv-landingpage
-    image: ghcr.io/xxx  /omv-landingpage:latest
+    container_name: omv-service-dashboard
+    image: ghcr.io/xxx/omv-service-dashboard:latest
     pid: "host"
     privileged: true
     devices:
