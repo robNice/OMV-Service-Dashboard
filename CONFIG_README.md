@@ -62,8 +62,9 @@ config.json example:
 {
   "title": "OMV Landingpage",
   "defaultLang": "en-gb",
-  "omvRpcPath": "/usr/sbin/omv-rpc",
-  "omvurl"    : "https://omv.cube.box"
+  "omvurl"    : "https://omv.cube.box",
+  "port"      : 3000,
+  "omvRpcPath": "/usr/sbin/omv-rpc"
 }
 ````
 
@@ -73,7 +74,87 @@ config.json example:
 
 Defines sections and services shown on the landing page.
 
-If present, this file **fully replaces** the internal default `services.json`.
+This file **fully replaces** the internal default `services.json` (which is just an example configuration).
+You should definately **customize this file** to match your needs.
+
+The following Example defines two sections, on is filled with two services and the other one is empty:
+
+```json
+{
+  "sections": [
+    {
+      "id": "admin",
+      "title": "Administration",
+      "services": [
+        {
+          "title": "OMV Webinterface",
+          "url": "https://omv.my.local.domain",
+          "logo": "omv.png"
+        },
+        {
+          "title": "Filebrowser",
+          "url": "http://filebrowser.my.local.domain",
+          "logo": "filebrowser.png"
+        }
+      ]
+    },
+    {
+      "id": "smart-home",
+      "title": "Smart-Home",
+      "services": [
+
+      ]
+    }
+  ]
+}
+```
+
+Section IDs must be unique. 
+Section title is used as card-title.
+
+#### Card-image filenames
+
+Section IDs also must match the card-image-filenames.
+
+`"id": "admin"`
+=> So a 'admin.png' image should exist either in
+
+`/data/assets/cards/sections/`
+
+or
+
+`/{your-config-directory}/assets/cards/sections/`
+
+Each section also has an own background image. The filename of this image must also match the section id. 
+
+Luckily there actually is an admin.png in the built-in assets :)
+
+Here is a complete list of available section-card-image-filenames:
+
+- admin.png
+- kitchen.png
+- media.png
+- network.png
+- smart-home.png
+
+This also means you can already use sections with the corresponding ids (admin, kitchen, media, network, smart-home)
+
+If you are in need of more sections, feel free to add missing images to your config/assets/cards/sections-directory. Just keep in mind: filename is always `{id}.png` 
+
+
+Services are configured a little bit differently:
+
+```json
+{
+  "title": "OMV Webinterface",
+  "url": "https://omv.my.local.domain",
+  "logo": "omv.png"
+}
+```
+`title` is used as card-title, `url` is used as card-link and `logo` is used as card-image. They should be placed in `/{your-config-dir}/assets/cards/services/`
+
+All card images should be around 305px x 185px.
+
 
 ---
 

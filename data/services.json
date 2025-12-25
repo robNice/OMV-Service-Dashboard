@@ -3,7 +3,6 @@
     {
       "id": "admin",
       "title": "Administration",
-      "thumbnail": "admin.png",
       "services": [
         {
           "title": "OMV Webinterface",
@@ -20,7 +19,6 @@
     {
       "id": "media",
       "title": "Media",
-      "thumbnail": "media.png",
       "services": [
 
       ]
@@ -28,7 +26,6 @@
     {
       "id": "kitchen",
       "title": "Kitchen",
-      "thumbnail": "kitchen.png",
       "services": [
 
       ]
@@ -36,7 +33,6 @@
     {
       "id": "smart-home",
       "title": "Smart-Home",
-      "thumbnail": "smart-home.png",
       "services": [
 
       ]
@@ -44,7 +40,6 @@
     {
       "id": "network",
       "title": "Network",
-      "thumbnail": "network.png",
       "services": [
 
       ]

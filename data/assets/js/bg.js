@@ -25,7 +25,7 @@
         const m = path.match(/^\/section\/([^/]+)$/);
         if (m) {
             const slug = decodeURIComponent(m[1]);
-            setBg(`${BASE}/${slug}.jpg`);
+            setBgAuto(`${BASE}/${slug}`);
             return;
         }
 
@@ -33,6 +33,20 @@
             if (!url) return;
             html.style.setProperty('--bg-url', `url('${url}')`);
             html.style.setProperty('--bg-opacity', '1');
+        }
+
+        function setBgAuto(base) {
+            const exts = ['png', 'jpg', 'gif'];
+            let i = 0;
+
+            (function tryNext() {
+                if (i >= exts.length) return;
+                const url = `${base}.${exts[i++]}`;
+                const img = new Image();
+                img.onload = () => setBg(url);
+                img.onerror = tryNext;
+                img.src = url;
+            })();
         }
     } catch (e) {
         console.warn('[omv-bg] failed:', e);

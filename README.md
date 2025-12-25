@@ -93,7 +93,7 @@ services:
     working_dir: /app
     command: ["node", "server.js"]
     ports:
-      - "3000:3000"  # 
+      - "3000:3000"  # mapping the desired port to the configured port inside the container
     restart: unless-stopped
 
 ```
