@@ -60,6 +60,9 @@ User-provided configuration and assets live outside the app code in:
 ## Installation: Docker (recommended)
 
 ### Requirements
+ 
+@TODO: ADD INFOS ABOUT INSTALLATION MODES (DOCKER, STANDALONE)
+
 
 - Docker
 - Docker Compose (or `docker compose`)
