@@ -6,11 +6,17 @@
     if (!el || !tab) return;
     const setOpen = (open) => {
         el.classList.toggle("open", open);
-        try { localStorage.setItem(STORAGE_KEY, open ? "1" : "0"); } catch (_) {}
+        try {
+            localStorage.setItem(STORAGE_KEY, open ? "1" : "0");
+        } catch (_) {
+        }
     };
 
     tab.addEventListener("click", () => setOpen(!el.classList.contains("open")));
     closeBtn?.addEventListener("click", () => setOpen(false));
 
-    try { setOpen(localStorage.getItem(STORAGE_KEY) === "1"); } catch (_) {}
+    try {
+        setOpen(localStorage.getItem(STORAGE_KEY) === "1");
+    } catch (_) {
+    }
 })();
