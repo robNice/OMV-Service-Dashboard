@@ -45,7 +45,7 @@
     "noDisksFound": "No Disks detected"
   },
   "log": {
-    "listening": "Landingpage listening on port"
+    "listening": "Service Dashboard listening on port"
   },
   "units": {
     "byte": "B",

@@ -45,7 +45,7 @@
     "noDisksFound": "Keine Laufwerke erkannt"
   },
   "log": {
-    "listening": "Landingpage läuft auf Port"
+    "listening": "Service Dashboard läuft auf Port"
   },
   "units": {
     "byte": "B",

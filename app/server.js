@@ -13,7 +13,7 @@ const APP_CARDS  = path.join(__dirname, '../data/assets/cards/sections');
 
 if (!fs.existsSync('/config')) {
     console.log('[config] No /config directory found.');
-    console.log('[config] Copy config.example to config to customize the landingpage.');
+    console.log('[config] Copy config.example to config to customize the dashboard.');
 }
 
 const {getStats} = require("./server/stats");
@@ -253,5 +253,5 @@ app.get("/section/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log('Landingpage listening on port '+PORT);
+    console.log('Service Dashboard listening on port '+PORT);
 });

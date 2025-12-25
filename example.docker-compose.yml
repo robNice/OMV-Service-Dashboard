@@ -1,10 +1,10 @@
 services:
-  landingpage:
-    container_name: omv-landingpage
+  OMV-Service-Dashboard:
+    container_name: omv-service-dashboard
     build:
       context: .
       dockerfile: Dockerfile
-    image: omv-landingpage-with-docker
+    image: omv-service-dashboard-with-docker
     pid: "host"
     privileged: true
     devices:
