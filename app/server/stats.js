@@ -28,11 +28,12 @@ const { translateTextI18n, withLocale } = require('/app/lib/i18n-util');
 
 
 
-const SMART_PARAMS = {
+const SMART_PARAMS_old = {
     start: 0,
     limit: -1,
     sort: [{ property: "devicefile", direction: "ASC" }],
 };
+const SMART_PARAMS = {"start":0,"limit":-1,"sort":[{"property":"devicefile","direction":"ASC"}]};
 const EXE_OPTS = {
     timeout: 15000,
     env: { LC_ALL: 'C', LANG: 'C' },
