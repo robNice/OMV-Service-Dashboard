@@ -9,6 +9,7 @@ The app is designed to run either:
 - directly on the OMV host (“standalone”), or
 - inside a Docker container with access to the host’s stats and Docker daemon.
 
+
 ---
 
 ## Features
@@ -61,8 +62,6 @@ User-provided configuration and assets live outside the app code in:
 
 ### Requirements
  
-@TODO: ADD INFOS ABOUT INSTALLATION MODES (DOCKER, STANDALONE)
-
 
 - Docker
 - Docker Compose (or `docker compose`)
