@@ -37,7 +37,7 @@ const SMART_PARAMS = {"start":0,"limit":-1,"sort":[{"property":"devicefile","dir
 const EXE_OPTS = {
     timeout: 15000,
     env: { LC_ALL: 'C', LANG: 'C' },
-    maxBuffer: 10 * 1024 * 1024,
+    maxBuffer: 50 * 1024 * 1024,
 };
 function loadConfig() {
     const { loadServices } = require('./lib/load-config');
@@ -285,7 +285,7 @@ async function readSmartListViaOmvRpc(HOST) {
 async function readOmvSmartList() {
     try {
         const j = await readSmartListViaOmvRpc(HOST);
-        return j;//Array.isArray(j?.data) ? j.data : [];
+        return Array.isArray(j?.data) ? j.data : [];
     } catch {
         return [];
     }
