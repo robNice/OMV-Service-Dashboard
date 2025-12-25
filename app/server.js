@@ -1,4 +1,4 @@
-const version = "1.0.0-19"+'-'+Math.random().toString();  // my lazy ass anti cache: +'-'+Math.random().toString();
+const version = "1.2.0-0" // my lazy ass anti cache: +'-'+Math.random().toString();
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
@@ -41,6 +41,11 @@ function loadData() {
     return loadServices();
 }
 
+/**
+ * Resolve a section card image path for a given section ID.
+ * @param id
+ * @returns {string}
+ */
 function resolveSectionCard(id) {
     const cached = cardCache.get(id);
 
@@ -151,8 +156,6 @@ function setTemplate( req, template, backlink, version, title, cards )  {
         { locale: req.getLocale() }
     );
 }
-
-
 
 /**
  *

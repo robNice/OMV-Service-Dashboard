@@ -42,12 +42,22 @@ const EXE_OPTS = {
 
 const IS_CONTAINER = fsSync.existsSync('/.dockerenv');
 
+/**
+ * Wraps sh command execution in a chroot environment if needed.
+ * @param cmd
+ * @returns {string|*}
+ */
 function hostCmd(cmd) {
     return IS_CONTAINER
         ? `chroot ${HOST} ${cmd}`
         : cmd;
 }
 
+/**
+ * Parses dmidecode output for memory devices.
+ * @param text
+ * @returns {*[]}
+ */
 function parseDmidecodeMemory(text) {
     const out = [];
     const src = String(text || "");
@@ -77,10 +87,14 @@ function parseDmidecodeMemory(text) {
 
         out.push({ slot: locator, size, speed, manufacturer, part, serial });
     }
-
     return out;
 }
 
+/**
+ * Parses lshw output for memory devices.
+ * @param text
+ * @returns {*[]}
+ */
 function parseLshwMemory(text) {
     const lines = String(text || "").split(/\r?\n/);
     const out = [];
@@ -90,8 +104,7 @@ function parseLshwMemory(text) {
 
     const pushIfComplete = () => {
         const sz = (size || "").trim();
-        if (!sz || /^empty$/i.test(sz)) return;           // leere Slots ignorieren
-        // Falls lshw bei Cache o.ä. landet: Slot "… Cache" ignorieren
+        if (!sz || /^empty$/i.test(sz)) return;
         if (/cache$/i.test(slot || "")) return;
         out.push({
             slot: (slot || "").trim(),
@@ -125,7 +138,7 @@ function parseLshwMemory(text) {
             continue;
         }
         if ((m = line.match(/^\s*size:\s*(.+)$/i))) {
-            size = m[1].trim();                              // z.B. "8GiB", "8192MiB"
+            size = m[1].trim();
             continue;
         }
         if ((m = line.match(/^\s*vendor:\s*(.+)$/i))) {
@@ -143,14 +156,11 @@ function parseLshwMemory(text) {
 }
 
 
+/**
+ * Reads system info.
+ * @returns {Promise<{host: string, os: string, kernel: string, cpu: string, gpu: string, ram: *[], ramtool: string}>}
+ */
 async function readSystemInfo() {
-    // const [{ stdout: h1 }, { stdout: os1 }, { stdout: k1 }, { stdout: c1 }, { stdout: g1 }] = await Promise.all([
-    //     sh(`chroot ${HOST} /bin/cat /etc/hostname || chroot ${HOST} /bin/cat /proc/sys/kernel/hostname`, EXE_OPTS),
-    //     sh(`chroot ${HOST} /bin/bash -lc "grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '\\\"'"`, EXE_OPTS),
-    //     sh(`chroot ${HOST} /bin/uname -r`, EXE_OPTS),
-    //     sh(`chroot ${HOST} /bin/bash -lc "grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2- | sed 's/^ //'"`, EXE_OPTS),
-    //     sh(`chroot ${HOST} /bin/bash -lc "lspci | grep -i 'vga\\|3d' | cut -d: -f3- | sed 's/^ //'"`, EXE_OPTS).catch(() => ({ stdout: "" })),
-    // ]);
 
     const [{ stdout: h1 }, { stdout: os1 }, { stdout: k1 }, { stdout: c1 }, { stdout: g1 }] =
         await Promise.all([
@@ -176,9 +186,6 @@ async function readSystemInfo() {
             ).catch(() => ({ stdout: "" })),
         ]);
 
-
-
-
     const host  = String(h1 || "").trim();
     const os    = String(os1 || "").trim();
     const kernel= String(k1 || "").trim();
@@ -188,11 +195,6 @@ async function readSystemInfo() {
     let ram = [], ramtool = "";
 
     try {
-        // const { stdout: dmiOut } = await sh(
-        //     `chroot ${HOST} /usr/sbin/dmidecode -t memory 2>/dev/null || true`,
-        //     EXE_OPTS
-        // );
-
         const { stdout: dmiOut } = await sh(
             `${hostCmd('/usr/sbin/dmidecode -t memory')} 2>/dev/null || true`,
             EXE_OPTS
@@ -212,11 +214,6 @@ async function readSystemInfo() {
 
     if (!ram.length) {
         try {
-            // const { stdout: jraw } = await sh(
-            //     `chroot ${HOST} /bin/bash -lc "command -v lshw >/dev/null 2>&1 && lshw -quiet -json -class memory 2>/dev/null || true"`,
-            //     EXE_OPTS
-            // );
-
             const { stdout: jraw } = await sh(
                 hostCmd(
                     `/bin/bash -lc "command -v lshw >/dev/null 2>&1 && lshw -quiet -json -class memory 2>/dev/null || true"`
@@ -286,6 +283,10 @@ async function readSystemInfo() {
     return { host, os, kernel, cpu, gpu, ram, ramtool };
 }
 
+/**
+ * Reads CPU usage.
+ * @returns {Promise<{total: *|number, used: number, percent: number|number}|{total: number, used: number, percent: number}>}
+ */
 async function readMem() {
     const txt = await readFileSafe(`${PROC}/meminfo`);
     if (!txt) return { total: 0, used: 0, percent: 0 };
@@ -301,6 +302,10 @@ async function readMem() {
     return { total, used, percent: total ? pct(used, total) : 0 };
 }
 
+/**
+ * Reads CPU temperature.
+ * @returns {Promise<{load: number[], uptime: {days: number, hours: number, mins: number}}>}
+ */
 async function readLoadUptime() {
     const loadTxt = await readFileSafe(`${PROC}/loadavg`);
     const upTxt   = await readFileSafe(`${PROC}/uptime`);
@@ -316,10 +321,13 @@ async function readLoadUptime() {
     return { load, uptime };
 }
 
-
+/**
+ * Reads disk temperature.
+ * @param HOST
+ * @returns {Promise<any>}
+ */
 async function readSmartListViaOmvRpc(HOST) {
     const config = loadConfiguration();
-    // const cmd = `chroot ${HOST} ${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
     const cmd = hostCmd(
         `${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`
     );
@@ -347,7 +355,6 @@ async function resolveByIdToDev(byIdPath) {
 async function readDriveUsageMap() {
     let lb;
     try {
-        // const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT"`);
         const { stdout } = await sh(
             hostCmd(`/bin/bash -lc "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT"`),
             EXE_OPTS
