@@ -52,7 +52,7 @@
             const key = CACHE_PREFIX + base;
             const cached = sessionStorage.getItem(key);
 
-            if (cached) {
+            if (1===2 && cached) {
                 const { url, etag } = JSON.parse(cached);
                 const curEtag = await head(url);
                 if (curEtag && curEtag === etag) {
