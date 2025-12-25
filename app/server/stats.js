@@ -473,8 +473,9 @@ async function getStats() {
         container,
         containers,
         drives,
-        system,
-        debug
+        system
+        //,
+        //debug
     ] = await Promise.all([
         readLoadUptime(),
         readMem(),
@@ -482,8 +483,9 @@ async function getStats() {
         readOMV(),
         readDockerContainers(),
         readPhysicalDrives(),
-        readSystemInfo(),
-        readSmartListViaOmvRpc()
+        readSystemInfo()
+        //,
+        //readSmartListViaOmvRpc()
     ]);
 
     return {
