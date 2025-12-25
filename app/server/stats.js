@@ -280,12 +280,6 @@ async function readSmartListViaOmvRpc(HOST) {
     const { stdout } = await sh(cmd, EXE_OPTS);
     return JSON.parse(stdout);
 }
-async function readSmartListViaOmvRpcRaw(HOST) {
-    const config = loadConfig();
-    const cmd = `chroot ${HOST} ${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
-    const { stdout } = await sh(cmd, EXE_OPTS);
-    return JSON.parse(stdout);
-}
 
 async function readOmvSmartList() {
     try {
@@ -293,14 +287,6 @@ async function readOmvSmartList() {
         return Array.isArray(j?.data) ? j.data : [];
     } catch {
         return [];
-    }
-}
-async function readOmvSmartListRaw() {
-    try {
-        const j = await readSmartListViaOmvRpcRaw(HOST);
-        return j;
-    } catch {
-        return null;
     }
 }
 
@@ -435,7 +421,6 @@ async function readTempsCpuChassis() {
 
 async function readPhysicalDrives() {
     const list = await readOmvSmartList();
-    return list;
     if (!list.length) return [];
 
     const usageMap = await readDriveUsageMap();
@@ -478,29 +463,14 @@ async function readPhysicalDrives() {
 }
 
 async function getStats() {
-    const [
-        {
-            load,
-            uptime
-        },
-        ram,
-        tempsCpuChassis,
-        container,
-        containers,
-        drives,
-        system
-        ,
-        debug
-    ] = await Promise.all([
+    const [{ load, uptime }, ram, tempsCpuChassis, container, containers, drives, system] = await Promise.all([
         readLoadUptime(),
         readMem(),
         readTempsCpuChassis(),
         readOMV(),
         readDockerContainers(),
         readPhysicalDrives(),
-        readSystemInfo()
-        ,
-        readOmvSmartListRaw()
+        readSystemInfo(),
     ]);
 
     return {
@@ -512,8 +482,7 @@ async function getStats() {
         container,
         containers,
         disks: drives,
-        system: system,
-        debug: debug
+        system: system
     };
 }
 
