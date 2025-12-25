@@ -1,9 +1,14 @@
 # Configuration (`/config`)
 
+
+Whenever this text mentions `/config` it means your very own `/config` directory for this app, mapped in your docker-composer.yml or defined in the env variable `OMV_LANDINGPAGE_CONFIG`.
+
 The `/config` directory contains **optional user overrides** for the OMV Landingpage.
 
 All files in this directory are **read at runtime** and **override the built-in defaults** shipped with the application.  
 Nothing in `/config` is required – if a file is missing, the application falls back to its internal defaults.
+
+Anyway: without a customized services.json, you will only see an exmaple landing page with very dead links. 
 
 > ⚠️ This directory is meant for **configuration and content only**.  
 > **JavaScript, CSS and other application core files must not be placed here. They won't be read in there anyway ;)**
@@ -12,16 +17,18 @@ Nothing in `/config` is required – if a file is missing, the application falls
 
 ## TL;DR – Docker users
 
-If you are running the OMV Landingpage via Docker, this is all you need to know:
+If you are running the OMV Landingpage via Docker, define your personal config directory like this:
 
 ```yaml
 services:
   omv-landingpage:
     image: omv-landingpage
     volumes:
-      - ./config:/config
+      - /wherever-your-boat-floats/config:/config
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
-
+---
+## Basic notes
 - `/config` is the **only directory you should customize**
 - You can safely update or recreate the container at any time
 - Your configuration, translations and images stay untouched
@@ -62,13 +69,16 @@ config.json example:
 {
   "title": "OMV Landingpage",
   "defaultLang": "en-gb",
-  "omvurl"    : "https://omv.cube.box",
   "port"      : 3000,
   "omvRpcPath": "/usr/sbin/omv-rpc"
 }
-````
 
----
+- title: Used as basic title-tag and h1
+- defaultLang: Used as fallback language if no language is specified in the URL
+- port: Port the application listens on
+- omvRpcPath: Path to the omv-rpc binary: this is needed to read the disk list / smart info
+
+````
 
 ### `services.json`
 
@@ -77,7 +87,7 @@ Defines sections and services shown on the landing page.
 This file **fully replaces** the internal default `services.json` (which is just an example configuration).
 You should definately **customize this file** to match your needs.
 
-The following Example defines two sections, on is filled with two services and the other one is empty:
+The following Example defines two sections, one is filled with two services and the other one is empty (which doesn't makes much sense, does it? Change that now):
 
 ```json
 {
@@ -108,40 +118,39 @@ The following Example defines two sections, on is filled with two services and t
   ]
 }
 ```
+> ⚠️ Section IDs must be unique. Section and service titles are used for title tags, h1 and card-titles.
+--- 
+### Section card-image filenames
 
-Section IDs must be unique. 
-Section title is used as card-title.
-
-#### Card-image filenames
-
-Section IDs also must match the card-image-filenames.
+Section card-image filenames must match the section IDs.
 
 `"id": "admin"`
-=> So a 'admin.png' image should exist either in
-
-`/data/assets/cards/sections/`
-
-or
+=> So a 'admin.png', 'admin.gif', 'admin.jpg' or 'admin.webp' image should exist in
 
 `/{your-config-directory}/assets/cards/sections/`
 
-Each section also has an own background image. The filename of this image must also match the section id. 
+if it doesn't exist in
 
-Luckily there actually is an admin.png in the built-in assets :)
+`/data/assets/cards/sections/` 
 
-Here is a complete list of available section-card-image-filenames:
 
-- admin.png
-- kitchen.png
-- media.png
-- network.png
-- smart-home.png
+Each section also has its own background image. 
+The filename of this image must also match the section id. 
+
+Here is a complete list of already available section-ids, each with their own card and background image:
+
+- admin
+- kitchen
+- media
+- network
+- smart-home
 
 This also means you can already use sections with the corresponding ids (admin, kitchen, media, network, smart-home)
 
 If you are in need of more sections, feel free to add missing images to your config/assets/cards/sections-directory. Just keep in mind: filename is always `{id}.png` 
 
-
+---
+## Services
 Services are configured a little bit differently:
 
 ```json

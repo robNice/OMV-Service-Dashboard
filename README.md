@@ -104,6 +104,9 @@ services:
    cp -r config.example path-to-your-config-directory
    ```
 
+   Dont't forget to map the config directory to the config volume in the Docker Compose file.
+
+
 2. Start the container:
 
    ```bash
@@ -142,7 +145,7 @@ everything inside `/config` is preserved.
 
 ## Notes
 
-- The `/config` directory is optional; missing files fall back to built-in defaults.
+- The `/config` directory seems optional; missing files fall back to built-in defaults.
   BUT: You should at least define your own services.json
 - JavaScript and CSS are part of the application core and are **not customizable**.
 - Visual customization is limited to backgrounds and card images.
