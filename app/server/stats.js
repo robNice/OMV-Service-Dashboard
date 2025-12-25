@@ -267,18 +267,10 @@ async function readSystemInfo() {
             }
 
             if (!parsed.length) {
-                // const { stdout: traw } = await sh(
-                //     `chroot ${HOST} /usr/bin/lshw -quiet -class memory 2>/dev/null || true`,
-                //     EXE_OPTS
-                // );
-
                 const { stdout: traw } = await sh(
                     `${hostCmd('/usr/bin/lshw -quiet -class memory')} 2>/dev/null || true`,
                     EXE_OPTS
                 );
-
-
-
                 parsed = parseLshwMemory(traw);
             }
 
