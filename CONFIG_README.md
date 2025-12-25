@@ -190,10 +190,13 @@ If logo is not defined, a default image is used.
 #### Default images and overrides
 
 The Home background image is `assets/backgrounds/_home.png`. Use your own home-background
-image by placing a `_home` + any extension of png, gif, jpg or webp_ n your config/assets/backgrounds directory.
+image by placing a `_home` + any extension of png, gif, jpg or webp n your config/assets/backgrounds directory.
+
+The default background image is `assets/backgrounds/_default.png`. Use your own default background image by placing a `_default` + any extension of png, gif, jpg or webp in your config/assets/backgrounds directory.
+
 
 The default section and service card images are `assets/cards/sections/_default.png` and `assets/cards/services/_default.png`.
-Use your own default images by placing a `_default` + any extension of png, gif, jpg or webp_ in your config/assets/cards/sections and config/assets/cards/services directories.`
+Use your own default images by placing a `_default` + any extension of png, gif, jpg or webp in your config/assets/cards/sections and config/assets/cards/services directories.`
 
 ---
 
