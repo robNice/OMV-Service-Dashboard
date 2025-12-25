@@ -65,7 +65,7 @@ function resolveSectionCard(id) {
     }
 
     // optional: Fallback-Icon
-    const fallback = '/assets/cards/sections/_default.png';
+        const fallback = '/assets/cards/sections/_default.png';
     cardCache.set(id, fallback);
     return fallback;
 }
