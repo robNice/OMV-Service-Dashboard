@@ -285,7 +285,7 @@ async function readSmartListViaOmvRpc(HOST) {
 async function readOmvSmartList() {
     try {
         const j = await readSmartListViaOmvRpc(HOST);
-        return Array.isArray(j?.data) ? j.data : [];
+        return j;//Array.isArray(j?.data) ? j.data : [];
     } catch {
         return [];
     }
