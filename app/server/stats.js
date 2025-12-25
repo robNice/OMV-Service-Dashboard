@@ -280,6 +280,12 @@ async function readSmartListViaOmvRpc(HOST) {
     const { stdout } = await sh(cmd, EXE_OPTS);
     return JSON.parse(stdout);
 }
+async function readSmartListViaOmvRpcRaw(HOST) {
+    const config = loadConfig();
+    const cmd = `chroot ${HOST} ${config.omvRpcPath} Smart getList '${JSON.stringify(SMART_PARAMS)}'`;
+    const { stdout } = await sh(cmd, EXE_OPTS);
+    return JSON.parse(stdout);
+}
 
 async function readOmvSmartList() {
     try {
@@ -287,6 +293,14 @@ async function readOmvSmartList() {
         return Array.isArray(j?.data) ? j.data : [];
     } catch {
         return [];
+    }
+}
+async function readOmvSmartListRaw() {
+    try {
+        const j = await readSmartListViaOmvRpcRaw(HOST);
+        return j;
+    } catch {
+        return null;
     }
 }
 
@@ -474,8 +488,8 @@ async function getStats() {
         containers,
         drives,
         system
-        //,
-        //debug
+        ,
+        debug
     ] = await Promise.all([
         readLoadUptime(),
         readMem(),
@@ -484,8 +498,8 @@ async function getStats() {
         readDockerContainers(),
         readPhysicalDrives(),
         readSystemInfo()
-        //,
-        //readSmartListViaOmvRpc()
+        ,
+        readOmvSmartListRaw()
     ]);
 
     return {
@@ -497,7 +511,8 @@ async function getStats() {
         container,
         containers,
         disks: drives,
-        system: system
+        system: system,
+        debug: debug
     };
 }
 
