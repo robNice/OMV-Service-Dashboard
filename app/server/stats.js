@@ -30,8 +30,7 @@ const { translateTextI18n, withLocale } = require('/app/lib/i18n-util');
 
 const SMART_PARAMS = {
     start: 0,
-    limit: -1,
-    //sort: [{ property: "devicefile", direction: "ASC" }],
+    limit: -1
 };
 const EXE_OPTS = {
     timeout: 15000,
