@@ -8,7 +8,7 @@ const app = express();
 const CARD_EXTS = ['jpg', 'gif', 'webp', 'png'];
 const cardCache = new Map();
 const USER_CARDS = path.join(CONFIG_DIR, 'assets/cards/sections');
-const APP_CARDS  = path.join(__dirname, 'data/assets/cards/sections');
+const APP_CARDS  = path.join(__dirname, '../data/assets/cards/sections');
 
 
 if (!fs.existsSync('/config')) {
