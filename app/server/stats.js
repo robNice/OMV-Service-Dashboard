@@ -359,7 +359,12 @@ async function resolveByIdToDev(byIdPath) {
 async function readDriveUsageMap() {
     let lb;
     try {
-        const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT"`);
+        // const { stdout } = await sh(`chroot ${HOST} /bin/bash -lc "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT"`);
+        const { stdout } = await sh(
+            hostCmd(`/bin/bash -lc "lsblk -J -b -o NAME,TYPE,SIZE,MOUNTPOINT"`),
+            EXE_OPTS
+        );
+
         lb = JSON.parse(stdout);
     } catch { return new Map(); }
 
