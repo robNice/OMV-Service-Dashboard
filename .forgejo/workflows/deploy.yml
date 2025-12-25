@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Deploy to OMV host (/opt/omv-landingpage)
         env:
-          REPO_URL: ssh://git@git.cube.fritz.box:2222/rob/OMV-Landingpage.git
+          REPO_URL: ssh://git@git.cube.fritz.box:2222/rob/OMV-Service-Dashboard.git
           BRANCH: dev
           PROJECT_DIR: /opt/omv-landingpage
 
