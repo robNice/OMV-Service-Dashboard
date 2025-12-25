@@ -36,7 +36,7 @@
         }
 
         function setBgAuto(base) {
-            const exts = ['png', 'jpg', 'gif'];
+            const exts = ['webp', 'png', 'jpg', 'gif'];
             let i = 0;
 
             (function tryNext() {
