@@ -42,6 +42,19 @@ function loadData() {
 }
 
 function resolveSectionCard(id) {
+    const cached = cardCache.get(id);
+
+    if (cached) {
+        const { fsPath, mtimeMs, url } = cached;
+        if (fs.existsSync(fsPath)) {
+            const stat = fs.statSync(fsPath);
+            if (stat.mtimeMs === mtimeMs) {
+                return url;
+            }
+        }
+        cardCache.delete(id);
+    }
+
     if (cardCache.has(id)) {
         return cardCache.get(id);
     }
