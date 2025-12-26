@@ -23,16 +23,29 @@ function translateTextI18n(html, { locale } = {}) {
 
   const rx = /\{\{\s*__\.([a-zA-Z0-9_.-]+)(?:\s*\|\s*(\{[\s\S]*?}))?\s*}\}/g;
 
-  const out = html.replace(rx, (_m, key, jsonArgs) => {
-    let vars;
-    if (jsonArgs) {
-      try { vars = JSON.parse(jsonArgs); } catch {}
-    }
-    const val = i18n.__(key, vars);
-    return (typeof val === 'string' && val.length) ? val : `??${key}??`;
-  });
+  // const out = html.replace(rx, (_m, key, jsonArgs) => {
+  //   let vars;
+  //   if (jsonArgs) {
+  //     try { vars = JSON.parse(jsonArgs); } catch {}
+  //   }
+  //   const val = i18n.__(key, vars);
+  //   return (typeof val === 'string' && val.length) ? val : `??${key}??`;
+  // });
+    const out = html.replace(rx, (_m, key, jsonArgs) => {
+        let vars;
+        if (jsonArgs) {
+            try { vars = JSON.parse(jsonArgs); } catch {}
+        }
 
-  if (locale && typeof i18n.setLocale === 'function') {
+        const val = locale
+            ? i18n.__({ phrase: key, locale }, vars)
+            : i18n.__(key, vars);
+
+        return (typeof val === 'string' && val.length) ? val : `??${key}??`;
+    });
+
+
+    if (locale && typeof i18n.setLocale === 'function') {
     try { i18n.setLocale(prevLocale); } catch {}
   }
   return out;
