@@ -4,14 +4,49 @@ const fs = require("fs");
 const path = require("path");
 
 function initDataDir() {
-    const target = '/data';
-    const source = '/app/default-data';
+    const target = '/data/assets';
+    const source = '/app/default-data/assets';
     if (!fs.existsSync(target)) {
         fs.mkdirSync('/data', { recursive: true });
         fs.cpSync(source, target, { recursive: true });
     }
 }
-initDataDir();
+
+function initDefaultData() {
+    const sourceRoot = '/app/default-data';
+    const targetRoot = '/data';
+
+    if (!fs.existsSync(sourceRoot)) {
+        console.warn('[init] default-data missing');
+        return;
+    }
+
+    for (const entry of fs.readdirSync(sourceRoot)) {
+        const src = path.join(sourceRoot, entry);
+        const dst = path.join(targetRoot, entry);
+
+        if (fs.existsSync(dst)) {
+            console.log(`[init] ${entry} already exists`);
+            continue;
+        }
+
+        const stat = fs.statSync(src);
+
+        if (stat.isDirectory()) {
+            fs.mkdirSync(dst, { recursive: true });
+            fs.cpSync(src, dst, { recursive: true });
+            console.log(`[init] copied dir ${entry}`);
+        } else if (stat.isFile()) {
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(src, dst);
+            console.log(`[init] copied file ${entry}`);
+        }
+    }
+}
+
+
+// initDataDir();
+initDefaultData();
 
 const { CONFIG_DIR } = require('./lib/paths');
 const { resolveAssetPath } = require('./lib/asset-resolver');
