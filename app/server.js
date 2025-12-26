@@ -176,6 +176,7 @@ function loadTemplate() {
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
     res.set("Cache-Control", "public, max-age=31536000, immutable");
+    console.log('[favicon]');
     res.sendFile("favicon.ico", {root: "/data/assets"}, (err) => {
         if (err) {
             console.error("favicon send failed:", err);
@@ -235,7 +236,8 @@ app.get('/assets/*', (req, res) => {
     } else {
         res.setHeader('Cache-Control', 'public, max-age=3600');
     }
-
+    console.log('[SEND]');
+    console.log('  file:', file);
     //res.sendFile(file)
     sendAsset(res, file);
 });
