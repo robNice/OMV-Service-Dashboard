@@ -80,8 +80,14 @@ function readCustomizedFromFile() {
         path.join(CONFIG_DIR, 'i18n-settings.json'),
         path.join(APP_DATA, 'i18n-settings.json'),
     ];
+    console.log('[i18n][settings] candidates:', candidates);
     try {
         const file = candidates.find(f => fs.existsSync(f));
+        if (file) {
+            console.log('[i18n][settings] USING:', file);
+        } else {
+            console.log('[i18n][settings] NOT FOUND');
+        }
         if (!file) {
             console.log(`[i18n] No settings file found at ${candidates.join(',')}`);
             return null;
@@ -94,10 +100,13 @@ function readCustomizedFromFile() {
         }
 
         const parsed = JSON.parse(raw);
+        console.log('[i18n][settings] RAW:', parsed);
+
         const picked = {};
         for (const k of Object.keys(parsed)) {
             if (ALLOWED_CUSTOM_KEYS.has(k)) picked[k] = parsed[k];
         }
+        console.log('[i18n][settings] SANITIZED:', sanitizeCustom(picked));
         return sanitizeCustom(picked);
     } catch {
         console.log('[i18n] Error reading settings file');
@@ -147,10 +156,16 @@ function deepMerge(base, overlay) {
  * @returns {*}
  */
 function loadMergedLanguage(locale) {
+    console.log('[i18n][load] locale:', locale);
+
     const fileName = `${locale}.json`;
 
     const coreFile = path.join(APP_DATA, 'i18n', fileName);
     const configFile = path.join(CONFIG_DIR, 'i18n', fileName);
+
+    console.log('[i18n][load] coreFile:', coreFile, fs.existsSync(coreFile));
+    console.log('[i18n][load] configFile:', configFile, fs.existsSync(configFile));
+
 
     let base = {};
     let overlay = {};
@@ -172,6 +187,9 @@ function loadMergedLanguage(locale) {
  * @param locales
  */
 function prepareEffectiveI18nFiles(locales) {
+    console.log('[i18n][prepare] EFFECTIVE DIR:', EFFECTIVE_I18N_DIR);
+    console.log('[i18n][prepare] locales:', locales);
+
     if (!fs.existsSync(EFFECTIVE_I18N_DIR)) {
         fs.mkdirSync(EFFECTIVE_I18N_DIR, {recursive: true});
     }
@@ -204,12 +222,20 @@ function initI18n({app, custom} = {}) {
             cfg.locales = Array.from(new Set([SYSTEM_CFG.defaultLocale, ...cfg.locales]));
         }
 
+        console.log('[i18n][config] final locales:', cfg.locales);
+        console.log('[i18n][config] fallbacks:', cfg.fallbacks);
+        console.log('[i18n][config] defaultLocale:', cfg.defaultLocale);
 
         cleanEffectiveI18nDir(EFFECTIVE_I18N_DIR);
         console.log('[i18n] effective language cache cleaned');
 
         prepareEffectiveI18nFiles(cfg.locales);
         console.log(`[i18n] prepared ${cfg.locales.length} locale files`);
+        console.log(
+            '[i18n][effective] files:',
+            fs.readdirSync(EFFECTIVE_I18N_DIR)
+        );
+
 
         cfg.directory = EFFECTIVE_I18N_DIR;
 

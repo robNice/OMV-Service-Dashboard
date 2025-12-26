@@ -11,7 +11,15 @@ const { getI18n } = require('./i18n-config');
  * - Uses the shared i18n instance and supports a temporary locale override.
  */
 function translateTextI18n(html, { locale } = {}) {
-  if (typeof html !== 'string' || html.length === 0) return html || '';
+    console.log('[i18n][translate] requested locale:', locale);
+
+    try {
+        console.log('[i18n][translate] current locale:', getI18n().getLocale());
+    } catch {
+        console.log('[i18n][translate] current locale: <unavailable>');
+    }
+
+    if (typeof html !== 'string' || html.length === 0) return html || '';
 
   const i18n = getI18n();
 
@@ -23,29 +31,16 @@ function translateTextI18n(html, { locale } = {}) {
 
   const rx = /\{\{\s*__\.([a-zA-Z0-9_.-]+)(?:\s*\|\s*(\{[\s\S]*?}))?\s*}\}/g;
 
-  // const out = html.replace(rx, (_m, key, jsonArgs) => {
-  //   let vars;
-  //   if (jsonArgs) {
-  //     try { vars = JSON.parse(jsonArgs); } catch {}
-  //   }
-  //   const val = i18n.__(key, vars);
-  //   return (typeof val === 'string' && val.length) ? val : `??${key}??`;
-  // });
-    const out = html.replace(rx, (_m, key, jsonArgs) => {
-        let vars;
-        if (jsonArgs) {
-            try { vars = JSON.parse(jsonArgs); } catch {}
-        }
+  const out = html.replace(rx, (_m, key, jsonArgs) => {
+    let vars;
+    if (jsonArgs) {
+      try { vars = JSON.parse(jsonArgs); } catch {}
+    }
+    const val = i18n.__(key, vars);
+    return (typeof val === 'string' && val.length) ? val : `??${key}??`;
+  });
 
-        const val = locale
-            ? i18n.__({ phrase: key, locale }, vars)
-            : i18n.__(key, vars);
-
-        return (typeof val === 'string' && val.length) ? val : `??${key}??`;
-    });
-
-
-    if (locale && typeof i18n.setLocale === 'function') {
+  if (locale && typeof i18n.setLocale === 'function') {
     try { i18n.setLocale(prevLocale); } catch {}
   }
   return out;
