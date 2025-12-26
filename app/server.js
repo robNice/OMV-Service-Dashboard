@@ -1,8 +1,8 @@
-initDefaultData();
-
 const version = "1.2.0-0" // my lazy ass anti cache: +'-'+Math.random().toString();
 const express = require("express");
 const fs = require("fs");
+initDefaultData();
+
 const path = require("path");
 
 function initDataDir() {
