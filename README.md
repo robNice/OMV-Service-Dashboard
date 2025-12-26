@@ -1,8 +1,10 @@
 # OMV Landing Page
 
 A small Node.js–based landing page for an OpenMediaVault (OMV) host.  
-It shows your main services as cards, grouped into sections, and can display live system statistics
+It shows your main services* as cards, grouped into sections, and can display live system statistics
 (uptime, disk usage, temperatures, Docker containers, …).
+
+*Main services have to be defined in `/config/services.json`.
 
 The app is designed to run either:
 
@@ -68,39 +70,7 @@ User-provided configuration and assets live outside the app code in:
 
 ### Quick start
 
-```yaml
-services:
-  omv-service-dashboard:
-    container_name: omv-service-dashboard
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: omv-service-dashboard-with-docker
-    pid: "host"
-    privileged: true
-    devices:
-      - "/dev:/dev"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /var/lib/dpkg:/host/var/lib/dpkg:ro  # dpkg-Status vom Host
-      - /:/hostroot:ro,rslave
-      - /your-config-directory:/config
-    environment:
-      PROC_ROOT: /host/proc
-      SYS_ROOT: /host/sys
-      HOST_ROOT: /hostroot
-      DPKG_ROOT: /host/var/lib/dpkg
-    working_dir: /app
-    command: ["node", "server.js"]
-    ports:
-      - "3000:3000"  # mapping the desired port to the configured port inside the container
-    restart: unless-stopped
-
-
-
-```
+Take a look at the [`example.docker-compose.yml`](./example.docker-compose.yml) file for how to set up your docker-compose.yml.
 
 1. Copy the example configuration:
 
@@ -132,6 +102,9 @@ everything inside `/config` is preserved.
 
 > ⚠️ This mode is currently not actively tested and mainly provided for completeness.
 
+Take a look at the [`example.docker-compose.standalone.yml`](./example.docker-compose.standalone.yml) file for how to set up your docker-compose.yml.
+
+
 ### Requirements
 
 - Node.js (v18+ or v20+ recommended)
@@ -149,7 +122,7 @@ everything inside `/config` is preserved.
 
 ## Notes
 
-- The `/config` directory seems optional; missing files fall back to built-in defaults.
+- The `/config` directory *seems* optional; missing files fall back to built-in defaults.
   BUT: You should at least define your own services.json
 - JavaScript and CSS are part of the application core and are **not customizable**.
 - Visual customization is limited to backgrounds and card images.
@@ -157,6 +130,25 @@ everything inside `/config` is preserved.
 
 ---
 
+## Screenshots
+
+### Mobile dashboard overview
+![Dashboard overview mobile](docs/screenshots/omvsd_overview_mobile.png)
+### Mobile dashboard section
+![Dashboard section mobile](docs/screenshots/omvsd_section_mobile.png)
+### Mobile info drawer
+![Dashboard info drawer mobile](docs/screenshots/omvsd_info_drawer_mobile.png)
+
+### Desktop dashboard overview
+![Dashboard overview desktop](docs/screenshots/omvsd_overview_desktop.png)
+### Desktop dashboard section
+![Dashboard section desktop](docs/screenshots/omvsd_section_desktop.png)
+### Desktop info drawer
+![Dashboard info drawer desktop](docs/screenshots/omvsd_info_drawer_desktop.png)
+
+---
+
 ## License
 
-MIT (or your preferred license)
+[`MIT`](./LICENSE)
+
