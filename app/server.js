@@ -203,6 +203,14 @@ app.get("/api/stats", async (req, res) => {
 });
 
 app.get('/assets/*', (req, res) => {
+
+
+    console.log('\n[ASSET REQUEST]');
+    console.log('  url:', req.url);
+    console.log('  originalUrl:', req.originalUrl);
+    console.log('  params[0]:', JSON.stringify(req.params[0]));
+    console.log('  cwd:', process.cwd());
+
     const relPath = req.params[0];
 
     if (relPath.includes('..')) {
