@@ -4,38 +4,14 @@ const fs = require("fs");
 const path = require("path");
 
 function initDefaultData() {
-    const sourceRoot = '/app/default-data';
-    const targetRoot = '/data';
+    const source = '/app/default-data';
+    const target = '/data';
 
-    if (!fs.existsSync(sourceRoot)) {
-        console.warn('[init] default-data missing');
-        return;
-    }
+    fs.mkdirSync(target, { recursive: true });
+    fs.cpSync(source, target, { recursive: true });
 
-    for (const entry of fs.readdirSync(sourceRoot)) {
-        const src = path.join(sourceRoot, entry);
-        const dst = path.join(targetRoot, entry);
-
-        if (fs.existsSync(dst)) {
-            console.log(`[init] ${entry} already exists`);
-            continue;
-        }
-
-        const stat = fs.statSync(src);
-
-        if (stat.isDirectory()) {
-            fs.mkdirSync(dst, { recursive: true });
-            fs.cpSync(src, dst, { recursive: true });
-            console.log(`[init] copied dir ${entry}`);
-        } else if (stat.isFile()) {
-            fs.mkdirSync(path.dirname(dst), { recursive: true });
-            fs.copyFileSync(src, dst);
-            console.log(`[init] copied file ${entry}`);
-        }
-    }
+    console.log('[init] default-data copied to /data');
 }
-
-
 initDefaultData();
 
 
