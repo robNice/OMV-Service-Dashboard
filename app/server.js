@@ -4,8 +4,8 @@ const fs = require("fs");
 const path = require("path");
 
 function initDataDir() {
-    const target = '/data/assets';
-    const source = '/app/default-data/assets';
+    const target = '/data';
+    const source = '/app/default-data';
     if (!fs.existsSync(target)) {
         fs.mkdirSync('/data', { recursive: true });
         fs.cpSync(source, target, { recursive: true });
