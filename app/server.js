@@ -6,11 +6,8 @@ const path = require("path");
 function initDefaultData() {
     const source = '/app/default-data';
     const target = '/data';
-
     fs.mkdirSync(target, { recursive: true });
     fs.cpSync(source, target, { recursive: true });
-
-    console.log('[init] default-data copied to /data');
 }
 initDefaultData();
 
