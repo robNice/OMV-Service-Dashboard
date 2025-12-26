@@ -2,6 +2,19 @@ const version = "1.2.0-0" // my lazy ass anti cache: +'-'+Math.random().toString
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+
+function initDataDir() {
+    const target = '/data/assets';
+    const source = '/app/default-data/assets';
+
+    if (!fs.existsSync(target)) {
+        console.log('[init] /data/assets missing → initializing from defaults');
+        fs.mkdirSync('/data', { recursive: true });
+        fs.cpSync(source, target, { recursive: true });
+    }
+}
+initDataDir();
+
 const { CONFIG_DIR } = require('./lib/paths');
 const { resolveAssetPath } = require('./lib/asset-resolver');
 const app = express();
