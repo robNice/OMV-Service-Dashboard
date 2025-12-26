@@ -1,7 +1,10 @@
 services:
-  omv-service-dashboard:
-    container_name: omv-service-dashboard
-    image: ghcr.io/xxx/omv-service-dashboard:latest
+  OMV-Service-Dashboard:
+    container_name: omv-service-dashboard-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: omv-service-dashboard-with-docker
     pid: "host"
     privileged: true
     devices:
@@ -13,7 +16,7 @@ services:
       - /sys:/host/sys:ro
       - /var/lib/dpkg:/host/var/lib/dpkg:ro
       - /:/hostroot:ro,rslave
-      - ./config:/config
+      - /mnt/store1/config/omv-landingpage:/config
     environment:
       PROC_ROOT: /host/proc
       SYS_ROOT: /host/sys
