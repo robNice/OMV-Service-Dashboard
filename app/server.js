@@ -1,3 +1,5 @@
+initDefaultData();
+
 const version = "1.2.0-0" // my lazy ass anti cache: +'-'+Math.random().toString();
 const express = require("express");
 const fs = require("fs");
@@ -46,7 +48,6 @@ function initDefaultData() {
 
 
 // initDataDir();
-initDefaultData();
 
 const { CONFIG_DIR } = require('./lib/paths');
 const { resolveAssetPath } = require('./lib/asset-resolver');
