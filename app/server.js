@@ -6,9 +6,7 @@ const path = require("path");
 function initDataDir() {
     const target = '/data/assets';
     const source = '/app/default-data/assets';
-
     if (!fs.existsSync(target)) {
-        console.log('[init] /data/assets missing → initializing from defaults');
         fs.mkdirSync('/data', { recursive: true });
         fs.cpSync(source, target, { recursive: true });
     }
@@ -22,12 +20,6 @@ const CARD_EXTS = ['jpg', 'gif', 'webp', 'png'];
 const cardCache = new Map();
 const USER_CARDS = path.join(CONFIG_DIR, 'assets/cards/sections');
 const APP_CARDS  = path.join(__dirname, '../data/assets/cards/sections');
-
-
-if (!fs.existsSync('/config')) {
-    console.log('[config] No /config directory found.');
-    console.log('[config] Copy config.example to config to customize the dashboard.');
-}
 
 const {getStats} = require("./server/stats");
 
@@ -191,7 +183,6 @@ app.get("/favicon.ico", (req, res) => {
     res.set("Cache-Control", "public, max-age=31536000, immutable");
     res.sendFile("favicon.ico", {root: "/data/assets"}, (err) => {
         if (err) {
-            console.error("favicon send failed:", err);
             res.status(404).end();
         }
     });
@@ -216,6 +207,7 @@ app.get("/api/stats", async (req, res) => {
 });
 
 app.get('/assets/*', (req, res) => {
+
     const relPath = req.params[0];
 
     if (relPath.includes('..')) {
@@ -240,8 +232,6 @@ app.get('/assets/*', (req, res) => {
     } else {
         res.setHeader('Cache-Control', 'public, max-age=3600');
     }
-
-    //res.sendFile(file)
     sendAsset(res, file);
 });
 
