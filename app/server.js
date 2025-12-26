@@ -250,7 +250,7 @@ app.get('/assets/*', (req, res) => {
         res.setHeader('Cache-Control', 'public, max-age=3600');
     }
     console.log('[SEND]');
-    console.log('  file:', file);
+    console.log('  file: ', file);
     //res.sendFile(file)
     sendAsset(res, file);
 });
