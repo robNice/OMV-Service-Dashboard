@@ -32,6 +32,14 @@ const PORT =
     Number(config.port) ||
     3000;
 
+
+const mime = require('mime-types');
+
+function sendAsset(res, file) {
+    res.type(mime.lookup(file) || 'application/octet-stream');
+    fs.createReadStream(file).pipe(res);
+}
+
 /**
  * Load all data from disk and return it as a single object.
  * @returns {any}
@@ -220,7 +228,8 @@ app.get('/assets/*', (req, res) => {
         res.setHeader('Cache-Control', 'public, max-age=3600');
     }
 
-    res.sendFile(file);
+    //res.sendFile(file)
+    sendAsset(res, file);
 });
 
 app.get("/", (req, res) => {

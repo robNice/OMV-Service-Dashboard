@@ -1,5 +1,5 @@
 services:
-  landingpage:
+  omv-service-dashboard:
     container_name: omv-service-dashboard
     image: ghcr.io/xxx/omv-service-dashboard:latest
     pid: "host"

@@ -70,7 +70,7 @@ User-provided configuration and assets live outside the app code in:
 
 ```yaml
 services:
-  landingpage:
+  omv-service-dashboard:
     container_name: omv-service-dashboard
     build:
       context: .
