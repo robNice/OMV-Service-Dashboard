@@ -11,7 +11,6 @@ function initDefaultData() {
 }
 initDefaultData();
 
-
 function initDataDir() {
     const target = '/data/assets';
     const source = '/app/default-data/assets';

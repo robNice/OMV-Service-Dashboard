@@ -130,6 +130,24 @@ Take a look at the [`example.docker-compose.standalone.yml`](./example.docker-co
 
 ---
 
+## Screenshots
+
+### Mobile dashboard overview
+![Dashboard overview mobile](docs/screenshots/omvsd_overview_mobile.png)
+### Mobile dashboard section
+![Dashboard section mobile](docs/screenshots/omvsd_section_mobile.png)
+### Mobile info drawer
+![Dashboard info drawer mobile](docs/screenshots/omvsd_info_drawer_mobile.png)
+
+### Desktop dashboard overview
+![Dashboard overview desktop](docs/screenshots/omvsd_overview_desktop.png)
+### Desktop dashboard section
+![Dashboard section desktop](docs/screenshots/omvsd_section_desktop.png)
+### Desktop info drawer
+![Dashboard info drawer desktop](docs/screenshots/omvsd_info_drawer_desktop.png)
+
+---
+
 ## License
 
 [`MIT`](./LICENSE)
