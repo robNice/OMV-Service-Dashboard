@@ -1,18 +1,6 @@
 const version = "1.2.0-0" // my lazy ass anti cache: +'-'+Math.random().toString();
 const express = require("express");
 const fs = require("fs");
-initDefaultData();
-
-const path = require("path");
-
-function initDataDir() {
-    const target = '/data/assets';
-    const source = '/app/default-data/assets';
-    if (!fs.existsSync(target)) {
-        fs.mkdirSync('/data', { recursive: true });
-        fs.cpSync(source, target, { recursive: true });
-    }
-}
 
 function initDefaultData() {
     const sourceRoot = '/app/default-data';
@@ -45,6 +33,21 @@ function initDefaultData() {
         }
     }
 }
+
+
+initDefaultData();
+
+const path = require("path");
+
+function initDataDir() {
+    const target = '/data/assets';
+    const source = '/app/default-data/assets';
+    if (!fs.existsSync(target)) {
+        fs.mkdirSync('/data', { recursive: true });
+        fs.cpSync(source, target, { recursive: true });
+    }
+}
+
 
 
 // initDataDir();
