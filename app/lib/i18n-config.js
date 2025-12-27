@@ -28,14 +28,43 @@ const SYSTEM_CFG = Object.freeze({
 });
 
 const CUSTOM_DEFAULTS = Object.freeze({
-    locales: ['en-GB', 'de-DE', 'fr-FR'],
-    fallbacks: {
-        'en': 'en-GB',
-        'en-US': 'en-GB',
-        'de': 'de-DE',
-        'fr': 'fr-FR',
+        "locales": [
+            "en-GB",
+            "de-DE",
+            "fr-FR",
+            "es-ES",
+            "it-IT",
+            "nl-NL",
+            "pl-PL",
+            "pt-BR",
+            "pt-PT",
+            "tr-TR",
+            "ja-JP"
+        ],
+        "fallbacks": {
+            "en": "en-GB",
+            "en-US": "en-GB",
+
+            "de": "de-DE",
+
+            "fr": "fr-FR",
+
+            "es": "es-ES",
+
+            "it": "it-IT",
+
+            "nl": "nl-NL",
+
+            "pl": "pl-PL",
+
+            "pt": "pt-BR",
+
+            "tr": "tr-TR",
+
+            "ja": "ja-JP"
+        }
     }
-});
+);
 
 const ALLOWED_CUSTOM_KEYS = new Set(['locales', 'fallbacks']);
 

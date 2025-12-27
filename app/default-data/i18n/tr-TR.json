@@ -1,0 +1,58 @@
+{
+  "label": {
+    "back": "Geri",
+    "liveStats": "Canlı istatistikler",
+    "close": "Kapat",
+    "info": "Bilgi",
+    "days": "Gün",
+    "hours_short": "Saat",
+    "storage": "Depolama (HDD)",
+    "temps": "Sıcaklıklar",
+    "versions": "Sürümler",
+    "system": "Sistem",
+    "docker": "Docker konteynerleri",
+    "host": "Host",
+    "os": "İS",
+    "kernel": "Kernel",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Çalışma süresi",
+    "hddAvg": "HDD Ort.",
+    "chassis": "Şasi",
+    "cpuLoad": "Yük",
+    "plugins": "Eklentiler",
+    "ram": "RAM",
+    "ramSlot": "RAM yuvası",
+    "used": "Kullanılan",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Son güncelleme",
+    "now": "şimdi"
+  },
+  "tooltip": {
+    "infodrawer": "Sistem bilgilerini aç/kapat",
+    "systemLoad": "Sistem yükü ortalaması: son 1 dakika / son 5 dakika / son 15 dakika"
+  },
+  "docker": {
+    "status": {
+      "up": "Çalışıyor",
+      "created": "Oluşturuldu"
+    }
+  },
+  "errors": {
+    "missingKey": "Eksik çeviri: {key}",
+    "noDisksFound": "Sürücü bulunamadı"
+  },
+  "log": {
+    "listening": "Service Dashboard şu portta çalışıyor"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  }
+}

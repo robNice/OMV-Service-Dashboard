@@ -253,9 +253,20 @@ Example:
 /config/i18n/fr-FR.json
 ```
 
-However: Full (and hopefully correct) translations are already provided for English, French and German.
+However: Full (and hopefully correct) translations are already provided for:
 
-If you translate the application into another language, please consider contributing your translations back to the project.
+- English
+- German
+- French
+- Spanish
+- Italian
+- Dutch
+- Polish
+- Portuguese
+- Turkish
+- Japanese
+
+If you translate the application into another language or find mistranslations, please consider contributing your translations back to the project.
 
 ### How translations work
 

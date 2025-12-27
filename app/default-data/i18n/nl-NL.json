@@ -1,0 +1,58 @@
+{
+  "label": {
+    "back": "Terug",
+    "liveStats": "Live-statistieken",
+    "close": "Sluiten",
+    "info": "Info",
+    "days": "Dagen",
+    "hours_short": "u",
+    "storage": "Opslag (HDD’s)",
+    "temps": "Temperaturen",
+    "versions": "Versies",
+    "system": "Systeem",
+    "docker": "Docker-containers",
+    "host": "Host",
+    "os": "OS",
+    "kernel": "Kernel",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Uptime",
+    "hddAvg": "HDD Ø",
+    "chassis": "Chassis",
+    "cpuLoad": "Belasting",
+    "plugins": "Extensies",
+    "ram": "RAM",
+    "ramSlot": "RAM-slot",
+    "used": "Gebruikt",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Laatst bijgewerkt",
+    "now": "nu"
+  },
+  "tooltip": {
+    "infodrawer": "Systeeminformatie openen/sluiten",
+    "systemLoad": "Gemiddelde systeembelasting: laatste minuut / laatste 5 minuten / laatste 15 minuten"
+  },
+  "docker": {
+    "status": {
+      "up": "Actief",
+      "created": "Aangemaakt"
+    }
+  },
+  "errors": {
+    "missingKey": "Ontbrekende vertaling: {key}",
+    "noDisksFound": "Geen schijven gevonden"
+  },
+  "log": {
+    "listening": "Service Dashboard draait op poort"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  }
+}

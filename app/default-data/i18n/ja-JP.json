@@ -1,0 +1,58 @@
+{
+  "label": {
+    "back": "戻る",
+    "liveStats": "ライブ統計",
+    "close": "閉じる",
+    "info": "情報",
+    "days": "日",
+    "hours_short": "時間",
+    "storage": "ストレージ（HDD）",
+    "temps": "温度",
+    "versions": "バージョン",
+    "system": "システム",
+    "docker": "Docker コンテナ",
+    "host": "ホスト",
+    "os": "OS",
+    "kernel": "カーネル",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "稼働時間",
+    "hddAvg": "HDD 平均",
+    "chassis": "シャーシ",
+    "cpuLoad": "負荷",
+    "plugins": "拡張機能",
+    "ram": "RAM",
+    "ramSlot": "RAM スロット",
+    "used": "使用中",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "最終更新",
+    "now": "現在"
+  },
+  "tooltip": {
+    "infodrawer": "システム情報を開く／閉じる",
+    "systemLoad": "システム負荷の平均：直近1分／直近5分／直近15分"
+  },
+  "docker": {
+    "status": {
+      "up": "稼働中",
+      "created": "作成済み"
+    }
+  },
+  "errors": {
+    "missingKey": "翻訳が見つかりません: {key}",
+    "noDisksFound": "ドライブが検出されませんでした"
+  },
+  "log": {
+    "listening": "Service Dashboard は次のポートで実行中"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  }
+}
