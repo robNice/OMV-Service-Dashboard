@@ -1,5 +1,33 @@
 # OMV Service Dashboard
 
+---
+
+## Contents
+
+- [Introduction](#Introduction)
+- [Features](#features)
+- [Configuration (important)](#configuration-important)
+- [Directory Layout (relevant parts)](#directory-layout-relevant-parts)
+- [Installation: Docker (recommended)](#installation-docker-recommended)
+    - [Requirements](#requirements)
+    - [Quick start](#quick-start)
+- [Installation: Standalone (advanced / untested)](#installation-standalone-advanced--untested)
+    - [Requirements](#requirements-1)
+    - [Steps (high level)](#steps-high-level)
+- [Notes](#notes)
+- [Screenshots](#screenshots)
+    - [Mobile dashboard overview](#mobile-dashboard-overview)
+    - [Mobile dashboard section](#mobile-dashboard-section)
+    - [Mobile info drawer](#mobile-info-drawer)
+    - [Desktop dashboard overview](#desktop-dashboard-overview)
+    - [Desktop dashboard section](#desktop-dashboard-section)
+    - [Desktop info drawer](#desktop-info-drawer)
+- [License](#license)
+
+---
+
+## Introduction
+
 A small Node.js–based service and system dashboard for an OpenMediaVault (OMV) host.  
 It shows your main services* as cards, grouped into sections, and can display live system statistics
 (uptime, disk usage, temperatures, Docker containers, …).
@@ -10,7 +38,6 @@ The app is designed to run either:
 
 - inside a Docker container (recommended) or
 - directly on the OMV host (“standalone”),
-
 
 ---
 
