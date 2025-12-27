@@ -1,6 +1,6 @@
-# OMV Landing Page
+# OMV Service Dashboard
 
-A small Node.js–based landing page for an OpenMediaVault (OMV) host.  
+A small Node.js–based service and system dashboard for an OpenMediaVault (OMV) host.  
 It shows your main services* as cards, grouped into sections, and can display live system statistics
 (uptime, disk usage, temperatures, Docker containers, …).
 
@@ -87,10 +87,10 @@ Take a look at the [`example.docker-compose.yml`](./example.docker-compose.yml) 
    docker compose up -d
    ```
 
-3. Open the landing page:
+3. Open the dashboard in your browser:
 
    ```
-   http://<host>:chosenport/
+   http://<host>:<port>/
    ```
 
 You can update or recreate the container at any time –  

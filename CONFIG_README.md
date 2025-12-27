@@ -10,7 +10,7 @@ To make things easier, copy the directory `config-example` to  your `/config` di
 All files in this directory are **read at runtime** and **override the built-in defaults** shipped with the application.  
 Nothing in `/config` is required – if a file is missing, the application falls back to its internal defaults.
 
-Anyway: without a customized services.json, you will only see an exmaple landing page with very dead links. 
+Anyway: without a customized services.json, you will only see an example dashboard with very dead links. 
 
 > ⚠️ This directory is meant for **configuration and content only**.  
 > **JavaScript, CSS and other application core files must not be placed here. They won't be read in there anyway ;)**
@@ -86,7 +86,7 @@ config.json example:
 
 ### `services.json`
 
-Defines sections and services shown on the landing page.
+Defines sections and services shown on the dashboard.
 
 This file **fully replaces** the internal default `services.json` (which is just an example configuration).
 You should definately **customize this file** to match your needs.
