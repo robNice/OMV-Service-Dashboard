@@ -102,9 +102,6 @@ everything inside `/config` is preserved.
 
 > ⚠️ This mode is currently not actively tested and mainly provided for completeness.
 
-Take a look at the [`example.docker-compose.standalone.yml`](./example.docker-compose.standalone.yml) file for how to set up your docker-compose.yml.
-
-
 ### Requirements
 
 - Node.js (v18+ or v20+ recommended)
