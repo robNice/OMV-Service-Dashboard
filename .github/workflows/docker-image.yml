@@ -58,5 +58,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
-            ${{ steps.version.outputs.is_prerelease == 'false' && format('ghcr.io/{0}:latest', github.repository) || '' }}
+            ghcr.io/${{ toLower( github.repository ) }}:${{ steps.version.outputs.version }}
+            ${{ steps.version.outputs.is_prerelease == 'false' && format('ghcr.io/{0}:latest', toLower( github.repository )) || '' }}
