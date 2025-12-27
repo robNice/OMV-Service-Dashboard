@@ -1,8 +1,9 @@
-const version = "1.2.1-0" // my lazy ass anti cache: +'-'+Math.random().toString();
+//const version = "1.2.1-0" // my lazy ass anti cache: +'-'+Math.random().toString();
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-
+const pkg = require('./package.json');
+const APP_VERSION = pkg.version;
 function initDefaultData() {
     const source = '/app/default-data';
     const target = '/data';
@@ -250,7 +251,7 @@ app.get("/", (req, res) => {
     const data = loadData();
     const config = loadConfig()
     const sections = data.sections.map(renderSection).join("\n");
-    const html = setTemplate( req, loadTemplate(), '', version, config.title, sections );
+    const html = setTemplate( req, loadTemplate(), '', APP_VERSION, config.title, sections );
 
     res.send(html);
 });
@@ -268,7 +269,7 @@ app.get("/section/:id", (req, res) => {
         req,
         loadTemplate(),
         '<a href="/" style="margin: 1rem; display: inline-block;">← '+__('label.back')+'</a>',
-        version,
+        APP_VERSION,
         config.title + ' - ' + section.title,
         services
     );
