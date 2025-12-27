@@ -6,7 +6,10 @@
     if (!el || !tab) return;
     const setOpen = (open) => {
         el.classList.toggle("open", open);
-        window.setTimeout(() => tab.blur(), 750);
+        window.setTimeout(() => {
+            tab.blur();
+            document.body.focus();
+        }, 750);
         try {
             localStorage.setItem(STORAGE_KEY, open ? "1" : "0");
         } catch (_) {
