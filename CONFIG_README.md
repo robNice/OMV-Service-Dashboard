@@ -5,6 +5,8 @@ Whenever this text mentions `/config` it means your very own `/config` directory
 
 The `/config` directory contains **optional user overrides** for the OMV Service Dashboard.
 
+To make things easier, copy the directory `config-example` to  your `/config` directory and customize it to your needs.
+
 All files in this directory are **read at runtime** and **override the built-in defaults** shipped with the application.  
 Nothing in `/config` is required – if a file is missing, the application falls back to its internal defaults.
 
@@ -87,7 +89,7 @@ Defines sections and services shown on the landing page.
 This file **fully replaces** the internal default `services.json` (which is just an example configuration).
 You should definately **customize this file** to match your needs.
 
-The following Example defines two sections, one is filled with two services and the other one is empty (which doesn't makes much sense, does it? Change that now):
+The following example defines two sections, one is filled with two services and the other one is empty (which doesn't makes much sense, does it? Change that now):
 
 ```json
 {
@@ -122,7 +124,7 @@ The following Example defines two sections, one is filled with two services and 
 --- 
 #### Section card image filenames
 
-Section card- mage filenames must match the section IDs.
+Section card image filenames must match the section IDs.
 
 `"id": "admin"`
 => So a 'admin.png', 'admin.gif', 'admin.jpg' or 'admin.webp' image should exist in

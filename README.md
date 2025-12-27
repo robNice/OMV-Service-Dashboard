@@ -46,10 +46,10 @@ app/
   server.js           # Node/Express server
   lib/                # Backend helpers (i18n, assets, stats, config loaders)
   templates/          # HTML templates
-
-data/
-  assets/             # Built-in assets (JS, CSS, images)
-  i18n/               # Built-in translations
+  default-data/       # will be copied to /data on run time
+    assets/           # Built-in assets (JS, CSS, images)
+    i18n/             # Built-in translations
+config.example/       # Example configuration / you should copy this to your config-path (mounted in your docker-compose.yml or defined in the env variable 'OMV_SERVICE_DASHBOARD_CONFIG')
 ```
 
 User-provided configuration and assets live outside the app code in:
