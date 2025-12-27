@@ -42,7 +42,7 @@
   },
   "errors": {
     "missingKey": "Missing translation: {key}",
-    "noDisksFound": "No Disks detected"
+    "noDisksFound": "No disks detected"
   },
   "log": {
     "listening": "Service Dashboard listening on port"
