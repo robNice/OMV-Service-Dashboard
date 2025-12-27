@@ -8,8 +8,8 @@ It shows your main services* as cards, grouped into sections, and can display li
 
 The app is designed to run either:
 
-- directly on the OMV host (“standalone”), or
-- inside a Docker container with access to the host’s stats and Docker daemon.
+- inside a Docker container (recommended) or
+- directly on the OMV host (“standalone”),
 
 
 ---
