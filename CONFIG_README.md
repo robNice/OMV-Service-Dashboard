@@ -71,6 +71,7 @@ config.json example:
 {
   "title": "OMV Service Dashboard",
   "defaultLang": "en-gb",
+  "infoDrawerRefreshInterval": 30,
   "port"      : 3000,
   "omvRpcPath": "/usr/sbin/omv-rpc"
 }
@@ -78,6 +79,7 @@ config.json example:
 
 - title: Used as basic title-tag and h1
 - defaultLang: Used as fallback language if no language is specified in the URL
+- infoDrawerRefreshInterval: How often the info drawer should be refreshed (in seconds)
 - port: Port the application listens on
 - omvRpcPath: Path to the omv-rpc binary: this is needed to read the disk list / smart info
 

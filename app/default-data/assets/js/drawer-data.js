@@ -1,7 +1,7 @@
 (async function () {
     const $ = (sel) => document.querySelector(sel);
     const host = "/api/stats";
-    const POLL_MS = 30000;
+    let POLL_MS = 30000;
 
     /**
      * Human readable file size.
@@ -224,7 +224,9 @@
         const res = await fetch(host, {cache: "no-store"});
         if (!res.ok) throw new Error(res.statusText);
         const s = await res.json();
-
+        if( s.pollInterval && s.pollInterval > 0 ) {
+            POLL_MS = s.pollInterval;
+        }
         if (s.ram) {
             const p = s.ram.percent ?? 0;
             const used = (s.ram.used / (1024 ** 3)).toFixed(1);
