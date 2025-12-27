@@ -1,6 +1,35 @@
 # Configuration (`/config`)
 
+--- 
 
+## Contents
+
+- [Introduction](#Introduction)
+- [TL;DR – Docker users](#tldr--docker-users)
+- [Basic notes](#basic-notes)
+- [Directory structure](#directory-structure)
+- [Configuration files](#configuration-files)
+    - [`config.json`](#configjson)
+    - [`services.json`](#servicesjson)
+        - [Section card image filenames](#section-card-image-filenames)
+        - [Section background-image filenames](#section-background-image-filenames)
+        - [Available section-ids](#available-section-ids)
+        - [Services](#services)
+        - [Default images and overrides](#default-images-and-overrides)
+    - [`i18n-settings.json`](#i18n-settingsjson)
+    - [Translations (`/config/i18n`)](#translations-configi18n)
+        - [How translations work](#how-translations-work)
+        - [Example: `i18n/fr-FR.json`](#example-i18nfr-frjson)
+- [Custom assets (`/config/assets`)](#custom-assets-configassets)
+    - [Allowed asset overrides](#allowed-asset-overrides)
+    - [Rules](#rules)
+    - [Not allowed](#not-allowed)
+- [Summary](#summary)
+
+
+---
+
+## Introduction
 Whenever this text mentions `/config` it means your very own `/config` directory for this app, mapped in your docker-composer.yml or defined in the env variable `OMV_SERVICE_DASHBOARD_CONFIG`.
 
 The `/config` directory contains **optional user overrides** for the OMV Service Dashboard.
@@ -16,6 +45,7 @@ Anyway: without a customized services.json, you will only see an example dashboa
 > **JavaScript, CSS and other application core files must not be placed here. They won't be read in there anyway ;)**
 
 ---
+
 
 ## TL;DR – Docker users
 
@@ -78,7 +108,7 @@ config.json example:
 ```
 
 - title: Used as basic title-tag and h1
-- defaultLang: Used as fallback language if no language is specified in the URL
+- defaultLang: Used as fallback language if no language file can be found
 - infoDrawerRefreshInterval: How often the info drawer should be refreshed (in seconds)
 - port: Port the application listens on
 - omvRpcPath: Path to the omv-rpc binary: this is needed to read the disk list / smart info
