@@ -585,7 +585,7 @@ async function readPhysicalDrives() {
 async function readPollInterval() {
     const config = loadConfiguration();
     if( typeof config.infoDrawerRefreshInterval === "number" && config.infoDrawerRefreshInterval > 0 )  {
-        return config.infoDrawerRefreshInterval;
+        return config.infoDrawerRefreshInterval * 1000;
     }
     return null;
 }
