@@ -203,7 +203,8 @@ Use your own default images by placing a `_default` + any extension of png, gif,
 
 ### `i18n-settings.json`
 
-Controls which languages are available and how language fallbacks behave.
+Controls which languages should be available and how language fallbacks behave.
+The language is determined by the browser's language settings and falls back to the default language if no match is found.
 
 Example:
 
@@ -242,6 +243,10 @@ Example:
 ```
 /config/i18n/fr-FR.json
 ```
+
+However: Full (and hopefully correct) translations are already provided for English, French and German.
+
+If you translate the application into another language, please consider contributing your translations back to the project.
 
 ### How translations work
 
