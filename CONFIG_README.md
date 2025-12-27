@@ -207,8 +207,14 @@ Use your own default images by placing a `_default` + any extension of png, gif,
 
 ### `i18n-settings.json`
 
+> ⚠️ Though you theoretically could use this file to override the built-in translation settings, this is not recommended.
+>
+> I recommend to not include in your /config unless you have a very good reason to.
+> You could miss future translations.
+
 Controls which languages should be available and how language fallbacks behave.
 The language is determined by the browser's language settings (to be precise, what `Accept-Language` header your browser sends) and falls back to the default language if no match is found.
+
 
 Example:
 
@@ -253,9 +259,20 @@ Example:
 /config/i18n/fr-FR.json
 ```
 
-However: Full (and hopefully correct) translations are already provided for English, French and German.
+However: Full (and hopefully correct) translations are already provided for:
 
-If you translate the application into another language, please consider contributing your translations back to the project.
+- English
+- German
+- French
+- Spanish
+- Italian
+- Dutch
+- Polish
+- Portuguese
+- Turkish
+- Japanese
+
+If you translate the application into another language or find mistranslations, please consider contributing your translations back to the project.
 
 ### How translations work
 

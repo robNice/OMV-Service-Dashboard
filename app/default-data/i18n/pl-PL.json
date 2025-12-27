@@ -1,0 +1,58 @@
+{
+  "label": {
+    "back": "Wstecz",
+    "liveStats": "Statystyki na żywo",
+    "close": "Zamknij",
+    "info": "Info",
+    "days": "Dni",
+    "hours_short": "godz.",
+    "storage": "Pamięć masowa (HDD)",
+    "temps": "Temperatury",
+    "versions": "Wersje",
+    "system": "System",
+    "docker": "Kontenery Docker",
+    "host": "Host",
+    "os": "OS",
+    "kernel": "Jądro",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Czas działania",
+    "hddAvg": "HDD Ø",
+    "chassis": "Obudowa",
+    "cpuLoad": "Obciążenie",
+    "plugins": "Rozszerzenia",
+    "ram": "RAM",
+    "ramSlot": "Gniazdo RAM",
+    "used": "Użyte",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Ostatnia aktualizacja",
+    "now": "teraz"
+  },
+  "tooltip": {
+    "infodrawer": "Otwórz/zamknij informacje systemowe",
+    "systemLoad": "Średnie obciążenie systemu: ostatnia minuta / ostatnie 5 minut / ostatnie 15 minut"
+  },
+  "docker": {
+    "status": {
+      "up": "Uruchomiony",
+      "created": "Utworzony"
+    }
+  },
+  "errors": {
+    "missingKey": "Brak tłumaczenia: {key}",
+    "noDisksFound": "Nie wykryto dysków"
+  },
+  "log": {
+    "listening": "Service Dashboard działa na porcie"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  }
+}

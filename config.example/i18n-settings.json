@@ -1,9 +1,37 @@
 {
-  "locales": ["en-GB", "de-DE", "fr-FR"],
+  "locales": [
+    "en-GB",
+    "de-DE",
+    "fr-FR",
+    "es-ES",
+    "it-IT",
+    "nl-NL",
+    "pl-PL",
+    "pt-BR",
+    "pt-PT",
+    "tr-TR",
+    "ja-JP"
+  ],
   "fallbacks": {
     "en": "en-GB",
     "en-US": "en-GB",
+
     "de": "de-DE",
-    "fr": "fr-FR"
+
+    "fr": "fr-FR",
+
+    "es": "es-ES",
+
+    "it": "it-IT",
+
+    "nl": "nl-NL",
+
+    "pl": "pl-PL",
+
+    "pt": "pt-BR",
+
+    "tr": "tr-TR",
+
+    "ja": "ja-JP"
   }
 }
