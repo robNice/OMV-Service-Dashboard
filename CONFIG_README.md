@@ -72,13 +72,13 @@ config.json example:
   "port"      : 3000,
   "omvRpcPath": "/usr/sbin/omv-rpc"
 }
+```
 
 - title: Used as basic title-tag and h1
 - defaultLang: Used as fallback language if no language is specified in the URL
 - port: Port the application listens on
 - omvRpcPath: Path to the omv-rpc binary: this is needed to read the disk list / smart info
 
-````
 
 ### `services.json`
 
