@@ -1,0 +1,58 @@
+{
+  "label": {
+    "back": "Voltar",
+    "liveStats": "Estatísticas ao vivo",
+    "close": "Fechar",
+    "info": "Info",
+    "days": "Dias",
+    "hours_short": "H",
+    "storage": "Armazenamento (HDDs)",
+    "temps": "Temperaturas",
+    "versions": "Versões",
+    "system": "Sistema",
+    "docker": "Contêineres Docker",
+    "host": "Host",
+    "os": "SO",
+    "kernel": "Kernel",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Tempo de atividade",
+    "hddAvg": "HDD Ø",
+    "chassis": "Chassi",
+    "cpuLoad": "Carga",
+    "plugins": "Extensões",
+    "ram": "RAM",
+    "ramSlot": "Slot de RAM",
+    "used": "Usado",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Última atualização",
+    "now": "agora"
+  },
+  "tooltip": {
+    "infodrawer": "Abrir/fechar informações do sistema",
+    "systemLoad": "Média da carga do sistema: último minuto / últimos 5 minutos / últimos 15 minutos"
+  },
+  "docker": {
+    "status": {
+      "up": "Em execução",
+      "created": "Criado"
+    }
+  },
+  "errors": {
+    "missingKey": "Tradução ausente: {key}",
+    "noDisksFound": "Nenhuma unidade detectada"
+  },
+  "log": {
+    "listening": "Service Dashboard em execução na porta"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  }
+}
