@@ -89,7 +89,7 @@ Defines sections and services shown on the landing page.
 This file **fully replaces** the internal default `services.json` (which is just an example configuration).
 You should definately **customize this file** to match your needs.
 
-The following example defines two sections, one is filled with two services and the other one is empty (which doesn't makes much sense, does it? Change that now):
+The following example defines two sections, one is filled with two services and the other one is empty (which doesn't makes much sense, does it? Change that now!):
 
 ```json
 {
