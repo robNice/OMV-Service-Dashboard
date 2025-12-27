@@ -164,7 +164,7 @@ Here is a complete list of already available section-ids, each with their own ca
 - network
 - smart-home
 
-If you are in need of more sections, feel free to add missing images to your config/assets/cards/sections-directory. Just keep in mind: filename is always `{id}.png` 
+If you are in need of more sections, feel free to add missing images to your config/assets/cards/sections-directory. Just keep in mind: filename is always `{id}.`+any extension of png, gif, jpg or webp. 
 
 ---
 #### Services
