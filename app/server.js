@@ -1,4 +1,4 @@
-const version = "1.2.0-0" // my lazy ass anti cache: +'-'+Math.random().toString();
+const version = "1.2.1-0" // my lazy ass anti cache: +'-'+Math.random().toString();
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
