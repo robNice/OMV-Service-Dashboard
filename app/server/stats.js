@@ -582,6 +582,13 @@ async function readPhysicalDrives() {
     return Array.from(seen.values()).sort((a, b) => a.device.localeCompare(b.device));
 }
 
+async function readPollInterval() {
+    const config = loadConfiguration();
+    if( typeof config.infoDrawerRefreshInterval === "number" && config.infoDrawerRefreshInterval > 0 )  {
+        return config.infoDrawerRefreshInterval;
+    }
+    return null;
+}
 /**
  * creates output of the stats request
  * @returns {Promise<{ts: number, ram: Awaited<{load: number[], uptime: {days: number, hours: number, mins: number}}>, load: number[], uptime: {days: number, hours: number, mins: number}, temps: Awaited<{load: number[], uptime: {days: number, hours: number, mins: number}}>, container: Awaited<{load: number[], uptime: {days: number, hours: number, mins: number}}>, containers: Awaited<{load: number[], uptime: {days: number, hours: number, mins: number}}>, disks: Awaited<{load: number[], uptime: {days: number, hours: number, mins: number}}>, system: Awaited<{load: number[], uptime: {days: number, hours: number, mins: number}}>}>}

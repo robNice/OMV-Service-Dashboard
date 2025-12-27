@@ -1,7 +1,7 @@
 (async function () {
     const $ = (sel) => document.querySelector(sel);
     const host = "/api/stats";
-    const POLL_MS = 30000;
+    let POLL_MS = 30000;
 
     /**
      * Human readable file size.
