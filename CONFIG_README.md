@@ -70,7 +70,7 @@ config.json example:
 ```json
 {
   "title": "OMV Service Dashboard",
-  "defaultLang": "en-gb",
+  "defaultLang": "en-GB",
   "infoDrawerRefreshInterval": 30,
   "port"      : 3000,
   "omvRpcPath": "/usr/sbin/omv-rpc"
@@ -208,7 +208,7 @@ Use your own default images by placing a `_default` + any extension of png, gif,
 ### `i18n-settings.json`
 
 Controls which languages should be available and how language fallbacks behave.
-The language is determined by the browser's language settings and falls back to the default language if no match is found.
+The language is determined by the browser's language settings (to be precise, what `Accept-Language` header your browser sends) and falls back to the default language if no match is found.
 
 Example:
 
@@ -228,7 +228,12 @@ Example:
   List of enabled locales.
 
 - `fallbacks`  
-  Maps language codes to a fallback locale.
+  Maps language codes (`Accept-Language` header) to a fallback locale.
+  
+  For example: If you are french and your browser sends 
+  `Accept-Language: fr;(...)` the fallback locale for `fr` is `fr-FR`. 
+  
+  Without this mapping, the fallback would be what is defined in your config.json as `defaultLang`.
 
 If this file is missing, the built-in defaults are used.
 
