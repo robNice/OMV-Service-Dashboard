@@ -46,7 +46,7 @@ zu laufen.
 ## Funktionen
 
 - Übersichtliches Dashboard mit Sektionen (z. B. *System*, *Media*, *Smart Home*, …)
-- Service-Karten mit Links zu OMV, Home Assistant, Mealie, Jellyfin usw.
+- Service-Karten, beispelsweise mit Links zu OMV, Home Assistant, Mealie, Jellyfin usw.
 - Hintergrundbilder pro Sektion
 - Vorschaubilder pro Sektion und Service
 - Live-Statistik-Drawer (Uptime, RAM, Datenträger, Temperaturen, Docker-Container)
