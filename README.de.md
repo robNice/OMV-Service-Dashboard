@@ -1,6 +1,5 @@
 # OMV Service Dashboard
 
----
 
 ## Inhalt
 
