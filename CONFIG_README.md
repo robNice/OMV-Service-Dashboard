@@ -56,8 +56,7 @@ services:
   omv-service-dashboard:
     image: omv-service-dashboard
     volumes:
-      - /wherever-your-boat-floats/config:/config
-      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      - /path/to/your/configuration/directory:/config
 ```
 ---
 ## Basic notes
@@ -188,9 +187,10 @@ If in neither directory, a default image is used.
 
 ---
 #### Available section-ids
-Here is a complete list of already available section-ids, each with their own card and background image:
+Here is a complete list of the section IDs for which card and background images already exist:
 
 - admin
+- files
 - kitchen
 - media
 - network

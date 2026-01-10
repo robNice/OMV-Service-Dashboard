@@ -17,6 +17,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Ensure tag is on main
+        run: |
+          git fetch --all --tags
+          if ! git branch -r --contains "$GITHUB_SHA" | grep -q "origin/main"; then
+            echo "❌ Tag is not on main"
+            exit 1
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -57,16 +65,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v5
-#        with:
-#          context: .
-#          push: true
-#          tags: |
-#            ghcr.io/${{ lower( github.repository ) }}:${{ steps.version.outputs.version }}
-#            ${{ steps.version.outputs.is_prerelease == 'false' && format('ghcr.io/{0}:latest', lower( github.repository )) || '' }}
-
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
