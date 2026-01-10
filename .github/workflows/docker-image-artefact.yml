@@ -15,17 +15,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build image
+      - name: Prepare image name
+        id: image
         run: |
-          docker build \
-            -t ghcr.io/<owner>/<repo>:main-${{ github.sha }} \
-            .
+          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "name=$IMAGE_NAME" >> $GITHUB_OUTPUT
 
-      - name: Push image
-        run: |
-          docker push ghcr.io/<owner>/<repo>:main-${{ github.sha }}
-
-            .
+      - name: Build and push MAIN artifact image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.image.outputs.name }}:main-${{ github.sha }}
