@@ -35,4 +35,3 @@ jobs:
           push: true
           tags: |
             ${{ steps.image.outputs.name }}:dev
-            ${{ steps.image.outputs.name }}:dev-${{ github.sha }}
