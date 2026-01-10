@@ -67,8 +67,7 @@ services:
   omv-service-dashboard:
     image: omv-service-dashboard
     volumes:
-      - /wherever-your-boat-floats/config:/config
-      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      - /pfad/zu/deinem/konfigurationsverzeichnis:/config
 ```
 ---
 ## Grundlegende Hinweise
@@ -207,10 +206,11 @@ Existiert es in keinem der beiden Verzeichnisse, wird ein Standardbild verwendet
 
 ---
 #### Verfügbare Section-IDs
-Hier ist eine vollständige Liste der bereits verfügbaren Section-IDs,
-jeweils inklusive eigenem Karten- und Hintergrundbild:
+Hier ist eine vollständige Liste der Section-IDs für die es schon Karten- und 
+Hintergrundbilder gibt:
 
 - admin
+- files
 - kitchen
 - media
 - network
