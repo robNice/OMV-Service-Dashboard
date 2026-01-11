@@ -54,5 +54,23 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "services": {
+      "title": "Services (Bearbeiten)",
+      "addSection": "Sektion hinzufügen"
+    },
+    "section": {
+      "id": "Sektions-ID",
+      "title": "Sektionsname",
+      "delete": "Sektion löschen",
+      "addService": "Service hinzufügen"
+    },
+    "service": {
+      "id": "Service-ID",
+      "title": "Service-Name",
+      "url": "Service-URL",
+      "delete": "Service löschen"
+    }
   }
 }

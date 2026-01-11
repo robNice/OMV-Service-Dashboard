@@ -373,19 +373,18 @@ app.post("/admin/setpassword", requireAdmin, express.urlencoded({ extended: fals
 });
 
 app.get("/admin/services", requireAdmin, (req, res) => {
-    const data = loadServices();
-
     const tpl = fs.readFileSync(
         "/app/templates/admin-services.html",
         "utf8"
     );
 
-    const sectionsHtml = renderAdminServices(data);
+    const html = translateTextI18n(tpl, {
+        locale: req.getLocale()
+    });
 
-    res.send(
-        tpl.replace("{{SECTIONS}}", sectionsHtml)
-    );
+    res.send(html);
 });
+
 
 app.get("/admin/api/services", requireAdmin, (req, res) => {
     const data = loadServices();
