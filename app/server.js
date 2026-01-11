@@ -317,6 +317,7 @@ app.post("/admin/login", express.urlencoded({ extended: false }), (req, res) => 
     const sid = crypto.randomBytes(16).toString("hex");
     sessions.set(sid, { isAdmin: true });
 
+
     res.setHeader(
         "Set-Cookie",
         `omv_session=${sid}; HttpOnly; SameSite=Lax`
@@ -384,6 +385,11 @@ app.get("/admin/services", requireAdmin, (req, res) => {
     res.send(
         tpl.replace("{{SECTIONS}}", sectionsHtml)
     );
+});
+
+app.get("/admin/api/services", requireAdmin, (req, res) => {
+    const data = loadServices();
+    res.json(data);
 });
 
 app.get('/assets/*', (req, res) => {
