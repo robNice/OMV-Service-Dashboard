@@ -3,6 +3,8 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const pkg = require('./package.json');
+const crypto = require("crypto");
+const argon2 = require("argon2");
 const APP_VERSION = pkg.version;
 function initDefaultData() {
     const source = '/app/default-data';
@@ -11,13 +13,7 @@ function initDefaultData() {
     fs.cpSync(source, target, { recursive: true });
 }
 initDefaultData();
-
-
-
-
-
 // initDataDir();
-
 const { CONFIG_DIR } = require('./lib/paths');
 const { resolveAssetPath } = require('./lib/asset-resolver');
 const app = express();
