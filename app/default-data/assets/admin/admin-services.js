@@ -40,8 +40,35 @@ function getServiceDropTarget(mouseY) {
         }
     }
 
+    const sections = [...editor.querySelectorAll(".section")];
+
+    for (const sec of sections) {
+        const servicesEl = sec.querySelector(".section-services");
+        if (!servicesEl.children.length) {
+            const r = servicesEl.getBoundingClientRect();
+            if (mouseY >= r.top && mouseY <= r.bottom) {
+                return {
+                    sectionIndex: Number(servicesEl.dataset.sectionIndex),
+                    serviceIndex: 0,
+                    top: r.top + 8
+                };
+            }
+        }
+    }
+
+    const lastSection = sections.at(-1);
+    if (lastSection) {
+        const servicesEl = lastSection.querySelector(".section-services");
+        return {
+            sectionIndex: Number(servicesEl.dataset.sectionIndex),
+            serviceIndex: servicesEl.children.length,
+            top: servicesEl.getBoundingClientRect().bottom
+        };
+    }
+
     return null;
 }
+
 
 function showIndicator(y) {
     indicator.style.top = `${y + window.scrollY}px`;
@@ -99,6 +126,7 @@ function renderSection(section, sectionIndex) {
     };
 
     const servicesEl = el.querySelector(".section-services");
+    servicesEl.dataset.sectionIndex = sectionIndex;
 
     section.services.forEach((svc, svcIdx) => {
         servicesEl.appendChild(
