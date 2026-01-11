@@ -39,7 +39,7 @@ function renderSection(section) {
     });
 
     el.querySelector('[data-action="add-service"]').onclick = () => {
-        section.services.push({ id: "", title: "", url: "" });
+        section.services.push({ title: "", url: "" });
         render();
     };
 
@@ -62,13 +62,10 @@ function renderSection(section) {
 function renderService(section, service) {
     const el = clone("service-template");
 
-    el.querySelector('[data-label="service-id"]').textContent = T.serviceId;
     el.querySelector('[data-label="service-title"]').textContent = T.serviceTitle;
     el.querySelector('[data-label="service-url"]').textContent = T.serviceUrl;
-
     el.querySelector('[data-action="delete-service"]').textContent = T.deleteService;
 
-    el.querySelector('[data-field="service-id"]').value = service.id ?? "";
     el.querySelector('[data-field="service-title"]').value = service.title ?? "";
     el.querySelector('[data-field="service-url"]').value = service.url ?? "";
 
@@ -77,10 +74,6 @@ function renderService(section, service) {
     el.querySelector('[data-action="delete-service"]').onclick = () => {
         section.services = section.services.filter(s => s !== service);
         render();
-    };
-
-    el.querySelector('[data-field="service-id"]').oninput = e => {
-        service.id = e.target.value;
     };
 
     el.querySelector('[data-field="service-title"]').oninput = e => {

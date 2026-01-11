@@ -4,7 +4,7 @@
 }
 
 body {
-    font-family: system-ui, sans-serif;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     background: #0f172a;
     color: #e5e7eb;
     margin: 0;
@@ -20,13 +20,14 @@ body {
 
 .admin-page {
     padding: 1.5rem;
+    max-width: 1100px;
 }
 
 /* ===== Card / Panel ===== */
 .admin-card {
     background: #020617;
     padding: 2rem;
-    border-radius: 8px;
+    border-radius: 10px;
     width: 320px;
 }
 
@@ -38,57 +39,88 @@ header.admin-header {
     margin-bottom: 2rem;
 }
 
+header.admin-header h1 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
 header.admin-header a {
     color: #60a5fa;
     text-decoration: none;
 }
 
+header.admin-header a:hover {
+    text-decoration: underline;
+}
+
 /* ===== Sections ===== */
 .section {
     margin-bottom: 2rem;
-    padding: 1rem;
+    padding: 1.25rem;
+    background: linear-gradient(180deg, #020617, #020617cc);
+    border-radius: 10px;
+    border: 1px solid #1e293b;
+}
+
+.section-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 0.75rem;
+    align-items: end;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #1e293b;
+}
+
+/* ===== Services (children of sections) ===== */
+.section-services {
+    margin-top: 1rem;
+    margin-left: 1.25rem;
+    padding-left: 1rem;
+    border-left: 2px dashed #1e293b;
+}
+
+.service {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr auto;
+    gap: 0.75rem;
+    align-items: end;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
     background: #020617;
+    border: 1px solid #1e293b;
     border-radius: 8px;
 }
 
-.section h2 {
-    margin-top: 0;
-    font-size: 1.1rem;
-    border-bottom: 1px solid #1e293b;
-    padding-bottom: 0.5rem;
-}
-
-/* ===== Lists ===== */
-ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-}
-
-li {
-    display: flex;
-    align-items: center;
-    padding: 0.4rem 0;
-    border-bottom: 1px solid #1e293b;
-}
-
-li:last-child {
-    border-bottom: none;
+.service:last-child {
+    margin-bottom: 0;
 }
 
 /* ===== Forms ===== */
+label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
 input,
 button {
     width: 100%;
-    margin-top: 1rem;
-    padding: 0.6rem;
+    padding: 0.6rem 0.65rem;
+    font-size: 0.9rem;
 }
 
 input {
     background: #020617;
     border: 1px solid #334155;
     color: #e5e7eb;
-    border-radius: 4px;
+    border-radius: 6px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #60a5fa;
 }
 
 button {
@@ -96,11 +128,33 @@ button {
     border: none;
     color: white;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+button:hover {
+    background: #1d4ed8;
 }
 
 button.danger {
     background: #b91c1c;
+}
+
+button.danger:hover {
+    background: #991b1b;
+}
+
+button.secondary {
+    background: #334155;
+}
+
+button.secondary:hover {
+    background: #475569;
+}
+
+/* ===== Add buttons ===== */
+button.add {
+    margin-top: 1rem;
 }
 
 /* ===== Text ===== */
@@ -110,30 +164,17 @@ h1 {
 }
 
 .hint {
-    margin-top: 1rem;
-    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
     color: #fbbf24;
 }
 
 .error {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     color: #f87171;
 }
 
-/* ===== Service List ===== */
-img.service-icon {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-    margin-right: 0.75rem;
-}
-
-.service-title {
-    font-weight: 500;
-}
-
-.service-url {
-    margin-left: auto;
-    font-size: 0.85rem;
-    color: #94a3b8;
+/* ===== Utility ===== */
+.hidden {
+    display: none;
 }
