@@ -4,7 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const pkg = require('./package.json');
 const crypto = require("crypto");
-const argon2 = require("argon2");
 const APP_VERSION = pkg.version;
 function initDefaultData() {
     const source = '/app/default-data';
@@ -56,17 +55,26 @@ function loadData() {
     return loadServices();
 }
 
+function hashPassword(password) {
+    const salt = crypto.randomBytes(16).toString("hex");
+    const hash = crypto.pbkdf2Sync(
+        password,
+        salt,
+        100_000,
+        32,
+        "sha256"
+    ).toString("hex");
+
+    return `${salt}:${hash}`;
+}
+
 async function initAdminPassword(config) {
     if (config.admin?.passwordHash) {
         return;
     }
 
-    const hash = await argon2.hash("admin", {
-        type: argon2.argon2id
-    });
-
     config.admin = {
-        passwordHash: hash,
+        passwordHash: hashPassword("dashboard"),
         passwordInitialized: true
     };
 
