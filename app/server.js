@@ -1,7 +1,8 @@
 //const version = "1.2.1-0" // my lazy ass anti cache: +'-'+Math.random().toString();
 const express = require("express");
-const session = require("express-session");
-
+const crypto = require("crypto");
+const SESSION_SECRET = crypto.randomBytes(32).toString("hex");
+const sessions = new Map();
 
 app.use(session({
     name: "omv-service-dashboard",
@@ -17,7 +18,6 @@ app.use(session({
 const fs = require("fs");
 const path = require("path");
 const pkg = require('./package.json');
-const crypto = require("crypto");
 const APP_VERSION = pkg.version;
 function initDefaultData() {
     const source = '/app/default-data';
@@ -68,6 +68,24 @@ function loadData() {
     // const { loadServices } = require('./lib/load-services');
     return loadServices();
 }
+
+function sessionMiddleware(req, res, next) {
+    const cookie = req.headers.cookie
+        ?.split("; ")
+        .find(c => c.startsWith("omv_session="));
+
+    if (cookie) {
+        const sid = cookie.split("=")[1];
+        if (sessions.has(sid)) {
+            req.session = sessions.get(sid);
+        }
+    }
+
+    next();
+}
+app.use(sessionMiddleware);
+
+app.use(sessionMiddleware);
 
 function hashPassword(password) {
     const salt = crypto.randomBytes(16).toString("hex");
@@ -280,28 +298,39 @@ app.post("/admin/login", express.urlencoded({ extended: false }), (req, res) => 
     const config = loadConfiguration();
 
     if (!verifyPassword(password, config.admin.passwordHash)) {
-        const tpl = fs.readFileSync(
-            "/app/templates/admin-login.html",
-            "utf8"
-        );
-
-        return res.send(
-            tpl.replace(
-                "{{MESSAGE}}",
-                '<div class="error">Invalid password</div>'
-            )
-        );
+        return res.status(401).send("Invalid password");
     }
 
-    req.session.isAdmin = true;
+    const sid = crypto.randomBytes(16).toString("hex");
+    sessions.set(sid, { isAdmin: true });
+
+    res.setHeader(
+        "Set-Cookie",
+        `omv_session=${sid}; HttpOnly; SameSite=Lax`
+    );
+
     res.redirect("/admin");
 });
 
+
 app.get("/admin/logout", (req, res) => {
-    req.session.destroy(() => {
-        res.redirect("/admin/login");
-    });
+    const cookie = req.headers.cookie
+        ?.split("; ")
+        .find(c => c.startsWith("omv_session="));
+
+    if (cookie) {
+        const sid = cookie.split("=")[1];
+        sessions.delete(sid);
+    }
+
+    res.setHeader(
+        "Set-Cookie",
+        "omv_session=; Max-Age=0"
+    );
+
+    res.redirect("/admin/login");
 });
+
 
 app.get("/admin", requireAdmin, (req, res) => {
     res.send(`
