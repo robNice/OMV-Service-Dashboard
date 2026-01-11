@@ -1,6 +1,10 @@
 let state = { sections: [] };
 const T = window.ADMIN_I18N;
 let dragState = null;
+let uiState = {
+    collapsedSections: new Set()
+};
+
 
 /* ================= helpers ================= */
 
@@ -90,9 +94,12 @@ function renderSection(section, sectionIndex) {
     const el = document.createElement("div");
     el.className = "section";
     el.draggable = true;
-
+    const isCollapsed = uiState.collapsedSections.has(sectionIndex);
     el.innerHTML = `
         <div class="section-header">
+             <button class="collapse-toggle" title="Toggle">
+                ${isCollapsed ? "▶" : "▼"}
+            </button>
             <div>
                 <label>${T.sectionId}</label>
                 <input type="text" value="${section.id}">
@@ -104,10 +111,20 @@ function renderSection(section, sectionIndex) {
             <button class="danger">${T.deleteSection}</button>
         </div>
 
-        <div class="section-services"></div>
 
-        <button class="secondary add">${T.addService}</button>
+        <div class="section-services ${isCollapsed ? "collapsed" : ""}"></div>
+    
+        ${isCollapsed ? "" : `<button class="secondary add">${T.addService}</button>`}
     `;
+
+    el.querySelector(".collapse-toggle").onclick = () => {
+        if (uiState.collapsedSections.has(sectionIndex)) {
+            uiState.collapsedSections.delete(sectionIndex);
+        } else {
+            uiState.collapsedSections.add(sectionIndex);
+        }
+        render();
+    };
 
     /* section drag */
     el.addEventListener("dragstart", () => {
@@ -133,11 +150,13 @@ function renderSection(section, sectionIndex) {
     const servicesEl = el.querySelector(".section-services");
     servicesEl.dataset.sectionIndex = sectionIndex;
 
-    section.services.forEach((svc, svcIdx) => {
-        servicesEl.appendChild(
-            renderService(section, svc, sectionIndex, svcIdx)
-        );
-    });
+    if (!uiState.collapsedSections.has(sectionIndex)) {
+        section.services.forEach((svc, svcIdx) => {
+            servicesEl.appendChild(
+                renderService(section, svc, sectionIndex, svcIdx)
+            );
+        });
+    }
 
     el.querySelector(".add").onclick = () => {
         section.services.push({ title: "", url: "" });
