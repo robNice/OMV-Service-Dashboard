@@ -264,7 +264,7 @@ app.get('/assets/*', (req, res) => {
 
 app.get("/", (req, res) => {
     const data = loadData();
-    const config = loadConfig()
+    const config = loadConfiguration()
     const sections = data.sections.map(renderSection).join("\n");
     const html = setTemplate( req, loadTemplate(), '', APP_VERSION, config.title, sections );
 
@@ -274,7 +274,7 @@ app.get("/", (req, res) => {
 
 app.get("/section/:id", (req, res) => {
     const data = loadData();
-    const config = loadConfig()
+    const config = loadConfiguration()
     const section = data.sections.find(s => s.id === req.params.id);
     if (!section) {
         return res.status(404).send("Sektion nicht gefunden");
