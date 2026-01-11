@@ -1,0 +1,139 @@
+/* ===== Base ===== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, sans-serif;
+    background: #0f172a;
+    color: #e5e7eb;
+    margin: 0;
+}
+
+/* ===== Layout ===== */
+.admin-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.admin-page {
+    padding: 1.5rem;
+}
+
+/* ===== Card / Panel ===== */
+.admin-card {
+    background: #020617;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 320px;
+}
+
+/* ===== Header ===== */
+header.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+header.admin-header a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+/* ===== Sections ===== */
+.section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #020617;
+    border-radius: 8px;
+}
+
+.section h2 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #1e293b;
+    padding-bottom: 0.5rem;
+}
+
+/* ===== Lists ===== */
+ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #1e293b;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+/* ===== Forms ===== */
+input,
+button {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.6rem;
+}
+
+input {
+    background: #020617;
+    border: 1px solid #334155;
+    color: #e5e7eb;
+    border-radius: 4px;
+}
+
+button {
+    background: #2563eb;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button.danger {
+    background: #b91c1c;
+}
+
+/* ===== Text ===== */
+h1 {
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+.hint {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #fbbf24;
+}
+
+.error {
+    margin-top: 1rem;
+    color: #f87171;
+}
+
+/* ===== Service List ===== */
+img.service-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    margin-right: 0.75rem;
+}
+
+.service-title {
+    font-weight: 500;
+}
+
+.service-url {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}

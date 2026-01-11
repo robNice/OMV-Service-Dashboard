@@ -4,87 +4,28 @@
     <meta charset="UTF-8">
     <title>Admin – Services</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: system-ui, sans-serif;
-            background: #0f172a;
-            color: #e5e7eb;
-            margin: 0;
-            padding: 1.5rem;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        a {
-            color: #60a5fa;
-            text-decoration: none;
-        }
-
-        .section {
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background: #020617;
-            border-radius: 8px;
-        }
-
-        .section h2 {
-            margin-top: 0;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #1e293b;
-            padding-bottom: 0.5rem;
-        }
-
-        ul {
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-        }
-
-        li {
-            display: flex;
-            align-items: center;
-            padding: 0.4rem 0;
-            border-bottom: 1px solid #1e293b;
-        }
-
-        li:last-child {
-            border-bottom: none;
-        }
-
-        img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-            margin-right: 0.75rem;
-        }
-
-        .service-title {
-            font-weight: 500;
-        }
-
-        .service-url {
-            margin-left: auto;
-            font-size: 0.85rem;
-            color: #94a3b8;
-        }
-    </style>
+    <link rel="stylesheet" href="/assets/admin/admin.css">
 </head>
 <body>
 
-<header>
-    <h1>Services (read-only)</h1>
-    <nav>
-        <a href="/admin">Admin</a> ·
-        <a href="/admin/logout">Logout</a>
-    </nav>
-</header>
+<div class="admin-page">
 
-{{SECTIONS}}
+    <header class="admin-header">
+        <h1>Services (edit mode)</h1>
+        <nav>
+            <a href="/admin">Admin</a> ·
+            <a href="/admin/logout">Logout</a>
+        </nav>
+    </header>
 
+    <div id="services-editor"></div>
+
+    <div style="margin-top:2rem;">
+        <button id="add-section">+ Add section</button>
+    </div>
+
+</div>
+
+<script src="/assets/admin/admin-services.js"></script>
 </body>
 </html>
