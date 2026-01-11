@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/admin/admin.css">
 </head>
+
 <body>
 
 <div class="admin-page">
@@ -26,6 +27,22 @@
 
 </div>
 
+<script>
+    window.ADMIN_I18N = {
+        sectionId: "{{__.admin.section.id}}",
+        sectionTitle: "{{__.admin.section.title}}",
+        deleteSection: "{{__.admin.section.delete}}",
+        addService: "{{__.admin.section.addService}}",
+
+        serviceId: "{{__.admin.service.id}}",
+        serviceTitle: "{{__.admin.service.title}}",
+        serviceUrl: "{{__.admin.service.url}}",
+        deleteService: "{{__.admin.service.delete}}"
+    };
+</script>
+
 <script src="/assets/admin/admin-services.js"></script>
 </body>
+
+
 </html>

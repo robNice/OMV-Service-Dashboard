@@ -2,6 +2,8 @@ let state = {
     sections: []
 };
 
+const T = window.ADMIN_I18N;
+
 /* ---------- helpers ---------- */
 
 function uid(prefix) {
@@ -24,15 +26,25 @@ function renderSection(section) {
     el.className = "section";
 
     el.innerHTML = `
-        <div class="section-header">
+        <label>
+            ${T.sectionId}
             <input type="text" value="${section.id}" data-field="section-id">
+        </label>
+
+        <label>
+            ${T.sectionTitle}
             <input type="text" value="${section.title}" data-field="section-title">
-            <button class="danger" data-action="delete-section">Delete</button>
-        </div>
+        </label>
+
+        <button class="danger" data-action="delete-section">
+            ${T.deleteSection}
+        </button>
 
         <div class="section-services"></div>
 
-        <button data-action="add-service">+ Add service</button>
+        <button data-action="add-service">
+            ${T.addService}
+        </button>
     `;
 
     const servicesContainer = el.querySelector(".section-services");
@@ -44,7 +56,7 @@ function renderSection(section) {
     el.querySelector('[data-action="add-service"]').onclick = () => {
         section.services.push({
             id: uid("service"),
-            title: "New service",
+            title: "",
             url: ""
         });
         render();
@@ -73,10 +85,24 @@ function renderService(section, service) {
     el.className = "service";
 
     el.innerHTML = `
-        <input type="text" value="${service.id}" data-field="service-id">
-        <input type="text" value="${service.title}" data-field="service-title">
-        <input type="text" value="${service.url}" data-field="service-url">
-        <button class="danger" data-action="delete-service">×</button>
+        <label>
+            ${T.serviceId}
+            <input type="text" value="${service.id}" data-field="service-id">
+        </label>
+
+        <label>
+            ${T.serviceTitle}
+            <input type="text" value="${service.title}" data-field="service-title">
+        </label>
+
+        <label>
+            ${T.serviceUrl}
+            <input type="text" value="${service.url}" data-field="service-url">
+        </label>
+
+        <button class="danger" data-action="delete-service">
+            ${T.deleteService}
+        </button>
     `;
 
     el.querySelector('[data-action="delete-service"]').onclick = () => {
@@ -104,7 +130,7 @@ function renderService(section, service) {
 document.getElementById("add-section").onclick = () => {
     state.sections.push({
         id: uid("section"),
-        title: "New section",
+        title: "",
         services: []
     });
     render();
