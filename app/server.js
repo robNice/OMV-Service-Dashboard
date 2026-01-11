@@ -12,14 +12,7 @@ function initDefaultData() {
 }
 initDefaultData();
 
-function initDataDir() {
-    const target = '/data/assets';
-    const source = '/app/default-data/assets';
-    if (!fs.existsSync(target)) {
-        fs.mkdirSync('/data', { recursive: true });
-        fs.cpSync(source, target, { recursive: true });
-    }
-}
+
 
 
 
@@ -40,10 +33,11 @@ const { initI18n } = require('./lib/i18n-config');
 initI18n({ app });
 const { translateTextI18n } = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
-const {loadConfiguration} = require("./lib/load-config");
-
-const config = loadConfig();
-
+const { loadConfiguration, saveConfiguration } = require('./lib/load-config');
+const config = loadConfiguration();
+(async () => {
+    await initAdminPassword(config);
+})();
 const PORT =
     Number(process.env.PORT) ||
     Number(config.port) ||
@@ -62,8 +56,25 @@ function sendAsset(res, file) {
  * @returns {any}
  */
 function loadData() {
-    const { loadServices } = require('./lib/load-services');
+    // const { loadServices } = require('./lib/load-services');
     return loadServices();
+}
+
+async function initAdminPassword(config) {
+    if (config.admin?.passwordHash) {
+        return;
+    }
+
+    const hash = await argon2.hash("admin", {
+        type: argon2.argon2id
+    });
+
+    config.admin = {
+        passwordHash: hash,
+        passwordInitialized: true
+    };
+
+    saveConfiguration(config);
 }
 
 /**
@@ -125,10 +136,10 @@ function buildEtag(stat) {
  * Load the configuration from disk and return it as a single object.
  * @returns {any}
  */
-function loadConfig() {
-    const { loadServices } = require('./lib/load-config');
-    return loadConfiguration();
-}
+// function loadConfig() {
+//     const { loadServices } = require('./lib/load-config');
+//     return loadConfiguration();
+// }
 
 /**
  *
