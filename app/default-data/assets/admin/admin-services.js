@@ -14,6 +14,17 @@ function render() {
 }
 
 /* ================= section ================= */
+function getSectionDropIndex(container, mouseY) {
+    const sections = [...container.querySelectorAll(".section:not(.dragging)")];
+
+    for (let i = 0; i < sections.length; i++) {
+        const rect = sections[i].getBoundingClientRect();
+        if (mouseY < rect.top + rect.height / 2) {
+            return i;
+        }
+    }
+    return sections.length;
+}
 
 function renderSection(section, sectionIndex) {
     const el = document.createElement("div");
@@ -50,20 +61,28 @@ function renderSection(section, sectionIndex) {
         el.classList.remove("dragging");
     });
 
-    el.addEventListener("dragover", e => e.preventDefault());
+    const editor = document.getElementById("services-editor");
 
-    el.addEventListener("drop", e => {
+    editor.addEventListener("dragover", e => {
         e.preventDefault();
+    });
+
+    editor.addEventListener("drop", e => {
+        e.preventDefault();
+
         if (e.dataTransfer.getData("type") !== "section") return;
 
         const from = Number(e.dataTransfer.getData("index"));
-        const to = sectionIndex;
-        if (from === to) return;
+        const to = getSectionDropIndex(editor, e.clientY);
+
+        if (from === to || from + 1 === to) return;
 
         const moved = state.sections.splice(from, 1)[0];
-        state.sections.splice(to, 0, moved);
+        state.sections.splice(to > from ? to - 1 : to, 0, moved);
+
         render();
     });
+
 
     /* section logic */
     const [idInput, titleInput] = el.querySelectorAll("input");
@@ -174,6 +193,7 @@ document.getElementById("add-section").onclick = () => {
     });
     render();
 };
+
 
 async function loadInitialData() {
     const res = await fetch("/admin/api/services");
