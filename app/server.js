@@ -212,6 +212,28 @@ function renderSection(section) {
     </div>`;
 }
 
+function renderAdminServices(data) {
+    return data.sections.map(section => {
+        const services = (section.services || []).map(service => `
+            <li>
+                <img src="/assets/cards/services/${service.logo || '_default.png'}" alt="">
+                <span class="service-title">${service.title}</span>
+                <span class="service-url">${service.url}</span>
+            </li>
+        `).join("");
+
+        return `
+            <div class="section">
+                <h2>${section.title} <small>(${section.id})</small></h2>
+                <ul>
+                    ${services || '<li><em>No services</em></li>'}
+                </ul>
+            </div>
+        `;
+    }).join("\n");
+}
+
+
 /**
  *
  * @param req
@@ -349,6 +371,20 @@ app.post("/admin/setpassword", requireAdmin, express.urlencoded({ extended: fals
     res.redirect("/admin");
 });
 
+app.get("/admin/services", requireAdmin, (req, res) => {
+    const data = loadServices();
+
+    const tpl = fs.readFileSync(
+        "/app/templates/admin-services.html",
+        "utf8"
+    );
+
+    const sectionsHtml = renderAdminServices(data);
+
+    res.send(
+        tpl.replace("{{SECTIONS}}", sectionsHtml)
+    );
+});
 
 app.get('/assets/*', (req, res) => {
 
