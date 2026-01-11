@@ -4,22 +4,20 @@ let dragState = null;
 
 /* ================= helpers ================= */
 
-function render() {
-    const root = document.getElementById("services-editor");
-    root.innerHTML = "";
+const editor = document.getElementById("services-editor");
+const indicator = document.getElementById("drop-indicator");
 
-    state.sections.forEach((section, index) => {
-        root.appendChild(renderSection(section, index));
+function render() {
+    editor.innerHTML = "";
+    state.sections.forEach((section, sIdx) => {
+        editor.appendChild(renderSection(section, sIdx));
     });
 }
 
 /* ================= drop helpers ================= */
 
-const editor = document.getElementById("services-editor");
-const indicator = document.getElementById("drop-indicator");
-
-function getSectionDropIndex(container, mouseY) {
-    const sections = [...container.querySelectorAll(".section:not(.dragging)")];
+function getSectionDropIndex(mouseY) {
+    const sections = [...editor.querySelectorAll(".section:not(.dragging)")];
 
     for (let i = 0; i < sections.length; i++) {
         const r = sections[i].getBoundingClientRect();
@@ -28,26 +26,29 @@ function getSectionDropIndex(container, mouseY) {
     return sections.length;
 }
 
-function updateDropIndicator(mouseY) {
-    const sections = [...editor.querySelectorAll(".section:not(.dragging)")];
+function getServiceDropTarget(mouseY) {
+    const services = [...editor.querySelectorAll(".service:not(.dragging)")];
 
-    for (const s of sections) {
-        const r = s.getBoundingClientRect();
+    for (const el of services) {
+        const r = el.getBoundingClientRect();
         if (mouseY < r.top + r.height / 2) {
-            indicator.style.top = `${r.top + window.scrollY}px`;
-            indicator.style.display = "block";
-            return;
+            return {
+                sectionIndex: Number(el.dataset.sectionIndex),
+                serviceIndex: Number(el.dataset.serviceIndex),
+                top: r.top
+            };
         }
     }
 
-    if (sections.length) {
-        const r = sections.at(-1).getBoundingClientRect();
-        indicator.style.top = `${r.bottom + window.scrollY}px`;
-        indicator.style.display = "block";
-    }
+    return null;
 }
 
-function clearDropIndicator() {
+function showIndicator(y) {
+    indicator.style.top = `${y + window.scrollY}px`;
+    indicator.style.display = "block";
+}
+
+function clearIndicator() {
     indicator.style.display = "none";
 }
 
@@ -76,15 +77,16 @@ function renderSection(section, sectionIndex) {
         <button class="secondary add">${T.addService}</button>
     `;
 
+    /* section drag */
     el.addEventListener("dragstart", () => {
-        dragState = { type: "section", index: sectionIndex };
+        dragState = { type: "section", sectionIndex };
         el.classList.add("dragging");
     });
 
     el.addEventListener("dragend", () => {
         el.classList.remove("dragging");
         dragState = null;
-        clearDropIndicator();
+        clearIndicator();
     });
 
     const [idInput, titleInput] = el.querySelectorAll("input");
@@ -97,8 +99,11 @@ function renderSection(section, sectionIndex) {
     };
 
     const servicesEl = el.querySelector(".section-services");
-    section.services.forEach((svc, idx) => {
-        servicesEl.appendChild(renderService(section, svc, idx));
+
+    section.services.forEach((svc, svcIdx) => {
+        servicesEl.appendChild(
+            renderService(section, svc, sectionIndex, svcIdx)
+        );
     });
 
     el.querySelector(".add").onclick = () => {
@@ -111,9 +116,13 @@ function renderSection(section, sectionIndex) {
 
 /* ================= service ================= */
 
-function renderService(section, service, serviceIndex) {
+function renderService(section, service, sectionIndex, serviceIndex) {
     const el = document.createElement("div");
     el.className = "service";
+    el.draggable = true;
+
+    el.dataset.sectionIndex = sectionIndex;
+    el.dataset.serviceIndex = serviceIndex;
 
     el.innerHTML = `
         <div>
@@ -126,6 +135,23 @@ function renderService(section, service, serviceIndex) {
         </div>
         <button class="danger">${T.deleteService}</button>
     `;
+
+    /* service drag */
+    el.addEventListener("dragstart", e => {
+        e.stopPropagation();
+        dragState = {
+            type: "service",
+            fromSection: sectionIndex,
+            fromService: serviceIndex
+        };
+        el.classList.add("dragging");
+    });
+
+    el.addEventListener("dragend", () => {
+        el.classList.remove("dragging");
+        dragState = null;
+        clearIndicator();
+    });
 
     const [titleInput, urlInput] = el.querySelectorAll("input");
     titleInput.oninput = e => service.title = e.target.value;
@@ -143,26 +169,56 @@ function renderService(section, service, serviceIndex) {
 
 editor.addEventListener("dragover", e => {
     e.preventDefault();
-    if (dragState?.type === "section") {
-        updateDropIndicator(e.clientY);
+    if (!dragState) return;
+
+    if (dragState.type === "section") {
+        const idx = getSectionDropIndex(e.clientY);
+        const sections = editor.querySelectorAll(".section");
+        if (sections[idx]) {
+            const r = sections[idx].getBoundingClientRect();
+            showIndicator(r.top);
+        }
+    }
+
+    if (dragState.type === "service") {
+        const target = getServiceDropTarget(e.clientY);
+        if (target) {
+            showIndicator(target.top);
+        }
     }
 });
 
 editor.addEventListener("drop", e => {
     e.preventDefault();
+    if (!dragState) return;
 
-    if (!dragState || dragState.type !== "section") return;
+    /* SECTION DROP */
+    if (dragState.type === "section") {
+        const from = dragState.sectionIndex;
+        const to = getSectionDropIndex(e.clientY);
 
-    const from = dragState.index;
-    const to = getSectionDropIndex(editor, e.clientY);
+        if (from !== to && from + 1 !== to) {
+            const moved = state.sections.splice(from, 1)[0];
+            state.sections.splice(to > from ? to - 1 : to, 0, moved);
+        }
+    }
 
-    if (from !== to && from + 1 !== to) {
-        const moved = state.sections.splice(from, 1)[0];
-        state.sections.splice(to > from ? to - 1 : to, 0, moved);
+    /* SERVICE DROP */
+    if (dragState.type === "service") {
+        const target = getServiceDropTarget(e.clientY);
+        if (target) {
+            const { fromSection, fromService } = dragState;
+            const { sectionIndex, serviceIndex } = target;
+
+            const moved =
+                state.sections[fromSection].services.splice(fromService, 1)[0];
+
+            state.sections[sectionIndex].services.splice(serviceIndex, 0, moved);
+        }
     }
 
     dragState = null;
-    clearDropIndicator();
+    clearIndicator();
     render();
 });
 
