@@ -1,5 +1,19 @@
 //const version = "1.2.1-0" // my lazy ass anti cache: +'-'+Math.random().toString();
 const express = require("express");
+const session = require("express-session");
+
+
+app.use(session({
+    name: "omv-service-dashboard",
+    secret: "change-me-later",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: "lax"
+    }
+}));
+
 const fs = require("fs");
 const path = require("path");
 const pkg = require('./package.json');
@@ -66,6 +80,20 @@ function hashPassword(password) {
     ).toString("hex");
 
     return `${salt}:${hash}`;
+}
+
+function verifyPassword(password, stored) {
+    const [salt, hash] = stored.split(":");
+    const test = crypto.pbkdf2Sync(password, salt, 100_000, 32, "sha256")
+        .toString("hex");
+    return test === hash;
+}
+
+function requireAdmin(req, res, next) {
+    if (!req.session?.isAdmin) {
+        return res.redirect("/admin/login");
+    }
+    next();
 }
 
 async function initAdminPassword(config) {
@@ -232,6 +260,75 @@ app.get("/api/stats", async (req, res) => {
         res.status(500).json({error: "stats_failed"});
     }
 });
+
+app.get("/admin/login", (req, res) => {
+    if (req.session?.isAdmin) {
+        return res.redirect("/admin");
+    }
+
+    const tpl = fs.readFileSync(
+        "/app/templates/admin-login.html",
+        "utf8"
+    );
+
+    res.send(
+        tpl.replace("{{MESSAGE}}", "")
+    );
+});
+app.post("/admin/login", express.urlencoded({ extended: false }), (req, res) => {
+    const { password } = req.body;
+    const config = loadConfiguration();
+
+    if (!verifyPassword(password, config.admin.passwordHash)) {
+        const tpl = fs.readFileSync(
+            "/app/templates/admin-login.html",
+            "utf8"
+        );
+
+        return res.send(
+            tpl.replace(
+                "{{MESSAGE}}",
+                '<div class="error">Invalid password</div>'
+            )
+        );
+    }
+
+    req.session.isAdmin = true;
+    res.redirect("/admin");
+});
+
+app.get("/admin/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/admin/login");
+    });
+});
+
+app.get("/admin", requireAdmin, (req, res) => {
+    res.send(`
+        <h1>Admin</h1>
+        <ul>
+            <li><a href="/admin/services">Services</a></li>
+            <li><a href="/admin/setpassword">Change password</a></li>
+            <li><a href="/admin/logout">Logout</a></li>
+        </ul>
+    `);
+});
+
+app.post("/admin/setpassword", requireAdmin, express.urlencoded({ extended: false }), (req, res) => {
+    const { password, passwordRepeat } = req.body;
+
+    if (password !== passwordRepeat || password.length < 8) {
+        return res.send("Invalid password");
+    }
+
+    const config = loadConfiguration();
+    config.admin.passwordHash = hashPassword(password);
+    config.admin.passwordInitialized = false;
+    saveConfiguration(config);
+
+    res.redirect("/admin");
+});
+
 
 app.get('/assets/*', (req, res) => {
 
