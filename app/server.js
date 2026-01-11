@@ -241,16 +241,7 @@ function setTemplate( req, template, backlink, version, title, cards )  {
 function loadTemplate() {
     return fs.readFileSync("/app/templates/index.html", "utf-8");
 }
-app.use(session({
-    name: "omv-service-dashboard",
-    secret: "change-me-later",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        httpOnly: true,
-        sameSite: "lax"
-    }
-}));
+
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
     res.set("Cache-Control", "public, max-age=31536000, immutable");
