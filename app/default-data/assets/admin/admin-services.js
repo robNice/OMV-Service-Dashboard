@@ -1,64 +1,45 @@
-let state = {
-    sections: []
-};
-
 const T = window.ADMIN_I18N;
 
-/* ---------- helpers ---------- */
+let state = { sections: [] };
 
-function uid(prefix) {
-    return prefix + "-" + Math.random().toString(36).slice(2, 8);
+function clone(id) {
+    return document.getElementById(id).content.firstElementChild.cloneNode(true);
+}
+
+function enable(el) {
+    el.querySelectorAll("input,button").forEach(e => e.disabled = false);
 }
 
 function render() {
     const root = document.getElementById("services-editor");
     root.innerHTML = "";
-
     state.sections.forEach(section => {
         root.appendChild(renderSection(section));
     });
 }
 
-/* ---------- section ---------- */
-
 function renderSection(section) {
-    const el = document.createElement("div");
-    el.className = "section";
+    const el = clone("section-template");
 
-    el.innerHTML = `
-        <label>
-            ${T.sectionId}
-            <input type="text" value="${section.id}" data-field="section-id">
-        </label>
+    el.querySelector('[data-label="section-id"]').textContent = T.sectionId;
+    el.querySelector('[data-label="section-title"]').textContent = T.sectionTitle;
 
-        <label>
-            ${T.sectionTitle}
-            <input type="text" value="${section.title}" data-field="section-title">
-        </label>
+    el.querySelector('[data-action="delete-section"]').textContent = T.deleteSection;
+    el.querySelector('[data-action="add-service"]').textContent = T.addService;
 
-        <button class="danger" data-action="delete-section">
-            ${T.deleteSection}
-        </button>
+    el.querySelector('[data-field="section-id"]').value = section.id ?? "";
+    el.querySelector('[data-field="section-title"]').value = section.title ?? "";
 
-        <div class="section-services"></div>
+    enable(el);
 
-        <button data-action="add-service">
-            ${T.addService}
-        </button>
-    `;
-
-    const servicesContainer = el.querySelector(".section-services");
+    const servicesEl = el.querySelector(".section-services");
 
     section.services.forEach(service => {
-        servicesContainer.appendChild(renderService(section, service));
+        servicesEl.appendChild(renderService(section, service));
     });
 
     el.querySelector('[data-action="add-service"]').onclick = () => {
-        section.services.push({
-            id: uid("service"),
-            title: "",
-            url: ""
-        });
+        section.services.push({ id: "", title: "", url: "" });
         render();
     };
 
@@ -67,79 +48,61 @@ function renderSection(section) {
         render();
     };
 
-    el.querySelector('[data-field="section-id"]').onchange = e => {
-        section.id = e.target.value.trim();
+    el.querySelector('[data-field="section-id"]').oninput = e => {
+        section.id = e.target.value;
     };
 
-    el.querySelector('[data-field="section-title"]').onchange = e => {
-        section.title = e.target.value.trim();
+    el.querySelector('[data-field="section-title"]').oninput = e => {
+        section.title = e.target.value;
     };
 
     return el;
 }
 
-/* ---------- service ---------- */
-
 function renderService(section, service) {
-    const el = document.createElement("div");
-    el.className = "service";
+    const el = clone("service-template");
 
-    el.innerHTML = `
-        <label>
-            ${T.serviceId}
-            <input type="text" value="${service.id}" data-field="service-id">
-        </label>
+    el.querySelector('[data-label="service-id"]').textContent = T.serviceId;
+    el.querySelector('[data-label="service-title"]').textContent = T.serviceTitle;
+    el.querySelector('[data-label="service-url"]').textContent = T.serviceUrl;
 
-        <label>
-            ${T.serviceTitle}
-            <input type="text" value="${service.title}" data-field="service-title">
-        </label>
+    el.querySelector('[data-action="delete-service"]').textContent = T.deleteService;
 
-        <label>
-            ${T.serviceUrl}
-            <input type="text" value="${service.url}" data-field="service-url">
-        </label>
+    el.querySelector('[data-field="service-id"]').value = service.id ?? "";
+    el.querySelector('[data-field="service-title"]').value = service.title ?? "";
+    el.querySelector('[data-field="service-url"]').value = service.url ?? "";
 
-        <button class="danger" data-action="delete-service">
-            ${T.deleteService}
-        </button>
-    `;
+    enable(el);
 
     el.querySelector('[data-action="delete-service"]').onclick = () => {
         section.services = section.services.filter(s => s !== service);
         render();
     };
 
-    el.querySelector('[data-field="service-id"]').onchange = e => {
-        service.id = e.target.value.trim();
+    el.querySelector('[data-field="service-id"]').oninput = e => {
+        service.id = e.target.value;
     };
 
-    el.querySelector('[data-field="service-title"]').onchange = e => {
-        service.title = e.target.value.trim();
+    el.querySelector('[data-field="service-title"]').oninput = e => {
+        service.title = e.target.value;
     };
 
-    el.querySelector('[data-field="service-url"]').onchange = e => {
-        service.url = e.target.value.trim();
+    el.querySelector('[data-field="service-url"]').oninput = e => {
+        service.url = e.target.value;
     };
 
     return el;
 }
 
-/* ---------- init ---------- */
-
 document.getElementById("add-section").onclick = () => {
-    state.sections.push({
-        id: uid("section"),
-        title: "",
-        services: []
-    });
+    state.sections.push({ id: "", title: "", services: [] });
     render();
 };
 
-async function loadInitialData() {
+async function init() {
     const res = await fetch("/admin/api/services");
     state = await res.json();
     render();
 }
 
-loadInitialData();
+init();

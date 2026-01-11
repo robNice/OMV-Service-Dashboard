@@ -387,8 +387,7 @@ app.get("/admin/services", requireAdmin, (req, res) => {
 
 
 app.get("/admin/api/services", requireAdmin, (req, res) => {
-    const data = loadServices();
-    res.json(data);
+    res.json(loadServices());
 });
 
 app.get('/assets/*', (req, res) => {

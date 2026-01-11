@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "en"
+  },
   "label": {
     "back": "Back",
     "liveStats": "Live stats",

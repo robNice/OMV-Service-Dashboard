@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{__.html.lang}}">
 <head>
     <meta charset="UTF-8">
     <title>Admin – Services</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/admin/admin.css">
 </head>
-
 <body>
 
 <div class="admin-page">
-
     <header class="admin-header">
         <h1>{{__.admin.services.title}}</h1>
         <nav>
@@ -21,10 +19,7 @@
 
     <div id="services-editor"></div>
 
-    <div style="margin-top:2rem;">
-        <button id="add-section">{{__.admin.services.addSection}}</button>
-    </div>
-
+    <button id="add-section">{{__.admin.services.addSection}}</button>
 </div>
 
 <script>
@@ -41,8 +36,49 @@
     };
 </script>
 
+<!-- SECTION TEMPLATE -->
+<template id="section-template">
+    <div class="section" data-section>
+        <label>
+            <span data-label="section-id"></span>
+            <input type="text" data-field="section-id" disabled>
+        </label>
+
+        <label>
+            <span data-label="section-title"></span>
+            <input type="text" data-field="section-title" disabled>
+        </label>
+
+        <button class="danger" data-action="delete-section" disabled></button>
+
+        <div class="section-services"></div>
+
+        <button data-action="add-service" disabled></button>
+    </div>
+</template>
+
+<!-- SERVICE TEMPLATE -->
+<template id="service-template">
+    <div class="service" data-service>
+        <label>
+            <span data-label="service-id"></span>
+            <input type="text" data-field="service-id" disabled>
+        </label>
+
+        <label>
+            <span data-label="service-title"></span>
+            <input type="text" data-field="service-title" disabled>
+        </label>
+
+        <label>
+            <span data-label="service-url"></span>
+            <input type="text" data-field="service-url" disabled>
+        </label>
+
+        <button class="danger" data-action="delete-service" disabled></button>
+    </div>
+</template>
+
 <script src="/assets/admin/admin-services.js"></script>
 </body>
-
-
 </html>
