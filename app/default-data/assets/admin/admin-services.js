@@ -255,6 +255,26 @@ editor.addEventListener("drop", e => {
     render();
 });
 
+function bindSaveButton() {
+    document.getElementById("save-services").onclick = async () => {
+        const res = await fetch("/admin/api/services", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(state)
+        });
+
+        const status = document.getElementById("save-status");
+
+        if (res.ok) {
+            status.textContent = "Saved";
+            status.style.color = "#22c55e";
+        } else {
+            status.textContent = "Error";
+            status.style.color = "#ef4444";
+        }
+    };
+}
+
 /* ================= init ================= */
 
 document.getElementById("add-section").onclick = () => {
@@ -269,3 +289,4 @@ async function loadInitialData() {
 }
 
 loadInitialData();
+bindSaveButton();

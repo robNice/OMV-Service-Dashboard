@@ -389,6 +389,37 @@ app.get("/admin/services", requireAdmin, (req, res) => {
 app.get("/admin/api/services", requireAdmin, (req, res) => {
     res.json(loadServices());
 });
+app.post(
+    "/admin/api/services",
+    requireAdmin,
+    express.json(),
+    (req, res) => {
+        const data = req.body;
+
+        if (!data || !Array.isArray(data.sections)) {
+            return res.status(400).json({ error: "invalid_format" });
+        }
+
+        const normalized = {
+            sections: data.sections.map(sec => ({
+                id: String(sec.id || "").trim(),
+                title: String(sec.title || "").trim(),
+                services: Array.isArray(sec.services)
+                    ? sec.services.map(s => ({
+                        title: String(s.title || "").trim(),
+                        url: String(s.url || "").trim(),
+                        ...(s.logo ? { logo: s.logo } : {})
+                    }))
+                    : []
+            }))
+        };
+
+        saveServices(normalized);
+        res.json({ ok: true });
+    }
+);
+
+
 
 app.get('/assets/*', (req, res) => {
 
