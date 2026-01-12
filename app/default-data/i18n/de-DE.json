@@ -73,6 +73,7 @@
       "id": "Service-ID",
       "title": "Service-Name",
       "url": "Service-URL",
+      "logo": "Logo",
       "delete": "Service löschen"
     }
   }

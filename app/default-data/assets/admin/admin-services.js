@@ -160,7 +160,7 @@ function renderSection(section, sectionIndex) {
     }
 
     el.querySelector(".add").onclick = () => {
-        section.services.push({ title: "", url: "" });
+        section.services.push({ title: "", url: "", logo: "" });
         render();
     };
 
@@ -186,6 +186,10 @@ function renderService(section, service, sectionIndex, serviceIndex) {
             <label>${T.serviceUrl}</label>
             <input type="text" value="${service.url || ""}">
         </div>
+         <div>
+            <label>${T.logo}</label>
+            <input type="text" placeholder="logo.png" value="${service.logo || ""}">
+        </div>
         <button class="danger">${T.deleteService}</button>
     `;
 
@@ -209,6 +213,7 @@ function renderService(section, service, sectionIndex, serviceIndex) {
     const [titleInput, urlInput] = el.querySelectorAll("input");
     titleInput.oninput = e => service.title = e.target.value;
     urlInput.oninput = e => service.url = e.target.value;
+    logoInput.oninput = e => service.logo = e.target.value;
 
     el.querySelector(".danger").onclick = () => {
         section.services.splice(serviceIndex, 1);
