@@ -28,7 +28,7 @@ function renderSection(section, sectionIndex) {
     const el = tpl.content.firstElementChild.cloneNode(true);
 
     const toggle = el.querySelector('[data-action="toggle-section"]');
-    const body   = el.querySelector('.section-body');
+    const body   = el.querySelector('.section-services');
 
     if (uiState.collapsedSections.has(sectionIndex)) {
         body.classList.add("collapsed");

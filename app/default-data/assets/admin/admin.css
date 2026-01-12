@@ -260,6 +260,11 @@ h1 {
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0;
+    transition: transform 0.15s ease;
+}
+
+.collapse-toggle.collapsed {
+    transform: rotate(-90deg);
 }
 
 .collapse-toggle:hover {
