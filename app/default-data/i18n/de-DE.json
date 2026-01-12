@@ -88,5 +88,6 @@
       "repeat": "Passwort wiederholen",
       "tooShort": "Passwort muss mindestens 8 Zeichen lang sein.",
       "mismatch": "Passwörter stimmen nicht überein."
+    }
   }
 }

@@ -88,5 +88,6 @@
       "repeat": "Repeat password",
       "tooShort": "Password must be at least 8 characters",
       "mismatch": "Passwords do not match"
+    }
   }
 }
