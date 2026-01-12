@@ -123,6 +123,143 @@ editor.addEventListener("click", e => {
     }
 });
 
+/* ================= Drag & Drop ================= */
+
+editor.addEventListener("dragstart", e => {
+    const serviceEl = e.target.closest(".service");
+    const sectionEl = e.target.closest(".section");
+
+    if (serviceEl) {
+        dragState = {
+            type: "service",
+            fromSection: Number(serviceEl.dataset.sectionIndex),
+            fromService: Number(serviceEl.dataset.serviceIndex)
+        };
+        serviceEl.classList.add("dragging");
+        e.stopPropagation();
+        return;
+    }
+
+    if (sectionEl) {
+        dragState = {
+            type: "section",
+            fromSection: Number(sectionEl.dataset.sectionIndex)
+        };
+        sectionEl.classList.add("dragging");
+    }
+});
+
+editor.addEventListener("dragend", () => {
+    editor.querySelectorAll(".dragging")
+        .forEach(el => el.classList.remove("dragging"));
+    dragState = null;
+    hideDropIndicator();
+});
+
+editor.addEventListener("dragover", e => {
+    e.preventDefault();
+    if (!dragState) return;
+
+    if (dragState.type === "section") {
+        const idx = getSectionDropIndex(e.clientY);
+        const sections = editor.querySelectorAll(".section");
+        if (sections[idx]) {
+            showDropIndicator(sections[idx].getBoundingClientRect().top);
+        }
+    }
+
+    if (dragState.type === "service") {
+        const target = getServiceDropTarget(e.clientY);
+        if (target) showDropIndicator(target.y);
+    }
+});
+
+editor.addEventListener("drop", e => {
+    e.preventDefault();
+    if (!dragState) return;
+
+    if (dragState.type === "section") {
+        const from = dragState.fromSection;
+        const to = getSectionDropIndex(e.clientY);
+
+        if (from !== to && from + 1 !== to) {
+            const moved = state.sections.splice(from, 1)[0];
+            state.sections.splice(to > from ? to - 1 : to, 0, moved);
+            markDirty();
+        }
+    }
+
+    if (dragState.type === "service") {
+        const target = getServiceDropTarget(e.clientY);
+        if (target) {
+            const moved =
+                state.sections[dragState.fromSection]
+                    .services.splice(dragState.fromService, 1)[0];
+
+            state.sections[target.sectionIndex]
+                .services.splice(target.serviceIndex, 0, moved);
+
+            markDirty();
+        }
+    }
+
+    dragState = null;
+    hideDropIndicator();
+    render();
+});
+
+function showDropIndicator(y) {
+    indicator.style.top = `${y + window.scrollY}px`;
+    indicator.style.display = "block";
+}
+
+function hideDropIndicator() {
+    indicator.style.display = "none";
+}
+
+
+function getSectionDropIndex(mouseY) {
+    const sections = [...editor.querySelectorAll(".section:not(.dragging)")];
+
+    for (let i = 0; i < sections.length; i++) {
+        const r = sections[i].getBoundingClientRect();
+        if (mouseY < r.top + r.height / 2) return i;
+    }
+    return sections.length;
+}
+
+function getServiceDropTarget(mouseY) {
+    const sectionEls = [...editor.querySelectorAll(".section")];
+
+    for (const sec of sectionEls) {
+        const services = sec.querySelector(".section-services");
+        const r = services.getBoundingClientRect();
+
+        if (mouseY >= r.top && mouseY <= r.bottom) {
+            const sectionIndex = Number(sec.dataset.sectionIndex);
+            const items = [...services.querySelectorAll(".service:not(.dragging)")];
+
+            if (!items.length) {
+                return { sectionIndex, serviceIndex: 0, y: r.top + 8 };
+            }
+
+            for (let i = 0; i < items.length; i++) {
+                const ir = items[i].getBoundingClientRect();
+                if (mouseY < ir.top + ir.height / 2) {
+                    return { sectionIndex, serviceIndex: i, y: ir.top };
+                }
+            }
+
+            return {
+                sectionIndex,
+                serviceIndex: items.length,
+                y: r.bottom
+            };
+        }
+    }
+    return null;
+}
+
 /* ================= Dirty / Save ================= */
 
 function markDirty() {
