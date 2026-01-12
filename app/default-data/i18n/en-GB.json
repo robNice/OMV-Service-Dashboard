@@ -60,7 +60,7 @@
   },
   "admin": {
     "title": "Admin",
-    "subtitle": "System & configuration management",
+    "subtitle": "Configuration management",
     "services": {
       "title": "Edit Sections and Services",
       "desc": "Edit sections, services and links shown on the dashboard",

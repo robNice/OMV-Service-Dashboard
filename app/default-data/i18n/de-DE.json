@@ -60,7 +60,7 @@
   },
   "admin": {
     "title": "Admin",
-    "subtitle": "System & configuration management",
+    "subtitle": "Konfigurationsverwaltung",
     "services": {
       "title": "Sektionen und Dienste verwalten",
       "desc": "Verwalte Sektionen, Dienste und Links auf dem Dashboard",
