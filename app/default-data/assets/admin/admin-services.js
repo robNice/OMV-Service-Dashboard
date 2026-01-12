@@ -2,6 +2,9 @@ let state = { sections: [] };
 let dirty = false;
 let dragState = null;
 let serviceCardImages = [];
+let uiState = {
+    collapsedSections: new Set()
+};
 
 const editor   = document.getElementById("services-editor");
 const indicator = document.getElementById("drop-indicator");
@@ -23,6 +26,28 @@ function render() {
 function renderSection(section, sectionIndex) {
     const tpl = document.getElementById("tpl-section");
     const el = tpl.content.firstElementChild.cloneNode(true);
+
+    const toggle = el.querySelector('[data-action="toggle-section"]');
+    const body   = el.querySelector('.section-body');
+
+    if (uiState.collapsedSections.has(sectionIndex)) {
+        body.classList.add("collapsed");
+    }
+
+    toggle.addEventListener("click", e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (uiState.collapsedSections.has(sectionIndex)) {
+            uiState.collapsedSections.delete(sectionIndex);
+            body.classList.remove("collapsed");
+        } else {
+            uiState.collapsedSections.add(sectionIndex);
+            body.classList.add("collapsed");
+        }
+    });
+
+
 
     el.dataset.sectionIndex = sectionIndex;
 
