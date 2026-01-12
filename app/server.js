@@ -3,7 +3,7 @@ const express = require("express");
 const crypto = require("crypto");
 const SESSION_SECRET = crypto.randomBytes(32).toString("hex");
 const sessions = new Map();
-
+const { getServiceCardImages } = require("./lib/service-card-images");
 
 
 const fs = require("fs");
@@ -421,6 +421,11 @@ app.get("/admin/services", requireAdmin, (req, res) => {
     res.send(html);
 });
 
+app.get("/admin/api/service-card-images", requireAdmin, (req, res) => {
+    res.json({
+        images: getServiceCardImages()
+    });
+});
 
 app.get("/admin/api/services", requireAdmin, (req, res) => {
     res.json(loadServices());
