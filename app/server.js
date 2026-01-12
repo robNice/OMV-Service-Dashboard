@@ -360,8 +360,18 @@ app.get("/admin", requireAdmin, (req, res) => {
 
 
 app.get("/admin/setpassword", requireAdmin, (req, res) => {
-    res.render("admin-setpassword.html");
+    const tpl = fs.readFileSync(
+        "/app/templates/admin-setpassword.html",
+        "utf8"
+    );
+
+    const html = translateTextI18n(tpl, {
+        locale: req.getLocale()
+    });
+
+    res.send(html);
 });
+
 
 app.post("/admin/setpassword", requireAdmin, express.urlencoded({ extended: false }), (req, res) => {
     const { password, passwordRepeat } = req.body;
