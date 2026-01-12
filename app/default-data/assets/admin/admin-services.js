@@ -210,7 +210,7 @@ function renderService(section, service, sectionIndex, serviceIndex) {
         clearIndicator();
     });
 
-    const [titleInput, urlInput] = el.querySelectorAll("input");
+    const [titleInput, urlInput, logoInput] = el.querySelectorAll("input");
     titleInput.oninput = e => service.title = e.target.value;
     urlInput.oninput = e => service.url = e.target.value;
     logoInput.oninput = e => service.logo = e.target.value;
