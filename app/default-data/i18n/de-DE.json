@@ -59,6 +59,7 @@
     "petabyte": "PB"
   },
   "admin": {
+    "title": "Admin",
     "services": {
       "title": "Services (Bearbeiten)",
       "addSection": "Sektion hinzufügen"

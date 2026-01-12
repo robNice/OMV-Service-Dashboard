@@ -11,14 +11,14 @@ body {
 
 .admin-center {
     display: flex;
-    align-items: center;
     justify-content: center;
-    height: 100vh;
+    margin-top: 3rem;
 }
 
 .admin-page {
     padding: 1.5rem;
     max-width: 1100px;
+    margin: 0 auto;
 }
 
 /* ===== Card / Panel ===== */
@@ -26,9 +26,34 @@ body {
     background: #020617;
     padding: 2rem;
     border-radius: 10px;
-    width: 320px;
+    width: 360px;
+    background: linear-gradient(180deg, #020617, #020617cc);
+}
+.admin-menu  {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
+.admin-menu li + li {
+    margin-top: 0.75rem;
+}
+.admin-menu a {
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: inline-block;
+}
+
+.admin-menu a:hover {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+
+#pw-card {
+    max-width: 360px;
+}
 /* ===== Header ===== */
 header.admin-header {
     display: flex;
