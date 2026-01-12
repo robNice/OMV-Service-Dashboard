@@ -5,7 +5,10 @@ let serviceCardImages = [];
 
 const editor   = document.getElementById("services-editor");
 const indicator = document.getElementById("drop-indicator");
-
+const I18N = (() => {
+    const el = document.getElementById("i18n");
+    return el ? el.dataset : {};
+})();
 /* ================= Render ================= */
 
 function render() {
@@ -86,7 +89,7 @@ function renderService(service, sectionIndex, serviceIndex) {
         markDirty();
     });
 
-    logo.addEventListener("input", () => {
+    logo.addEventListener("change", () => {
         service.logo = logo.value;
         markDirty();
     });
@@ -315,13 +318,13 @@ function bindSaveButton() {
 
             if (!res.ok) throw new Error();
 
-            status.textContent = label.textContent = "{{__.admin.save.saved}}";
+            status.textContent = label.textContent = I18N.saveSaved;
             clearDirty();
         } catch {
-            status.textContent = "{{__.admin.save.error}}";
+            status.textContent = I18N.saveError;
         } finally {
             spinner.classList.add("hidden");
-            label.textContent = "{{__.admin.save.label}}";
+            label.textContent = I18N.saveLabel;
         }
     });
 }
