@@ -76,7 +76,7 @@
       "id": "Service ID",
       "title": "Service title",
       "url": "Service URL",
-      "logo": "Logo",
+      "cardimage": "Card image",
       "delete": "Delete service"
     },
     "save": {

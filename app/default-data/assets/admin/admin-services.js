@@ -1,6 +1,7 @@
 let state = { sections: [] };
 let dirty = false;
 let dragState = null;
+let serviceCardImages = [];
 
 const editor   = document.getElementById("services-editor");
 const indicator = document.getElementById("drop-indicator");
@@ -63,7 +64,17 @@ function renderService(service, sectionIndex, serviceIndex) {
 
     title.value = service.title || "";
     url.value   = service.url || "";
-    logo.value  = service.logo || "";
+
+    logo.innerHTML = "";
+
+    for (const img of serviceCardImages) {
+        const opt = document.createElement("option");
+        opt.value = img;
+        opt.textContent = img;
+        logo.appendChild(opt);
+    }
+
+    logo.value = service.logo || "";
 
     title.addEventListener("input", () => {
         service.title = title.value;
@@ -328,6 +339,14 @@ async function loadInitialData() {
     state = await res.json();
     render();
 }
-
-loadInitialData();
-bindSaveButton();
+async function loadServiceCardImages() {
+    const res = await fetch("/admin/api/service-card-images");
+    const data = await res.json();
+    serviceCardImages = data.images || [];
+}
+async function init() {
+    await loadServiceCardImages();
+    await loadInitialData();
+    bindSaveButton();
+}
+init();
