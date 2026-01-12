@@ -348,14 +348,16 @@ app.get("/admin/logout", (req, res) => {
 
 
 app.get("/admin", requireAdmin, (req, res) => {
-    res.send(`
-        <h1>Admin</h1>
-        <ul>
-            <li><a href="/admin/services">Services</a></li>
-            <li><a href="/admin/setpassword">Change password</a></li>
-            <li><a href="/admin/logout">Logout</a></li>
-        </ul>
-    `);
+    const tpl = fs.readFileSync(
+        "/app/templates/admin-index.html",
+        "utf8"
+    );
+
+    const html = translateTextI18n(tpl, {
+        locale: req.getLocale()
+    });
+
+    res.send(html);
 });
 
 

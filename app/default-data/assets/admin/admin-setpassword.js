@@ -1,9 +1,22 @@
+const card     = document.getElementById("pw-card");
+
 const pwNew    = document.getElementById("pw-new");
 const pwRepeat = document.getElementById("pw-repeat");
 const btn      = document.getElementById("pw-save");
 const status   = document.getElementById("pw-status");
 const label    = btn.querySelector(".label");
 const spinner  = btn.querySelector(".spinner");
+
+/* ===== Translated strings from HTML ===== */
+
+const TXT = {
+    tooShort:   card.dataset.tooShort,
+    mismatch:   card.dataset.mismatch,
+    saveLabel:  card.dataset.saveLabel,
+    saveSaving: card.dataset.saveSaving,
+    saveSaved:  card.dataset.saveSaved,
+    saveError:  card.dataset.saveError
+};
 
 let dirty = false;
 
@@ -20,13 +33,13 @@ function validate() {
     }
 
     if (a.length < 8) {
-        setStatus("{{__.admin.password.tooShort}}", "error");
+        setStatus(TXT.tooShort, "error");
         btn.disabled = true;
         return false;
     }
 
     if (a !== b) {
-        setStatus("{{__.admin.password.mismatch}}", "error");
+        setStatus(TXT.mismatch, "error");
         btn.disabled = true;
         return false;
     }
@@ -57,7 +70,7 @@ btn.addEventListener("click", async () => {
 
     btn.disabled = true;
     spinner.classList.remove("hidden");
-    label.textContent = "{{__.admin.save.saving}}";
+    label.textContent = TXT.saveSaving;
     setStatus("");
 
     try {
@@ -72,7 +85,7 @@ btn.addEventListener("click", async () => {
 
         if (!res.ok) throw new Error();
 
-        setStatus("{{__.admin.save.saved}}", "hint");
+        setStatus(TXT.saveSaved, "hint");
         dirty = false;
 
         pwNew.value = "";
@@ -80,10 +93,10 @@ btn.addEventListener("click", async () => {
         btn.disabled = true;
 
     } catch {
-        setStatus("{{__.admin.save.error}}", "error");
+        setStatus(TXT.saveError, "error");
         btn.disabled = false;
     } finally {
         spinner.classList.add("hidden");
-        label.textContent = "{{__.admin.save.label}}";
+        label.textContent = TXT.saveLabel;
     }
 });
