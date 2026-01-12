@@ -81,6 +81,12 @@
       "saving": "Saving…",
       "saved": "Saved",
       "error": "Save failed"
-    }
+    },
+    "password": {
+      "title": "Change password",
+      "new": "New password",
+      "repeat": "Repeat password",
+      "tooShort": "Password must be at least 8 characters",
+      "mismatch": "Passwords do not match"
   }
 }
