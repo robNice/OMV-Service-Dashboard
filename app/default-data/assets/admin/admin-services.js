@@ -281,24 +281,39 @@ editor.addEventListener("drop", e => {
 });
 
 function bindSaveButton() {
-    document.getElementById("save-services").onclick = async () => {
-        const res = await fetch("/admin/api/services", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(state)
-        });
+    const btn = document.getElementById("save-services");
+    const status = document.getElementById("save-status");
+    const label = btn.querySelector(".label");
+    const spinner = btn.querySelector(".spinner");
 
-        const status = document.getElementById("save-status");
+    btn.onclick = async () => {
+        btn.disabled = true;
+        spinner.classList.remove("hidden");
+        label.textContent = "Saving…";
+        status.textContent = "";
 
-        if (res.ok) {
+        try {
+            const res = await fetch("/admin/api/services", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(state)
+            });
+
+            if (!res.ok) throw new Error();
+
             status.textContent = "Saved";
             status.style.color = "#22c55e";
-        } else {
-            status.textContent = "Error";
+        } catch {
+            status.textContent = "Save failed";
             status.style.color = "#ef4444";
+        } finally {
+            btn.disabled = false;
+            spinner.classList.add("hidden");
+            label.textContent = "Save";
         }
     };
 }
+
 
 /* ================= init ================= */
 
