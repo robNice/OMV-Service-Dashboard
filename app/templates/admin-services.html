@@ -2,34 +2,16 @@
 <html lang="{{__.html.lang}}">
 <head>
     <meta charset="UTF-8">
-    <title>Admin – Services</title>
+    <title>{{__.admin.services.title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/admin/admin.css">
 </head>
 <body>
 
-<script>
-    window.ADMIN_I18N = {
-        sectionId: "Section ID",
-        sectionTitle: "Section title",
-        deleteSection: "Delete section",
-        addService: "Add service",
-
-        serviceTitle: "Service title",
-        serviceUrl: "Service URL",
-        deleteService: "Delete service",
-
-        saveLabel: "{{__.admin.save.label}}",
-        saveSaving: "{{__.admin.save.saving}}",
-        saveSaved: "{{__.admin.save.saved}}",
-        saveError: "{{__.admin.save.error}}"
-    };
-</script>
-
 <div class="admin-page">
 
     <header class="admin-header">
-        <h1>Services</h1>
+        <h1>{{__.admin.services.title}}</h1>
         <nav>
             <a href="/admin">Admin</a> ·
             <a href="/admin/logout">Logout</a>
@@ -41,7 +23,7 @@
 
     <div class="admin-footer">
         <button id="add-section" class="secondary">
-            {{__.admin.section.add}}
+            {{__.admin.services.addSection}}
         </button>
 
         <button id="save-services" class="primary" disabled>
@@ -56,29 +38,31 @@
 
 <div id="drop-indicator"></div>
 
-<!-- TEMPLATES (nicht gerendert!) -->
-
 <template id="tpl-section">
     <div class="section" draggable="true">
         <div class="section-header">
             <button class="collapse-toggle" title="Toggle">▼</button>
 
             <div>
-                <label></label>
+                <label>{{__.admin.section.id}}</label>
                 <input type="text" data-field="section-id">
             </div>
 
             <div>
-                <label></label>
+                <label>{{__.admin.section.title}}</label>
                 <input type="text" data-field="section-title">
             </div>
 
-            <button class="danger" data-action="delete-section"></button>
+            <button class="danger" data-action="delete-section">
+                {{__.admin.section.delete}}
+            </button>
         </div>
 
         <div class="section-body">
             <div class="section-services"></div>
-            <button class="secondary add" data-action="add-service"></button>
+            <button class="secondary add" data-action="add-service">
+                {{__.admin.section.addService}}
+            </button>
         </div>
     </div>
 </template>
@@ -86,21 +70,23 @@
 <template id="tpl-service">
     <div class="service" draggable="true">
         <div>
-            <label></label>
+            <label>{{__.admin.service.title}}</label>
             <input type="text" data-field="service-title">
         </div>
 
         <div>
-            <label></label>
+            <label>{{__.admin.service.url}}</label>
             <input type="text" data-field="service-url">
         </div>
 
         <div>
-            <label></label>
-            <input type="text" data-field="service-logo">
+            <label>{{__.admin.service.logo}}</label>
+            <input type="text" data-field="service-logo" placeholder="logo.png">
         </div>
 
-        <button class="danger" data-action="delete-service"></button>
+        <button class="danger" data-action="delete-service">
+            {{__.admin.service.delete}}
+        </button>
     </div>
 </template>
 
