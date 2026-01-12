@@ -307,25 +307,43 @@ app.get("/admin/login", (req, res) => {
         tpl.replace("{{MESSAGE}}", "")
     );
 });
-app.post("/admin/login", express.urlencoded({ extended: false }), (req, res) => {
-    const { password } = req.body;
-    const config = loadConfiguration();
+app.post(
+    "/admin/login",
+    express.urlencoded({ extended: false }),
+    (req, res) => {
 
-    if (!verifyPassword(password, config.admin.passwordHash)) {
-        return res.status(401).send("Invalid password");
+        const { password } = req.body;
+        const config = loadConfiguration();
+
+        if (!verifyPassword(password, config.admin.passwordHash)) {
+            const tpl = fs.readFileSync(
+                "/app/templates/admin-login.html",
+                "utf8"
+            );
+
+            const html = translateTextI18n(
+                tpl.replace(
+                    "{{MESSAGE}}",
+                    '<div class="error">{{__.admin.login.invalid}}</div>'
+                ),
+                { locale: req.getLocale() }
+            );
+
+            return res.status(401).send(html);
+        }
+
+        const sid = crypto.randomBytes(16).toString("hex");
+        sessions.set(sid, { isAdmin: true });
+
+        res.setHeader(
+            "Set-Cookie",
+            `omv_session=${sid}; HttpOnly; SameSite=Lax`
+        );
+
+        res.redirect("/admin");
     }
+);
 
-    const sid = crypto.randomBytes(16).toString("hex");
-    sessions.set(sid, { isAdmin: true });
-
-
-    res.setHeader(
-        "Set-Cookie",
-        `omv_session=${sid}; HttpOnly; SameSite=Lax`
-    );
-
-    res.redirect("/admin");
-});
 
 
 app.get("/admin/logout", (req, res) => {

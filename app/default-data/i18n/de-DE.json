@@ -61,7 +61,7 @@
   "admin": {
     "title": "Admin",
     "services": {
-      "title": "Services (Bearbeiten)",
+      "title": "Sektionen und Dienste verwalten",
       "addSection": "Sektion hinzufügen"
     },
     "section": {

@@ -61,7 +61,7 @@
   "admin": {
     "title": "Admin",
     "services": {
-      "title": "Services (edit mode)",
+      "title": "Edit Sections and Services",
       "addSection": "Add section"
     },
     "section": {
