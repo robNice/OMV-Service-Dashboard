@@ -41,9 +41,11 @@ function renderSection(section, sectionIndex) {
         if (uiState.collapsedSections.has(sectionIndex)) {
             uiState.collapsedSections.delete(sectionIndex);
             body.classList.remove("collapsed");
+            toggle.classList.remove("is-collapsed");
         } else {
             uiState.collapsedSections.add(sectionIndex);
             body.classList.add("collapsed");
+            toggle.classList.add("is-collapsed");
         }
     });
 

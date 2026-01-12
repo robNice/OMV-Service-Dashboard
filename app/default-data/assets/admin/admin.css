@@ -263,7 +263,7 @@ h1 {
     transition: transform 0.15s ease;
 }
 
-.collapse-toggle.collapsed {
+.collapse-toggle.is-collapsed {
     transform: rotate(-90deg);
 }
 
