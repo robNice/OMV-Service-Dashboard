@@ -114,7 +114,7 @@ function clearIndicator() {
 
 /* ================= section ================= */
 
-function renderSection(section, sectionIndex) {
+function renderSection_del(section, sectionIndex) {
     const el = document.createElement("div");
     el.className = "section";
     el.draggable = true;
@@ -202,9 +202,61 @@ function renderSection(section, sectionIndex) {
     return el;
 }
 
+function renderSection(section, sectionIndex) {
+    const tpl = document.getElementById("tpl-section");
+    const el = tpl.content.firstElementChild.cloneNode(true);
+
+    el.dataset.sectionIndex = sectionIndex;
+
+    const isCollapsed = uiState.collapsedSections.has(sectionIndex);
+
+    const idInput    = el.querySelector('[data-field="section-id"]');
+    const titleInput = el.querySelector('[data-field="section-title"]');
+    const servicesEl = el.querySelector('.section-services');
+    const bodyEl     = el.querySelector('.section-body');
+
+    el.querySelector('.collapse-toggle').textContent =
+        isCollapsed ? "▶" : "▼";
+
+    bodyEl.classList.toggle('collapsed', isCollapsed);
+
+    el.querySelector('[data-action="delete-section"]').textContent =
+        T.deleteSection;
+
+    el.querySelector('[data-action="add-service"]').textContent =
+        T.addService;
+
+    el.querySelectorAll('label')[0].textContent = T.sectionId;
+    el.querySelectorAll('label')[1].textContent = T.sectionTitle;
+
+    idInput.value = section.id;
+    titleInput.value = section.title;
+
+    idInput.oninput = () => {
+        section.id = idInput.value.trim();
+        markDirty();
+    };
+
+    titleInput.oninput = () => {
+        section.title = titleInput.value.trim();
+        markDirty();
+    };
+
+    if (!isCollapsed) {
+        section.services.forEach((svc, i) => {
+            servicesEl.appendChild(
+                renderService(section, svc, sectionIndex, i)
+            );
+        });
+    }
+
+    return el;
+}
+
+
 /* ================= service ================= */
 
-function renderService(section, service, sectionIndex, serviceIndex) {
+function renderService_old(section, service, sectionIndex, serviceIndex) {
     const el = document.createElement("div");
     el.className = "service";
     el.draggable = true;
@@ -273,6 +325,35 @@ function renderService(section, service, sectionIndex, serviceIndex) {
 
     return el;
 }
+
+function renderService(section, service, sectionIndex, serviceIndex) {
+    const tpl = document.getElementById("tpl-service");
+    const el = tpl.content.firstElementChild.cloneNode(true);
+
+    el.dataset.sectionIndex = sectionIndex;
+    el.dataset.serviceIndex = serviceIndex;
+
+    const [title, url, logo] = el.querySelectorAll('input');
+    const labels = el.querySelectorAll('label');
+
+    labels[0].textContent = T.serviceTitle;
+    labels[1].textContent = T.serviceUrl;
+    labels[2].textContent = "Logo";
+
+    title.value = service.title || "";
+    url.value   = service.url || "";
+    logo.value  = service.logo || "";
+
+    title.oninput = () => { service.title = title.value; markDirty(); };
+    url.oninput   = () => { service.url = url.value; markDirty(); };
+    logo.oninput  = () => { service.logo = logo.value; markDirty(); };
+
+    el.querySelector('[data-action="delete-service"]').textContent =
+        T.deleteService;
+
+    return el;
+}
+
 
 /* ================= global DnD ================= */
 

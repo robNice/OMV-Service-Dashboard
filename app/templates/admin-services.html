@@ -36,24 +36,73 @@
         </nav>
     </header>
 
+    <!-- Mount point -->
     <div id="services-editor"></div>
 
-
     <div class="admin-footer">
-        <button id="add-section" class="secondary">Add section</button>
+        <button id="add-section" class="secondary">
+            {{__.admin.section.add}}
+        </button>
 
         <button id="save-services" class="primary" disabled>
-            <span class="label"></span>
+            <span class="label">{{__.admin.save.label}}</span>
             <span class="spinner hidden"></span>
         </button>
+
         <span id="save-status"></span>
-
     </div>
-
 
 </div>
 
 <div id="drop-indicator"></div>
+
+<!-- TEMPLATES (nicht gerendert!) -->
+
+<template id="tpl-section">
+    <div class="section" draggable="true">
+        <div class="section-header">
+            <button class="collapse-toggle" title="Toggle">▼</button>
+
+            <div>
+                <label></label>
+                <input type="text" data-field="section-id">
+            </div>
+
+            <div>
+                <label></label>
+                <input type="text" data-field="section-title">
+            </div>
+
+            <button class="danger" data-action="delete-section"></button>
+        </div>
+
+        <div class="section-body">
+            <div class="section-services"></div>
+            <button class="secondary add" data-action="add-service"></button>
+        </div>
+    </div>
+</template>
+
+<template id="tpl-service">
+    <div class="service" draggable="true">
+        <div>
+            <label></label>
+            <input type="text" data-field="service-title">
+        </div>
+
+        <div>
+            <label></label>
+            <input type="text" data-field="service-url">
+        </div>
+
+        <div>
+            <label></label>
+            <input type="text" data-field="service-logo">
+        </div>
+
+        <button class="danger" data-action="delete-service"></button>
+    </div>
+</template>
 
 <script src="/assets/admin/admin-services.js"></script>
 </body>
