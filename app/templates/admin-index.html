@@ -11,21 +11,34 @@
 <div class="admin-page">
 
     <header class="admin-header">
-        <h1>{{__.admin.title}}</h1>
+        <div>
+            <h1>{{__.admin.title}}</h1>
+            <p class="admin-subtitle">
+                {{__.admin.subtitle}}
+            </p>
+        </div>
+
         <nav>
-            <a href="/admin">Admin</a> ·
             <a href="/admin/logout">Logout</a>
         </nav>
     </header>
 
-    <div class="admin-card">
-        <ul class="admin-menu">
-            <li><a href="/admin/services">{{__.admin.services.title}}</a></li>
-            <li><a href="/admin/setpassword">{{__.admin.password.title}}</a></li>
-        </ul>
+    <div class="admin-dashboard">
+
+        <a href="/admin/services" class="admin-tile primary">
+            <h2>{{__.admin.services.title}}</h2>
+            <p>{{__.admin.services.desc}}</p>
+        </a>
+
+        <a href="/admin/setpassword" class="admin-tile">
+            <h2>{{__.admin.password.title}}</h2>
+            <p>{{__.admin.password.desc}}</p>
+        </a>
+
     </div>
 
 </div>
+
 
 </body>
 </html>

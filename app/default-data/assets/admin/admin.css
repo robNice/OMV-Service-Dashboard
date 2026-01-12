@@ -51,6 +51,51 @@ body {
     text-decoration: underline;
 }
 
+.admin-subtitle {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.admin-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+
+.admin-tile {
+    background: linear-gradient(180deg, #020617, #020617cc);
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 1.75rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s;
+}
+
+.admin-tile h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.05rem;
+}
+
+.admin-tile p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.admin-tile:hover {
+    transform: translateY(-2px);
+    border-color: #2563eb;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.admin-tile.primary {
+    border-color: #2563eb;
+}
+
+
 #pw-card {
     max-width: 360px;
 }

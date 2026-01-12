@@ -60,8 +60,10 @@
   },
   "admin": {
     "title": "Admin",
+    "subtitle": "System & configuration management",
     "services": {
       "title": "Edit Sections and Services",
+      "desc": "Edit sections, services and links shown on the dashboard",
       "addSection": "Add section"
     },
     "section": {
@@ -85,6 +87,7 @@
     },
     "password": {
       "title": "Change password",
+      "desc": "Update the administrator password",
       "new": "New password",
       "repeat": "Repeat password",
       "tooShort": "Password must be at least 8 characters",
