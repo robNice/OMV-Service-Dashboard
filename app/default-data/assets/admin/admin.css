@@ -59,12 +59,13 @@ header.admin-header a:hover {
     border: 1px solid #1e293b;
 }
 
+
 .section-header {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
+    grid-template-columns: auto 1fr 1fr auto;
     gap: 0.75rem;
     align-items: end;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid #1e293b;
 }
@@ -182,11 +183,6 @@ h1 {
     z-index: 1000;
 }
 
-.section-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
 
 .collapse-toggle {
     background: none;

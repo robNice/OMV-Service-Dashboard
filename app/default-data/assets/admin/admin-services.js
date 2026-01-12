@@ -112,9 +112,10 @@ function renderSection(section, sectionIndex) {
         </div>
 
 
-        <div class="section-services ${isCollapsed ? "collapsed" : ""}"></div>
-    
-        ${isCollapsed ? "" : `<button class="secondary add">${T.addService}</button>`}
+        <div class="section-body ${isCollapsed ? "collapsed" : ""}">
+            <div class="section-services"></div>
+            <button class="secondary add">${T.addService}</button>
+        </div>
     `;
 
     el.querySelector(".collapse-toggle").onclick = () => {
