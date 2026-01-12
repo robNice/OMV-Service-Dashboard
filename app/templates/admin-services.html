@@ -17,7 +17,12 @@
 
         serviceTitle: "Service title",
         serviceUrl: "Service URL",
-        deleteService: "Delete service"
+        deleteService: "Delete service",
+
+        saveLabel: "{{__.admin.save.label}}",
+        saveSaving: "{{__.admin.save.saving}}",
+        saveSaved: "{{__.admin.save.saved}}",
+        saveError: "{{__.admin.save.error}}"
     };
 </script>
 
@@ -37,12 +42,12 @@
     <div class="admin-footer">
         <button id="add-section" class="secondary">Add section</button>
 
-        <button id="save-services" class="primary">
-            <span class="label">Save</span>
+        <button id="save-services" class="primary" disabled>
+            <span class="label"></span>
             <span class="spinner hidden"></span>
         </button>
-
         <span id="save-status"></span>
+
     </div>
 
 

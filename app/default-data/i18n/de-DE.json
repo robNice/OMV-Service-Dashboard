@@ -75,6 +75,12 @@
       "url": "Service-URL",
       "logo": "Logo",
       "delete": "Service löschen"
+    },
+    "save": {
+      "label": "Speichern",
+      "saving": "speichere…",
+      "saved": "gespeichert",
+      "error": "Speichern fehlgeschlagen"
     }
   }
 }

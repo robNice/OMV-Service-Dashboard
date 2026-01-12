@@ -75,6 +75,12 @@
       "url": "Service URL",
       "logo": "Logo",
       "delete": "Delete service"
+    },
+    "save": {
+      "label": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "error": "Save failed"
     }
   }
 }

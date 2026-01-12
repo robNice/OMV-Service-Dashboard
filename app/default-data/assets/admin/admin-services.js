@@ -1,4 +1,5 @@
 let state = { sections: [] };
+let dirty = false;
 const T = window.ADMIN_I18N;
 let dragState = null;
 let uiState = {
@@ -10,6 +11,8 @@ let uiState = {
 
 const editor = document.getElementById("services-editor");
 const indicator = document.getElementById("drop-indicator");
+
+
 
 function render() {
     editor.innerHTML = "";
@@ -77,6 +80,27 @@ function getServiceDropTarget(mouseY) {
     };
 }
 
+function markDirty() {
+    if (!dirty) {
+        dirty = true;
+        updateSaveUI();
+    }
+}
+
+function clearDirty() {
+    dirty = false;
+    updateSaveUI();
+}
+
+function updateSaveUI() {
+    const btn = document.getElementById("save-services");
+    const status = document.getElementById("save-status");
+
+    btn.disabled = !dirty;
+    if (dirty) {
+        status.textContent = "";
+    }
+}
 
 
 function showIndicator(y) {
@@ -140,13 +164,23 @@ function renderSection(section, sectionIndex) {
     });
 
     const [idInput, titleInput] = el.querySelectorAll("input");
-    idInput.oninput = e => section.id = e.target.value.trim();
-    titleInput.oninput = e => section.title = e.target.value.trim();
+    idInput.oninput = e => {
+        section.id = e.target.value.trim();
+        markDirty();
+    };
+
+    titleInput.oninput = e => {
+        section.title = e.target.value.trim();
+        markDirty();
+    };
+
 
     el.querySelector(".danger").onclick = () => {
         state.sections.splice(sectionIndex, 1);
+        markDirty();
         render();
     };
+
 
     const servicesEl = el.querySelector(".section-services");
     servicesEl.dataset.sectionIndex = sectionIndex;
@@ -161,6 +195,7 @@ function renderSection(section, sectionIndex) {
 
     el.querySelector(".add").onclick = () => {
         section.services.push({ title: "", url: "", logo: "" });
+        markDirty();
         render();
     };
 
@@ -211,12 +246,28 @@ function renderService(section, service, sectionIndex, serviceIndex) {
     });
 
     const [titleInput, urlInput, logoInput] = el.querySelectorAll("input");
-    titleInput.oninput = e => service.title = e.target.value;
-    urlInput.oninput = e => service.url = e.target.value;
-    logoInput.oninput = e => service.logo = e.target.value;
+
+
+    titleInput.oninput = e => {
+        service.title = e.target.value;
+        markDirty();
+    };
+
+    urlInput.oninput = e => {
+        service.url = e.target.value;
+        markDirty();
+    };
+
+    logoInput.oninput = e => {
+        service.logo = e.target.value;
+        markDirty();
+    };
+
+
 
     el.querySelector(".danger").onclick = () => {
         section.services.splice(serviceIndex, 1);
+        markDirty();
         render();
     };
 
@@ -258,6 +309,7 @@ editor.addEventListener("drop", e => {
         if (from !== to && from + 1 !== to) {
             const moved = state.sections.splice(from, 1)[0];
             state.sections.splice(to > from ? to - 1 : to, 0, moved);
+            markDirty();
         }
     }
 
@@ -272,6 +324,7 @@ editor.addEventListener("drop", e => {
                 state.sections[fromSection].services.splice(fromService, 1)[0];
 
             state.sections[sectionIndex].services.splice(serviceIndex, 0, moved);
+            markDirty();
         }
     }
 
@@ -287,9 +340,11 @@ function bindSaveButton() {
     const spinner = btn.querySelector(".spinner");
 
     btn.onclick = async () => {
+        if (!dirty) return;
+
         btn.disabled = true;
         spinner.classList.remove("hidden");
-        label.textContent = "Saving…";
+        label.textContent = T.saveSaving;
         status.textContent = "";
 
         try {
@@ -301,24 +356,32 @@ function bindSaveButton() {
 
             if (!res.ok) throw new Error();
 
-            status.textContent = "Saved";
+            status.textContent = T.saveSaved;
             status.style.color = "#22c55e";
+            clearDirty();
         } catch {
-            status.textContent = "Save failed";
+            status.textContent = T.saveError;
             status.style.color = "#ef4444";
-        } finally {
             btn.disabled = false;
+        } finally {
             spinner.classList.add("hidden");
-            label.textContent = "Save";
+            label.textContent = T.saveLabel;
         }
     };
 }
 
 
+function initSaveButton() {
+    const btn = document.getElementById("save-services");
+    btn.querySelector(".label").textContent = T.saveLabel;
+    btn.disabled = true;
+}
+
 /* ================= init ================= */
 
 document.getElementById("add-section").onclick = () => {
     state.sections.push({ id: "", title: "", services: [] });
+    markDirty();
     render();
 };
 
@@ -330,3 +393,4 @@ async function loadInitialData() {
 
 loadInitialData();
 bindSaveButton();
+initSaveButton();
