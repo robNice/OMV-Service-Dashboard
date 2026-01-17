@@ -95,16 +95,24 @@ function renderService(service, sectionIndex, serviceIndex) {
     title.value = service.title || "";
     url.value   = service.url || "";
 
-    logo.innerHTML = "";
+    if (logo) {
+        logo.innerHTML = "";
 
-    for (const img of serviceCardImages) {
-        const opt = document.createElement("option");
-        opt.value = img;
-        opt.textContent = img;
-        logo.appendChild(opt);
+        for (const img of serviceCardImages) {
+            const opt = document.createElement("option");
+            opt.value = img;
+            opt.textContent = img;
+            logo.appendChild(opt);
+        }
+
+        logo.value = service.logo || "";
+
+        logo.addEventListener("change", () => {
+            service.logo = logo.value;
+            markDirty();
+        });
     }
 
-    logo.value = service.logo || "";
 
     title.addEventListener("input", () => {
         service.title = title.value;
