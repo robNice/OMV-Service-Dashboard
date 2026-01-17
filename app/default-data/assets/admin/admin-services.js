@@ -70,7 +70,7 @@ function renderSection(section, sectionIndex) {
 
     const bgImg = el.querySelector('[data-preview="section-bg"]');
     const bgStatus = el.querySelector('[data-status="section-bg"]');
-
+    console.log('BG resolver', section.backgroundImage);
     if (section.backgroundImage && bgImg) {
         bgImg.src = section.backgroundImage.src;
         bgStatus.textContent = section.backgroundImage.source;

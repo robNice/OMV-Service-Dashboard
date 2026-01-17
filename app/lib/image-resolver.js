@@ -57,7 +57,7 @@ function resolveSectionBackgroundImage(section) {
         explicit: section.backgroundImage || null,
         idFallback: `${section.id}_bg.jpg`,
         defaultFile: '_default.jpg',
-        baseDir: 'backgrounds/sections'
+        baseDir: 'backgrounds'
     });
 }
 
