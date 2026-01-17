@@ -330,3 +330,15 @@ button.primary:disabled {
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+.image-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 6px;
+    font-size: 0.7em;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.badge-explicit { background: #2ecc71; }
+.badge-id       { background: #3498db; }
+.badge-default  { background: #f39c12; }

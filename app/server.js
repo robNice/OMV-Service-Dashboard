@@ -4,6 +4,12 @@ const crypto = require("crypto");
 const SESSION_SECRET = crypto.randomBytes(32).toString("hex");
 const sessions = new Map();
 const { getServiceCardImages } = require("./lib/service-card-images");
+const {
+    resolveSectionCardImage,
+    resolveSectionBackgroundImage,
+    resolveServiceCardImage
+} = require('./lib/image-resolver');
+
 
 
 const fs = require("fs");
@@ -75,7 +81,6 @@ function sessionMiddleware(req, res, next) {
 
     next();
 }
-app.use(sessionMiddleware);
 
 app.use(sessionMiddleware);
 
@@ -192,7 +197,7 @@ function renderService(service) {
     return `
     <div class="service">
       <a href="${service.url}" target="_blank">
-        <img src="/assets/cards/services/${service.logo || '_default.png'}" alt="${service.title}" />
+        <img src="${service.image.src}" alt="${service.title}" />
         <div class="service-title">${service.title}</div>
       </a>
     </div>`;
@@ -207,32 +212,54 @@ function renderSection(section) {
     return `
     <div class="service">
       <a href="/section/${encodeURIComponent(section.id)}">
-        <img src="${resolveSectionCard(section.id)}" alt="${section.title}" />
+        <img src="${section.cardImage.src}" alt="${section.title}" />
         <div class="service-title">${section.title}</div>
       </a>
     </div>`;
 }
 
+
 function renderAdminServices(data) {
     return data.sections.map(section => {
-        const services = (section.services || []).map(service => `
-            <li>
-                <img src="/assets/cards/services/${service.logo || '_default.png'}" alt="">
-                <span class="service-title">${service.title}</span>
-                <span class="service-url">${service.url}</span>
-            </li>
-        `).join("");
+
+        const services = (section.services || []).map(service => {
+            const image = resolveServiceCardImage(service);
+
+            return `
+                <li>
+                    <img src="${image.src}" alt="">
+                    ${renderImageSourceBadge(image)}
+                    <span class="service-title">${service.title}</span>
+                    <span class="service-url">${service.url}</span>
+                </li>
+            `;
+        }).join("");
+        const sectionCardImage = resolveSectionCardImage(section);
+        const sectionBgImage   = resolveSectionBackgroundImage(section);
 
         return `
             <div class="section">
-                <h2>${section.title} <small>(${section.id})</small></h2>
+                <div class="section-header"
+                     style="background-image: url('${sectionBgImage.src}')">
+                    <img class="section-card-image"
+                         src="${sectionCardImage.src}"
+                         alt="">
+                         ${renderImageSourceBadge(sectionCardImage)}
+                    <h2>
+                        ${section.title}
+                        <small>(${section.id})</small>
+                    </h2>
+                </div>
+        
                 <ul>
                     ${services || '<li><em>No services</em></li>'}
                 </ul>
             </div>
         `;
+
     }).join("\n");
 }
+
 
 
 /**
@@ -264,6 +291,24 @@ function setTemplate( req, template, backlink, version, title, cards )  {
 function loadTemplate() {
     return fs.readFileSync("/app/templates/index.html", "utf-8");
 }
+
+
+
+function renderImageSourceBadge(image) {
+    const map = {
+        explicit: { label: 'explizit', class: 'badge-explicit' },
+        id:       { label: 'id-fallback', class: 'badge-id' },
+        default:  { label: 'default', class: 'badge-default' }
+    };
+
+    const cfg = map[image.source];
+    if (!cfg) return '';
+
+    return `<span class="image-badge ${cfg.class}">${cfg.label}</span>`;
+}
+
+
+
 
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
@@ -493,12 +538,26 @@ app.get('/assets/*', (req, res) => {
 
 app.get("/", (req, res) => {
     const data = loadData();
-    const config = loadConfiguration()
-    const sections = data.sections.map(renderSection).join("\n");
-    const html = setTemplate( req, loadTemplate(), '', APP_VERSION, config.title, sections );
+    const config = loadConfiguration();
+
+    const sections = data.sections.map(section => ({
+        ...section,
+        cardImage: resolveSectionCardImage(section),
+        backgroundImage: resolveSectionBackgroundImage(section)
+    })).map(renderSection).join("\n");
+
+    const html = setTemplate(
+        req,
+        loadTemplate(),
+        '',
+        APP_VERSION,
+        config.title,
+        sections
+    );
 
     res.send(html);
 });
+
 
 
 app.get("/section/:id", (req, res) => {
