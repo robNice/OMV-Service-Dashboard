@@ -485,7 +485,23 @@ app.get("/admin/api/service-card-images", requireAdmin, (req, res) => {
 });
 
 app.get("/admin/api/services", requireAdmin, (req, res) => {
-    res.json(loadServices());
+    const data = loadServices();
+
+    const enriched = {
+        sections: data.sections.map(section => ({
+            ...section,
+
+            cardImage: resolveSectionCardImage(section),
+            backgroundImage: resolveSectionBackgroundImage(section),
+
+            services: (section.services || []).map(service => ({
+                ...service,
+                cardImage: resolveServiceCardImage(service)
+            }))
+        }))
+    };
+
+    res.json(enriched);
 });
 app.post(
     "/admin/api/services",

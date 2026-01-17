@@ -207,6 +207,10 @@ header.admin-header a:hover {
     color: #94a3b8;
     margin-left: 6px;
 }
+.image-status::before {
+    content: '• ';
+    opacity: 0.5;
+}
 .service {
     display: grid;
     grid-template-columns: 1fr 1.5fr 1fr auto;

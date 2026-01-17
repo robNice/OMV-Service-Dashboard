@@ -60,6 +60,23 @@ function renderSection(section, sectionIndex) {
     idInput.value = section.id || "";
     titleInput.value = section.title || "";
 
+    const cardImg = el.querySelector('[data-preview="section-card"]');
+    const cardStatus = el.querySelector('[data-status="section-card"]');
+
+    if (section.cardImage && cardImg) {
+        cardImg.src = section.cardImage.src;
+        cardStatus.textContent = section.cardImage.source;
+    }
+
+    const bgImg = el.querySelector('[data-preview="section-bg"]');
+    const bgStatus = el.querySelector('[data-status="section-bg"]');
+
+    if (section.backgroundImage && bgImg) {
+        bgImg.src = section.backgroundImage.src;
+        bgStatus.textContent = section.backgroundImage.source;
+    }
+
+
     idInput.addEventListener("input", () => {
         section.id = idInput.value.trim();
         markDirty();
@@ -94,6 +111,15 @@ function renderService(service, sectionIndex, serviceIndex) {
 
     title.value = service.title || "";
     url.value   = service.url || "";
+
+    const img = el.querySelector('[data-preview="service-card"]');
+    const status = el.querySelector('[data-status="service-card"]');
+
+    if (service.cardImage && img) {
+        img.src = service.cardImage.src;
+        status.textContent = service.cardImage.source;
+    }
+
 
     if (logo) {
         logo.innerHTML = "";
