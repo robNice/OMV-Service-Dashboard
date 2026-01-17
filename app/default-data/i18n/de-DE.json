@@ -67,7 +67,7 @@
       "addSection": "Sektion hinzufügen",
       "cardimage" : "Card-Bild"
     },
-    "images": {
+    "image": {
       "resetToDefault" : "zurücksetzen auf Standard-Bild"
     },
     "section": {
