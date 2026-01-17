@@ -227,7 +227,7 @@ function renderAdminServices(data) {
 
             return `
                 <li>
-                    <img src="${image.src}" alt="">
+                    <img src="${image.src}" alt="" style="width:32px;height:auto;">
                     ${renderImageSourceBadge(image)}
                     <span class="service-title">${service.title}</span>
                     <span class="service-url">${service.url}</span>
@@ -244,10 +244,21 @@ function renderAdminServices(data) {
                     <img class="section-card-image"
                          src="${sectionCardImage.src}"
                          alt="">
-                         ${renderImageSourceBadge(sectionCardImage)}
+        
                     <h2>
                         ${section.title}
                         <small>(${section.id})</small>
+                        <span class="bg-indicator"
+                              title="Background: ${sectionBgImage.source} (${sectionBgImage.resolvedFile})"
+                              style="display:inline-block;
+                                     width:16px;
+                                     height:16px;
+                                     margin-left:6px;
+                                     background-image:url('${sectionBgImage.src}');
+                                     background-size:cover;
+                                     background-position:center;
+                                     border:1px solid #ccc;">
+                        </span>
                     </h2>
                 </div>
         
@@ -256,6 +267,7 @@ function renderAdminServices(data) {
                 </ul>
             </div>
         `;
+
 
     }).join("\n");
 }
