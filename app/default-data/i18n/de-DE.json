@@ -64,13 +64,19 @@
     "services": {
       "title": "Sektionen und Dienste verwalten",
       "desc": "Verwalte Sektionen, Dienste und Links auf dem Dashboard",
-      "addSection": "Sektion hinzufügen"
+      "addSection": "Sektion hinzufügen",
+      "cardimage" : "Card-Bild"
+    },
+    "images": {
+      "resetToDefault" : "zurücksetzen auf Standard-Bild"
     },
     "section": {
       "id": "Sektions-ID",
       "title": "Sektionsname",
       "delete": "Sektion löschen",
-      "addService": "Service hinzufügen"
+      "addService": "Service hinzufügen",
+      "backgroundimage": "Hintergrundbild",
+      "cardimage" : "Card-Bild"
     },
     "service": {
       "id": "Service-ID",

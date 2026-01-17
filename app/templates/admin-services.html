@@ -57,6 +57,44 @@
                 <label>{{__.admin.section.title}}</label>
                 <input type="text" data-field="section-title">
             </div>
+            <div class="image-field">
+                <label>{{__.admin.section.cardimage}}</label>
+
+                <div class="image-preview">
+                    <img data-preview="section-card" alt="">
+                    <span class="image-status" data-status="section-card"></span>
+                </div>
+
+                <input type="file"
+                       accept="image/*"
+                       data-upload="section-card">
+
+                <button type="button"
+                        class="secondary small"
+                        data-action="reset-section-card">
+                    {{__.admin.image.resetToDefault}}
+                </button>
+            </div>
+
+            <div class="image-field">
+                <label>{{__.admin.section.backgroundimage}}</label>
+
+                <div class="image-preview">
+                    <img data-preview="section-bg" alt="">
+                    <span class="image-status" data-status="section-bg"></span>
+                </div>
+
+                <input type="file"
+                       accept="image/*"
+                       data-upload="section-bg">
+
+                <button type="button"
+                        class="secondary small"
+                        data-action="reset-section-bg">
+                    {{__.admin.image.resetToDefault}}
+                </button>
+            </div>
+
 
             <button class="danger" data-action="delete-section">
                 {{__.admin.section.delete}}
@@ -84,10 +122,25 @@
             <input type="text" data-field="service-url">
         </div>
 
-        <div>
+        <div class="image-field">
             <label>{{__.admin.service.cardimage}}</label>
-            <select data-field="service-logo"></select>
+
+            <div class="image-preview">
+                <img data-preview="service-card" alt="">
+                <span class="image-status" data-status="service-card"></span>
+            </div>
+
+            <input type="file"
+                   accept="image/*"
+                   data-upload="service-card">
+
+            <button type="button"
+                    class="secondary small"
+                    data-action="reset-service-card">
+                {{__.admin.image.resetToDefault}}
+            </button>
         </div>
+
 
         <button class="danger" data-action="delete-service">
             {{__.admin.service.delete}}

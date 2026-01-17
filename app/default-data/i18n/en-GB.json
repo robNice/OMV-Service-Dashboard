@@ -64,13 +64,19 @@
     "services": {
       "title": "Edit Sections and Services",
       "desc": "Edit sections, services and links shown on the dashboard",
-      "addSection": "Add section"
+      "addSection": "Add section",
+      "cardimage" : "Card image"
+    },
+    "images": {
+      "resetToDefault" : "reset to default image"
     },
     "section": {
       "id": "Section ID",
       "title": "Section title",
       "delete": "Delete section",
-      "addService": "Add service"
+      "addService": "Add service",
+      "backgroundimage": "Background image",
+      "cardimage" : "Card image"
     },
     "service": {
       "id": "Service ID",
