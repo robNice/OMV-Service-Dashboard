@@ -55,7 +55,7 @@ function resolveSectionCardImage(section) {
 function resolveSectionBackgroundImage(section) {
     return resolveImage({
         explicit: section.backgroundImage || null,
-        idFallback: `${section.id}_bg.jpg`,
+        idFallback: `${section.id}.jpg`,
         defaultFile: '_default.jpg',
         baseDir: 'backgrounds'
     });
