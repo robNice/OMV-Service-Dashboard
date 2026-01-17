@@ -26,10 +26,14 @@ function applyImagePreview(previewEl, image) {
     }
 
     if (status) {
-        status.textContent =
-            image.source === "explicit" ? "custom" :
-                image.source === "id"       ? "by id" :
-                    "default";
+        const LABELS = {
+            explicit: 'custom',
+            id:       'auto',
+            default:  'default'
+        };
+
+
+        status.textContent = LABELS[image.source] || image.source;
 
         status.dataset.source = image.source;
     }

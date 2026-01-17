@@ -189,6 +189,7 @@ header.admin-header a:hover {
 }
 
 .image-preview {
+    position: relative;
     width: 42px;
     height: 42px;
     border-radius: 6px;
@@ -196,18 +197,26 @@ header.admin-header a:hover {
     border: 1px solid #1e293b;
     background: #020617;
 }
-
 .image-preview img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 .image-status {
-    font-size: 0.65rem;
-    padding: 2px 6px;
-    border-radius: 4px;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+
+    font-size: 0.6rem;
     line-height: 1;
-    white-space: nowrap;
+    padding: 2px 4px;
+
+    border-radius: 3px;
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+
+    pointer-events: none;
+    z-index: 2;
 }
 
 .image-status[data-source="explicit"] {
