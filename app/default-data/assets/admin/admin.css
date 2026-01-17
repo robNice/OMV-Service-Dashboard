@@ -234,13 +234,11 @@ header.admin-header a:hover {
     color: #3a2500;
 }
 
-.image-status::before {
-    content: '• ';
-    opacity: 0.5;
-}
-.image-status[data-source="explicit"] { color: #2ecc71; }
-.image-status[data-source="id"]       { color: #3498db; }
-.image-status[data-source="default"]  { color: #f39c12; }
+
+
+
+
+
 .service {
     display: grid;
     grid-template-columns: 1fr 1.5fr 1fr auto;
@@ -431,7 +429,3 @@ button.primary:disabled {
     border-radius: 4px;
     color: #fff;
 }
-
-.badge-explicit { background: #2ecc71; }
-.badge-id       { background: #3498db; }
-.badge-default  { background: #f39c12; }
