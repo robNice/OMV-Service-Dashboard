@@ -157,8 +157,31 @@ header.admin-header a:hover {
     grid-template-columns: auto 1fr;
     gap: 6px 10px;
     align-items: center;
+    background: rgba(2,6,23,0.4);
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #1e293b;
+}
+.image-field input[type="file"] {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.5rem;
+    opacity: 0.85;
 }
 
+.image-field input[type="file"]::-webkit-file-upload-button {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+}
+.image-field button.secondary.small {
+    margin-top: 4px;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    opacity: 0.7;
+}
+
+.image-field button.secondary.small:hover {
+    opacity: 1;
+}
 .image-field label {
     grid-column: 1 / -1;
     font-size: 0.75rem;
@@ -179,7 +202,11 @@ header.admin-header a:hover {
     height: 100%;
     object-fit: cover;
 }
-
+.image-status {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    margin-left: 6px;
+}
 .service {
     display: grid;
     grid-template-columns: 1fr 1.5fr 1fr auto;
@@ -191,7 +218,9 @@ header.admin-header a:hover {
     border: 1px solid #1e293b;
     border-radius: 8px;
 }
+
 .service > .image-field {
+    margin-top: 0.5rem;
     grid-column: 1 / -2;
 }
 .service:last-child {
