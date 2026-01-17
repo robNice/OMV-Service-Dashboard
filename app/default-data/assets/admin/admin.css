@@ -142,6 +142,7 @@ header.admin-header a:hover {
 }
 
 .section-header > .image-field {
+    margin-top: 0.5rem;
     grid-column: 2 / span 2;
 }
 
