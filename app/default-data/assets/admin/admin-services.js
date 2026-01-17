@@ -124,11 +124,6 @@ function renderService(service, sectionIndex, serviceIndex) {
         markDirty();
     });
 
-    logo.addEventListener("change", () => {
-        service.logo = logo.value;
-        markDirty();
-    });
-
     return el;
 }
 
