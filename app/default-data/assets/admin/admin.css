@@ -131,13 +131,18 @@ header.admin-header a:hover {
 
 
 .section-header {
-    display: grid;
-    grid-template-columns: auto 1fr 1fr auto;
-    gap: 0.75rem;
-    align-items: start;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid #1e293b;
+    display: grid;
+    grid-template-columns: auto 1fr 1fr auto;
+    grid-auto-rows: auto;
+    gap: 0.75rem 1rem;
+    align-items: start;
+}
+
+.section-header > .image-field {
+    grid-column: 2 / span 2;
 }
 
 .section-services {
@@ -185,7 +190,9 @@ header.admin-header a:hover {
     border: 1px solid #1e293b;
     border-radius: 8px;
 }
-
+.service > .image-field {
+    grid-column: 1 / -2;
+}
 .service:last-child {
     margin-bottom: 0;
 }
