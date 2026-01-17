@@ -12,6 +12,31 @@ const I18N = (() => {
     const el = document.getElementById("i18n");
     return el ? el.dataset : {};
 })();
+
+
+function applyImagePreview(previewEl, image) {
+    if (!previewEl || !image) return;
+
+    const img = previewEl.querySelector("img");
+    const status = previewEl.querySelector(".image-status");
+
+    if (img) {
+        img.src = image.src;
+        img.title = image.resolvedFile || "";
+    }
+
+    if (status) {
+        status.textContent =
+            image.source === "explicit" ? "custom" :
+                image.source === "id"       ? "by id" :
+                    "default";
+
+        status.dataset.source = image.source;
+    }
+}
+
+
+
 /* ================= Render ================= */
 
 function render() {
@@ -26,6 +51,13 @@ function render() {
 function renderSection(section, sectionIndex) {
     const tpl = document.getElementById("tpl-section");
     const el = tpl.content.firstElementChild.cloneNode(true);
+
+    const cardPreview = el.querySelector('[data-preview="section-card"]')?.closest('.image-preview');
+    const bgPreview   = el.querySelector('[data-preview="section-bg"]')?.closest('.image-preview');
+
+    applyImagePreview(cardPreview, section.cardImage);
+    applyImagePreview(bgPreview, section.backgroundImage);
+
 
     const toggle = el.querySelector('[data-action="toggle-section"]');
     const body   = el.querySelector('.section-services');
@@ -107,38 +139,9 @@ function renderService(service, sectionIndex, serviceIndex) {
 
     const title = el.querySelector('[data-field="service-title"]');
     const url   = el.querySelector('[data-field="service-url"]');
-    const logo  = el.querySelector('[data-field="service-logo"]');
 
     title.value = service.title || "";
     url.value   = service.url || "";
-
-    const img = el.querySelector('[data-preview="service-card"]');
-    const status = el.querySelector('[data-status="service-card"]');
-
-    if (service.cardImage && img) {
-        img.src = service.cardImage.src;
-        status.textContent = service.cardImage.source;
-    }
-
-
-    if (logo) {
-        logo.innerHTML = "";
-
-        for (const img of serviceCardImages) {
-            const opt = document.createElement("option");
-            opt.value = img;
-            opt.textContent = img;
-            logo.appendChild(opt);
-        }
-
-        logo.value = service.logo || "";
-
-        logo.addEventListener("change", () => {
-            service.logo = logo.value;
-            markDirty();
-        });
-    }
-
 
     title.addEventListener("input", () => {
         service.title = title.value;
@@ -149,6 +152,11 @@ function renderService(service, sectionIndex, serviceIndex) {
         service.url = url.value;
         markDirty();
     });
+
+    const preview = el.querySelector('.image-preview');
+    if (preview && service.cardImage) {
+        applyImagePreview(preview, service.cardImage);
+    }
 
     return el;
 }
@@ -190,6 +198,27 @@ editor.addEventListener("click", e => {
             markDirty();
             render();
             break;
+
+        case "reset-section-card":
+            state.sections[sectionIndex].cardImage = null;
+            markDirty();
+            render();
+            break;
+
+        case "reset-section-bg":
+            state.sections[sectionIndex].backgroundImage = null;
+            markDirty();
+            render();
+            break;
+
+        case "reset-service-card":
+            state.sections[sectionIndex]
+                .services[serviceIndex]
+                .logo = null;
+            markDirty();
+            render();
+            break;
+
     }
 });
 

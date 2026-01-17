@@ -211,6 +211,9 @@ header.admin-header a:hover {
     content: '• ';
     opacity: 0.5;
 }
+.image-status[data-source="explicit"] { color: #2ecc71; }
+.image-status[data-source="id"]       { color: #3498db; }
+.image-status[data-source="default"]  { color: #f39c12; }
 .service {
     display: grid;
     grid-template-columns: 1fr 1.5fr 1fr auto;

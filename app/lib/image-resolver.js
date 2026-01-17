@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { USER_ASSETS, APP_ASSETS } = require('./paths');
-
+const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
 function fileExists(p) {
     try {
         return fs.existsSync(p);
@@ -23,17 +23,22 @@ function resolveImage({ explicit, idFallback, defaultFile, baseDir }) {
         }
     }
 
-    // 2. ID-Fallback (app-data)
+    // 2. ID-Fallback (app-data, multi-extension)
     if (idFallback) {
-        const idPath = path.join(APP_ASSETS, baseDir, idFallback);
-        if (fileExists(idPath)) {
-            return {
-                src: `/assets/${baseDir}/${idFallback}`,
-                source: 'id',
-                resolvedFile: idFallback
-            };
+        for (const ext of IMAGE_EXTS) {
+            const file = `${idFallback}.${ext}`;
+            const idPath = path.join(APP_ASSETS, baseDir, file);
+
+            if (fileExists(idPath)) {
+                return {
+                    src: `/assets/${baseDir}/${file}`,
+                    source: 'id',
+                    resolvedFile: file
+                };
+            }
         }
     }
+
 
     // 3. Default (app-data)
     return {
@@ -46,7 +51,7 @@ function resolveImage({ explicit, idFallback, defaultFile, baseDir }) {
 function resolveSectionCardImage(section) {
     return resolveImage({
         explicit: section.cardImage || null,
-        idFallback: `${section.id}.png`,
+        idFallback: section.id,
         defaultFile: '_default.png',
         baseDir: 'cards/sections'
     });
@@ -55,7 +60,7 @@ function resolveSectionCardImage(section) {
 function resolveSectionBackgroundImage(section) {
     return resolveImage({
         explicit: section.backgroundImage || null,
-        idFallback: `${section.id}.jpg`,
+        idFallback: section.id,
         defaultFile: '_default.jpg',
         baseDir: 'backgrounds'
     });
@@ -64,7 +69,7 @@ function resolveSectionBackgroundImage(section) {
 function resolveServiceCardImage(service) {
     return resolveImage({
         explicit: service.logo || null,
-        idFallback: `${service.id}.png`,
+        idFallback: service.id,
         defaultFile: '_default.png',
         baseDir: 'cards/services'
     });
