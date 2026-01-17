@@ -128,7 +128,15 @@ function renderSection(section, sectionIndex) {
             renderService(svc, sectionIndex, i)
         );
     });
+    const resetCardBtn = el.querySelector('[data-action="reset-section-card"]');
+    if (resetCardBtn) {
+        resetCardBtn.textContent = t('imageReset');
+    }
 
+    const resetBgBtn = el.querySelector('[data-action="reset-section-bg"]');
+    if (resetBgBtn) {
+        resetBgBtn.textContent = t('imageReset');
+    }
     return el;
 }
 
@@ -161,7 +169,10 @@ function renderService(service, sectionIndex, serviceIndex) {
     if (preview && service.cardImage) {
         applyImagePreview(preview, service.cardImage);
     }
-
+    const resetBtn = el.querySelector('[data-action="reset-service-card"]');
+    if (resetBtn) {
+        resetBtn.textContent = t('imageReset');
+    }
     return el;
 }
 
