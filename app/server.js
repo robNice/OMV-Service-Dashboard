@@ -1,4 +1,18 @@
 //const version = "1.2.1-0" // my lazy ass anti cache: +'-'+Math.random().toString();
+const UPLOAD_MAP = {
+    "section-card": {
+        tmpSubDir: "cards/sections",
+        prefix: "sec-card-"
+    },
+    "section-background": {
+        tmpSubDir: "backgrounds",
+        prefix: "sec-bg-"
+    },
+    "service-card": {
+        tmpSubDir: "cards/services",
+        prefix: "svc-card-"
+    }
+};
 const express = require("express");
 const crypto = require("crypto");
 const SESSION_SECRET = crypto.randomBytes(32).toString("hex");
@@ -9,8 +23,8 @@ const {
     resolveSectionBackgroundImage,
     resolveServiceCardImage
 } = require('./lib/image-resolver');
-const TMP_DIR = "/data/tmp/assets/cards/sections/";
-
+const TMP_DIR = "/data/tmp/assets/";
+// const TMP_SECTION_BG_DIR = TMP_DIR+"/data/tmp/assets/backgrounds/";
 
 const fs = require("fs");
 const path = require("path");
@@ -84,8 +98,10 @@ function sessionMiddleware(req, res, next) {
 
 app.use(sessionMiddleware);
 
-function ensureTmpDir() {
-    fs.mkdirSync(TMP_DIR, { recursive: true });
+function ensureTmpDirs() {
+     for (const cfg of Object.values(UPLOAD_MAP)) {
+        fs.mkdirSync(path.join(TMP_DIR, cfg.tmpSubDir), { recursive: true });
+    }
 }
 
 function isImage(filename) {
@@ -330,6 +346,66 @@ function renderImageSourceBadge(image) {
 
 
 
+function findTmpUpload(dir, uploadId) {
+    if (!fs.existsSync(dir)) return null;
+
+    const files = fs.readdirSync(dir);
+    return files.find(f => f.startsWith(uploadId)) || null;
+}
+
+function deleteUserSectionCard(sectionId) {
+    const dir = path.join(CONFIG_DIR, "assets/cards/sections");
+    if (!fs.existsSync(dir)) return;
+
+    const files = fs.readdirSync(dir);
+    for (const f of files) {
+        if (f.startsWith(sectionId + ".")) {
+            fs.unlinkSync(path.join(dir, f));
+        }
+    }
+}
+
+function deleteUserImage(dir, baseName) {
+    if (!fs.existsSync(dir)) return;
+
+    const files = fs.readdirSync(dir);
+    for (const f of files) {
+        if (f.startsWith(baseName + ".")) {
+            fs.unlinkSync(path.join(dir, f));
+        }
+    }
+}
+
+function commitImage({
+                         image,
+                         uploadDir,
+                         targetDir,
+                         targetBaseName
+                     }) {
+    if (image === null) {
+        deleteUserImage(targetDir, targetBaseName);
+        return;
+    }
+
+    if (!image || !image.uploadId) {
+        return;
+    }
+
+    const tmpFile = findTmpUpload(uploadDir, image.uploadId);
+    if (!tmpFile) return;
+
+    fs.mkdirSync(targetDir, { recursive: true });
+
+    const ext = path.extname(tmpFile);
+    const target = path.join(targetDir, targetBaseName + ext);
+
+    fs.renameSync(
+        path.join(uploadDir, tmpFile),
+        target
+    );
+}
+
+
 
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
@@ -512,35 +588,64 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
 
     res.json(enriched);
 });
-app.post(
-    "/admin/api/services",
-    requireAdmin,
-    express.json(),
-    (req, res) => {
-        const data = req.body;
+    app.post(
+        "/admin/api/services",
+        requireAdmin,
+        express.json(),
+        (req, res) => {
+            const data = req.body;
 
-        if (!data || !Array.isArray(data.sections)) {
-            return res.status(400).json({ error: "invalid_format" });
+            if (!data || !Array.isArray(data.sections)) {
+                return res.status(400).json({ error: "invalid_format" });
+            }
+
+            for (const section of data.sections) {
+
+                commitImage({
+                    image: section.cardImage,
+                    uploadDir: path.join(TMP_DIR, "cards/sections"),
+                    targetDir: path.join(CONFIG_DIR, "assets/cards/sections"),
+                    targetBaseName: section.id
+                });
+
+                commitImage({
+                    image: section.backgroundImage,
+                    uploadDir: path.join(TMP_DIR, "backgrounds"),
+                    targetDir: path.join(CONFIG_DIR, "assets/backgrounds"),
+                    targetBaseName: section.id
+                });
+
+                for (const service of section.services || []) {
+
+                    if (!service.id) continue;
+
+                    commitImage({
+                        image: service.cardImage,
+                        uploadDir: path.join(TMP_DIR, "cards/services"),
+                        targetDir: path.join(CONFIG_DIR, "assets/cards/services"),
+                        targetBaseName: service.id
+                    });
+                }
+            }
+
+            const normalized = {
+                sections: data.sections.map(sec => ({
+                    id: String(sec.id || "").trim(),
+                    title: String(sec.title || "").trim(),
+                    services: Array.isArray(sec.services)
+                        ? sec.services.map(s => ({
+                            //id: s.id ? String(s.id).trim() : undefined,   // @todo: check
+                            title: String(s.title || "").trim(),
+                            url: String(s.url || "").trim()
+                        }))
+                        : []
+                }))
+            };
+
+            saveServices(normalized);
+            res.json({ ok: true });
         }
-
-        const normalized = {
-            sections: data.sections.map(sec => ({
-                id: String(sec.id || "").trim(),
-                title: String(sec.title || "").trim(),
-                services: Array.isArray(sec.services)
-                    ? sec.services.map(s => ({
-                        title: String(s.title || "").trim(),
-                        url: String(s.url || "").trim(),
-                        ...(s.logo ? { logo: s.logo } : {})
-                    }))
-                    : []
-            }))
-        };
-
-        saveServices(normalized);
-        res.json({ ok: true });
-    }
-);
+    );
 
 
 
@@ -575,17 +680,24 @@ app.get('/assets/*', (req, res) => {
 
 
 app.post(
-    "/admin/api/upload/section-card",
+    "/admin/api/upload/:kind",
     requireAdmin,
     (req, res) => {
-        ensureTmpDir();
+
+        const kind = req.params.kind;
+        const cfg = UPLOAD_MAP[kind];
+
+        if (!cfg) {
+            return res.status(400).json({ error: "invalid_upload_type" });
+        }
+
+        ensureTmpDirs();
 
         if (!req.headers["content-type"]?.startsWith("multipart/form-data")) {
             return res.status(400).json({ error: "invalid_content_type" });
         }
 
         let buffer = Buffer.alloc(0);
-        let filename = null;
 
         req.on("data", chunk => {
             buffer = Buffer.concat([buffer, chunk]);
@@ -597,36 +709,50 @@ app.post(
                 return res.status(400).json({ error: "no_file" });
             }
 
-            filename = match[1];
+            const filename = match[1];
             if (!isImage(filename)) {
                 return res.status(400).json({ error: "invalid_filetype" });
             }
 
             const ext = path.extname(filename);
-            const uploadId = "sec-card-" + crypto.randomBytes(6).toString("hex");
-            const target = path.join(TMP_DIR, uploadId + ext);
+            const uploadId = cfg.prefix + crypto.randomBytes(6).toString("hex");
 
-            // extrem simpel, bewusst
+            const target = path.join(
+                TMP_DIR,
+                cfg.tmpSubDir,
+                uploadId + ext
+            );
+
+            // bewusst simpel (wie bei dir)
             const fileStart = buffer.indexOf("\r\n\r\n") + 4;
-            const fileEnd = buffer.lastIndexOf("\r\n------");
+            const fileEnd   = buffer.lastIndexOf("\r\n------");
 
             fs.writeFileSync(target, buffer.slice(fileStart, fileEnd));
 
             res.json({
                 uploadId,
                 filename,
-                previewUrl: `/admin/api/tmp/section-card/${uploadId}${ext}`
+                previewUrl: `/admin/api/tmp/${kind}/${uploadId}${ext}`
             });
         });
     }
 );
 
+
+
 app.get(
-    "/admin/api/tmp/section-card/:file",
+    "/admin/api/tmp/:kind/:file",
     requireAdmin,
     (req, res) => {
-        const file = req.params.file;
-        const p = path.join(TMP_DIR, file);
+
+        const { kind, file } = req.params;
+        const cfg = UPLOAD_MAP[kind];
+
+        if (!cfg) {
+            return res.status(400).end();
+        }
+
+        const p = path.join(TMP_DIR, cfg.tmpSubDir, file);
 
         if (!fs.existsSync(p)) {
             return res.status(404).end();
@@ -636,6 +762,7 @@ app.get(
         sendAsset(res, p);
     }
 );
+
 
 app.get("/", (req, res) => {
     const data = loadData();

@@ -68,7 +68,8 @@
       "cardimage" : "Card-Bild"
     },
     "image": {
-      "resetToDefault" : "zurücksetzen auf Standard-Bild"
+      "resetToDefault" : "zurücksetzen auf Standard-Bild",
+      "deleteCustomImage" : "Custom-Image löschen"
     },
     "section": {
       "id": "Sektions-ID",
