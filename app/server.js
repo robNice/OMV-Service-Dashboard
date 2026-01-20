@@ -9,7 +9,7 @@ const {
     resolveSectionBackgroundImage,
     resolveServiceCardImage
 } = require('./lib/image-resolver');
-
+const TMP_DIR = "/data/tmp/assets/cards/sections/";
 
 
 const fs = require("fs");
@@ -83,6 +83,15 @@ function sessionMiddleware(req, res, next) {
 }
 
 app.use(sessionMiddleware);
+
+function ensureTmpDir() {
+    fs.mkdirSync(TMP_DIR, { recursive: true });
+}
+
+function isImage(filename) {
+    return /\.(png|jpe?g|gif|webp)$/i.test(filename);
+}
+
 
 function hashPassword(password) {
     const salt = crypto.randomBytes(16).toString("hex");
@@ -563,6 +572,70 @@ app.get('/assets/*', (req, res) => {
     }
     sendAsset(res, file);
 });
+
+
+app.post(
+    "/admin/api/upload/section-card",
+    requireAdmin,
+    (req, res) => {
+        ensureTmpDir();
+
+        if (!req.headers["content-type"]?.startsWith("multipart/form-data")) {
+            return res.status(400).json({ error: "invalid_content_type" });
+        }
+
+        let buffer = Buffer.alloc(0);
+        let filename = null;
+
+        req.on("data", chunk => {
+            buffer = Buffer.concat([buffer, chunk]);
+        });
+
+        req.on("end", () => {
+            const match = buffer.toString("binary").match(/filename="([^"]+)"/);
+            if (!match) {
+                return res.status(400).json({ error: "no_file" });
+            }
+
+            filename = match[1];
+            if (!isImage(filename)) {
+                return res.status(400).json({ error: "invalid_filetype" });
+            }
+
+            const ext = path.extname(filename);
+            const uploadId = "sec-card-" + crypto.randomBytes(6).toString("hex");
+            const target = path.join(TMP_DIR, uploadId + ext);
+
+            // extrem simpel, bewusst
+            const fileStart = buffer.indexOf("\r\n\r\n") + 4;
+            const fileEnd = buffer.lastIndexOf("\r\n------");
+
+            fs.writeFileSync(target, buffer.slice(fileStart, fileEnd));
+
+            res.json({
+                uploadId,
+                filename,
+                previewUrl: `/admin/api/tmp/section-card/${uploadId}${ext}`
+            });
+        });
+    }
+);
+
+app.get(
+    "/admin/api/tmp/section-card/:file",
+    requireAdmin,
+    (req, res) => {
+        const file = req.params.file;
+        const p = path.join(TMP_DIR, file);
+
+        if (!fs.existsSync(p)) {
+            return res.status(404).end();
+        }
+
+        res.setHeader("Cache-Control", "no-store");
+        sendAsset(res, p);
+    }
+);
 
 app.get("/", (req, res) => {
     const data = loadData();

@@ -1,7 +1,6 @@
 let state = { sections: [] };
 let dirty = false;
 let dragState = null;
-let serviceCardImages = [];
 let uiState = {
     collapsedSections: new Set()
 };
@@ -39,7 +38,9 @@ function applyImagePreview(previewEl, image) {
     }
 }
 
-
+function isExplicit(image)   {
+    return image && image.source === 'explicit';
+}
 
 /* ================= Render ================= */
 
@@ -58,6 +59,16 @@ function renderSection(section, sectionIndex) {
 
     const cardPreview = el.querySelector('[data-preview="section-card"]')?.closest('.image-preview');
     const bgPreview   = el.querySelector('[data-preview="section-bg"]')?.closest('.image-preview');
+
+    const cardResetBtn = el.querySelector('[data-action="reset-section-card"]');
+    if (cardResetBtn) {
+        cardResetBtn.style.display = isExplicit(section.cardImage) ? '' : 'none';
+    }
+
+    const bgResetBtn = el.querySelector('[data-action="reset-section-bg"]');
+    if (bgResetBtn) {
+        bgResetBtn.style.display = isExplicit(section.backgroundImage) ? '' : 'none';
+    }
 
     applyImagePreview(cardPreview, section.cardImage);
     applyImagePreview(bgPreview, section.backgroundImage);
@@ -85,8 +96,6 @@ function renderSection(section, sectionIndex) {
         }
     });
 
-
-
     el.dataset.sectionIndex = sectionIndex;
 
     const idInput    = el.querySelector('[data-field="section-id"]');
@@ -95,23 +104,6 @@ function renderSection(section, sectionIndex) {
 
     idInput.value = section.id || "";
     titleInput.value = section.title || "";
-
-    const cardImg = el.querySelector('[data-preview="section-card"]');
-    const cardStatus = el.querySelector('[data-status="section-card"]');
-
-    if (section.cardImage && cardImg) {
-        cardImg.src = section.cardImage.src;
-        cardStatus.textContent = section.cardImage.source;
-    }
-
-    const bgImg = el.querySelector('[data-preview="section-bg"]');
-    const bgStatus = el.querySelector('[data-status="section-bg"]');
-    console.log('BG resolver', section.backgroundImage);
-    if (section.backgroundImage && bgImg) {
-        bgImg.src = section.backgroundImage.src;
-        bgStatus.textContent = section.backgroundImage.source;
-    }
-
 
     idInput.addEventListener("input", () => {
         section.id = idInput.value.trim();
@@ -158,6 +150,10 @@ function renderService(service, sectionIndex, serviceIndex) {
     });
 
     const preview = el.querySelector('.image-preview');
+    const resetBtn = el.querySelector('[data-action="reset-service-card"]');
+    if (resetBtn) {
+        resetBtn.style.display = isExplicit(service.cardImage) ? '' : 'none';
+    }
     if (preview && service.cardImage) {
         applyImagePreview(preview, service.cardImage);
     }
@@ -431,13 +427,8 @@ async function loadInitialData() {
     state = await res.json();
     render();
 }
-async function loadServiceCardImages() {
-    const res = await fetch("/admin/api/service-card-images");
-    const data = await res.json();
-    serviceCardImages = data.images || [];
-}
+
 async function init() {
-    await loadServiceCardImages();
     await loadInitialData();
     bindSaveButton();
 }
