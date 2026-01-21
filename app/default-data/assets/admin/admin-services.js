@@ -95,7 +95,7 @@ function renderSection(section, sectionIndex) {
     if (cardPreview) {
         const img = cardPreview.querySelector('img');
         if (img) {
-            img.dataset.defaultimg = section.cardImage?.defaultSrc || '';
+            img.dataset.defaultimg = section.cardImageDefault || '';
         }
     }
 

@@ -589,10 +589,8 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
             return {
                 ...section,
 
-                cardImage: {
-                    ...card,
-                    defaultSrc: card.src
-                },
+                cardImage: card,
+                cardImageDefault: card.src,
 
                 backgroundImage: {
                     ...background,
