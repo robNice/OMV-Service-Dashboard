@@ -403,10 +403,12 @@ function commitImage({
 
     fs.mkdirSync(targetDir, {recursive: true});
 
+    deleteUserImage(targetDir, targetBaseName);
+
     const ext = path.extname(tmpFile);
     const target = path.join(targetDir, targetBaseName + ext);
     const src = path.join(uploadDir, tmpFile);
-    deleteUserImage(targetDir, targetBaseName);
+
     fs.copyFileSync(src, target);
     fs.unlinkSync(src);
 }
