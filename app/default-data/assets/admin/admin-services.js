@@ -38,9 +38,7 @@ function applyImagePreview(previewEl, image) {
     }
 }
 
-function isExplicit(image)   {
-    return image && image.source === 'explicit';
-}
+
 function isCustom(image) {
     return image && (image.source === 'explicit' || image.source === 'id');
 }
