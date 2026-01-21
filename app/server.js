@@ -151,6 +151,14 @@ async function initAdminPassword(config) {
     saveConfiguration(config);
 }
 
+function slugify(str) {
+    return String(str || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
 /**
  * Resolve a section card image path for a given section ID.
  * @param id
@@ -618,28 +626,58 @@ app.post(
                 targetBaseName: section.id
             });
 
-            for (const service of section.services || []) {
-                if (!service.id) continue;
+            for (const [serviceId, service] of Object.entries(section.services || {})) {
                 commitImage({
                     image: service.cardImage,
                     uploadDir: path.join(TMP_DIR, "cards/services"),
                     targetDir: path.join(CONFIG_DIR, "assets/cards/services"),
-                    targetBaseName: service.id
+                    targetBaseName: serviceId
                 });
             }
+
         }
 
         const normalized = {
-            sections: data.sections.map(sec => ({
-                id: String(sec.id || "").trim(),
-                title: String(sec.title || "").trim(),
+            sections: data.sections.map(sec => {
 
-                services: sec.services || {},
-                serviceOrder: Array.isArray(sec.serviceOrder)
-                    ? sec.serviceOrder
-                    : Object.keys(sec.services || {})
-            }))
+                const services = {};
+                const serviceOrder = [];
+
+                for (const serviceId of sec.serviceOrder || []) {
+                    const svc = sec.services?.[serviceId];
+                    if (!svc) continue;
+
+                    let finalId = serviceId;
+
+                    // 🔒 tmp-ID wird beim ersten Save fixiert
+                    if (serviceId.startsWith("tmp-")) {
+                        finalId = slugify(svc.title);
+
+                        let i = 1;
+                        const base = finalId;
+                        while (services[finalId]) {
+                            finalId = `${base}-${i++}`;
+                        }
+                    }
+
+                    services[finalId] = {
+                        title: String(svc.title || "").trim(),
+                        url: String(svc.url || "").trim(),
+                        ...(svc.logo ? { logo: svc.logo } : {})
+                    };
+
+                    serviceOrder.push(finalId);
+                }
+
+                return {
+                    id: String(sec.id || "").trim(),
+                    title: String(sec.title || "").trim(),
+                    services,
+                    serviceOrder
+                };
+            })
         };
+
 
         saveServices(normalized);
         res.json({ok: true});
