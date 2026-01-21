@@ -346,10 +346,11 @@ editor.addEventListener("click", e => {
             break;
 
         case "reset-service-card": {
-            const section = state.sections[sectionIndex];
-            const serviceId = serviceEl.dataset.serviceId;
-
-            section.services[serviceId].logo = null;
+            state.sections[sectionIndex].cardImage = {
+                src: "/assets/cards/sections/_default.png",
+                source: "default",
+                resolvedFile: "_default.png"
+            };
             markDirty();
             render();
             break;
