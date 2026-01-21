@@ -27,6 +27,17 @@ function resolveImage({ explicit, idFallback, defaultFile, baseDir }) {
     if (idFallback) {
         for (const ext of IMAGE_EXTS) {
             const file = `${idFallback}.${ext}`;
+
+           const userPath = path.join(USER_ASSETS, baseDir, file);
+           if (fileExists(userPath)) {
+                   return {
+                           src: `/assets/${baseDir}/${file}`,
+                           source: 'id',
+                           resolvedFile: file
+                   };
+               }
+
+
             const idPath = path.join(APP_ASSETS, baseDir, file);
 
             if (fileExists(idPath)) {
