@@ -51,6 +51,22 @@ function render() {
     });
 }
 
+async function uploadImage(kind, file) {
+    const fd = new FormData();
+    fd.append("file", file);
+
+    const res = await fetch(`/admin/api/upload/${kind}`, {
+        method: "POST",
+        body: fd
+    });
+
+    if (!res.ok) {
+        throw new Error("upload_failed");
+    }
+
+    return await res.json();
+}
+
 /* ================= Section ================= */
 
 function renderSection(section, sectionIndex) {
@@ -73,6 +89,29 @@ function renderSection(section, sectionIndex) {
     applyImagePreview(cardPreview, section.cardImage);
     applyImagePreview(bgPreview, section.backgroundImage);
 
+
+    const bgInput = el.querySelector('[data-upload="section-bg"]');
+    if (bgInput) {
+        bgInput.addEventListener("change", async () => {
+            const file = bgInput.files[0];
+            if (!file) return;
+
+            try {
+                const result = await uploadImage("section-background", file);
+
+                section.backgroundImage = {
+                    uploadId: result.uploadId,
+                    src: result.previewUrl,
+                    source: "explicit"
+                };
+
+                markDirty();
+                render();
+            } catch {
+                alert("Upload fehlgeschlagen");
+            }
+        });
+    }
 
     const toggle = el.querySelector('[data-action="toggle-section"]');
     const body   = el.querySelector('.section-services');
@@ -101,6 +140,30 @@ function renderSection(section, sectionIndex) {
     const idInput    = el.querySelector('[data-field="section-id"]');
     const titleInput = el.querySelector('[data-field="section-title"]');
     const servicesEl = el.querySelector('.section-services');
+
+    const cardInput = el.querySelector('[data-upload="section-card"]');
+    if (cardInput) {
+        cardInput.addEventListener("change", async () => {
+            const file = cardInput.files[0];
+            if (!file) return;
+
+            try {
+                const result = await uploadImage("section-card", file);
+
+                section.cardImage = {
+                    uploadId: result.uploadId,
+                    src: result.previewUrl,
+                    source: "explicit"
+                };
+
+                markDirty();
+                render();
+            } catch {
+                alert("Upload fehlgeschlagen");
+            }
+        });
+    }
+
 
     idInput.value = section.id || "";
     titleInput.value = section.title || "";
@@ -151,6 +214,30 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
 
     const title = el.querySelector('[data-field="service-title"]');
     const url   = el.querySelector('[data-field="service-url"]');
+
+    const cardInput = el.querySelector('[data-upload="service-card"]');
+    if (cardInput) {
+        cardInput.addEventListener("change", async () => {
+            const file = cardInput.files[0];
+            if (!file) return;
+
+            try {
+                const result = await uploadImage("service-card", file);
+
+                service.cardImage = {
+                    uploadId: result.uploadId,
+                    src: result.previewUrl,
+                    source: "explicit"
+                };
+
+                markDirty();
+                render();
+            } catch {
+                alert("Upload fehlgeschlagen");
+            }
+        });
+    }
+
 
     title.value = service.title || "";
     url.value   = service.url || "";
