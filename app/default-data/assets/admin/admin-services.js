@@ -574,6 +574,7 @@ document.getElementById("add-section").addEventListener("click", () => {
 async function loadInitialData() {
     const res = await fetch("/admin/api/services");
     const data = await res.json();
+    console.log("RAW backend data:", data.sections);
     data.sections.forEach(section => {
         if (!section.services) {
             section.services = {};
