@@ -115,11 +115,12 @@ function renderSection(section, sectionIndex) {
         markDirty();
     });
 
-    section.services.forEach((svc, i) => {
+    Object.entries(section.services).forEach(([id, svc], i) => {
         servicesEl.appendChild(
-            renderService(svc, sectionIndex, i)
+            renderService({ ...svc, id }, sectionIndex, i)
         );
     });
+
 
     return el;
 }

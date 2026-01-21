@@ -17,7 +17,7 @@ const express = require("express");
 const crypto = require("crypto");
 const SESSION_SECRET = crypto.randomBytes(32).toString("hex");
 const sessions = new Map();
-const { getServiceCardImages } = require("./lib/service-card-images");
+const {getServiceCardImages} = require("./lib/service-card-images");
 const {
     resolveSectionCardImage,
     resolveSectionBackgroundImage,
@@ -30,30 +30,32 @@ const fs = require("fs");
 const path = require("path");
 const pkg = require('./package.json');
 const APP_VERSION = pkg.version;
+
 function initDefaultData() {
     const source = '/app/default-data';
     const target = '/data';
-    fs.mkdirSync(target, { recursive: true });
-    fs.cpSync(source, target, { recursive: true });
+    fs.mkdirSync(target, {recursive: true});
+    fs.cpSync(source, target, {recursive: true});
 }
+
 initDefaultData();
 // initDataDir();
-const { CONFIG_DIR } = require('./lib/paths');
-const { resolveAssetPath } = require('./lib/asset-resolver');
+const {CONFIG_DIR} = require('./lib/paths');
+const {resolveAssetPath} = require('./lib/asset-resolver');
 const app = express();
 const CARD_EXTS = ['jpg', 'gif', 'webp', 'png'];
 const cardCache = new Map();
 const USER_CARDS = path.join(CONFIG_DIR, 'assets/cards/sections');
-const APP_CARDS  = path.join(__dirname, '../data/assets/cards/sections');
+const APP_CARDS = path.join(__dirname, '../data/assets/cards/sections');
 
 const {getStats} = require("./server/stats");
 
-const { normalizeRamModules } = require('./lib/ramsize-util');
-const { initI18n } = require('./lib/i18n-config');
-initI18n({ app });
-const { translateTextI18n } = require('./lib/i18n-util');
+const {normalizeRamModules} = require('./lib/ramsize-util');
+const {initI18n} = require('./lib/i18n-config');
+initI18n({app});
+const {translateTextI18n} = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
-const { loadConfiguration, saveConfiguration } = require('./lib/load-config');
+const {loadConfiguration, saveConfiguration} = require('./lib/load-config');
 const config = loadConfiguration();
 (async () => {
     await initAdminPassword(config);
@@ -99,8 +101,8 @@ function sessionMiddleware(req, res, next) {
 app.use(sessionMiddleware);
 
 function ensureTmpDirs() {
-     for (const cfg of Object.values(UPLOAD_MAP)) {
-        fs.mkdirSync(path.join(TMP_DIR, cfg.tmpSubDir), { recursive: true });
+    for (const cfg of Object.values(UPLOAD_MAP)) {
+        fs.mkdirSync(path.join(TMP_DIR, cfg.tmpSubDir), {recursive: true});
     }
 }
 
@@ -158,7 +160,7 @@ function resolveSectionCard(id) {
     const cached = cardCache.get(id);
 
     if (cached) {
-        const { fsPath, mtimeMs, url } = cached;
+        const {fsPath, mtimeMs, url} = cached;
         if (fs.existsSync(fsPath)) {
             const stat = fs.statSync(fsPath);
             if (stat.mtimeMs === mtimeMs) {
@@ -173,8 +175,8 @@ function resolveSectionCard(id) {
     }
 
     const bases = [
-        { fs: USER_CARDS, url: '/assets/cards/sections' },
-        { fs: APP_CARDS,  url: '/assets/cards/sections' }
+        {fs: USER_CARDS, url: '/assets/cards/sections'},
+        {fs: APP_CARDS, url: '/assets/cards/sections'}
     ];
 
     for (const base of bases) {
@@ -260,7 +262,7 @@ function renderAdminServices(data) {
             `;
         }).join("");
         const sectionCardImage = resolveSectionCardImage(section);
-        const sectionBgImage   = resolveSectionBackgroundImage(section);
+        const sectionBgImage = resolveSectionBackgroundImage(section);
 
         return `
             <div class="section">
@@ -298,7 +300,6 @@ function renderAdminServices(data) {
 }
 
 
-
 /**
  *
  * @param req
@@ -309,15 +310,15 @@ function renderAdminServices(data) {
  * @param cards
  * @returns {*}
  */
-function setTemplate( req, template, backlink, version, title, cards )  {
-    return  translateTextI18n(
+function setTemplate(req, template, backlink, version, title, cards) {
+    return translateTextI18n(
         template
-        .replace(/{{BACKLINK}}/g, backlink)
-        .replace(/{{VERSION}}/g, version)
-        .replace(/{{TITLE}}/g, title)
-        .replace(/{{SECTION_NAME}}/g, title)
-        .replace(/{{SECTIONS_SERVICES}}/g, cards),
-        { locale: req.getLocale() }
+            .replace(/{{BACKLINK}}/g, backlink)
+            .replace(/{{VERSION}}/g, version)
+            .replace(/{{TITLE}}/g, title)
+            .replace(/{{SECTION_NAME}}/g, title)
+            .replace(/{{SECTIONS_SERVICES}}/g, cards),
+        {locale: req.getLocale()}
     );
 }
 
@@ -330,12 +331,11 @@ function loadTemplate() {
 }
 
 
-
 function renderImageSourceBadge(image) {
     const map = {
-        explicit: { label: 'explizit', class: 'badge-explicit' },
-        id:       { label: 'id-fallback', class: 'badge-id' },
-        default:  { label: 'default', class: 'badge-default' }
+        explicit: {label: 'explizit', class: 'badge-explicit'},
+        id: {label: 'id-fallback', class: 'badge-id'},
+        default: {label: 'default', class: 'badge-default'}
     };
 
     const cfg = map[image.source];
@@ -343,7 +343,6 @@ function renderImageSourceBadge(image) {
 
     return `<span class="image-badge ${cfg.class}">${cfg.label}</span>`;
 }
-
 
 
 function findTmpUpload(dir, uploadId) {
@@ -394,7 +393,7 @@ function commitImage({
     const tmpFile = findTmpUpload(uploadDir, image.uploadId);
     if (!tmpFile) return;
 
-    fs.mkdirSync(targetDir, { recursive: true });
+    fs.mkdirSync(targetDir, {recursive: true});
 
     const ext = path.extname(tmpFile);
     const target = path.join(targetDir, targetBaseName + ext);
@@ -404,7 +403,6 @@ function commitImage({
         target
     );
 }
-
 
 
 app.get("/favicon.ico", (req, res) => {
@@ -425,7 +423,7 @@ app.get("/api/stats", async (req, res) => {
         const data = await getStats();
         const locale = req.getLocale ? req.getLocale() : 'en-GB';
         if (data.system && Array.isArray(data.system.ram)) {
-            data.system.ram = normalizeRamModules(data.system.ram, { locale });
+            data.system.ram = normalizeRamModules(data.system.ram, {locale});
         }
         res.set("Cache-Control", "no-store");
         res.json(data);
@@ -451,10 +449,10 @@ app.get("/admin/login", (req, res) => {
 });
 app.post(
     "/admin/login",
-    express.urlencoded({ extended: false }),
+    express.urlencoded({extended: false}),
     (req, res) => {
 
-        const { password } = req.body;
+        const {password} = req.body;
         const config = loadConfiguration();
 
         if (!verifyPassword(password, config.admin.passwordHash)) {
@@ -468,14 +466,14 @@ app.post(
                     "{{MESSAGE}}",
                     '<div class="error">{{__.admin.login.invalid}}</div>'
                 ),
-                { locale: req.getLocale() }
+                {locale: req.getLocale()}
             );
 
             return res.status(401).send(html);
         }
 
         const sid = crypto.randomBytes(16).toString("hex");
-        sessions.set(sid, { isAdmin: true });
+        sessions.set(sid, {isAdmin: true});
 
         res.setHeader(
             "Set-Cookie",
@@ -485,7 +483,6 @@ app.post(
         res.redirect("/admin");
     }
 );
-
 
 
 app.get("/admin/logout", (req, res) => {
@@ -535,8 +532,8 @@ app.get("/admin/setpassword", requireAdmin, (req, res) => {
 });
 
 
-app.post("/admin/setpassword", requireAdmin, express.urlencoded({ extended: false }), (req, res) => {
-    const { password, passwordRepeat } = req.body;
+app.post("/admin/setpassword", requireAdmin, express.urlencoded({extended: false}), (req, res) => {
+    const {password, passwordRepeat} = req.body;
 
     if (password !== passwordRepeat || password.length < 8) {
         return res.send("Invalid password");
@@ -579,74 +576,81 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
             cardImage: resolveSectionCardImage(section),
             backgroundImage: resolveSectionBackgroundImage(section),
 
-            services: (section.services || []).map(service => ({
-                ...service,
-                cardImage: resolveServiceCardImage(service)
-            }))
+            services: Object.fromEntries(
+                Object.entries(section.services || {}).map(([id, service]) => [
+                    id,
+                    {
+                        ...service,
+                        id,
+                        cardImage: resolveServiceCardImage({ ...service, id })
+                    }
+                ])
+            )
         }))
     };
-
     res.json(enriched);
 });
-    app.post(
-        "/admin/api/services",
-        requireAdmin,
-        express.json(),
-        (req, res) => {
-            const data = req.body;
 
-            if (!data || !Array.isArray(data.sections)) {
-                return res.status(400).json({ error: "invalid_format" });
-            }
+app.post(
+    "/admin/api/services",
+    requireAdmin,
+    express.json(),
+    (req, res) => {
+        const data = req.body;
 
-            for (const section of data.sections) {
-
-                commitImage({
-                    image: section.cardImage,
-                    uploadDir: path.join(TMP_DIR, "cards/sections"),
-                    targetDir: path.join(CONFIG_DIR, "assets/cards/sections"),
-                    targetBaseName: section.id
-                });
-
-                commitImage({
-                    image: section.backgroundImage,
-                    uploadDir: path.join(TMP_DIR, "backgrounds"),
-                    targetDir: path.join(CONFIG_DIR, "assets/backgrounds"),
-                    targetBaseName: section.id
-                });
-
-                for (const service of section.services || []) {
-
-                    if (!service.id) continue;
-
-                    commitImage({
-                        image: service.cardImage,
-                        uploadDir: path.join(TMP_DIR, "cards/services"),
-                        targetDir: path.join(CONFIG_DIR, "assets/cards/services"),
-                        targetBaseName: service.id
-                    });
-                }
-            }
-
-            const normalized = {
-                sections: data.sections.map(sec => ({
-                    id: String(sec.id || "").trim(),
-                    title: String(sec.title || "").trim(),
-                    services: Array.isArray(sec.services)
-                        ? sec.services.map(s => ({
-                            //id: s.id ? String(s.id).trim() : undefined,   // @todo: check
-                            title: String(s.title || "").trim(),
-                            url: String(s.url || "").trim()
-                        }))
-                        : []
-                }))
-            };
-
-            saveServices(normalized);
-            res.json({ ok: true });
+        if (!data || !Array.isArray(data.sections)) {
+            return res.status(400).json({error: "invalid_format"});
         }
-    );
 
+        for (const section of data.sections) {
+
+            commitImage({
+                image: section.cardImage,
+                uploadDir: path.join(TMP_DIR, "cards/sections"),
+                targetDir: path.join(CONFIG_DIR, "assets/cards/sections"),
+                targetBaseName: section.id
+            });
+
+            commitImage({
+                image: section.backgroundImage,
+                uploadDir: path.join(TMP_DIR, "backgrounds"),
+                targetDir: path.join(CONFIG_DIR, "assets/backgrounds"),
+                targetBaseName: section.id
+            });
+
+            for (const service of section.services || []) {
+                if (!service.id) continue;
+                commitImage({
+                    image: service.cardImage,
+                    uploadDir: path.join(TMP_DIR, "cards/services"),
+                    targetDir: path.join(CONFIG_DIR, "assets/cards/services"),
+                    targetBaseName: service.id
+                });
+            }
+        }
+
+        const normalized = {
+            sections: data.sections.map(sec => ({
+                id: String(sec.id || "").trim(),
+                title: String(sec.title || "").trim(),
+                services: sec.services && typeof sec.services === 'object'
+                    ? Object.fromEntries(
+                        Object.entries(sec.services).map(([id, s]) => [
+                            id,
+                            {
+                                title: String(s.title || '').trim(),
+                                url: String(s.url || '').trim(),
+                                ...(s.logo ? {logo: s.logo} : {})
+                            }
+                        ])
+                    )
+                    : {}
+            }))
+        };
+        saveServices(normalized);
+        res.json({ok: true});
+    }
+);
 
 
 app.get('/assets/*', (req, res) => {
@@ -688,13 +692,13 @@ app.post(
         const cfg = UPLOAD_MAP[kind];
 
         if (!cfg) {
-            return res.status(400).json({ error: "invalid_upload_type" });
+            return res.status(400).json({error: "invalid_upload_type"});
         }
 
         ensureTmpDirs();
 
         if (!req.headers["content-type"]?.startsWith("multipart/form-data")) {
-            return res.status(400).json({ error: "invalid_content_type" });
+            return res.status(400).json({error: "invalid_content_type"});
         }
 
         let buffer = Buffer.alloc(0);
@@ -706,12 +710,12 @@ app.post(
         req.on("end", () => {
             const match = buffer.toString("binary").match(/filename="([^"]+)"/);
             if (!match) {
-                return res.status(400).json({ error: "no_file" });
+                return res.status(400).json({error: "no_file"});
             }
 
             const filename = match[1];
             if (!isImage(filename)) {
-                return res.status(400).json({ error: "invalid_filetype" });
+                return res.status(400).json({error: "invalid_filetype"});
             }
 
             const ext = path.extname(filename);
@@ -723,9 +727,8 @@ app.post(
                 uploadId + ext
             );
 
-            // bewusst simpel (wie bei dir)
             const fileStart = buffer.indexOf("\r\n\r\n") + 4;
-            const fileEnd   = buffer.lastIndexOf("\r\n------");
+            const fileEnd = buffer.lastIndexOf("\r\n------");
 
             fs.writeFileSync(target, buffer.slice(fileStart, fileEnd));
 
@@ -739,13 +742,12 @@ app.post(
 );
 
 
-
 app.get(
     "/admin/api/tmp/:kind/:file",
     requireAdmin,
     (req, res) => {
 
-        const { kind, file } = req.params;
+        const {kind, file} = req.params;
         const cfg = UPLOAD_MAP[kind];
 
         if (!cfg) {
@@ -787,7 +789,6 @@ app.get("/", (req, res) => {
 });
 
 
-
 app.get("/section/:id", (req, res) => {
     const data = loadData();
     const config = loadConfiguration()
@@ -799,7 +800,7 @@ app.get("/section/:id", (req, res) => {
     const html = setTemplate(
         req,
         loadTemplate(),
-        '<a href="/" style="margin: 1rem; display: inline-block;">← '+__('label.back')+'</a>',
+        '<a href="/" style="margin: 1rem; display: inline-block;">← ' + __('label.back') + '</a>',
         APP_VERSION,
         config.title + ' - ' + section.title,
         services
@@ -808,5 +809,5 @@ app.get("/section/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log('Service Dashboard listening on port '+PORT);
+    console.log('Service Dashboard listening on port ' + PORT);
 });
