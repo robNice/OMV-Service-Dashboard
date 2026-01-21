@@ -581,26 +581,48 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
     const data = loadServices();
 
     const enriched = {
-        sections: data.sections.map(section => ({
-            ...section,
+        sections: data.sections.map(section => {
 
-            cardImage: resolveSectionCardImage(section),
-            backgroundImage: resolveSectionBackgroundImage(section),
+            const card = resolveSectionCardImage(section);
+            const background = resolveSectionBackgroundImage(section);
 
-            services: Object.fromEntries(
-                Object.entries(section.services || {}).map(([id, service]) => [
-                    id,
-                    {
-                        ...service,
-                        id,
-                        cardImage: resolveServiceCardImage({ ...service, id })
-                    }
-                ])
-            )
-        }))
+            return {
+                ...section,
+
+                cardImage: {
+                    ...card,
+                    defaultSrc: card.src
+                },
+
+                backgroundImage: {
+                    ...background,
+                    defaultSrc: background.src
+                },
+
+                services: Object.fromEntries(
+                    Object.entries(section.services || {}).map(([id, service]) => {
+                        const svcCard = resolveServiceCardImage({ ...service, id });
+
+                        return [
+                            id,
+                            {
+                                ...service,
+                                id,
+                                cardImage: {
+                                    ...svcCard,
+                                    defaultSrc: svcCard.src
+                                }
+                            }
+                        ];
+                    })
+                )
+            };
+        })
     };
+
     res.json(enriched);
 });
+
 
 app.post(
     "/admin/api/services",

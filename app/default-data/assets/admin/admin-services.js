@@ -14,14 +14,26 @@ const I18N = (() => {
 
 
 function applyImagePreview(previewEl, image) {
-    if (!previewEl || !image) return;
+    if (!previewEl) return;
 
     const img = previewEl.querySelector("img");
     const status = previewEl.querySelector(".image-status");
 
-    if (img) {
+    if (!image) {
+        if (img && img.dataset.defaultimg) {
+            img.src = img.dataset.defaultimg;
+            img.title = '';
+        }
+        if (status) {
+            status.textContent = '';
+            status.removeAttribute('data-source');
+        }
+        return;
+    }
+
+    if (img && image.src) {
         img.src = image.src;
-        img.title = image.resolvedFile || "";
+        img.title = image.resolvedFile || '';
     }
 
     if (status) {
@@ -30,22 +42,20 @@ function applyImagePreview(previewEl, image) {
             id:       'auto',
             default:  'default'
         };
-
-
         status.textContent = LABELS[image.source] || image.source;
-
         status.dataset.source = image.source;
     }
 }
+
 
 
 function isCustom(image) {
     return !!(
         image &&
         (
-            image.isCustom === true ||   // vom Backend
-            image.uploadId ||            // frisch hochgeladen
-            image.source === 'explicit'  // Fallback / Altbestand
+            image.isCustom === true ||
+            image.uploadId ||
+            image.source === 'explicit'
         )
     );
 }
@@ -82,7 +92,17 @@ function renderSection(section, sectionIndex) {
     const el = tpl.content.firstElementChild.cloneNode(true);
 
     const cardPreview = el.querySelector('[data-preview="section-card"]')?.closest('.image-preview');
+    if (cardPreview) {
+        const img = cardPreview.querySelector('img');
+        if (img) {
+            img.dataset.defaultimg = section.cardImage?.defaultSrc || '';
+        }
+    }
+
+
     const bgPreview   = el.querySelector('[data-preview="section-bg"]')?.closest('.image-preview');
+
+
 
     const cardResetBtn = el.querySelector('[data-action="reset-section-card"]');
     if (cardResetBtn) {
@@ -330,24 +350,27 @@ editor.addEventListener("click", e => {
             break;
         }
 
-        case "reset-section-card":
-            state.sections[sectionIndex].cardImage = {
-                src: "/assets/cards/sections/_default.png",
-                source: "default",
-                resolvedFile: "_default.png",
-                isCustom: false
-            };
+        case "reset-section-card": {
+            state.sections[sectionIndex].cardImage = null;
             markDirty();
             render();
             break;
+        }
+
 
         case "reset-section-bg":
-            state.sections[sectionIndex].backgroundImage = {
-                src: "/assets/backgrounds/_default.png",
-                source: "default",
-                resolvedFile: "_default.png"
-            };
+            const section = state.sections[sectionIndex];
+
+            section.cardImage = null; // State korrekt
             markDirty();
+
+            const img = document.querySelector(
+                `.section[data-section-index="${sectionIndex}"] img[data-preview="section-card"]`
+            );
+
+            if (img && img.dataset.defaultimg) {
+                img.src = img.dataset.defaultimg;
+            }
             render();
             break;
 
