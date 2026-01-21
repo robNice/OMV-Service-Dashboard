@@ -126,7 +126,8 @@ function renderSection(section, sectionIndex) {
         if (!svc) return;
         servicesEl.appendChild(
             renderService(
-                { id: serviceId, ...svc },
+                serviceId,
+                svc,
                 sectionIndex,
                 i
             )
@@ -140,12 +141,13 @@ function renderSection(section, sectionIndex) {
 
 /* ================= Service ================= */
 
-function renderService(service, sectionIndex, serviceIndex) {
+function renderService(serviceId, service, sectionIndex, orderIndex) {
     const tpl = document.getElementById("tpl-service");
     const el = tpl.content.firstElementChild.cloneNode(true);
 
     el.dataset.sectionIndex = sectionIndex;
-    el.dataset.serviceIndex = serviceIndex;
+    el.dataset.serviceIndex = orderIndex;
+    el.dataset.serviceId = serviceId;
 
     const title = el.querySelector('[data-field="service-title"]');
     const url   = el.querySelector('[data-field="service-url"]');
@@ -199,24 +201,39 @@ editor.addEventListener("click", e => {
             render();
             break;
 
-        case "add-service":
-            state.sections[sectionIndex].services.push({
-                title: "", url: "", logo: ""
-            });
+        case "add-service": {
+            const section = state.sections[sectionIndex];
+
+            if (!section.services) section.services = {};
+            if (!section.serviceOrder) section.serviceOrder = [];
+
+            const tmpId = "tmp-" + Math.random().toString(36).slice(2, 10);
+
+            section.services[tmpId] = {
+                title: "",
+                url: "",
+                logo: ""
+            };
+
+            section.serviceOrder.push(tmpId);
+
             markDirty();
             render();
             break;
+        }
 
-        case "delete-service":
+        case "delete-service": {
             const section = state.sections[sectionIndex];
-            const serviceId = section.serviceOrder[serviceIndex];
+            const serviceId = serviceEl.dataset.serviceId;
 
             delete section.services[serviceId];
-            section.serviceOrder.splice(serviceIndex, 1);
+            section.serviceOrder =
+                section.serviceOrder.filter(id => id !== serviceId);
 
             markDirty();
             render();
             break;
+        }
 
         case "reset-section-card":
             state.sections[sectionIndex].cardImage = null;
@@ -230,13 +247,15 @@ editor.addEventListener("click", e => {
             render();
             break;
 
-        case "reset-service-card":
-            state.sections[sectionIndex]
-                .services[serviceIndex]
-                .logo = null;
+        case "reset-service-card": {
+            const section = state.sections[sectionIndex];
+            const serviceId = serviceEl.dataset.serviceId;
+
+            section.services[serviceId].logo = null;
             markDirty();
             render();
             break;
+        }
 
     }
 });
@@ -413,24 +432,6 @@ function bindSaveButton() {
         label.textContent = btn.dataset.saving || label.textContent;
 
 
-        const payload = JSON.parse(JSON.stringify(state));
-
-        payload.sections.forEach(section => {
-            if (Array.isArray(section.services)) {
-                const map = {};
-                section.services.forEach(svc => {
-                    map[svc.id] = {
-                        title: svc.title,
-                        url: svc.url,
-                        ...(svc.logo ? { logo: svc.logo } : {})
-                    };
-                });
-                section.services = map;
-                delete section._servicesMap;
-            }
-        });
-
-
         try {
 
             const res = await fetch("/admin/api/services", {
@@ -455,7 +456,12 @@ function bindSaveButton() {
 /* ================= Init ================= */
 
 document.getElementById("add-section").addEventListener("click", () => {
-    state.sections.push({ id: "", title: "", services: [] });
+    state.sections.push({
+        id: "",
+        title: "",
+        services: {},
+        serviceOrder: []
+    });
     markDirty();
     render();
 });
@@ -464,11 +470,11 @@ async function loadInitialData() {
     const res = await fetch("/admin/api/services");
     const data = await res.json();
     data.sections.forEach(section => {
-        if (!Array.isArray(section.services)) {
-            section._servicesMap = section.services;
-            section.services = Object.entries(section.services).map(
-                ([id, svc]) => ({ id, ...svc })
-            );
+        if (!section.services) {
+            section.services = {};
+        }
+        if (!section.serviceOrder) {
+            section.serviceOrder = Object.keys(section.services);
         }
     });
     state = data;
