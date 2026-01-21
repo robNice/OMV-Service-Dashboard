@@ -406,10 +406,9 @@ function commitImage({
     const ext = path.extname(tmpFile);
     const target = path.join(targetDir, targetBaseName + ext);
 
-    fs.renameSync(
-        path.join(uploadDir, tmpFile),
-        target
-    );
+    const src = path.join(uploadDir, tmpFile);
+    fs.copyFileSync(src, target);
+    fs.unlinkSync(src);
 }
 
 
