@@ -633,20 +633,14 @@ app.post(
             sections: data.sections.map(sec => ({
                 id: String(sec.id || "").trim(),
                 title: String(sec.title || "").trim(),
-                services: sec.services && typeof sec.services === 'object'
-                    ? Object.fromEntries(
-                        Object.entries(sec.services).map(([id, s]) => [
-                            id,
-                            {
-                                title: String(s.title || '').trim(),
-                                url: String(s.url || '').trim(),
-                                ...(s.logo ? {logo: s.logo} : {})
-                            }
-                        ])
-                    )
-                    : {}
+
+                services: sec.services || {},
+                serviceOrder: Array.isArray(sec.serviceOrder)
+                    ? sec.serviceOrder
+                    : Object.keys(sec.services || {})
             }))
         };
+
         saveServices(normalized);
         res.json({ok: true});
     }

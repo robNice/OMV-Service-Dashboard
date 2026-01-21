@@ -115,11 +115,24 @@ function renderSection(section, sectionIndex) {
         markDirty();
     });
 
-    Object.entries(section.services).forEach(([id, svc], i) => {
+    // Object.entries(section.services).forEach(([id, svc], i) => {
+    //     servicesEl.appendChild(
+    //         renderService({ ...svc, id }, sectionIndex, i)
+    //     );
+    // });
+
+    (section.serviceOrder || []).forEach((serviceId, i) => {
+        const svc = section.services[serviceId];
+        if (!svc) return;
         servicesEl.appendChild(
-            renderService({ ...svc, id }, sectionIndex, i)
+            renderService(
+                { id: serviceId, ...svc },
+                sectionIndex,
+                i
+            )
         );
     });
+
 
 
     return el;
@@ -195,7 +208,12 @@ editor.addEventListener("click", e => {
             break;
 
         case "delete-service":
-            state.sections[sectionIndex].services.splice(serviceIndex, 1);
+            const section = state.sections[sectionIndex];
+            const serviceId = section.serviceOrder[serviceIndex];
+
+            delete section.services[serviceId];
+            section.serviceOrder.splice(serviceIndex, 1);
+
             markDirty();
             render();
             break;
@@ -292,12 +310,11 @@ editor.addEventListener("drop", e => {
     if (dragState.type === "service") {
         const target = getServiceDropTarget(e.clientY);
         if (target) {
-            const moved =
-                state.sections[dragState.fromSection]
-                    .services.splice(dragState.fromService, 1)[0];
+            const order =
+                state.sections[dragState.fromSection].serviceOrder;
 
-            state.sections[target.sectionIndex]
-                .services.splice(target.serviceIndex, 0, moved);
+            const [moved] = order.splice(dragState.fromService, 1);
+            order.splice(target.serviceIndex, 0, moved);
 
             markDirty();
         }
@@ -395,7 +412,27 @@ function bindSaveButton() {
         spinner.classList.remove("hidden");
         label.textContent = btn.dataset.saving || label.textContent;
 
+
+        const payload = JSON.parse(JSON.stringify(state));
+
+        payload.sections.forEach(section => {
+            if (Array.isArray(section.services)) {
+                const map = {};
+                section.services.forEach(svc => {
+                    map[svc.id] = {
+                        title: svc.title,
+                        url: svc.url,
+                        ...(svc.logo ? { logo: svc.logo } : {})
+                    };
+                });
+                section.services = map;
+                delete section._servicesMap;
+            }
+        });
+
+
         try {
+
             const res = await fetch("/admin/api/services", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -425,9 +462,19 @@ document.getElementById("add-section").addEventListener("click", () => {
 
 async function loadInitialData() {
     const res = await fetch("/admin/api/services");
-    state = await res.json();
+    const data = await res.json();
+    data.sections.forEach(section => {
+        if (!Array.isArray(section.services)) {
+            section._servicesMap = section.services;
+            section.services = Object.entries(section.services).map(
+                ([id, svc]) => ({ id, ...svc })
+            );
+        }
+    });
+    state = data;
     render();
 }
+
 
 async function init() {
     await loadInitialData();

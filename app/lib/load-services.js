@@ -1,39 +1,45 @@
 const fs = require('fs');
 const path = require('path');
 const { APP_DATA, CONFIG_DIR } = require('./paths');
-const { saveServices } = require('./save-services'); // existiert bei dir bereits
 
 function slugify(str) {
     return String(str || '')
         .toLowerCase()
-        .trim()
         .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
+        .replace(/(^-|-$)/g, '');
 }
 
-function migrateServicesArrayToMap(servicesArray) {
-    const map = {};
-    const used = new Set();
+function migrateSection(section) {
+    // services als Array → Map + Order
+    if (Array.isArray(section.services)) {
+        const map = {};
+        const order = [];
 
-    for (const svc of servicesArray) {
-        let base = slugify(svc.title || 'service');
-        let id = base;
-        let i = 2;
+        section.services.forEach((svc, idx) => {
+            const id =
+                svc.id ||
+                slugify(svc.title) ||
+                `service-${idx}`;
 
-        while (used.has(id) || map[id]) {
-            id = `${base}-${i++}`;
-        }
+            map[id] = {
+                title: svc.title || '',
+                url: svc.url || '',
+                ...(svc.logo ? { logo: svc.logo } : {})
+            };
 
-        used.add(id);
+            order.push(id);
+        });
 
-        map[id] = {
-            title: svc.title || '',
-            url: svc.url || '',
-            ...(svc.logo ? { logo: svc.logo } : {})
-        };
+        section.services = map;
+        section.serviceOrder = order;
     }
 
-    return map;
+    // services schon Map, aber keine Order
+    if (!section.serviceOrder) {
+        section.serviceOrder = Object.keys(section.services || {});
+    }
+
+    return section;
 }
 
 function loadServices() {
@@ -46,19 +52,7 @@ function loadServices() {
 
     const data = JSON.parse(fs.readFileSync(fileToUse, 'utf8'));
 
-    let migrated = false;
-
-    for (const section of data.sections || []) {
-        if (Array.isArray(section.services)) {
-            section.services = migrateServicesArrayToMap(section.services);
-            migrated = true;
-        }
-    }
-
-    if (migrated && fileToUse === configFile) {
-        saveServices(data);
-    }
-
+    data.sections = (data.sections || []).map(migrateSection);
     return data;
 }
 
