@@ -41,6 +41,9 @@ function applyImagePreview(previewEl, image) {
 function isExplicit(image)   {
     return image && image.source === 'explicit';
 }
+function isCustom(image) {
+    return image && (image.source === 'explicit' || image.source === 'id');
+}
 
 /* ================= Render ================= */
 
@@ -78,12 +81,12 @@ function renderSection(section, sectionIndex) {
 
     const cardResetBtn = el.querySelector('[data-action="reset-section-card"]');
     if (cardResetBtn) {
-        cardResetBtn.style.display = isExplicit(section.cardImage) ? '' : 'none';
+        cardResetBtn.style.display = isCustom(section.cardImage) ? '' : 'none';
     }
 
     const bgResetBtn = el.querySelector('[data-action="reset-section-bg"]');
     if (bgResetBtn) {
-        bgResetBtn.style.display = isExplicit(section.backgroundImage) ? '' : 'none';
+        bgResetBtn.style.display = isCustom(section.backgroundImage) ? '' : 'none';
     }
 
     applyImagePreview(cardPreview, section.cardImage);
@@ -255,7 +258,7 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
     const preview = el.querySelector('.image-preview');
     const resetBtn = el.querySelector('[data-action="reset-service-card"]');
     if (resetBtn) {
-        resetBtn.style.display = isExplicit(service.cardImage) ? '' : 'none';
+        resetBtn.style.display = isCustom(service.cardImage) ? '' : 'none';
     }
     if (preview && service.cardImage) {
         applyImagePreview(preview, service.cardImage);
