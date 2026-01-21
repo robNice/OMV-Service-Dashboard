@@ -40,7 +40,13 @@ function applyImagePreview(previewEl, image) {
 
 
 function isCustom(image) {
-    return image && (image.source === 'explicit' || image.source === 'id');
+    return !!(
+        image &&
+        (
+            image.uploadId ||            // frisch hochgeladen
+            image.source === 'explicit'  // gespeichert
+        )
+    );
 }
 
 /* ================= Render ================= */
@@ -330,7 +336,11 @@ editor.addEventListener("click", e => {
             break;
 
         case "reset-section-bg":
-            state.sections[sectionIndex].backgroundImage = null;
+            state.sections[sectionIndex].backgroundImage = {
+                src: "/assets/backgrounds/_default.png",
+                source: "default",
+                resolvedFile: "_default.png"
+            };
             markDirty();
             render();
             break;
