@@ -11,31 +11,31 @@ function fileExists(p) {
 }
 
 function resolveImage({ explicit, idFallback, defaultFile, baseDir }) {
-    // 1. explizit (user-config)
     if (explicit) {
         const explicitPath = path.join(USER_ASSETS, baseDir, explicit);
         if (fileExists(explicitPath)) {
             return {
                 src: `/assets/${baseDir}/${explicit}`,
                 source: 'explicit',
-                resolvedFile: explicit
+                resolvedFile: explicit,
+                isCustom: true
             };
         }
     }
 
-    // 2. ID-Fallback (app-data, multi-extension)
     if (idFallback) {
         for (const ext of IMAGE_EXTS) {
             const file = `${idFallback}.${ext}`;
 
            const userPath = path.join(USER_ASSETS, baseDir, file);
            if (fileExists(userPath)) {
-                   return {
-                           src: `/assets/${baseDir}/${file}`,
-                           source: 'id',
-                           resolvedFile: file
-                   };
-               }
+               return {
+                   src: `/assets/${baseDir}/${file}`,
+                   source: 'id',
+                   resolvedFile: file,
+                   isCustom: true
+               };
+           }
 
 
             const idPath = path.join(APP_ASSETS, baseDir, file);
@@ -44,18 +44,19 @@ function resolveImage({ explicit, idFallback, defaultFile, baseDir }) {
                 return {
                     src: `/assets/${baseDir}/${file}`,
                     source: 'id',
-                    resolvedFile: file
+                    resolvedFile: file,
+                    isCustom: false
                 };
             }
         }
     }
 
 
-    // 3. Default (app-data)
     return {
         src: `/assets/${baseDir}/${defaultFile}`,
         source: 'default',
-        resolvedFile: defaultFile
+        resolvedFile: defaultFile,
+        isCustom: false
     };
 }
 

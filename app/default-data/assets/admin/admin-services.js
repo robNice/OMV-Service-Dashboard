@@ -43,8 +43,9 @@ function isCustom(image) {
     return !!(
         image &&
         (
+            image.isCustom === true ||   // vom Backend
             image.uploadId ||            // frisch hochgeladen
-            image.source === 'explicit'  // gespeichert
+            image.source === 'explicit'  // Fallback / Altbestand
         )
     );
 }
@@ -330,7 +331,12 @@ editor.addEventListener("click", e => {
         }
 
         case "reset-section-card":
-            state.sections[sectionIndex].cardImage = null;
+            state.sections[sectionIndex].cardImage = {
+                src: "/assets/cards/sections/_default.png",
+                source: "default",
+                resolvedFile: "_default.png",
+                isCustom: false
+            };
             markDirty();
             render();
             break;

@@ -10,7 +10,6 @@ function slugify(str) {
 }
 
 function migrateSection(section) {
-    // services als Array → Map + Order
     if (Array.isArray(section.services)) {
         const map = {};
         const order = [];

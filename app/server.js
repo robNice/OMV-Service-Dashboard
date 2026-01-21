@@ -411,6 +411,7 @@ function commitImage({
 
     fs.copyFileSync(src, target);
     fs.unlinkSync(src);
+    return targetFile;
 }
 
 
