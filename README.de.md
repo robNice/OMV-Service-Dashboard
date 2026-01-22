@@ -49,17 +49,60 @@ Bildschirmen, wie im Smart-Home-Umfeld häufig eingesetzt.
 
 ---
 
-## Konfiguration (wichtig)
+## Konfiguration
 
-Konfiguration, Übersetzungen und benutzerdefinierte Bilder werden **nicht im Anwendungscode** bearbeitet.
+Seitenstruktur, Konfiguration, Übersetzungen und benutzerdefinierte Bilder werden über den Adminbereich und Konfigurationsdateien festgelegt.
 
-Stattdessen befinden sich alle benutzerspezifischen Anpassungen in einem dedizierten
+Die Konfigurationsdateien befinden sich in einem dedizierten
 `/config`-Verzeichnis, das zur Laufzeit eingelesen wird und Updates sowie Container-Neubauten
 sicher übersteht.
 
 ➡️ **Bitte lies [`CONFIG_README.de.md`](./CONFIG_README.de.md) für Details.**
 
 Diese README hält Konfigurationsdetails bewusst kurz, um Redundanzen zu vermeiden.
+
+Die eigentliche Struktur deiner Portalseite wird im Adminbereich des OMV-Webinterfaces konfiguriert.
+
+## Admin-Bereich
+
+Die Konfiguration der Sektionen und Services erfolgt über einen integrierten Admin-Bereich, erreichbar unter:
+> {dashboard-url}/admin
+
+Das Default-Passwort ist
+> dashboard
+
+
+> ⚠️ Die  `services.json` muss nicht mehr manuell bearbeitet werden.
+Änderungen werden über die Web-Oberfläche vorgenommen. Die Datei dient nur noch als persistente Datenbasis.
+
+Es existieren schon Grafiken (Card- und Hintergrundgrafiken) für bestimmte Sektionen. Wenn du diese benutzen möchtest, nutze folgende Sektionen-IDs:
+- admin
+- files
+- kitchen
+- media
+- network
+- smart-home
+
+Default-Bilder für Sektionen sowie Services können bei Bedarf hier abgelegt werden:
+
+```
+/config
+ └─ assets/
+     ├─ backgrounds/
+     │   ├─ _default.png
+     │   └─ _home.png (Background Startseite)
+     └─ cards/
+         ├─ sections/
+         │   └─ _default.png 
+         └─ services/
+              └─ _default.png
+```
+
+Für hochgeladene Card-Bilder empfehle ich eine Größe von ~`305px × 185px`.
+
+---
+
+
 
 ---
 
@@ -106,11 +149,12 @@ zu laufen.
 
 Siehe die Datei [`example.docker-compose.yml`](./example.docker-compose.yml).
 
-1. Beispielkonfiguration kopieren:
+1. Nur wenn du vor dem ersten Start etwas ändern musst, kopiere die Beispiel-Konfiguration:
 
 ```bash
 cp -r config.example path-to-your-config-directory
 ```
+Du musst die Konfigurationsdatei jedoch nicht zwingend kopieren, da sie beim Start des Dienstes automatisch erstellt wird.
 
 Vergiss nicht, das Config-Verzeichnis im Docker-Compose-File auf das Config-Volume zu mappen.
 

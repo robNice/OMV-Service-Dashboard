@@ -2,18 +2,19 @@
 
 ---
 
-## Contents
+## Table of Contents
 
-- [Introduction](#Introduction)
+- [Introduction](#introduction)
 - [Features](#features)
 - [Configuration (important)](#configuration-important)
-- [Directory Layout (relevant parts)](#directory-layout-relevant-parts)
-- [Installation: Docker (recommended)](#installation-docker-recommended)
-    - [Requirements](#requirements)
-    - [Quick start](#quick-start)
-- [Installation: Standalone (advanced / untested)](#installation-standalone-advanced--untested)
-    - [Requirements](#requirements-1)
-    - [Steps (high level)](#steps-high-level)
+- [Directory Structure (relevant parts)](#directory-structure-relevant-parts)
+- [Installation](#installation)
+  - [Installation: Docker (recommended)](#installation-docker-recommended)
+      - [Requirements](#requirements)
+      - [Quick Start](#quick-start)
+  - [Installation: Standalone (advanced / untested)](#installation-standalone-advanced--untested)
+      - [Requirements](#requirements-1)
+      - [Steps (overview)](#steps-overview)
 - [Notes](#notes)
 - [Screenshots](#screenshots)
     - [Mobile dashboard overview](#mobile-dashboard-overview)
@@ -26,131 +27,177 @@
 
 ---
 
-## Introduction
+## Introduction / What is this for?
 
-A small Node.js–based service and system dashboard for an OpenMediaVault (OMV) host.  
-It shows your main services* as cards, grouped into sections, and can display live system statistics
-(uptime, disk usage, temperatures, Docker containers, …).
+The OMV Service Dashboard primarily serves as a central, clear web interface for
+displaying and accessing services and system information around an OpenMediaVault server.
 
-*Main services have to be defined in `/config/services.json`.
-
-The app is designed to run either:
-
-- inside a Docker container (recommended) or
-- directly on the OMV host (“standalone”),
+In addition, the dashboard is very well suited as a permanently visible interface on
+screens, as commonly used in smart home environments.
 
 ---
 
 ## Features
 
-- Clean dashboard with sections (e.g. *System*, *Media*, *Smart Home*, …)
-- Service cards linking to OMV, Home Assistant, Mealie, Jellyfin, etc.
-- Per-section background images
-- Per-section and per-service thumbnails
-- Live stats drawer (uptime, RAM, disks, temperatures, Docker containers)
-- Docker integration (list containers, basic status, update info)
-- Multilingual UI (labels, drawer texts, etc.)
+- Clear dashboard with sections (e.g. *System*, *Media*, *Smart Home*, …)
+- Service cards with links to OMV, Home Assistant, Mealie, Jellyfin, etc.
+- Background images per section
+- Preview images per section and service
+- Live statistics drawer (uptime, RAM, disks, temperatures, Docker containers)
+- Docker integration (container list, basic status, update information)
+- Multilingual user interface (labels, drawer texts, etc.)
 
 ---
 
-## Configuration (important)
+## Configuration
 
-Configuration, translations and custom images are **not edited inside the application code**.
+Page structure, configuration, translations, and custom images are defined via the admin area and configuration files.
 
-Instead, all user customization lives in a dedicated `/config` directory which is
-read at runtime and safely survives updates and container rebuilds.
+The configuration files are located in a dedicated
+`/config` directory, which is read at runtime and safely survives updates and container rebuilds.
 
 ➡️ **Please read [`CONFIG_README.md`](./CONFIG_README.md) for details.**
 
-This main README intentionally keeps configuration details short to avoid duplication.
+This README intentionally keeps configuration details short to avoid redundancy.
+
+The actual structure of your portal page is configured in the admin area of the OMV web interface.
+
+## Admin Area
+
+Configuration of sections and services is done via an integrated admin area, accessible at:
+> {dashboard-url}/admin
+
+The default password is
+> dashboard
+
+
+> ⚠️ The `services.json` no longer needs to be edited manually.
+Changes are made via the web interface. The file now only serves as a persistent data store.
+
+Graphics (card and background images) already exist for certain sections. If you want to use them, use the following section IDs:
+- admin
+- files
+- kitchen
+- media
+- network
+- smart-home
+
+Default images for sections and services can be placed here if needed:
+
+```
+/config
+ └─ assets/
+     ├─ backgrounds/
+     │   ├─ _default.png
+     │   └─ _home.png (home screen background)
+     └─ cards/
+         ├─ sections/
+         │   └─ _default.png 
+         └─ services/
+              └─ _default.png
+```
+
+For uploaded card images, a size of approximately `305px × 185px` is recommended.
 
 ---
 
-## Directory Layout (relevant parts)
+
+
+---
+
+## Directory Structure (relevant parts)
 
 ```text
 app/
   server.js           # Node/Express server
-  lib/                # Backend helpers (i18n, assets, stats, config loaders)
+  lib/                # Backend helpers (i18n, assets, stats, config loader)
   templates/          # HTML templates
-  default-data/       # will be copied to /data on run time
-    assets/           # Built-in assets (JS, CSS, images)
-    i18n/             # Built-in translations
-config.example/       # Example configuration / you should copy this to your config-path (mounted in your docker-compose.yml or defined in the env variable 'OMV_SERVICE_DASHBOARD_CONFIG')
+  default-data/       # copied to /data at runtime
+    assets/           # Integrated assets (JS, CSS, images)
+    i18n/             # Integrated translations
+config.example/       # Example configuration
 ```
 
-User-provided configuration and assets live outside the app code in:
+Custom configurations and assets are located outside the app code in:
 
 ```text
-/config               # user configuration (mounted volume)
+/config               # User configuration (mounted volume)
 ```
 
 ---
+## Installation
 
-## Installation: Docker (recommended)
+The application is designed to run either
 
-### Requirements
- 
+- in a Docker container (recommended) or
+- directly on the OMV host (“standalone”)
+
+
+
+### Installation: Docker (recommended)
+
+
+
+#### Requirements
 
 - Docker
 - Docker Compose (or `docker compose`)
 
-### Quick start
+#### Quick Start
 
-Take a look at the [`example.docker-compose.yml`](./example.docker-compose.yml) file for how to set up your docker-compose.yml.
+See the file [`example.docker-compose.yml`](./example.docker-compose.yml).
 
-1. Copy the example configuration:
+1. Only if you need to change anything before your first start, copy example configuration :
 
-   ```bash
-   cp -r config.example path-to-your-config-directory
-   ```
+```bash
+cp -r config.example path-to-your-config-directory
+```
 
-   Dont't forget to map the config directory to the config volume in the Docker Compose file.
+But you don't have to copy the config file as it will be created automatically when the service starts.
 
+Do not forget to map the config directory to the config volume in the Docker Compose file.
 
-2. Start the container:
+2. Start container:
 
-   ```bash
-   docker compose up -d
-   ```
+```bash
+docker compose up -d
+```
 
 3. Open the dashboard in your browser:
 
-   ```
-   http://<host>:<port>/
-   ```
+```
+http://<host>:<port>/
+```
 
-You can update or recreate the container at any time –  
-everything inside `/config` is preserved.
+Updates or rebuilding the container are possible at any time –  
+everything inside `/config` remains intact.
 
 ---
 
-## Installation: Standalone (advanced / untested)
+### Installation: Standalone (advanced / untested)
 
-> ⚠️ This mode is currently not actively tested and mainly provided for completeness.
+> ⚠️ This mode is currently not actively tested and mainly exists for completeness.
 
-### Requirements
+#### Requirements
 
 - Node.js (v18+ or v20+ recommended)
 - npm
 - OpenMediaVault host
 
-### Steps (high level)
+#### Steps (overview)
 
-1. Clone the repository
+1. Clone repository
 2. Install dependencies
 3. Copy `config.example/` to `config/`
-4. Start the server via `node server.js`
+4. Start server with `node server.js`
 
 ---
 
-## Notes
+### Notes
 
-- The `/config` directory *seems* optional; missing files fall back to built-in defaults.
-  BUT: You should at least define your own services.json
-- JavaScript and CSS are part of the application core and are **not customizable**.
+- JavaScript and CSS are part of the application core and **not customizable**.
 - Visual customization is limited to backgrounds and card images.
-- Translations from `/config/i18n` are merged on top of built-in translations.
+- Translations from `/config/i18n` override the integrated translations.
 
 ---
 
@@ -175,4 +222,3 @@ everything inside `/config` is preserved.
 ## License
 
 [`MIT`](./LICENSE)
-
