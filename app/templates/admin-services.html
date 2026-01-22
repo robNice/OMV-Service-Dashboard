@@ -14,6 +14,14 @@
      data-save-error="{{__.admin.save.error}}"
      data-image-reset="{{__.admin.image.deleteCustomImage}}">
 </div>
+<div id="save-bar">
+    <button id="save-services" class="primary" disabled>
+        <span class="label">{{__.admin.save.label}}</span>
+        <span class="spinner hidden"></span>
+    </button>
+
+    <span id="save-status"></span>
+</div>
 <div class="admin-page">
 
     <header class="admin-header">
@@ -27,18 +35,11 @@
     <!-- Mount point -->
     <div id="services-editor"></div>
 
-    <div class="admin-footer">
-        <button id="add-section" class="secondary">
-            {{__.admin.services.addSection}}
-        </button>
+    <button id="add-section" class="secondary add-section-full">
+        {{__.admin.services.addSection}}
+    </button>
 
-        <button id="save-services" class="primary" disabled>
-            <span class="label">{{__.admin.save.label}}</span>
-            <span class="spinner hidden"></span>
-        </button>
 
-        <span id="save-status"></span>
-    </div>
 
 </div>
 
