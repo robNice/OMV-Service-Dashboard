@@ -267,55 +267,6 @@ function deleteUserImage(dir, baseName) {
     }
 }
 
-/*
-* cleanupDeletedEntityImages({
-            oldSections: oldData.sections,
-            newSections: normalized.sections,
-            getIds: sec => [sec.id],
-            imageDir: path.join(CONFIG_DIR, "assets/backgrounds")
-        });
-        * */
-
-// function cleanupAllDeletedEntityImages( oldData, normalized )    {
-//     const deletePack = [
-//         { getIds: Object.keys(sec.services || {}), path : 'assets/cards/services' },
-//         { getIds : 'sections', path : 'assets/cards/sections' },
-//         { getIds : 'sections', path : 'assets/backgrounds' },
-//     ];
-//     for( let i in deletePack )  {
-//
-//         const entityType = deletePack[i].entityType;
-//         const path  = deletePack[i].path;
-//
-//         cleanupDeletedEntityImages({
-//             oldSections: oldData[entityType],
-//             newSections: normalized[entityType],
-//             getIds: sec => Object.keys(sec.services || {}),
-//             imageDir: path.join(CONFIG_DIR, "assets/cards/services")
-//         });
-//     }
-//
-//     cleanupDeletedEntityImages({
-//         oldSections: oldData.sections,
-//         newSections: normalized.sections,
-//         getIds: sec => Object.keys(sec.services || {}),
-//         imageDir: path.join(CONFIG_DIR, "assets/cards/services")
-//     });
-//
-//     cleanupDeletedEntityImages({
-//         oldSections: oldData.sections,
-//         newSections: normalized.sections,
-//         getIds: sec => [sec.id],
-//         imageDir: path.join(CONFIG_DIR, "assets/cards/sections")
-//     });
-//
-//     cleanupDeletedEntityImages({
-//         oldSections: oldData.sections,
-//         newSections: normalized.sections,
-//         getIds: sec => [sec.id],
-//         imageDir: path.join(CONFIG_DIR, "assets/backgrounds")
-//     });
-// }
 function cleanupDeletedEntityImages({
                                         oldSections,
                                         newSections,

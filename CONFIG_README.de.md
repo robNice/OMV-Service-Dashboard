@@ -46,8 +46,10 @@ Alle Dateien in diesem Verzeichnis werden **zur Laufzeit eingelesen** und
 Nichts in `/config` ist zwingend erforderlich – fehlt eine Datei, greift die Anwendung
 automatisch auf ihre internen Defaults zurück.
 
-Trotzdem gilt: Ohne eine angepasste `services.json` siehst du lediglich ein
-Beispiel-Dashboard mit sehr toten Links.
+Die config.json wird beim Starten des Dienstes angelegt, wenn sie noch nicht vorhanden ist. 
+Fehlt dir Datei, kannst du Sie aus dem Verzeichnis`config-example` in dein
+`/config`-Verzeichnis kopieren.
+Die services.json wird erst nach dem ersten Mal Speichern im Adminbereich angelegt.
 
 > ⚠️ Dieses Verzeichnis ist ausschließlich für **Konfiguration und Inhalte**
 > gedacht.  
@@ -115,7 +117,11 @@ Beispiel `config.json`:
   "defaultLang": "en-GB",
   "infoDrawerRefreshInterval": 30,
   "port"      : 3000,
-  "omvRpcPath": "/usr/sbin/omv-rpc"
+  "omvRpcPath": "/usr/sbin/omv-rpc",
+  "admin": {
+    "passwordHash": "3a33aaf60a0f71503b9c399e414e6ab8:e472941cd72ddc6807c2e5cb1291250ecec8664c5d9f1b9453196d410e900f7d",
+    "passwordInitialized": true
+  }
 }
 ```
 
@@ -124,7 +130,7 @@ Beispiel `config.json`:
 - infoDrawerRefreshInterval: Gibt an, wie oft der Info-Drawer aktualisiert werden soll (in Sekunden)
 - port: Port, auf dem die Anwendung lauscht
 - omvRpcPath: Pfad zum omv-rpc-Binary – wird benötigt, um die Datenträgerliste / SMART-Infos auszulesen
-
+- sadmin: etze admin exakt wie dort zu sehen, um das Admin-Passwort auf das Default-Passwort `dashboard` festzulegen.
 
 ### `services.json`
 
