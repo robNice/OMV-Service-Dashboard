@@ -643,7 +643,8 @@ app.post(
 
                     services[finalId] = {
                         title: String(svc.title || "").trim(),
-                        url: String(svc.url || "").trim()
+                        url: String(svc.url || "").trim(),
+                        cardImage: svc.cardImage || null
                     };
 
                     serviceOrder.push(finalId);
