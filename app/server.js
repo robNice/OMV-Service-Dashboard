@@ -560,7 +560,9 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
                             needsMigration = true;
                         }
                         const svcCard = resolveServiceCardImage({...service, id});
-                        const svcAbsPath = path.join(CONFIG_DIR, 'assets/cards/services', svcCard.resolvedFile);
+                        const svcAbsPath = svcCard.resolvedFile
+                            ? path.join(CONFIG_DIR, 'assets/cards/services', svcCard.resolvedFile)
+                            : null;
                         const svcAppDefault = resolveAppServiceCardImage({id});
                         return [
                             id,
