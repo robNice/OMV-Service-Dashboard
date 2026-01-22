@@ -295,8 +295,11 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
     if (resetBtn) {
         resetBtn.style.display = isCustom(service.cardImage) ? '' : 'none';
     }
-    if (preview && service.cardImage) {
-        applyImagePreview(preview, service.cardImage);
+    if (preview) {
+        const img = preview.querySelector('img');
+        if (img) {
+            img.dataset.defaultimg = service.serviceCardImageDefault || '';
+        }
     }
 
     return el;
@@ -376,11 +379,8 @@ editor.addEventListener("click", e => {
         }
 
         case "reset-service-card": {
-            state.sections[sectionIndex].cardImage = {
-                src: "/assets/cards/sections/_default.png",
-                source: "default",
-                resolvedFile: "_default.png"
-            };
+            const serviceId = serviceEl.dataset.serviceId;
+            state.sections[sectionIndex].services[serviceId].cardImage = null;
             markDirty();
             render();
             break;

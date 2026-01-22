@@ -560,17 +560,16 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
 
                 services: Object.fromEntries(
                     Object.entries(section.services || {}).map(([id, service]) => {
+                        // const svcCard = resolveServiceCardImage({ ...service, id });
                         const svcCard = resolveServiceCardImage({ ...service, id });
-
+                        const svcAppDefault = resolveAppServiceCardImage({ id });
                         return [
                             id,
                             {
                                 ...service,
                                 id,
-                                cardImage: {
-                                    ...svcCard,
-                                    defaultSrc: svcCard.src
-                                }
+                                cardImage: withVersion(svcCard, svcAbsPath),
+                                serviceCardImageDefault: svcAppDefault.src
                             }
                         ];
                     })
