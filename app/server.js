@@ -250,38 +250,11 @@ function loadTemplate() {
     return fs.readFileSync("/app/templates/index.html", "utf-8");
 }
 
-
-function renderImageSourceBadge(image) {
-    const map = {
-        explicit: {label: 'explizit', class: 'badge-explicit'},
-        id: {label: 'id-fallback', class: 'badge-id'},
-        default: {label: 'default', class: 'badge-default'}
-    };
-
-    const cfg = map[image.source];
-    if (!cfg) return '';
-
-    return `<span class="image-badge ${cfg.class}">${cfg.label}</span>`;
-}
-
-
 function findTmpUpload(dir, uploadId) {
     if (!fs.existsSync(dir)) return null;
 
     const files = fs.readdirSync(dir);
     return files.find(f => f.startsWith(uploadId)) || null;
-}
-
-function deleteUserSectionCard(sectionId) {
-    const dir = path.join(CONFIG_DIR, "assets/cards/sections");
-    if (!fs.existsSync(dir)) return;
-
-    const files = fs.readdirSync(dir);
-    for (const f of files) {
-        if (f.startsWith(sectionId + ".")) {
-            fs.unlinkSync(path.join(dir, f));
-        }
-    }
 }
 
 function deleteUserImage(dir, baseName) {

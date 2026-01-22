@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "it"
+  },
   "label": {
     "back": "Indietro",
     "liveStats": "Statistiche live",
@@ -6,7 +9,7 @@
     "info": "Info",
     "days": "Giorni",
     "hours_short": "Ore",
-    "storage": "Archiviazione (HDD)",
+    "storage": "Archiviazione (HDDs)",
     "temps": "Temperature",
     "versions": "Versioni",
     "system": "Sistema",
@@ -54,5 +57,51 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "title": "Admin",
+    "subtitle": "Gestione della configurazione",
+    "services": {
+      "title": "Gestisci sezioni e servizi",
+      "desc": "Gestisci sezioni, servizi e link sulla dashboard",
+      "addSection": "Aggiungi sezione",
+      "cardimage": "Immagine card"
+    },
+    "image": {
+      "resetToDefault": "Ripristina immagine predefinita",
+      "deleteCustomImage": "Elimina immagine personalizzata"
+    },
+    "section": {
+      "id": "ID sezione",
+      "title": "Nome sezione",
+      "delete": "Elimina sezione",
+      "addService": "Aggiungi servizio",
+      "backgroundimage": "Immagine di sfondo",
+      "cardimage": "Immagine card"
+    },
+    "service": {
+      "id": "ID servizio",
+      "title": "Nome servizio",
+      "url": "URL servizio",
+      "cardimage": "Immagine card",
+      "delete": "Elimina servizio"
+    },
+    "save": {
+      "label": "Salva",
+      "saving": "salvataggio…",
+      "saved": "salvato",
+      "error": "Salvataggio non riuscito"
+    },
+    "password": {
+      "title": "Cambia password",
+      "desc": "Cambia qui la password amministratore.",
+      "new": "Nuova password",
+      "repeat": "Ripeti password",
+      "tooShort": "La password deve contenere almeno 8 caratteri.",
+      "mismatch": "Le password non corrispondono."
+    },
+    "login": {
+      "invalid": "Password non corretta."
+    }
   }
 }

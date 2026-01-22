@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "ja"
+  },
   "label": {
     "back": "戻る",
     "liveStats": "ライブ統計",
@@ -6,7 +9,7 @@
     "info": "情報",
     "days": "日",
     "hours_short": "時間",
-    "storage": "ストレージ（HDD）",
+    "storage": "ストレージ（HDDs）",
     "temps": "温度",
     "versions": "バージョン",
     "system": "システム",
@@ -54,5 +57,51 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "title": "管理",
+    "subtitle": "設定管理",
+    "services": {
+      "title": "セクションとサービスの管理",
+      "desc": "ダッシュボード上のセクション、サービス、リンクを管理します",
+      "addSection": "セクションを追加",
+      "cardimage": "カード画像"
+    },
+    "image": {
+      "resetToDefault": "標準画像に戻す",
+      "deleteCustomImage": "カスタム画像を削除"
+    },
+    "section": {
+      "id": "セクションID",
+      "title": "セクション名",
+      "delete": "セクションを削除",
+      "addService": "サービスを追加",
+      "backgroundimage": "背景画像",
+      "cardimage": "カード画像"
+    },
+    "service": {
+      "id": "サービスID",
+      "title": "サービス名",
+      "url": "サービスURL",
+      "cardimage": "カード画像",
+      "delete": "サービスを削除"
+    },
+    "save": {
+      "label": "保存",
+      "saving": "保存中…",
+      "saved": "保存しました",
+      "error": "保存に失敗しました"
+    },
+    "password": {
+      "title": "パスワード変更",
+      "desc": "管理者パスワードを変更します。",
+      "new": "新しいパスワード",
+      "repeat": "パスワードを再入力",
+      "tooShort": "パスワードは8文字以上である必要があります。",
+      "mismatch": "パスワードが一致しません。"
+    },
+    "login": {
+      "invalid": "パスワードが正しくありません。"
+    }
   }
 }

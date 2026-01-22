@@ -89,34 +89,6 @@ function resolveServiceCardImage(service) {
     });
 }
 
-
-// function resolveSectionCardImage(section) {
-//     return resolveImage({
-//         explicit: section.cardImage || null,
-//         idFallback: section.id,
-//         defaultFile: '_default.png',
-//         baseDir: 'cards/sections'
-//     });
-// }
-//
-// function resolveSectionBackgroundImage(section) {
-//     return resolveImage({
-//         explicit: section.backgroundImage || null,
-//         idFallback: section.id,
-//         defaultFile: '_default.png',
-//         baseDir: 'backgrounds'
-//     });
-// }
-//
-// function resolveServiceCardImage(service) {
-//     return resolveImage({
-//         explicit: service.logo || null,
-//         idFallback: service.id,
-//         defaultFile: '_default.png',
-//         baseDir: 'cards/services'
-//     });
-// }
-
 function resolveAppImage({id, baseDir, defaultFile = '_default.png'}) {
     for (const ext of IMAGE_EXTS) {
         const file = `${id}.${ext}`;

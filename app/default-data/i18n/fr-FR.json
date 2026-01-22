@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "fr"
+  },
   "label": {
     "back": "Retour",
     "liveStats": "Statistiques en direct",
@@ -6,7 +9,7 @@
     "info": "Infos",
     "days": "jours",
     "hours_short": "h",
-    "storage": "Stockage (HDD)",
+    "storage": "Stockage (HDDs)",
     "temps": "Températures",
     "versions": "Versions",
     "system": "Système",
@@ -31,7 +34,7 @@
     "now": "maintenant"
   },
   "tooltip": {
-    "infodrawer": "ouvrir/fermer les informations système",
+    "infodrawer": "Ouvrir/fermer les informations système",
     "systemLoad": "Moyenne de la charge système : dernière minute / 5 dernières minutes / 15 dernières minutes"
   },
   "docker": {
@@ -54,5 +57,51 @@
     "gigabyte": "Go",
     "terabyte": "To",
     "petabyte": "Po"
+  },
+  "admin": {
+    "title": "Admin",
+    "subtitle": "Gestion de la configuration",
+    "services": {
+      "title": "Gérer les sections et services",
+      "desc": "Gérez les sections, les services et les liens du tableau de bord",
+      "addSection": "Ajouter une section",
+      "cardimage": "Image de carte"
+    },
+    "image": {
+      "resetToDefault": "Réinitialiser à l’image par défaut",
+      "deleteCustomImage": "Supprimer l’image personnalisée"
+    },
+    "section": {
+      "id": "ID de section",
+      "title": "Nom de la section",
+      "delete": "Supprimer la section",
+      "addService": "Ajouter un service",
+      "backgroundimage": "Image d’arrière-plan",
+      "cardimage": "Image de carte"
+    },
+    "service": {
+      "id": "ID du service",
+      "title": "Nom du service",
+      "url": "URL du service",
+      "cardimage": "Image de carte",
+      "delete": "Supprimer le service"
+    },
+    "save": {
+      "label": "Enregistrer",
+      "saving": "enregistrement…",
+      "saved": "enregistré",
+      "error": "Échec de l’enregistrement"
+    },
+    "password": {
+      "title": "Changer le mot de passe",
+      "desc": "Modifiez ici votre mot de passe administrateur.",
+      "new": "Nouveau mot de passe",
+      "repeat": "Répéter le mot de passe",
+      "tooShort": "Le mot de passe doit contenir au moins 8 caractères.",
+      "mismatch": "Les mots de passe ne correspondent pas."
+    },
+    "login": {
+      "invalid": "Mot de passe incorrect."
+    }
   }
 }

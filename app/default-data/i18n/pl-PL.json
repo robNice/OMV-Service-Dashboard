@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "pl"
+  },
   "label": {
     "back": "Wstecz",
     "liveStats": "Statystyki na żywo",
@@ -6,7 +9,7 @@
     "info": "Info",
     "days": "Dni",
     "hours_short": "godz.",
-    "storage": "Pamięć masowa (HDD)",
+    "storage": "Pamięć masowa (HDDs)",
     "temps": "Temperatury",
     "versions": "Wersje",
     "system": "System",
@@ -54,5 +57,51 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "title": "Admin",
+    "subtitle": "Zarządzanie konfiguracją",
+    "services": {
+      "title": "Zarządzanie sekcjami i usługami",
+      "desc": "Zarządzaj sekcjami, usługami i linkami na pulpicie",
+      "addSection": "Dodaj sekcję",
+      "cardimage": "Obraz karty"
+    },
+    "image": {
+      "resetToDefault": "Przywróć obraz domyślny",
+      "deleteCustomImage": "Usuń niestandardowy obraz"
+    },
+    "section": {
+      "id": "ID sekcji",
+      "title": "Nazwa sekcji",
+      "delete": "Usuń sekcję",
+      "addService": "Dodaj usługę",
+      "backgroundimage": "Obraz tła",
+      "cardimage": "Obraz karty"
+    },
+    "service": {
+      "id": "ID usługi",
+      "title": "Nazwa usługi",
+      "url": "URL usługi",
+      "cardimage": "Obraz karty",
+      "delete": "Usuń usługę"
+    },
+    "save": {
+      "label": "Zapisz",
+      "saving": "zapisywanie…",
+      "saved": "zapisano",
+      "error": "Błąd zapisu"
+    },
+    "password": {
+      "title": "Zmień hasło",
+      "desc": "Zmień tutaj hasło administratora.",
+      "new": "Nowe hasło",
+      "repeat": "Powtórz hasło",
+      "tooShort": "Hasło musi mieć co najmniej 8 znaków.",
+      "mismatch": "Hasła nie są zgodne."
+    },
+    "login": {
+      "invalid": "Nieprawidłowe hasło."
+    }
   }
 }
