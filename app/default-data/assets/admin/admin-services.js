@@ -610,6 +610,9 @@ async function loadInitialData() {
     });
     state = data;
     render();
+    if (data.needsMigration) {
+        markDirty();
+    }
 }
 
 

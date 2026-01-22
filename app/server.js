@@ -491,7 +491,7 @@ app.get("/admin/api/service-card-images", requireAdmin, (req, res) => {
 
 app.get("/admin/api/services", requireAdmin, (req, res) => {
     const data = loadServices();
-
+    let needsMigration = false;
     const enriched = {
         sections: data.sections.map(section => {
 
@@ -513,7 +513,9 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
 
                 services: Object.fromEntries(
                     Object.entries(section.services || {}).map(([id, service]) => {
-                        // const svcCard = resolveServiceCardImage({ ...service, id });
+                        if (service.logo) {
+                            needsMigration = true;
+                        }
                         const svcCard = resolveServiceCardImage({ ...service, id });
                         const svcAbsPath = path.join(CONFIG_DIR, 'assets/cards/services', svcCard.resolvedFile);
                         const svcAppDefault = resolveAppServiceCardImage({ id });
@@ -532,7 +534,11 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
         })
     };
 
-    res.json(enriched);
+    // res.json(enriched);
+    res.json({
+        sections: enrichedSections,
+        needsMigration
+    });
 });
 
 
