@@ -46,10 +46,6 @@ initDefaultData();
 const {CONFIG_DIR} = require('./lib/paths');
 const {resolveAssetPath} = require('./lib/asset-resolver');
 const app = express();
-const CARD_EXTS = ['jpg', 'gif', 'webp', 'png'];
-const cardCache = new Map();
-const USER_CARDS = path.join(CONFIG_DIR, 'assets/cards/sections');
-const APP_CARDS = path.join(__dirname, '../data/assets/cards/sections');
 
 const {getStats} = require("./server/stats");
 
@@ -171,51 +167,7 @@ function slugify(str) {
         .replace(/^-+|-+$/g, "");
 }
 
-/**
- * Resolve a section card image path for a given section ID.
- * @param id
- * @returns {string}
- */
-function resolveSectionCard(id) {
-    const cached = cardCache.get(id);
 
-    if (cached) {
-        const {fsPath, mtimeMs, url} = cached;
-        if (fs.existsSync(fsPath)) {
-            const stat = fs.statSync(fsPath);
-            if (stat.mtimeMs === mtimeMs) {
-                return url;
-            }
-        }
-        cardCache.delete(id);
-    }
-
-    if (cardCache.has(id)) {
-        return cardCache.get(id);
-    }
-
-    const bases = [
-        {fs: USER_CARDS, url: '/assets/cards/sections'},
-        {fs: APP_CARDS, url: '/assets/cards/sections'}
-    ];
-
-    for (const base of bases) {
-        if (!fs.existsSync(base.fs)) continue;
-
-        for (const ext of CARD_EXTS) {
-            const file = `${id}.${ext}`;
-            const fsPath = path.join(base.fs, file);
-            if (fs.existsSync(fsPath)) {
-                const url = `${base.url}/${file}`;
-                cardCache.set(id, url);
-                return url;
-            }
-        }
-    }
-    const fallback = '/assets/cards/sections/_default.png';
-    cardCache.set(id, fallback);
-    return fallback;
-}
 
 /**
  * Build an ETag header value for a given stat object.

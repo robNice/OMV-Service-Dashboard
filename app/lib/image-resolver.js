@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const { USER_ASSETS, APP_ASSETS } = require('./paths');
+const {USER_ASSETS, APP_ASSETS} = require('./paths');
 const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+
 function fileExists(p) {
     try {
         return fs.existsSync(p);
@@ -10,86 +11,113 @@ function fileExists(p) {
     }
 }
 
-function resolveImage({ explicit, idFallback, defaultFile, baseDir }) {
-    if (explicit) {
-        const explicitPath = path.join(USER_ASSETS, baseDir, explicit);
-        if (fileExists(explicitPath)) {
-            return {
-                src: `/assets/${baseDir}/${explicit}`,
-                source: 'explicit',
-                resolvedFile: explicit,
-                isCustom: true
-            };
-        }
+function resolveEntityImage({
+                                explicit,
+                                id,
+                                baseDir,
+                                defaultFile = '_default.png',
+                                withVersion = false
+                            }) {
+    if (explicit?.uploadId || explicit?.src) {
+        return {
+            ...explicit,
+            source: 'explicit',
+            isCustom: true
+        };
     }
 
-    if (idFallback) {
+    if (id) {
         for (const ext of IMAGE_EXTS) {
-            const file = `${idFallback}.${ext}`;
+            const file = `${id}.${ext}`;
             const userPath = path.join(USER_ASSETS, baseDir, file);
-
-            if (fileExists(userPath)) {
+            if (fs.existsSync(userPath)) {
                 return {
                     src: `/assets/${baseDir}/${file}`,
-                    source: 'id',
                     resolvedFile: file,
+                    source: 'id',
                     isCustom: true
                 };
             }
         }
 
         for (const ext of IMAGE_EXTS) {
-            const file = `${idFallback}.${ext}`;
+            const file = `${id}.${ext}`;
             const appPath = path.join(APP_ASSETS, baseDir, file);
-
-            if (fileExists(appPath)) {
+            if (fs.existsSync(appPath)) {
                 return {
                     src: `/assets/${baseDir}/${file}`,
-                    source: 'id',
                     resolvedFile: file,
+                    source: 'app',
                     isCustom: false
                 };
             }
         }
     }
 
-
     return {
         src: `/assets/${baseDir}/${defaultFile}`,
-        source: 'default',
         resolvedFile: defaultFile,
+        source: 'default',
         isCustom: false
     };
 }
 
+
+
+
 function resolveSectionCardImage(section) {
-    return resolveImage({
-        explicit: section.cardImage || null,
-        idFallback: section.id,
-        defaultFile: '_default.png',
+    return resolveEntityImage({
+        explicit: section.cardImage,
+        id: section.id,
         baseDir: 'cards/sections'
     });
 }
 
 function resolveSectionBackgroundImage(section) {
-    return resolveImage({
-        explicit: section.backgroundImage || null,
-        idFallback: section.id,
-        defaultFile: '_default.png',
+    return resolveEntityImage({
+        explicit: section.backgroundImage,
+        id: section.id,
         baseDir: 'backgrounds'
     });
 }
 
 function resolveServiceCardImage(service) {
-    return resolveImage({
-        explicit: service.logo || null,
-        idFallback: service.id,
-        defaultFile: '_default.png',
+    return resolveEntityImage({
+        explicit: service.cardImage,
+        id: service.id,
         baseDir: 'cards/services'
     });
 }
 
-function resolveAppImage({ id, baseDir, defaultFile = '_default.png' }) {
+
+// function resolveSectionCardImage(section) {
+//     return resolveImage({
+//         explicit: section.cardImage || null,
+//         idFallback: section.id,
+//         defaultFile: '_default.png',
+//         baseDir: 'cards/sections'
+//     });
+// }
+//
+// function resolveSectionBackgroundImage(section) {
+//     return resolveImage({
+//         explicit: section.backgroundImage || null,
+//         idFallback: section.id,
+//         defaultFile: '_default.png',
+//         baseDir: 'backgrounds'
+//     });
+// }
+//
+// function resolveServiceCardImage(service) {
+//     return resolveImage({
+//         explicit: service.logo || null,
+//         idFallback: service.id,
+//         defaultFile: '_default.png',
+//         baseDir: 'cards/services'
+//     });
+// }
+
+function resolveAppImage({id, baseDir, defaultFile = '_default.png'}) {
     for (const ext of IMAGE_EXTS) {
         const file = `${id}.${ext}`;
         const appPath = path.join(APP_ASSETS, baseDir, file);
@@ -130,8 +158,6 @@ function resolveAppServiceCardImage(service) {
         baseDir: 'cards/services'
     });
 }
-
-
 
 
 module.exports = {
