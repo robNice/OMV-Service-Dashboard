@@ -22,7 +22,6 @@ const {
     resolveSectionCardImage,
     resolveSectionBackgroundImage,
     resolveServiceCardImage,
-    resolveAppImage,
     resolveAppSectionCardImage,
     resolveAppSectionBackgroundImage,
     resolveAppServiceCardImage
