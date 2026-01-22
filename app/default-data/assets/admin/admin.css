@@ -445,7 +445,7 @@ button.primary:disabled {
 }
 #save-status {
     font-size: 0.8em;
-    opacity: 0.8;
+    opacity: 0;
     white-space: nowrap;
     background: rgba(0,0,0, 0.85);
     color: #fff;
