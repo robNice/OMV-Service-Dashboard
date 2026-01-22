@@ -32,7 +32,8 @@ function applyImagePreview(previewEl, image) {
     }
 
     if (img && image.src) {
-        img.src = image.src;
+        const v = image.v ? `?v=${image.v}` : '';
+        img.src = image.src + v;
         img.title = image.resolvedFile || '';
     }
 
@@ -361,7 +362,7 @@ editor.addEventListener("click", e => {
         case "reset-section-bg":
             const section = state.sections[sectionIndex];
 
-            section.cardImage = null; // State korrekt
+            section.cardImage = null;
             markDirty();
 
             const img = document.querySelector(
