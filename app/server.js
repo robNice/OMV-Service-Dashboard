@@ -96,6 +96,7 @@ function sessionMiddleware(req, res, next) {
 
     next();
 }
+
 function withVersion(image, absPath) {
     if (!image || !absPath || !fs.existsSync(absPath)) return image;
 
@@ -168,7 +169,6 @@ function slugify(str) {
 }
 
 
-
 /**
  * Build an ETag header value for a given stat object.
  * @param stat
@@ -219,7 +219,6 @@ function renderSection(section) {
 }
 
 
-
 /**
  *
  * @param req
@@ -268,6 +267,78 @@ function deleteUserImage(dir, baseName) {
     }
 }
 
+/*
+* cleanupDeletedEntityImages({
+            oldSections: oldData.sections,
+            newSections: normalized.sections,
+            getIds: sec => [sec.id],
+            imageDir: path.join(CONFIG_DIR, "assets/backgrounds")
+        });
+        * */
+
+// function cleanupAllDeletedEntityImages( oldData, normalized )    {
+//     const deletePack = [
+//         { getIds: Object.keys(sec.services || {}), path : 'assets/cards/services' },
+//         { getIds : 'sections', path : 'assets/cards/sections' },
+//         { getIds : 'sections', path : 'assets/backgrounds' },
+//     ];
+//     for( let i in deletePack )  {
+//
+//         const entityType = deletePack[i].entityType;
+//         const path  = deletePack[i].path;
+//
+//         cleanupDeletedEntityImages({
+//             oldSections: oldData[entityType],
+//             newSections: normalized[entityType],
+//             getIds: sec => Object.keys(sec.services || {}),
+//             imageDir: path.join(CONFIG_DIR, "assets/cards/services")
+//         });
+//     }
+//
+//     cleanupDeletedEntityImages({
+//         oldSections: oldData.sections,
+//         newSections: normalized.sections,
+//         getIds: sec => Object.keys(sec.services || {}),
+//         imageDir: path.join(CONFIG_DIR, "assets/cards/services")
+//     });
+//
+//     cleanupDeletedEntityImages({
+//         oldSections: oldData.sections,
+//         newSections: normalized.sections,
+//         getIds: sec => [sec.id],
+//         imageDir: path.join(CONFIG_DIR, "assets/cards/sections")
+//     });
+//
+//     cleanupDeletedEntityImages({
+//         oldSections: oldData.sections,
+//         newSections: normalized.sections,
+//         getIds: sec => [sec.id],
+//         imageDir: path.join(CONFIG_DIR, "assets/backgrounds")
+//     });
+// }
+function cleanupDeletedEntityImages({
+                                        oldSections,
+                                        newSections,
+                                        getIds,
+                                        imageDir
+                                    }) {
+    const oldIds = new Set();
+    oldSections.forEach(sec => {
+        getIds(sec).forEach(id => oldIds.add(id));
+    });
+
+    const newIds = new Set();
+    newSections.forEach(sec => {
+        getIds(sec).forEach(id => newIds.add(id));
+    });
+
+    for (const id of oldIds) {
+        if (!newIds.has(id)) {
+            deleteUserImage(imageDir, id);
+        }
+    }
+}
+
 function commitImage({
                          image,
                          uploadDir,
@@ -286,7 +357,7 @@ function commitImage({
     const tmpFile = findTmpUpload(uploadDir, image.uploadId);
     if (!tmpFile) return;
 
-    fs.mkdirSync(targetDir, { recursive: true });
+    fs.mkdirSync(targetDir, {recursive: true});
 
     deleteUserImage(targetDir, targetBaseName);
 
@@ -298,7 +369,6 @@ function commitImage({
     fs.unlinkSync(src);
     return target;
 }
-
 
 
 app.get("/favicon.ico", (req, res) => {
@@ -489,9 +559,9 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
                         if (service.logo) {
                             needsMigration = true;
                         }
-                        const svcCard = resolveServiceCardImage({ ...service, id });
+                        const svcCard = resolveServiceCardImage({...service, id});
                         const svcAbsPath = path.join(CONFIG_DIR, 'assets/cards/services', svcCard.resolvedFile);
-                        const svcAppDefault = resolveAppServiceCardImage({ id });
+                        const svcAppDefault = resolveAppServiceCardImage({id});
                         return [
                             id,
                             {
@@ -541,16 +611,6 @@ app.post(
                 targetDir: path.join(CONFIG_DIR, "assets/backgrounds"),
                 targetBaseName: section.id
             });
-
-            for (const [serviceId, service] of Object.entries(section.services || {})) {
-                commitImage({
-                    image: service.cardImage,
-                    uploadDir: path.join(TMP_DIR, "cards/services"),
-                    targetDir: path.join(CONFIG_DIR, "assets/cards/services"),
-                    targetBaseName: serviceId
-                });
-            }
-
         }
 
         const normalized = {
@@ -599,7 +659,46 @@ app.post(
         };
 
 
+        const oldData = loadServices();
+        cleanupDeletedEntityImages({
+            oldSections: oldData.sections,
+            newSections: normalized.sections,
+            getIds: sec => Object.keys(sec.services || {}),
+            imageDir: path.join(CONFIG_DIR, "assets/cards/services")
+        });
+
+        cleanupDeletedEntityImages({
+            oldSections: oldData.sections,
+            newSections: normalized.sections,
+            getIds: sec => [sec.id],
+            imageDir: path.join(CONFIG_DIR, "assets/cards/sections")
+        });
+
+        cleanupDeletedEntityImages({
+            oldSections: oldData.sections,
+            newSections: normalized.sections,
+            getIds: sec => [sec.id],
+            imageDir: path.join(CONFIG_DIR, "assets/backgrounds")
+        });
+
+
         saveServices(normalized);
+
+        for (const section of normalized.sections) {
+            for (const serviceId of section.serviceOrder || []) {
+                const svc = section.services[serviceId];
+                if (!svc?.cardImage) continue;
+
+                commitImage({
+                    image: svc.cardImage,
+                    uploadDir: path.join(TMP_DIR, "cards/services"),
+                    targetDir: path.join(CONFIG_DIR, "assets/cards/services"),
+                    targetBaseName: serviceId
+                });
+            }
+        }
+
+
         res.json({ok: true});
     }
 );
@@ -757,7 +856,7 @@ app.get("/section/:id", (req, res) => {
     }
     const services = Object.entries(section.services || {})
         .map(([id, service]) =>
-            renderService({ ...service, id })
+            renderService({...service, id})
         )
         .join("\n");
 
