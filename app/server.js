@@ -685,8 +685,6 @@ app.post(
         });
 
 
-        saveServices(normalized);
-
         for (const section of normalized.sections) {
             for (const serviceId of section.serviceOrder || []) {
                 const svc = section.services[serviceId];
@@ -701,6 +699,13 @@ app.post(
             }
         }
 
+
+        for (const section of normalized.sections) {
+            for (const svc of Object.values(section.services)) {
+                delete svc.cardImage;
+            }
+        }
+        saveServices(normalized);
 
         res.json({ok: true});
     }
