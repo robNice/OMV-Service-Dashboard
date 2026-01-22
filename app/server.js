@@ -244,7 +244,8 @@ function renderService(service) {
     return `
     <div class="service">
       <a href="${service.url}" target="_blank">
-        <img src="${service.image.src}" alt="${service.title}" />
+        <img src="${service.cardImage?.src || '/assets/cards/services/_default.png'}"
+     alt="${service.title}" />
         <div class="service-title">${service.title}</div>
       </a>
     </div>`;
