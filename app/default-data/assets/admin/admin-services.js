@@ -92,7 +92,9 @@ function renderSection(section, sectionIndex) {
     const tpl = document.getElementById("tpl-section");
     const el = tpl.content.firstElementChild.cloneNode(true);
 
-    const cardPreview = el.querySelector('[data-preview="section-card"]')?.closest('.image-preview');
+    const cardPreview = el
+        .querySelector('[data-preview="section-card"]')
+        ?.closest('.image-preview');
     if (cardPreview) {
         const img = cardPreview.querySelector('img');
         if (img) {
@@ -100,9 +102,16 @@ function renderSection(section, sectionIndex) {
         }
     }
 
+    const bgPreview = el
+        .querySelector('[data-preview="section-bg"]')
+        ?.closest('.image-preview');
 
-    const bgPreview   = el.querySelector('[data-preview="section-bg"]')?.closest('.image-preview');
-
+    if (bgPreview) {
+        const img = bgPreview.querySelector('img');
+        if (img) {
+            img.dataset.defaultimg = section.backgroundImageDefault || '';
+        }
+    }
 
 
     const cardResetBtn = el.querySelector('[data-action="reset-section-card"]');
@@ -359,21 +368,12 @@ editor.addEventListener("click", e => {
         }
 
 
-        case "reset-section-bg":
-            const section = state.sections[sectionIndex];
-
-            section.cardImage = null;
+        case "reset-section-bg": {
+            state.sections[sectionIndex].backgroundImage = null;
             markDirty();
-
-            const img = document.querySelector(
-                `.section[data-section-index="${sectionIndex}"] img[data-preview="section-card"]`
-            );
-
-            if (img && img.dataset.defaultimg) {
-                img.src = img.dataset.defaultimg;
-            }
             render();
             break;
+        }
 
         case "reset-service-card": {
             state.sections[sectionIndex].cardImage = {

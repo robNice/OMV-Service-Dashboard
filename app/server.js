@@ -266,59 +266,6 @@ function renderSection(section) {
 }
 
 
-function renderAdminServices(data) {
-    return data.sections.map(section => {
-
-        const services = (section.services || []).map(service => {
-            const image = resolveServiceCardImage(service);
-
-            return `
-                <li>
-                    <img src="${image.src}" alt="" style="width:32px;height:auto;">
-                    ${renderImageSourceBadge(image)}
-                    <span class="service-title">${service.title}</span>
-                    <span class="service-url">${service.url}</span>
-                </li>
-            `;
-        }).join("");
-        const sectionCardImage = resolveSectionCardImage(section);
-        const sectionBgImage = resolveSectionBackgroundImage(section);
-
-        return `
-            <div class="section">
-                <div class="section-header"
-                     style="background-image: url('${sectionBgImage.src}')">
-                    <img class="section-card-image"
-                         src="${sectionCardImage.src}"
-                         alt="">
-        
-                    <h2>
-                        ${section.title}
-                        <small>(${section.id})</small>
-                        <span class="bg-indicator"
-                              title="Background: ${sectionBgImage.source} (${sectionBgImage.resolvedFile})"
-                              style="display:inline-block;
-                                     width:16px;
-                                     height:16px;
-                                     margin-left:6px;
-                                     background-image:url('${sectionBgImage.src}');
-                                     background-size:cover;
-                                     background-position:center;
-                                     border:1px solid #ccc;">
-                        </span>
-                    </h2>
-                </div>
-        
-                <ul>
-                    ${services || '<li><em>No services</em></li>'}
-                </ul>
-            </div>
-        `;
-
-
-    }).join("\n");
-}
-
 
 /**
  *
@@ -599,16 +546,15 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
             const cardAbsPath = path.join(CONFIG_DIR, 'assets/cards/sections', card.resolvedFile);
             const appDefault = resolveAppSectionCardImage(section);
 
-            const background = resolveSectionBackgroundImage(section);
+            const bg = resolveSectionBackgroundImage(section);
+            const bgAppDefault = resolveAppSectionBackgroundImage(section);
 
             return {
                 ...section,
                 cardImage: withVersion(card, cardAbsPath),
                 cardImageDefault: appDefault.src,
-                backgroundImage: {
-                    ...background,
-                    defaultSrc: background.src
-                },
+                backgroundImage: withVersion(bg, bgAbsPath),
+                backgroundImageDefault: bgAppDefault.src,
 
 
                 services: Object.fromEntries(
