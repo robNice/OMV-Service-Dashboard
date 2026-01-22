@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="{{__.html.lang}}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{__.admin.title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/admin/admin.css">
+</head>
+<body>
+
+<div class="admin-page">
+
+    <header class="admin-header">
+        <div>
+            <h1>{{__.admin.title}}</h1>
+            <p class="admin-subtitle">
+                {{__.admin.subtitle}}
+            </p>
+        </div>
+
+        <nav>
+            <a href="/admin/logout">Logout</a>
+        </nav>
+    </header>
+
+    <div class="admin-dashboard">
+
+        <a href="/admin/services" class="admin-tile primary">
+            <h2>{{__.admin.services.title}}</h2>
+            <p>{{__.admin.services.desc}}</p>
+        </a>
+
+        <a href="/admin/setpassword" class="admin-tile">
+            <h2>{{__.admin.password.title}}</h2>
+            <p>{{__.admin.password.desc}}</p>
+        </a>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

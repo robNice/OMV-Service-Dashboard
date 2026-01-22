@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="{{__.html.lang}}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{__.admin.services.title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/admin/admin.css">
+</head>
+<body>
+<div id="i18n"
+     data-save-label="{{__.admin.save.label}}"
+     data-save-saving="{{__.admin.save.saving}}"
+     data-save-saved="{{__.admin.save.saved}}"
+     data-save-error="{{__.admin.save.error}}"
+     data-image-reset="{{__.admin.image.deleteCustomImage}}">
+</div>
+<div id="save-bar">
+    <button id="save-services" class="primary" disabled>
+        <span class="label">{{__.admin.save.label}}</span>
+        <span class="spinner hidden"></span>
+    </button>
+
+    <span id="save-status"></span>
+</div>
+<div class="admin-page">
+
+    <header class="admin-header">
+        <h1>{{__.admin.services.title}}</h1>
+        <nav>
+            <a href="/admin">Admin</a> ·
+            <a href="/admin/logout">Logout</a>
+        </nav>
+    </header>
+
+    <!-- Mount point -->
+    <div id="services-editor"></div>
+
+    <button id="add-section" class="secondary add-section-full">
+        {{__.admin.services.addSection}}
+    </button>
+
+
+
+</div>
+
+<div id="drop-indicator"></div>
+
+<template id="tpl-section">
+    <div class="section" draggable="true">
+        <div class="section-header">
+            <button data-action="toggle-section" class="collapse-toggle" title="Toggle">▼</button>
+
+            <div>
+                <label>{{__.admin.section.id}}</label>
+                <input type="text" data-field="section-id">
+            </div>
+
+            <div>
+                <label>{{__.admin.section.title}}</label>
+                <input type="text" data-field="section-title">
+            </div>
+            <div class="image-field">
+                <label>{{__.admin.section.cardimage}}</label>
+
+                <div class="image-preview">
+                    <img
+                            data-preview="section-card"
+                            alt=""
+                            src=""
+                            data-defaultimg=""
+                    >
+                    <span class="image-status" data-status="section-card"></span>
+                </div>
+
+                <input type="file"
+                       accept="image/*"
+                       data-upload="section-card">
+
+                <button type="button"
+                        class="secondary small"
+                        data-action="reset-section-card">
+                    {{__.admin.image.deleteCustomImage}}
+                </button>
+            </div>
+
+            <div class="image-field">
+                <label>{{__.admin.section.backgroundimage}}</label>
+
+                <div class="image-preview">
+                    <img data-preview="section-bg" alt="">
+                    <span class="image-status" data-status="section-bg"></span>
+                </div>
+
+                <input type="file"
+                       accept="image/*"
+                       data-upload="section-bg">
+
+                <button type="button"
+                        class="secondary small"
+                        data-action="reset-section-bg">
+                    {{__.admin.image.deleteCustomImage}}
+                </button>
+            </div>
+
+
+            <button class="danger" data-action="delete-section">
+                {{__.admin.section.delete}}
+            </button>
+        </div>
+
+        <div class="section-body">
+            <div class="section-services"></div>
+            <button class="secondary add" data-action="add-service">
+                {{__.admin.section.addService}}
+            </button>
+        </div>
+    </div>
+</template>
+
+<template id="tpl-service">
+    <div class="service" draggable="true">
+        <div>
+            <label>{{__.admin.service.title}}</label>
+            <input type="text" data-field="service-title">
+        </div>
+
+        <div>
+            <label>{{__.admin.service.url}}</label>
+            <input type="text" data-field="service-url">
+        </div>
+
+        <div class="image-field">
+            <label>{{__.admin.service.cardimage}}</label>
+
+            <div class="image-preview">
+                <img data-preview="service-card" alt="">
+                <span class="image-status" data-status="service-card"></span>
+            </div>
+
+            <input type="file"
+                   accept="image/*"
+                   data-upload="service-card">
+
+            <button type="button"
+                    class="secondary small"
+                    data-action="reset-service-card">
+                {{__.admin.image.deleteCustomImage}}
+            </button>
+        </div>
+
+
+        <button class="danger" data-action="delete-service">
+            {{__.admin.service.delete}}
+        </button>
+    </div>
+</template>
+
+<script src="/assets/admin/admin-services.js"></script>
+</body>
+</html>

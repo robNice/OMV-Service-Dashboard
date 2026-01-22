@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "nl"
+  },
   "label": {
     "back": "Terug",
     "liveStats": "Live-statistieken",
@@ -54,5 +57,51 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "title": "Admin",
+    "subtitle": "Configuratiebeheer",
+    "services": {
+      "title": "Secties en services beheren",
+      "desc": "Beheer secties, services en links op het dashboard",
+      "addSection": "Sectie toevoegen",
+      "cardimage": "Kaartafbeelding"
+    },
+    "image": {
+      "resetToDefault": "Terugzetten naar standaardafbeelding",
+      "deleteCustomImage": "Aangepaste afbeelding verwijderen"
+    },
+    "section": {
+      "id": "Sectie-ID",
+      "title": "Sectienaam",
+      "delete": "Sectie verwijderen",
+      "addService": "Service toevoegen",
+      "backgroundimage": "Achtergrondafbeelding",
+      "cardimage": "Kaartafbeelding"
+    },
+    "service": {
+      "id": "Service-ID",
+      "title": "Servicenaam",
+      "url": "Service-URL",
+      "cardimage": "Kaartafbeelding",
+      "delete": "Service verwijderen"
+    },
+    "save": {
+      "label": "Opslaan",
+      "saving": "opslaan…",
+      "saved": "opgeslagen",
+      "error": "Opslaan mislukt"
+    },
+    "password": {
+      "title": "Wachtwoord wijzigen",
+      "desc": "Wijzig hier je admin-wachtwoord.",
+      "new": "Nieuw wachtwoord",
+      "repeat": "Wachtwoord herhalen",
+      "tooShort": "Het wachtwoord moet minimaal 8 tekens lang zijn.",
+      "mismatch": "Wachtwoorden komen niet overeen."
+    },
+    "login": {
+      "invalid": "Onjuist wachtwoord."
+    }
   }
 }

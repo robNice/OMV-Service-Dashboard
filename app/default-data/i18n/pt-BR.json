@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "pt-br"
+  },
   "label": {
     "back": "Voltar",
     "liveStats": "Estatísticas ao vivo",
@@ -54,5 +57,51 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "title": "Admin",
+    "subtitle": "Gerenciamento de configuração",
+    "services": {
+      "title": "Gerenciar seções e serviços",
+      "desc": "Gerencie seções, serviços e links no dashboard",
+      "addSection": "Adicionar seção",
+      "cardimage": "Imagem do card"
+    },
+    "image": {
+      "resetToDefault": "Restaurar imagem padrão",
+      "deleteCustomImage": "Excluir imagem personalizada"
+    },
+    "section": {
+      "id": "ID da seção",
+      "title": "Nome da seção",
+      "delete": "Excluir seção",
+      "addService": "Adicionar serviço",
+      "backgroundimage": "Imagem de fundo",
+      "cardimage": "Imagem do card"
+    },
+    "service": {
+      "id": "ID do serviço",
+      "title": "Nome do serviço",
+      "url": "URL do serviço",
+      "cardimage": "Imagem do card",
+      "delete": "Excluir serviço"
+    },
+    "save": {
+      "label": "Salvar",
+      "saving": "salvando…",
+      "saved": "salvo",
+      "error": "Falha ao salvar"
+    },
+    "password": {
+      "title": "Alterar senha",
+      "desc": "Altere aqui sua senha de administrador.",
+      "new": "Nova senha",
+      "repeat": "Repetir senha",
+      "tooShort": "A senha deve ter pelo menos 8 caracteres.",
+      "mismatch": "As senhas não coincidem."
+    },
+    "login": {
+      "invalid": "Senha incorreta."
+    }
   }
 }

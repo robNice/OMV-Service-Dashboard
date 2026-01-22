@@ -11,8 +11,6 @@ const { getI18n } = require('./i18n-config');
  * - Uses the shared i18n instance and supports a temporary locale override.
  */
 function translateTextI18n(html, { locale } = {}) {
-    console.log('[i18n][translate] requested locale:', locale);
-
     try {
         console.log('[i18n][translate] current locale:', getI18n().getLocale());
     } catch {

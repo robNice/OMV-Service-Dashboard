@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "en"
+  },
   "label": {
     "back": "Back",
     "liveStats": "Live stats",
@@ -54,5 +57,51 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "title": "Admin",
+    "subtitle": "Configuration management",
+    "services": {
+      "title": "Edit Sections and Services",
+      "desc": "Edit sections, services and links shown on the dashboard",
+      "addSection": "Add section",
+      "cardimage" : "Card image"
+    },
+    "image": {
+      "resetToDefault" : "reset to default image",
+      "deleteCustomImage" : "delte custom image"
+    },
+    "section": {
+      "id": "Section ID",
+      "title": "Section title",
+      "delete": "Delete section",
+      "addService": "Add service",
+      "backgroundimage": "Background image",
+      "cardimage" : "Card image"
+    },
+    "service": {
+      "id": "Service ID",
+      "title": "Service title",
+      "url": "Service URL",
+      "cardimage": "Card image",
+      "delete": "Delete service"
+    },
+    "save": {
+      "label": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "error": "Save failed"
+    },
+    "password": {
+      "title": "Change password",
+      "desc": "Update the administrator password",
+      "new": "New password",
+      "repeat": "Repeat password",
+      "tooShort": "Password must be at least 8 characters",
+      "mismatch": "Passwords do not match"
+    },
+    "login": {
+      "invalid": "Invalid password"
+    }
   }
 }

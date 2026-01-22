@@ -2,70 +2,75 @@
 
 --- 
 
-## Contents
+## Table of Contents
 
-- [Introduction](#Introduction)
+- [Introduction](#introduction)
 - [TL;DR – Docker users](#tldr--docker-users)
 - [Basic notes](#basic-notes)
 - [Directory structure](#directory-structure)
 - [Configuration files](#configuration-files)
     - [`config.json`](#configjson)
     - [`services.json`](#servicesjson)
-        - [Section card image filenames](#section-card-image-filenames)
-        - [Section background-image filenames](#section-background-image-filenames)
-        - [Available section-ids](#available-section-ids)
-        - [Services](#services)
-        - [Default images and overrides](#default-images-and-overrides)
     - [`i18n-settings.json`](#i18n-settingsjson)
     - [Translations (`/config/i18n`)](#translations-configi18n)
         - [How translations work](#how-translations-work)
         - [Example: `i18n/fr-FR.json`](#example-i18nfr-frjson)
-- [Custom assets (`/config/assets`)](#custom-assets-configassets)
-    - [Allowed asset overrides](#allowed-asset-overrides)
-    - [Rules](#rules)
-    - [Not allowed](#not-allowed)
 - [Summary](#summary)
-
 
 ---
 
 ## Introduction
-Whenever this text mentions `/config` it means your very own `/config` directory for this app, mapped in your docker-composer.yml or defined in the env variable `OMV_SERVICE_DASHBOARD_CONFIG`.
 
-The `/config` directory contains **optional user overrides** for the OMV Service Dashboard.
+Whenever this `/config` is mentioned, it refers to **your personal**
+`/config` directory for this application, which is either mounted in your
+`docker-compose.yml` or defined via the environment variable
+`OMV_SERVICE_DASHBOARD_CONFIG`.
 
-To make things easier, copy the directory `config-example` to  your `/config` directory and customize it to your needs.
+The `/config` directory contains **optional user overrides** for the
+OMV Service Dashboard.
 
-All files in this directory are **read at runtime** and **override the built-in defaults** shipped with the application.  
-Nothing in `/config` is required – if a file is missing, the application falls back to its internal defaults.
+To make getting started easier, copy the `config-example` directory into your
+`/config` directory and adjust it to your needs.
 
-Anyway: without a customized services.json, you will only see an example dashboard with very dead links. 
+All files in this directory are **read at runtime** and
+**override the integrated default values** shipped with the application.  
+Nothing in `/config` is mandatory – if a file is missing, the application
+automatically falls back to its internal defaults.
 
-> ⚠️ This directory is meant for **configuration and content only**.  
-> **JavaScript, CSS and other application core files must not be placed here. They won't be read in there anyway ;)**
+The `config.json` is created when the service starts if it does not yet exist.  
+If the file is missing, you can copy it from the `config-example` directory into
+your `/config` directory.  
+The `services.json` is only created after saving for the first time in the admin area.
+
+> ⚠️ This directory is intended exclusively for **configuration and content**.  
+> **JavaScript, CSS, and other core application files must not be placed here.  
+> They will not be read there anyway ;)**
 
 ---
 
-
 ## TL;DR – Docker users
 
-If you are running the OMV Service Dashboard via Docker, define your personal config directory like this:
+If you run the OMV Service Dashboard via Docker, define your personal
+configuration directory as follows:
 
 ```yaml
 services:
   omv-service-dashboard:
     image: omv-service-dashboard
     volumes:
-      - /path/to/your/configuration/directory:/config
+      - /path/to/your/configuration-directory:/config
 ```
----
-## Basic notes
-- `/config` is the **only directory you should customize**
-- You can safely update or recreate the container at any time
-- Your configuration, translations and images stay untouched
-- If a file does not exist in `/config`, the built-in defaults are used automatically
 
-You never need to modify files inside the container.
+---
+
+## Basic notes
+
+- `/config` is the **only directory** you should customize
+- You can safely update or recreate the container at any time
+- Your configurations, translations, and images remain untouched
+- If a file does not exist in `/config`, the integrated default values are used automatically
+
+You must **never** modify files inside the container.
 
 ---
 
@@ -91,160 +96,54 @@ You never need to modify files inside the container.
 
 ### `config.json`
 
-General application configuration (e.g. title, language defaults).
+General application configuration (e.g. title, default language).
 
-If present, this file **fully replaces** the internal default configuration.
+If present, this file **completely replaces** the internal
+default configuration.
 
-config.json example:
+Example `config.json`:
 ```json
 {
   "title": "OMV Service Dashboard",
   "defaultLang": "en-GB",
   "infoDrawerRefreshInterval": 30,
   "port"      : 3000,
-  "omvRpcPath": "/usr/sbin/omv-rpc"
+  "omvRpcPath": "/usr/sbin/omv-rpc",
+  "admin": {
+    "passwordHash": "3a33aaf60a0f71503b9c399e414e6ab8:e472941cd72ddc6807c2e5cb1291250ecec8664c5d9f1b9453196d410e900f7d",
+    "passwordInitialized": true
+  }
 }
 ```
 
-- title: Used as basic title-tag and h1
-- defaultLang: Used as fallback language if no language file can be found
-- infoDrawerRefreshInterval: How often the info drawer should be refreshed (in seconds)
+- title: Used as the base title tag and as the h1
+- defaultLang: Used as the fallback language if no matching locale is found
+- infoDrawerRefreshInterval: Defines how often the info drawer is refreshed (in seconds)
 - port: Port the application listens on
-- omvRpcPath: Path to the omv-rpc binary: this is needed to read the disk list / smart info
-
+- omvRpcPath: Path to the omv-rpc binary – required to read disk lists / SMART info
+- admin: Set the admin block exactly as shown to reset the admin password to the default password `dashboard`
 
 ### `services.json`
 
-Defines sections and services shown on the dashboard.
-
-This file **fully replaces** the internal default `services.json` (which is just an example configuration).
-You should definately **customize this file** to match your needs.
-
-The following example defines two sections, one is filled with two services and the other one is empty (which doesn't makes much sense, does it? Change that now!):
-
-```json
-{
-  "sections": [
-    {
-      "id": "admin",
-      "title": "Administration",
-      "services": [
-        {
-          "title": "OMV Webinterface",
-          "url": "https://omv.my.local.domain",
-          "logo": "omv.png"
-        },
-        {
-          "title": "Filebrowser",
-          "url": "http://filebrowser.my.local.domain",
-          "logo": "filebrowser.png"
-        }
-      ]
-    },
-    {
-      "id": "smart-home",
-      "title": "Smart-Home",
-      "services": [
-
-      ]
-    }
-  ]
-}
-```
-> ⚠️ Section IDs must be unique. Section and service titles are used for title tags, h1 and card-titles.
---- 
-#### Section card image filenames
-
-Section card image filenames must match the section IDs.
-
-`"id": "admin"`
-=> So a 'admin.png', 'admin.gif', 'admin.jpg' or 'admin.webp' image should exist in
-
-`/{your-config-directory}/assets/cards/sections/`
-
-if it doesn't exist in
-
-`/data/assets/cards/sections/` 
-
-If in neither directory, a default image is used.
-
----
-
-#### Section background-image filenames
-
-Each section also has its own background image. 
-The filename of this image must also match the section id (with any of the following file extensions: png, gif, jpg, webp). 
-
-The image should exist in
-
-`/{your-config-directory}/assets/backgrounds/`
-
-if it doesn't exist in
-
-`/data/assets/backgrounds/`
-
-If in neither directory, a default image is used.
-
----
-#### Available section-ids
-Here is a complete list of the section IDs for which card and background images already exist:
-
-- admin
-- files
-- kitchen
-- media
-- network
-- smart-home
-
-If you are in need of more sections, feel free to add missing images to your config/assets/cards/sections-directory. Just keep in mind: filename is always `{id}.`+any extension of png, gif, jpg or webp. 
-
----
-#### Services
-Services are configured a little bit differently:
- 
-```json
-{
-  "title": "OMV Webinterface",
-  "url": "https://omv.my.local.domain",
-  "logo": "omv.png"
-}
-```
-
-- `title` is used as card-title, 
-- `url` is used as card link (what to open when clicking on the card)
-- `logo` is used as card-image. They should be placed in `/{your-config-dir}/assets/cards/services/`
-
-If logo is not defined, a default image is used.
-
-> ⚠️ 
-> 
-> All card images should be around 305px x 185px.
-
----
-
-#### Default images and overrides
-
-The Home background image is `assets/backgrounds/_home.png`. Use your own home-background
-image by placing a `_home` + any extension of png, gif, jpg or webp in your config/assets/backgrounds directory.
-
-The default background image is `assets/backgrounds/_default.png`. Use your own default background image by placing a `_default` + any extension of png, gif, jpg or webp in your config/assets/backgrounds directory.
-
-
-The default section and service card images are `assets/cards/sections/_default.png` and `assets/cards/services/_default.png`.
-Use your own default images by placing a `_default` + any extension of png, gif, jpg or webp in your config/assets/cards/sections and config/assets/cards/services directories.`
+Defines the sections and services shown in the dashboard.
+Since the introduction of the admin area, manual editing of this file
+is no longer required.
 
 ---
 
 ### `i18n-settings.json`
 
-> ⚠️ Though you theoretically could use this file to override the built-in translation settings, this is not recommended.
+> ⚠️ Although you could theoretically use this file to override the integrated
+> translation settings, this is not recommended.
 >
-> I recommend to not include in your /config unless you have a very good reason to.
-> You could miss future translations.
+> I strongly recommend **not** placing this file in your `/config` directory
+> unless you have a very good reason.
+> Otherwise, you might miss future translations.
 
-Controls which languages should be available and how language fallbacks behave.
-The language is determined by the browser's language settings (to be precise, what `Accept-Language` header your browser sends) and falls back to the default language if no match is found.
-
+Controls which languages are available and how language fallbacks work.
+The language is determined by the browser language
+(more precisely by the `Accept-Language` header sent by your browser)
+and falls back to the default language if no matching locale is found.
 
 Example:
 
@@ -264,20 +163,22 @@ Example:
   List of enabled locales.
 
 - `fallbacks`  
-  Maps language codes (`Accept-Language` header) to a fallback locale.
-  
-  For example: If you are french and your browser sends 
-  `Accept-Language: fr;(...)` the fallback locale for `fr` is `fr-FR`. 
-  
-  Without this mapping, the fallback would be what is defined in your config.json as `defaultLang`.
+  Maps language codes (from the `Accept-Language` header) to a fallback locale.
 
-If this file is missing, the built-in defaults are used.
+  Example: If you are French and your browser sends
+  `Accept-Language: fr;(...)`, the fallback locale for `fr`
+  is `fr-FR`.
+
+  Without this mapping, the fallback value would be the one defined as
+  `defaultLang` in your `config.json`.
+
+If this file is missing, the integrated default values are used.
 
 ---
 
 ### Translations (`/config/i18n`)
 
-Each file in `/config/i18n` represents **one locale** and must be named:
+Each file in `/config/i18n` represents **one locale** and must be named as follows:
 
 ```
 <locale>.json
@@ -289,7 +190,8 @@ Example:
 /config/i18n/fr-FR.json
 ```
 
-However: Full (and hopefully correct) translations are already provided for:
+Complete (and hopefully correct) translations are already included for the following
+languages:
 
 - English
 - German
@@ -302,12 +204,14 @@ However: Full (and hopefully correct) translations are already provided for:
 - Turkish
 - Japanese
 
-If you translate the application into another language or find mistranslations, please consider contributing your translations back to the project.
+If you translate the application into another language or find errors in the
+existing translations, please consider contributing your translations
+to the project.
 
 ### How translations work
 
-- Translations from `/config/i18n` are **merged on top of** the built-in translations
-- You only need to define the keys you want to **override or add**
+- Translations from `/config/i18n` are applied **on top of** the integrated translations
+- You only need to define the keys you want to **override or extend**
 - Missing keys automatically fall back to the internal language files
 
 ### Example: `i18n/fr-FR.json`
@@ -331,44 +235,10 @@ If you translate the application into another language or find mistranslations, 
 
 ---
 
-## Custom assets (`/config/assets`)
-
-Like mentioned above, `/config/assets` allows you to override **visual content assets** only.
-
-### Allowed asset overrides
-
-```
-/config/assets/
- ├─ backgrounds/
- └─ cards/
-     ├─ sections/
-     └─ services/
-```
-
-### Rules
-
-- If an asset exists in `/config/assets`, it **overrides** the built-in version
-- If it does not exist, the application falls back to `/data/assets`
-- Only **images** are supported here
-
-### Not allowed
-
-The following must **never** be placed in `/config/assets`:
-
-- JavaScript files
-- CSS files
-- Fonts
-- Application icons required for functionality
-
-These files are part of the application core and are intentionally immutable.
-
----
-
 ## Summary
 
 - `/config` is **optional**
-- Missing files always fall back to built-in defaults
-- Configuration files replace defaults
-- Translation files **merge** with defaults
-- Assets override visuals only
-- Application logic and styling are **not customizable**
+- Missing files always fall back to integrated defaults
+- Configuration files replace default values
+- Translation files are **merged**
+- Assets override visual content only

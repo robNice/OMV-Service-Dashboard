@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "tr"
+  },
   "label": {
     "back": "Geri",
     "liveStats": "Canlı istatistikler",
@@ -6,7 +9,7 @@
     "info": "Bilgi",
     "days": "Gün",
     "hours_short": "Saat",
-    "storage": "Depolama (HDD)",
+    "storage": "Depolama (HDDs)",
     "temps": "Sıcaklıklar",
     "versions": "Sürümler",
     "system": "Sistem",
@@ -54,5 +57,51 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "title": "Admin",
+    "subtitle": "Yapılandırma yönetimi",
+    "services": {
+      "title": "Bölümleri ve servisleri yönet",
+      "desc": "Dashboard üzerindeki bölümleri, servisleri ve bağlantıları yönetin",
+      "addSection": "Bölüm ekle",
+      "cardimage": "Kart görseli"
+    },
+    "image": {
+      "resetToDefault": "Varsayılan görsele sıfırla",
+      "deleteCustomImage": "Özel görseli sil"
+    },
+    "section": {
+      "id": "Bölüm ID",
+      "title": "Bölüm adı",
+      "delete": "Bölümü sil",
+      "addService": "Servis ekle",
+      "backgroundimage": "Arka plan görseli",
+      "cardimage": "Kart görseli"
+    },
+    "service": {
+      "id": "Servis ID",
+      "title": "Servis adı",
+      "url": "Servis URL",
+      "cardimage": "Kart görseli",
+      "delete": "Servisi sil"
+    },
+    "save": {
+      "label": "Kaydet",
+      "saving": "kaydediliyor…",
+      "saved": "kaydedildi",
+      "error": "Kaydetme başarısız"
+    },
+    "password": {
+      "title": "Parola değiştir",
+      "desc": "Yönetici parolanızı buradan değiştirin.",
+      "new": "Yeni parola",
+      "repeat": "Parolayı tekrar et",
+      "tooShort": "Parola en az 8 karakter olmalıdır.",
+      "mismatch": "Parolalar eşleşmiyor."
+    },
+    "login": {
+      "invalid": "Hatalı parola."
+    }
   }
 }

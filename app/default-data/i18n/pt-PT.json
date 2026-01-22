@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "pt-pt"
+  },
   "label": {
     "back": "Voltar",
     "liveStats": "Estatísticas em tempo real",
@@ -54,5 +57,51 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "title": "Admin",
+    "subtitle": "Gestão de configuração",
+    "services": {
+      "title": "Gerir secções e serviços",
+      "desc": "Gira secções, serviços e ligações no dashboard",
+      "addSection": "Adicionar secção",
+      "cardimage": "Imagem do cartão"
+    },
+    "image": {
+      "resetToDefault": "Repor imagem padrão",
+      "deleteCustomImage": "Eliminar imagem personalizada"
+    },
+    "section": {
+      "id": "ID da secção",
+      "title": "Nome da secção",
+      "delete": "Eliminar secção",
+      "addService": "Adicionar serviço",
+      "backgroundimage": "Imagem de fundo",
+      "cardimage": "Imagem do cartão"
+    },
+    "service": {
+      "id": "ID do serviço",
+      "title": "Nome do serviço",
+      "url": "URL do serviço",
+      "cardimage": "Imagem do cartão",
+      "delete": "Eliminar serviço"
+    },
+    "save": {
+      "label": "Guardar",
+      "saving": "a guardar…",
+      "saved": "guardado",
+      "error": "Falha ao guardar"
+    },
+    "password": {
+      "title": "Alterar palavra-passe",
+      "desc": "Altere aqui a sua palavra-passe de administrador.",
+      "new": "Nova palavra-passe",
+      "repeat": "Repetir palavra-passe",
+      "tooShort": "A palavra-passe deve ter pelo menos 8 caracteres.",
+      "mismatch": "As palavras-passe não coincidem."
+    },
+    "login": {
+      "invalid": "Palavra-passe incorreta."
+    }
   }
 }

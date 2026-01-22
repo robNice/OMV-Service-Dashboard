@@ -20,10 +20,6 @@
     - [Übersetzungen (`/config/i18n`)](#übersetzungen-configi18n)
         - [Wie Übersetzungen funktionieren](#wie-übersetzungen-funktionieren)
         - [Beispiel: `i18n/fr-FR.json`](#beispiel-i18nfr-frjson)
-- [Eigene Assets (`/config/assets`)](#eigene-assets-configassets)
-    - [Erlaubte Asset-Überschreibungen](#erlaubte-asset-überschreibungen)
-    - [Regeln](#regeln)
-    - [Nicht erlaubt](#nicht-erlaubt)
 - [Zusammenfassung](#zusammenfassung)
 
 
@@ -46,8 +42,10 @@ Alle Dateien in diesem Verzeichnis werden **zur Laufzeit eingelesen** und
 Nichts in `/config` ist zwingend erforderlich – fehlt eine Datei, greift die Anwendung
 automatisch auf ihre internen Defaults zurück.
 
-Trotzdem gilt: Ohne eine angepasste `services.json` siehst du lediglich ein
-Beispiel-Dashboard mit sehr toten Links.
+Die config.json wird beim Starten des Dienstes angelegt, wenn sie noch nicht vorhanden ist. 
+Fehlt dir Datei, kannst du Sie aus dem Verzeichnis`config-example` in dein
+`/config`-Verzeichnis kopieren.
+Die services.json wird erst nach dem ersten Mal Speichern im Adminbereich angelegt.
 
 > ⚠️ Dieses Verzeichnis ist ausschließlich für **Konfiguration und Inhalte**
 > gedacht.  
@@ -115,7 +113,11 @@ Beispiel `config.json`:
   "defaultLang": "en-GB",
   "infoDrawerRefreshInterval": 30,
   "port"      : 3000,
-  "omvRpcPath": "/usr/sbin/omv-rpc"
+  "omvRpcPath": "/usr/sbin/omv-rpc",
+  "admin": {
+    "passwordHash": "3a33aaf60a0f71503b9c399e414e6ab8:e472941cd72ddc6807c2e5cb1291250ecec8664c5d9f1b9453196d410e900f7d",
+    "passwordInitialized": true
+  }
 }
 ```
 
@@ -124,147 +126,13 @@ Beispiel `config.json`:
 - infoDrawerRefreshInterval: Gibt an, wie oft der Info-Drawer aktualisiert werden soll (in Sekunden)
 - port: Port, auf dem die Anwendung lauscht
 - omvRpcPath: Pfad zum omv-rpc-Binary – wird benötigt, um die Datenträgerliste / SMART-Infos auszulesen
-
+- sadmin: etze admin exakt wie dort zu sehen, um das Admin-Passwort auf das Default-Passwort `dashboard` festzulegen.
 
 ### `services.json`
 
 Definiert die im Dashboard angezeigten Sektionen und Dienste.
-
-Diese Datei **ersetzt vollständig** die interne Standard-`services.json`
-(die lediglich eine Beispielkonfiguration darstellt).
-Du solltest diese Datei **unbedingt anpassen**, damit sie zu deinem Setup passt.
-
-Das folgende Beispiel definiert zwei Sektionen, von denen eine mit zwei Services
-gefüllt ist und die andere leer ist (was nicht besonders sinnvoll ist, oder?
-Ändere das jetzt!):
-
-```json
-{
-  "sections": [
-    {
-      "id": "admin",
-      "title": "Administration",
-      "services": [
-        {
-          "title": "OMV Webinterface",
-          "url": "https://omv.my.local.domain",
-          "logo": "omv.png"
-        },
-        {
-          "title": "Filebrowser",
-          "url": "http://filebrowser.my.local.domain",
-          "logo": "filebrowser.png"
-        }
-      ]
-    },
-    {
-      "id": "smart-home",
-      "title": "Smart-Home",
-      "services": [
-
-      ]
-    }
-  ]
-}
-```
-> ⚠️ Section-IDs müssen eindeutig sein. Section- und Service-Titel werden für
-> title-Tags, h1 und Karten-Titel verwendet.
---- 
-#### Dateinamen für Sektion-Kartenbilder
-
-Die Dateinamen von Sektion-Kartenbildern müssen den Section-IDs entsprechen.
-
-`"id": "admin"`
-=> Es sollte also ein Bild mit dem Namen `admin.png`, `admin.gif`, `admin.jpg`
-oder `admin.webp` existieren in
-
-`/{dein-config-verzeichnis}/assets/cards/sections/`
-
-falls es dort nicht existiert, in
-
-`/data/assets/cards/sections/` 
-
-Existiert es in keinem der beiden Verzeichnisse, wird ein Standardbild verwendet.
-
----
-
-#### Dateinamen für Sektion-Hintergrundbilder
-
-Jede Sektion besitzt außerdem ein eigenes Hintergrundbild.
-Der Dateiname dieses Bildes muss ebenfalls der Section-ID entsprechen
-(mit einer der folgenden Dateiendungen: png, gif, jpg, webp).
-
-Das Bild sollte existieren in
-
-`/{dein-config-verzeichnis}/assets/backgrounds/`
-
-oder, falls es dort nicht existiert, in
-
-`/data/assets/backgrounds/`
-
-Existiert es in keinem der beiden Verzeichnisse, wird ein Standardbild verwendet.
-
----
-#### Verfügbare Section-IDs
-Hier ist eine vollständige Liste der Section-IDs für die es schon Karten- und 
-Hintergrundbilder gibt:
-
-- admin
-- files
-- kitchen
-- media
-- network
-- smart-home
-
-Falls du weitere Sektionen benötigst, kannst du fehlende Bilder einfach
-in dein `config/assets/cards/sections`-Verzeichnis hinzufügen.
-Behalte dabei im Hinterkopf: Der Dateiname lautet immer `{id}.` plus eine
-beliebige der folgenden Endungen: png, gif, jpg oder webp.
-
----
-#### Services
-Services werden ein wenig anders konfiguriert:
-
-```json
-{
-  "title": "OMV Webinterface",
-  "url": "https://omv.my.local.domain",
-  "logo": "omv.png"
-}
-```
-
-- `title` wird als Karten-Titel verwendet
-- `url` wird als Karten-Link verwendet (also das Ziel beim Klick auf die Karte)
-- `logo` wird als Kartenbild verwendet. Dieses sollte in
-  `/{dein-config-verzeichnis}/assets/cards/services/` abgelegt werden
-
-Ist kein Logo definiert, wird ein Standardbild verwendet.
-
-> ⚠️ 
-> 
-> Alle Kartenbilder sollten ungefähr 305px × 185px groß sein.
-
----
-
-#### Standardbilder und Überschreibungen
-
-Das Home-Hintergrundbild ist `assets/backgrounds/_home.png`.
-Du kannst dein eigenes Home-Hintergrundbild verwenden, indem du ein Bild mit dem
-Namen `_home` plus einer beliebigen der folgenden Dateiendungen
-png, gif, jpg oder webp in dein `config/assets/backgrounds`-Verzeichnis legst.
-
-Das Standard-Hintergrundbild ist `assets/backgrounds/_default.png`.
-Du kannst dein eigenes Standard-Hintergrundbild verwenden, indem du ein Bild mit
-dem Namen `_default` plus einer beliebigen der folgenden Dateiendungen
-png, gif, jpg oder webp in dein `config/assets/backgrounds`-Verzeichnis legst.
-
-
-Die Standard-Sektions- und Service-Kartenbilder sind
-`assets/cards/sections/_default.png` und `assets/cards/services/_default.png`.
-Du kannst deine eigenen Standardbilder verwenden, indem du jeweils ein Bild mit
-dem Namen `_default` plus einer beliebigen der folgenden Dateiendungen
-png, gif, jpg oder webp in die Verzeichnisse
-`config/assets/cards/sections` und `config/assets/cards/services` legst.
+Durch Einführung des Adminbereiches ist die manuelle Bearbeitung dieser Datei
+nicht mehr erforderlich.
 
 ---
 
@@ -374,39 +242,6 @@ dem Projekt zur Verfügung zu stellen.
 
 ---
 
-## Eigene Assets (`/config/assets`)
-
-Wie oben bereits erwähnt, erlaubt `/config/assets` ausschließlich das
-Überschreiben **visueller Inhalts-Assets**.
-
-### Erlaubte Asset-Überschreibungen
-
-```
-/config/assets/
- ├─ backgrounds/
- └─ cards/
-     ├─ sections/
-     └─ services/
-```
-
-### Regeln
-
-- Existiert ein Asset in `/config/assets`, **überschreibt** es die integrierte Version
-- Existiert es nicht, greift die Anwendung auf `/data/assets` zurück
-- Es werden ausschließlich **Bilder** unterstützt
-
-### Nicht erlaubt
-
-Die folgenden Dateien dürfen **niemals** in `/config/assets` abgelegt werden:
-
-- JavaScript-Dateien
-- CSS-Dateien
-- Schriftarten
-- Funktionsrelevante Application-Icons
-
-Diese Dateien sind Teil des Anwendungskerns und bewusst unveränderlich.
-
----
 
 ## Zusammenfassung
 
@@ -415,4 +250,3 @@ Diese Dateien sind Teil des Anwendungskerns und bewusst unveränderlich.
 - Konfigurationsdateien ersetzen Standardwerte
 - Übersetzungsdateien werden **gemerged**
 - Assets überschreiben ausschließlich visuelle Inhalte
-- Anwendungslogik und Styling sind **nicht anpassbar**
