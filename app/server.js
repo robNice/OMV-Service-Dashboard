@@ -536,7 +536,7 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
 
     // res.json(enriched);
     res.json({
-        sections: enrichedSections,
+        sections: enriched.sections,
         needsMigration
     });
 });
