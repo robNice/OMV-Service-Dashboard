@@ -586,7 +586,12 @@ app.post(
 
                     let finalId = serviceId;
 
-                    // 🔒 tmp-ID wird beim ersten Save fixiert
+                    if (svc.logo && !serviceId.startsWith("tmp-")) {
+                        finalId = slugify(
+                            path.basename(svc.logo, path.extname(svc.logo))
+                        );
+                    }
+
                     if (serviceId.startsWith("tmp-")) {
                         finalId = slugify(svc.title);
 
@@ -599,8 +604,7 @@ app.post(
 
                     services[finalId] = {
                         title: String(svc.title || "").trim(),
-                        url: String(svc.url || "").trim(),
-                        ...(svc.logo ? { logo: svc.logo } : {})
+                        url: String(svc.url || "").trim()
                     };
 
                     serviceOrder.push(finalId);
