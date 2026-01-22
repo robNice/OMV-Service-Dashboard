@@ -1,6 +1,6 @@
 {
   "name": "omv-service-dashboard",
-  "version": "1.4.0.0",
+  "version": "1.4.0.1",
   "description": "Dashboard for your OMV. Shows links to your home services, and displays system info and more. Built with Node.js and Express.js.",
   "main": "server.js",
   "license": "MIT",
