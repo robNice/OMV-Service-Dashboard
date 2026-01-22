@@ -88,9 +88,35 @@ function resolveServiceCardImage(service) {
         baseDir: 'cards/services'
     });
 }
+function resolveAppSectionCardImage(section) {
+    const baseDir = 'cards/sections';
+    const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+
+    for (const ext of IMAGE_EXTS) {
+        const file = `${section.id}.${ext}`;
+        const appPath = path.join(APP_ASSETS, baseDir, file);
+
+        if (fs.existsSync(appPath)) {
+            return {
+                src: `/assets/${baseDir}/${file}`,
+                resolvedFile: file,
+                source: 'app'
+            };
+        }
+    }
+
+    return {
+        src: `/assets/${baseDir}/_default.png`,
+        resolvedFile: '_default.png',
+        source: 'app'
+    };
+}
+
 
 module.exports = {
     resolveSectionCardImage,
     resolveSectionBackgroundImage,
-    resolveServiceCardImage
+    resolveServiceCardImage,
+    resolveAppSectionCardImage
 };
+

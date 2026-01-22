@@ -584,31 +584,19 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
         sections: data.sections.map(section => {
 
             const card = resolveSectionCardImage(section);
-            const appCard = resolveSectionCardImage({
-                ...section,
-                cardImage: null
-            });
-            const isUserImage =
-                card.source === 'id' &&
-                fs.existsSync(
-                    path.join(CONFIG_DIR, 'assets/cards/sections', card.resolvedFile)
-                );
+            const appDefault = resolveAppSectionCardImage(section);
+
             const background = resolveSectionBackgroundImage(section);
 
             return {
                 ...section,
-
                 cardImage: card,
-
-                cardImageDefault: isUserImage
-                    ? appCard.src
-                    : card.src,
-
-
+                cardImageDefault: appDefault.src,
                 backgroundImage: {
                     ...background,
                     defaultSrc: background.src
                 },
+
 
                 services: Object.fromEntries(
                     Object.entries(section.services || {}).map(([id, service]) => {
