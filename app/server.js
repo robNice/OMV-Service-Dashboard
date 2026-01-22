@@ -819,7 +819,12 @@ app.get("/section/:id", (req, res) => {
     if (!section) {
         return res.status(404).send("Sektion nicht gefunden");
     }
-    const services = (section.services || []).map(renderService).join("\n");
+    const services = Object.entries(section.services || {})
+        .map(([id, service]) =>
+            renderService({ ...service, id })
+        )
+        .join("\n");
+
     const html = setTemplate(
         req,
         loadTemplate(),
