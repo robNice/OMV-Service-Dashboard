@@ -300,6 +300,7 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
         if (img) {
             img.dataset.defaultimg = service.serviceCardImageDefault || '';
         }
+        applyImagePreview(preview, service.cardImage);
     }
 
     return el;
