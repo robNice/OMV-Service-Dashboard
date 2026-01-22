@@ -547,6 +547,7 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
             const appDefault = resolveAppSectionCardImage(section);
 
             const bg = resolveSectionBackgroundImage(section);
+            const bgAbsPath = path.join(CONFIG_DIR, 'assets/backgrounds', card.resolvedFile);
             const bgAppDefault = resolveAppSectionBackgroundImage(section);
 
             return {
