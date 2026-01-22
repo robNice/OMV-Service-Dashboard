@@ -193,11 +193,11 @@ function buildEtag(stat) {
  * @returns {string}
  */
 function renderService(service) {
+    const card = resolveServiceCardImage(service);
     return `
     <div class="service">
       <a href="${service.url}" target="_blank">
-      <img src="${service.cardImage.src}"
-     alt="${service.title}" />
+      <img src="${card.src}" alt="${service.title}" />
         <div class="service-title">${service.title}</div>
       </a>
     </div>`;
