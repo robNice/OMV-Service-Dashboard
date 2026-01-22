@@ -22,7 +22,10 @@ const {
     resolveSectionCardImage,
     resolveSectionBackgroundImage,
     resolveServiceCardImage,
-    resolveAppSectionCardImage
+    resolveAppImage,
+    resolveAppSectionCardImage,
+    resolveAppSectionBackgroundImage,
+    resolveAppServiceCardImage
 } = require('./lib/image-resolver');
 const TMP_DIR = "/data/tmp/assets/";
 // const TMP_SECTION_BG_DIR = TMP_DIR+"/data/tmp/assets/backgrounds/";

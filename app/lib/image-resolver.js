@@ -88,12 +88,10 @@ function resolveServiceCardImage(service) {
         baseDir: 'cards/services'
     });
 }
-function resolveAppSectionCardImage(section) {
-    const baseDir = 'cards/sections';
-    const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
 
+function resolveAppImage({ id, baseDir, defaultFile = '_default.png' }) {
     for (const ext of IMAGE_EXTS) {
-        const file = `${section.id}.${ext}`;
+        const file = `${id}.${ext}`;
         const appPath = path.join(APP_ASSETS, baseDir, file);
 
         if (fs.existsSync(appPath)) {
@@ -106,17 +104,44 @@ function resolveAppSectionCardImage(section) {
     }
 
     return {
-        src: `/assets/${baseDir}/_default.png`,
-        resolvedFile: '_default.png',
+        src: `/assets/${baseDir}/${defaultFile}`,
+        resolvedFile: defaultFile,
         source: 'app'
     };
 }
+
+function resolveAppSectionCardImage(section) {
+    return resolveAppImage({
+        id: section.id,
+        baseDir: 'cards/sections'
+    });
+}
+
+function resolveAppSectionBackgroundImage(section) {
+    return resolveAppImage({
+        id: section.id,
+        baseDir: 'backgrounds'
+    });
+}
+
+function resolveAppServiceCardImage(service) {
+    return resolveAppImage({
+        id: service.id,
+        baseDir: 'cards/services'
+    });
+}
+
+
 
 
 module.exports = {
     resolveSectionCardImage,
     resolveSectionBackgroundImage,
     resolveServiceCardImage,
-    resolveAppSectionCardImage
+
+    resolveAppImage,
+    resolveAppSectionCardImage,
+    resolveAppSectionBackgroundImage,
+    resolveAppServiceCardImage
 };
 
