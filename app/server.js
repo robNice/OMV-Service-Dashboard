@@ -547,7 +547,7 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
             const appDefault = resolveAppSectionCardImage(section);
 
             const bg = resolveSectionBackgroundImage(section);
-            const bgAbsPath = path.join(CONFIG_DIR, 'assets/backgrounds', card.resolvedFile);
+            const bgAbsPath = path.join(CONFIG_DIR, 'assets/backgrounds', bg.resolvedFile);
             const bgAppDefault = resolveAppSectionBackgroundImage(section);
 
             return {
@@ -562,6 +562,7 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
                     Object.entries(section.services || {}).map(([id, service]) => {
                         // const svcCard = resolveServiceCardImage({ ...service, id });
                         const svcCard = resolveServiceCardImage({ ...service, id });
+                        const svcAbsPath = path.join(CONFIG_DIR, 'assets/cards/services', svcCard.resolvedFile);
                         const svcAppDefault = resolveAppServiceCardImage({ id });
                         return [
                             id,
