@@ -725,6 +725,13 @@ app.get('/assets/*', (req, res) => {
         return res.status(404).end();
     }
 
+    if (file.startsWith(CONFIG_DIR + path.sep)) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        return sendAsset(res, file);
+    }
+
     const stat = fs.statSync(file);
     const etag = buildEtag(stat);
 
