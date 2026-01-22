@@ -100,6 +100,15 @@ function sessionMiddleware(req, res, next) {
 
     next();
 }
+function withVersion(image, absPath) {
+    if (!image || !absPath || !fs.existsSync(absPath)) return image;
+
+    const stat = fs.statSync(absPath);
+    return {
+        ...image,
+        v: stat.mtimeMs
+    };
+}
 
 app.use(sessionMiddleware);
 
@@ -587,13 +596,14 @@ app.get("/admin/api/services", requireAdmin, (req, res) => {
         sections: data.sections.map(section => {
 
             const card = resolveSectionCardImage(section);
+            const cardAbsPath = path.join(CONFIG_DIR, 'assets/cards/sections', card.resolvedFile);
             const appDefault = resolveAppSectionCardImage(section);
 
             const background = resolveSectionBackgroundImage(section);
 
             return {
                 ...section,
-                cardImage: card,
+                cardImage: withVersion(card, cardAbsPath),
                 cardImageDefault: appDefault.src,
                 backgroundImage: {
                     ...background,
