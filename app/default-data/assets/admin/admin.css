@@ -444,9 +444,30 @@ button.primary:disabled {
     box-shadow: 0 6px 20px rgba(0,0,0,.25);
 }
 #save-status {
-    font-size: 13px;
+    font-size: 0.8em;
     opacity: 0.8;
     white-space: nowrap;
+    background: rgba(0,0,0, 0.85);
+    color: #fff;
+    padding: 7px 14px;
+    border-radius: 13px;
+    z-index: -1;
+    font-style: italic;
+    position: absolute;
+    margin-top: 0;
+    pointer-events: none;
+
+    transition:
+            opacity 250ms ease,
+            margin-top 250ms ease;
+}
+#save-status.is-visible {
+    opacity: 0.8;
+    margin-top: -86px;
+}
+#save-status.is-fading {
+    opacity: 0;
+    transition: opacity 750ms ease;
 }
 .add-section-full {
     width: 100%;

@@ -4,6 +4,8 @@ let dragState = null;
 let uiState = {
     collapsedSections: new Set()
 };
+let saveStatusTimer = null;
+let saveStatusFadeTimer = null;
 
 const editor   = document.getElementById("services-editor");
 const indicator = document.getElementById("drop-indicator");
@@ -48,6 +50,30 @@ function applyImagePreview(previewEl, image) {
     }
 }
 
+function showSaveStatus(text) {
+    const el = document.getElementById("save-status");
+    if (!el) return;
+
+    el.textContent = text;
+
+    clearTimeout(saveStatusTimer);
+    clearTimeout(saveStatusFadeTimer);
+
+    el.classList.remove("is-visible", "is-fading");
+
+    void el.offsetWidth;
+
+    el.classList.add("is-visible");
+
+    saveStatusTimer = setTimeout(() => {
+        el.classList.add("is-fading");
+
+        saveStatusFadeTimer = setTimeout(() => {
+            el.classList.remove("is-visible", "is-fading");
+        }, 750);
+
+    }, 5000);
+}
 
 
 function isCustom(image) {
@@ -572,10 +598,11 @@ function bindSaveButton() {
 
             if (!res.ok) throw new Error();
 
-            status.textContent = label.textContent = I18N.saveSaved;
+            showSaveStatus(I18N.saveSaved);
             clearDirty();
         } catch {
             status.textContent = I18N.saveError;
+            showSaveStatus(I18N.saveSaved);
         } finally {
             spinner.classList.add("hidden");
             label.textContent = I18N.saveLabel;
