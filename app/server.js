@@ -290,25 +290,17 @@ function cleanupDeletedEntityImages({
     }
 }
 
-function commitImage({
-                         image,
-                         uploadDir,
-                         targetDir,
-                         targetBaseName
-                     }) {
-    if (!image || image.source === 'default') {
-        deleteUserImage(targetDir, targetBaseName);
-        return;
-    }
+function commitImage({ image, uploadDir, targetDir, targetBaseName }) {
 
-    if (!image.uploadId) {
+    if (!image || !image.uploadId) {
+        deleteUserImage(targetDir, targetBaseName);
         return;
     }
 
     const tmpFile = findTmpUpload(uploadDir, image.uploadId);
     if (!tmpFile) return;
 
-    fs.mkdirSync(targetDir, {recursive: true});
+    fs.mkdirSync(targetDir, { recursive: true });
 
     deleteUserImage(targetDir, targetBaseName);
 
@@ -318,8 +310,10 @@ function commitImage({
 
     fs.copyFileSync(src, target);
     fs.unlinkSync(src);
+
     return target;
 }
+
 
 
 app.get("/favicon.ico", (req, res) => {
