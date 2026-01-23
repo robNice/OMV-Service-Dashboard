@@ -22,12 +22,10 @@ function getServiceCardImages() {
 
     const map = new Map();
 
-    // App-Images zuerst (Default)
     for (const img of appImages) {
         map.set(img, img);
     }
 
-    // User-Images überschreiben ggf. gleiche Namen
     for (const img of userImages) {
         map.set(img, img);
     }
