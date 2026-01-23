@@ -21,7 +21,7 @@ function applyImagePreview(previewEl, image) {
     const img = previewEl.querySelector("img");
     const status = previewEl.querySelector(".image-status");
 
-    if (!image) {
+    if (!image || image._delete === true) {
         if (img && img.dataset.defaultimg) {
             img.src = img.dataset.defaultimg;
             img.title = '';
