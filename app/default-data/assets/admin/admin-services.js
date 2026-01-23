@@ -386,7 +386,7 @@ editor.addEventListener("click", e => {
         }
 
         case "reset-section-card": {
-            state.sections[sectionIndex].cardImage = null;
+            state.sections[sectionIndex].cardImage = { _delete: true }
             markDirty();
             render();
             break;
@@ -394,7 +394,7 @@ editor.addEventListener("click", e => {
 
 
         case "reset-section-bg": {
-            state.sections[sectionIndex].backgroundImage = null;
+            state.sections[sectionIndex].backgroundImage = { _delete: true }
             markDirty();
             render();
             break;
@@ -402,7 +402,7 @@ editor.addEventListener("click", e => {
 
         case "reset-service-card": {
             const serviceId = serviceEl.dataset.serviceId;
-            state.sections[sectionIndex].services[serviceId].cardImage = null;
+            state.sections[sectionIndex].services[serviceId].cardImage = { _delete: true };
             markDirty();
             render();
             break;
