@@ -21,34 +21,42 @@ function applyImagePreview(previewEl, image) {
     const img = previewEl.querySelector("img");
     const status = previewEl.querySelector(".image-status");
 
+    let effectiveImage = image;
+
+    // 🔴 Delete oder kein Image → Default erzwingen
     if (!image || image._delete === true) {
         if (img && img.dataset.defaultimg) {
             img.src = img.dataset.defaultimg;
             img.title = '';
         }
-        if (status) {
-            status.textContent = '';
-            status.removeAttribute('data-source');
+
+        // 👇 WICHTIG: image NICHT returnen, sondern normalisieren
+        effectiveImage = image && image.source
+            ? image
+            : { source: 'default' };
+    } else {
+        if (img && image.src) {
+            const v = image.v ? `?v=${image.v}` : '';
+            img.src = image.src + v;
+            img.title = image.resolvedFile || '';
         }
-        return;
     }
 
-    if (img && image.src) {
-        const v = image.v ? `?v=${image.v}` : '';
-        img.src = image.src + v;
-        img.title = image.resolvedFile || '';
-    }
-
+    // 🏷️ Badge immer auswerten
     if (status) {
         const LABELS = {
             explicit: 'custom',
-            id: 'auto',
-            default: 'default'
+            id:       'auto',
+            default:  'default'
         };
-        status.textContent = LABELS[image.source] || image.source;
-        status.dataset.source = image.source;
+
+        const src = effectiveImage?.source;
+        status.textContent = LABELS[src] || src || '';
+        if (src) status.dataset.source = src;
+        else status.removeAttribute('data-source');
     }
 }
+
 
 function showSaveStatus(text) {
     const el = document.getElementById("save-status");
