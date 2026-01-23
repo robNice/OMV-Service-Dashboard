@@ -1,22 +1,26 @@
 const fs = require('fs');
 const path = require('path');
-const {USER_ASSETS, APP_ASSETS} = require('./paths');
+const { USER_ASSETS, APP_ASSETS } = require('./paths');
+
 const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
 
-function fileExists(p) {
-    try {
-        return fs.existsSync(p);
-    } catch {
-        return false;
+function findImageById({ rootPath, baseDir, id }) {
+    for (const ext of IMAGE_EXTS) {
+        const file = `${id}.${ext}`;
+        const fullPath = path.join(rootPath, baseDir, file);
+
+        if (fs.existsSync(fullPath)) {
+            return { file };
+        }
     }
+    return null;
 }
 
 function resolveEntityImage({
                                 explicit,
                                 id,
                                 baseDir,
-                                defaultFile = '_default.png',
-                                withVersion = false
+                                defaultFile = '_default.png'
                             }) {
     if (explicit?.uploadId || explicit?.src) {
         return {
@@ -27,30 +31,34 @@ function resolveEntityImage({
     }
 
     if (id) {
-        for (const ext of IMAGE_EXTS) {
-            const file = `${id}.${ext}`;
-            const userPath = path.join(USER_ASSETS, baseDir, file);
-            if (fs.existsSync(userPath)) {
-                return {
-                    src: `/assets/${baseDir}/${file}`,
-                    resolvedFile: file,
-                    source: 'id',
-                    isCustom: true
-                };
-            }
+        const userMatch = findImageById({
+            rootPath: USER_ASSETS,
+            baseDir,
+            id
+        });
+
+        if (userMatch) {
+            return {
+                src: `/assets/${baseDir}/${userMatch.file}`,
+                resolvedFile: userMatch.file,
+                source: 'id',
+                isCustom: true
+            };
         }
 
-        for (const ext of IMAGE_EXTS) {
-            const file = `${id}.${ext}`;
-            const appPath = path.join(APP_ASSETS, baseDir, file);
-            if (fs.existsSync(appPath)) {
-                return {
-                    src: `/assets/${baseDir}/${file}`,
-                    resolvedFile: file,
-                    source: 'app',
-                    isCustom: false
-                };
-            }
+        const appMatch = findImageById({
+            rootPath: APP_ASSETS,
+            baseDir,
+            id
+        });
+
+        if (appMatch) {
+            return {
+                src: `/assets/${baseDir}/${appMatch.file}`,
+                resolvedFile: appMatch.file,
+                source: 'app',
+                isCustom: false
+            };
         }
     }
 
@@ -62,8 +70,25 @@ function resolveEntityImage({
     };
 }
 
+function resolveAppImage({ id, baseDir, defaultFile = '_default.png' }) {
+    const match = id
+        ? findImageById({ rootPath: APP_ASSETS, baseDir, id })
+        : null;
 
+    if (match) {
+        return {
+            src: `/assets/${baseDir}/${match.file}`,
+            resolvedFile: match.file,
+            source: 'app'
+        };
+    }
 
+    return {
+        src: `/assets/${baseDir}/${defaultFile}`,
+        resolvedFile: defaultFile,
+        source: 'app'
+    };
+}
 
 function resolveSectionCardImage(section) {
     return resolveEntityImage({
@@ -89,27 +114,6 @@ function resolveServiceCardImage(service) {
     });
 }
 
-function resolveAppImage({id, baseDir, defaultFile = '_default.png'}) {
-    for (const ext of IMAGE_EXTS) {
-        const file = `${id}.${ext}`;
-        const appPath = path.join(APP_ASSETS, baseDir, file);
-
-        if (fs.existsSync(appPath)) {
-            return {
-                src: `/assets/${baseDir}/${file}`,
-                resolvedFile: file,
-                source: 'app'
-            };
-        }
-    }
-
-    return {
-        src: `/assets/${baseDir}/${defaultFile}`,
-        resolvedFile: defaultFile,
-        source: 'app'
-    };
-}
-
 function resolveAppSectionCardImage(section) {
     return resolveAppImage({
         id: section.id,
@@ -131,7 +135,6 @@ function resolveAppServiceCardImage(service) {
     });
 }
 
-
 module.exports = {
     resolveSectionCardImage,
     resolveSectionBackgroundImage,
@@ -142,4 +145,3 @@ module.exports = {
     resolveAppSectionBackgroundImage,
     resolveAppServiceCardImage
 };
-

@@ -242,11 +242,6 @@ function renderSection(section, sectionIndex) {
         markDirty();
     });
 
-    // Object.entries(section.services).forEach(([id, svc], i) => {
-    //     servicesEl.appendChild(
-    //         renderService({ ...svc, id }, sectionIndex, i)
-    //     );
-    // });
 
     (section.serviceOrder || []).forEach((serviceId, i) => {
         const svc = section.services[serviceId];
