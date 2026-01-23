@@ -1,4 +1,4 @@
-let state = { sections: [] };
+let state = {sections: []};
 let dirty = false;
 let dragState = null;
 let uiState = {
@@ -7,7 +7,7 @@ let uiState = {
 let saveStatusTimer = null;
 let saveStatusFadeTimer = null;
 
-const editor   = document.getElementById("services-editor");
+const editor = document.getElementById("services-editor");
 const indicator = document.getElementById("drop-indicator");
 const I18N = (() => {
     const el = document.getElementById("i18n");
@@ -42,8 +42,8 @@ function applyImagePreview(previewEl, image) {
     if (status) {
         const LABELS = {
             explicit: 'custom',
-            id:       'auto',
-            default:  'default'
+            id: 'auto',
+            default: 'default'
         };
         status.textContent = LABELS[image.source] || image.source;
         status.dataset.source = image.source;
@@ -178,7 +178,7 @@ function renderSection(section, sectionIndex) {
     }
 
     const toggle = el.querySelector('[data-action="toggle-section"]');
-    const body   = el.querySelector('.section-services');
+    const body = el.querySelector('.section-services');
 
     if (uiState.collapsedSections.has(sectionIndex)) {
         body.classList.add("collapsed");
@@ -201,7 +201,7 @@ function renderSection(section, sectionIndex) {
 
     el.dataset.sectionIndex = sectionIndex;
 
-    const idInput    = el.querySelector('[data-field="section-id"]');
+    const idInput = el.querySelector('[data-field="section-id"]');
     const titleInput = el.querySelector('[data-field="section-title"]');
     const servicesEl = el.querySelector('.section-services');
 
@@ -257,7 +257,6 @@ function renderSection(section, sectionIndex) {
     });
 
 
-
     return el;
 }
 
@@ -272,7 +271,7 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
     el.dataset.serviceId = serviceId;
 
     const title = el.querySelector('[data-field="service-title"]');
-    const url   = el.querySelector('[data-field="service-url"]');
+    const url = el.querySelector('[data-field="service-url"]');
 
     const cardInput = el.querySelector('[data-upload="service-card"]');
     if (cardInput) {
@@ -299,7 +298,7 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
 
 
     title.value = service.title || "";
-    url.value   = service.url || "";
+    url.value = service.url || "";
 
     title.addEventListener("input", () => {
         service.title = title.value;
@@ -386,7 +385,10 @@ editor.addEventListener("click", e => {
         }
 
         case "reset-section-card": {
-            state.sections[sectionIndex].cardImage = { _delete: true }
+            state.sections[sectionIndex].cardImage = {
+                _delete: true,
+                source: 'default'
+            };
             markDirty();
             render();
             break;
@@ -394,7 +396,10 @@ editor.addEventListener("click", e => {
 
 
         case "reset-section-bg": {
-            state.sections[sectionIndex].backgroundImage = { _delete: true }
+            state.sections[sectionIndex].backgroundImage = {
+                _delete: true,
+                source: 'default'
+            };
             markDirty();
             render();
             break;
@@ -402,7 +407,10 @@ editor.addEventListener("click", e => {
 
         case "reset-service-card": {
             const serviceId = serviceEl.dataset.serviceId;
-            state.sections[sectionIndex].services[serviceId].cardImage = { _delete: true };
+            state.sections[sectionIndex].services[serviceId].cardImage = {
+                _delete: true,
+                source: 'default'
+            };
             markDirty();
             render();
             break;
@@ -527,13 +535,13 @@ function getServiceDropTarget(mouseY) {
             const items = [...services.querySelectorAll(".service:not(.dragging)")];
 
             if (!items.length) {
-                return { sectionIndex, serviceIndex: 0, y: r.top + 8 };
+                return {sectionIndex, serviceIndex: 0, y: r.top + 8};
             }
 
             for (let i = 0; i < items.length; i++) {
                 const ir = items[i].getBoundingClientRect();
                 if (mouseY < ir.top + ir.height / 2) {
-                    return { sectionIndex, serviceIndex: i, y: ir.top };
+                    return {sectionIndex, serviceIndex: i, y: ir.top};
                 }
             }
 
@@ -587,7 +595,7 @@ function bindSaveButton() {
 
             const res = await fetch("/admin/api/services", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(state)
             });
 
@@ -642,4 +650,5 @@ async function init() {
     await loadInitialData();
     bindSaveButton();
 }
+
 init();
