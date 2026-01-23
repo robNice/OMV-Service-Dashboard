@@ -290,17 +290,25 @@ function cleanupDeletedEntityImages({
     }
 }
 
-function commitImage({ image, uploadDir, targetDir, targetBaseName }) {
-
-    if (!image || !image.uploadId) {
+function commitImage({
+                         image,
+                         uploadDir,
+                         targetDir,
+                         targetBaseName
+                     }) {
+    if (image && image._delete === true) {
         deleteUserImage(targetDir, targetBaseName);
+        return;
+    }
+
+    if (!image.uploadId) {
         return;
     }
 
     const tmpFile = findTmpUpload(uploadDir, image.uploadId);
     if (!tmpFile) return;
 
-    fs.mkdirSync(targetDir, { recursive: true });
+    fs.mkdirSync(targetDir, {recursive: true});
 
     deleteUserImage(targetDir, targetBaseName);
 
@@ -310,10 +318,8 @@ function commitImage({ image, uploadDir, targetDir, targetBaseName }) {
 
     fs.copyFileSync(src, target);
     fs.unlinkSync(src);
-
     return target;
 }
-
 
 
 app.get("/favicon.ico", (req, res) => {
@@ -633,16 +639,16 @@ app.post(
         for (const section of normalized.sections) {
             for (const serviceId of section.serviceOrder || []) {
                 const svc = section.services[serviceId];
+                // if (!svc?.cardImage) continue;
 
                 commitImage({
-                    image: svc?.cardImage || null,
+                    image: svc.cardImage,
                     uploadDir: path.join(TMP_DIR, "cards/services"),
                     targetDir: path.join(CONFIG_DIR, "assets/cards/services"),
                     targetBaseName: serviceId
                 });
             }
         }
-
 
 
         for (const section of normalized.sections) {
