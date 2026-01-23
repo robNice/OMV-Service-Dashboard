@@ -633,16 +633,16 @@ app.post(
         for (const section of normalized.sections) {
             for (const serviceId of section.serviceOrder || []) {
                 const svc = section.services[serviceId];
-                if (!svc?.cardImage) continue;
 
                 commitImage({
-                    image: svc.cardImage,
+                    image: svc?.cardImage || null,
                     uploadDir: path.join(TMP_DIR, "cards/services"),
                     targetDir: path.join(CONFIG_DIR, "assets/cards/services"),
                     targetBaseName: serviceId
                 });
             }
         }
+
 
 
         for (const section of normalized.sections) {
