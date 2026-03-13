@@ -18,26 +18,90 @@
             </p>
         </div>
 
-        <nav>
-            <a href="/admin/logout">{{__.admin.logout}}</a>
+        <nav class="admin-nav" aria-label="Admin">
+            <div class="admin-nav-group">
+                <a href="/admin/services" class="admin-nav-link">
+                    <span class="admin-nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="4" width="8" height="7" rx="1.5"></rect>
+                            <rect x="13" y="4" width="8" height="7" rx="1.5"></rect>
+                            <rect x="3" y="13" width="8" height="7" rx="1.5"></rect>
+                            <rect x="13" y="13" width="8" height="7" rx="1.5"></rect>
+                        </svg>
+                    </span>
+                    <span>{{__.admin.services.title}}</span>
+                </a>
+                <a href="/admin/theme" class="admin-nav-link">
+                    <span class="admin-nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 3L20 7V12C20 16.5 16.9 20.74 12 22C7.1 20.74 4 16.5 4 12V7L12 3Z"></path>
+                            <path d="M9 12L11 14L15 10"></path>
+                        </svg>
+                    </span>
+                    <span>{{__.admin.theme.title}}</span>
+                </a>
+                <a href="/admin/setpassword" class="admin-nav-link">
+                    <span class="admin-nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                            <path d="M8 11V8C8 5.79 9.79 4 12 4C14.21 4 16 5.79 16 8V11"></path>
+                            <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"></circle>
+                        </svg>
+                    </span>
+                    <span>{{__.admin.password.title}}</span>
+                </a>
+            </div>
+            <div class="admin-nav-group admin-nav-group-end">
+                <a href="/admin/logout" class="admin-nav-link admin-nav-link-logout">
+                    <span class="admin-nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M10 5H6C4.9 5 4 5.9 4 7V17C4 18.1 4.9 19 6 19H10"></path>
+                            <path d="M14 16L20 12L14 8"></path>
+                            <path d="M20 12H9"></path>
+                        </svg>
+                    </span>
+                    <span>{{__.admin.logout}}</span>
+                </a>
+            </div>
         </nav>
     </header>
 
     <div class="admin-dashboard">
 
         <a href="/admin/services" class="admin-tile primary">
+            <span class="admin-tile-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="4" width="8" height="7" rx="1.5"></rect>
+                    <rect x="13" y="4" width="8" height="7" rx="1.5"></rect>
+                    <rect x="3" y="13" width="8" height="7" rx="1.5"></rect>
+                    <rect x="13" y="13" width="8" height="7" rx="1.5"></rect>
+                </svg>
+            </span>
             <h2>{{__.admin.services.title}}</h2>
             <p>{{__.admin.services.desc}}</p>
         </a>
 
-        <a href="/admin/setpassword" class="admin-tile">
-            <h2>{{__.admin.password.title}}</h2>
-            <p>{{__.admin.password.desc}}</p>
-        </a>
-
         <a href="/admin/theme" class="admin-tile">
+            <span class="admin-tile-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3L20 7V12C20 16.5 16.9 20.74 12 22C7.1 20.74 4 16.5 4 12V7L12 3Z"></path>
+                    <path d="M9 12L11 14L15 10"></path>
+                </svg>
+            </span>
             <h2>{{__.admin.theme.title}}</h2>
             <p>{{__.admin.theme.desc}}</p>
+        </a>
+
+        <a href="/admin/setpassword" class="admin-tile">
+            <span class="admin-tile-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                    <path d="M8 11V8C8 5.79 9.79 4 12 4C14.21 4 16 5.79 16 8V11"></path>
+                    <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"></circle>
+                </svg>
+            </span>
+            <h2>{{__.admin.password.title}}</h2>
+            <p>{{__.admin.password.desc}}</p>
         </a>
 
     </div>

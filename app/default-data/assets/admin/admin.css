@@ -181,6 +181,28 @@ body {
     transition: transform .15s ease, box-shadow .15s ease, border-color .15s;
 }
 
+.admin-tile-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 1rem;
+    border-radius: 0.9rem;
+    background: rgba(37, 99, 235, 0.14);
+    border: 1px solid rgba(96, 165, 250, 0.24);
+    color: #93c5fd;
+}
+
+.admin-tile-icon svg {
+    width: 1.35rem;
+    height: 1.35rem;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
 .admin-tile h2 {
     margin: 0 0 0.5rem 0;
     font-size: 1.05rem;
@@ -210,7 +232,8 @@ body {
 header.admin-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 1.25rem;
     margin-bottom: 2rem;
 }
 
@@ -219,13 +242,79 @@ header.admin-header h1 {
     font-size: 1.25rem;
 }
 
-header.admin-header a {
-    color: #60a5fa;
-    text-decoration: none;
+.admin-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2.5rem;
+    flex-wrap: wrap;
 }
 
-header.admin-header a:hover {
-    text-decoration: underline;
+.admin-nav-group {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.admin-nav-group-end {
+    margin-left: auto;
+}
+
+.admin-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #cbd5e1;
+    background: rgba(15, 23, 42, 0.48);
+    border: 1px solid rgba(51, 65, 85, 0.9);
+    transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
+}
+
+.admin-nav-link:hover {
+    color: #eff6ff;
+    background: rgba(30, 41, 59, 0.9);
+    border-color: #475569;
+    transform: translateY(-1px);
+}
+
+.admin-nav-link-current {
+    color: #eff6ff;
+    background: rgba(37, 99, 235, 0.14);
+    border-color: rgba(96, 165, 250, 0.45);
+}
+
+.admin-nav-link-logout {
+    color: #fca5a5;
+    border-color: rgba(127, 29, 29, 0.72);
+    background: rgba(69, 10, 10, 0.3);
+}
+
+.admin-nav-link-logout:hover {
+    color: #fee2e2;
+    background: rgba(127, 29, 29, 0.46);
+    border-color: rgba(248, 113, 113, 0.45);
+}
+
+.admin-nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    color: inherit;
+}
+
+.admin-nav-icon svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .section {
@@ -531,6 +620,21 @@ button.primary:disabled {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+@media (max-width: 860px) {
+    header.admin-header {
+        flex-direction: column;
+    }
+
+    .admin-nav {
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .admin-nav-group-end {
+        margin-left: 0;
+    }
 }
 .image-badge {
     display: inline-block;
