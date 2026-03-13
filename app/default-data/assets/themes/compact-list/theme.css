@@ -32,7 +32,7 @@ body[data-theme="compact-list"] .page-header h1 {
 
 body[data-theme="compact-list"] .section-nav {
     flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 0.65rem;
     max-width: none;
     overflow-x: auto;
@@ -107,6 +107,7 @@ body[data-theme="compact-list"] .service-title {
     }
 
     body[data-theme="compact-list"] .section-nav {
+        justify-content: flex-start;
         margin: 0 auto 1rem;
     }
 

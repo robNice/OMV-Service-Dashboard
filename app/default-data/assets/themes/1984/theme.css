@@ -70,7 +70,7 @@ body[data-theme="1984"] .page-header h1 {
 }
 
 body[data-theme="1984"] .section-nav {
-    justify-content: flex-start;
+    justify-content: center;
     gap: 0.65rem;
     padding: 0.05rem 0 0;
     overflow-x: auto;
@@ -78,6 +78,7 @@ body[data-theme="1984"] .section-nav {
 }
 
 body[data-theme="1984"] .section-nav-item {
+    position: relative;
     flex: 0 0 88px;
     height: 58px;
     border: 2px solid rgba(110, 225, 255, 0.35);
@@ -101,6 +102,18 @@ body[data-theme="1984"] .section-nav-item.active {
         0 0 16px rgba(255, 242, 122, 0.18);
 }
 
+body[data-theme="1984"] .section-nav-item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.08), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.06)),
+        repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0 1px, rgba(255, 255, 255, 0.01) 1px 2px, transparent 2px 4px);
+    mix-blend-mode: screen;
+    opacity: 0.45;
+}
+
 body[data-theme="1984"] .service {
     width: 300px;
     background:
@@ -117,6 +130,25 @@ body[data-theme="1984"] .service {
         100% calc(100% - 14px), calc(100% - 14px) calc(100% - 14px), calc(100% - 14px) 100%,
         14px 100%, 14px calc(100% - 14px), 0 calc(100% - 14px)
     );
+}
+
+body[data-theme="1984"] .service a {
+    position: relative;
+}
+
+body[data-theme="1984"] .service a::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    pointer-events: none;
+    background:
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.08), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.06)),
+        repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.075) 0 1px, rgba(255, 255, 255, 0.015) 1px 2px, transparent 2px 4px);
+    mix-blend-mode: screen;
+    opacity: 0.42;
 }
 
 body[data-theme="1984"] .service:hover {
@@ -141,5 +173,13 @@ body[data-theme="1984"] .service-title {
     body[data-theme="1984"] .section-nav-item {
         flex-basis: 72px;
         height: 48px;
+    }
+
+    body[data-theme="1984"] .section-nav {
+        justify-content: flex-start;
+    }
+
+    body[data-theme="1984"] .service a::after {
+        height: 180px;
     }
 }
