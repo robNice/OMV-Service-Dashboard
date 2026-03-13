@@ -63,11 +63,10 @@
 #info-drawer .panel {
     position: fixed;
     top: calc(-1 * var(--drawer-h));
-    left: 0;
-    right: 0;
+    left: 50%;
     height: var(--drawer-h);
     width: var(--drawer-w);
-    margin: 0 auto;
+    transform: translateX(-50%);
     background:
         linear-gradient(180deg, rgba(62, 255, 104, 0.04), transparent 22%),
         repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.05) 0 1px, transparent 1px 3px),
