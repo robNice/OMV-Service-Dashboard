@@ -20,7 +20,8 @@
             for (let index = 0; index < 18; index += 1) {
                 const flower = document.createElement('span');
                 const palette = colors[index % colors.length];
-                const size = 22 + Math.round(Math.random() * 34);
+                const size = 18 + Math.round(Math.random() * 26);
+                const petals = 5 + (index % 2);
                 flower.className = 'flower-rain__flower';
                 flower.style.setProperty('--flower-size', `${size}px`);
                 flower.style.setProperty('--flower-x', `${Math.round(Math.random() * 100)}vw`);
@@ -34,6 +35,25 @@
                 flower.style.setProperty('--flower-petal-alt', palette.alt);
                 flower.style.setProperty('--flower-center', palette.center);
                 flower.style.setProperty('--flower-tilt', `${-25 + Math.round(Math.random() * 50)}deg`);
+                flower.style.setProperty('--petal-count', `${petals}`);
+
+                for (let petalIndex = 0; petalIndex < petals; petalIndex += 1) {
+                    const petal = document.createElement('span');
+                    petal.className = 'flower-rain__petal';
+                    petal.style.setProperty('--petal-rotate', `${(360 / petals) * petalIndex}deg`);
+                    petal.style.setProperty('--petal-color', petalIndex % 3 === 0 ? palette.alt : palette.petal);
+                    flower.appendChild(petal);
+                }
+
+                const center = document.createElement('span');
+                center.className = 'flower-rain__center';
+                flower.appendChild(center);
+
+                if (Math.random() > 0.35) {
+                    const leaf = document.createElement('span');
+                    leaf.className = 'flower-rain__leaf';
+                    flower.appendChild(leaf);
+                }
                 rain.appendChild(flower);
             }
 

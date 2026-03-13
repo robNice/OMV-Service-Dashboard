@@ -156,8 +156,8 @@
 }
 
 #info-drawer .tab {
-    top: 84px;
-    right: -30px;
+    top: 91px;
+    right: -19px;
     z-index: 3;
     background:
         linear-gradient(135deg, rgba(255, 216, 75, 0.98), rgba(243, 123, 52, 0.98) 48%, rgba(245, 86, 142, 0.92));
