@@ -60,10 +60,6 @@ body[data-theme="hacker"] .page-header h1 {
     font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
 }
 
-body[data-theme="hacker"] .page-header > a::before {
-    content: "> ";
-}
-
 body[data-theme="hacker"] .page-header h1 {
     text-align: left;
     margin-bottom: 0.85rem;
@@ -94,18 +90,6 @@ body[data-theme="hacker"] .section-nav-item {
 }
 
 body[data-theme="hacker"] .section-nav-item::before {
-    content: ">";
-    position: absolute;
-    top: 4px;
-    left: 6px;
-    z-index: 2;
-    color: rgba(154, 255, 169, 0.88);
-    font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
-    font-size: 0.8rem;
-    line-height: 1;
-}
-
-body[data-theme="hacker"] .section-nav-item::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -181,6 +165,11 @@ body[data-theme="hacker"] .service-title {
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+}
+
+body[data-theme="hacker"] .service-title::before {
+    content: "> ";
+    margin-right: 0.25rem;
 }
 
 @keyframes hacker-cursor {

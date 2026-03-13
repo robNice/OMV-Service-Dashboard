@@ -65,13 +65,16 @@ body[data-theme="hacker"] #info-drawer .section h3 {
 
 body[data-theme="hacker"] #info-drawer .tab {
     background: #031005;
-    color: #96ffa4;
+    color: transparent;
     border-color: rgba(89, 255, 129, 0.22);
     border-radius: 0;
+    font-size: 0;
 }
 
 body[data-theme="hacker"] #info-drawer .tab::before {
-    content: "> ";
+    content: "root:/info";
+    color: #96ffa4;
+    font-size: 0.74rem;
 }
 
 body[data-theme="hacker"] #info-drawer .kv {
