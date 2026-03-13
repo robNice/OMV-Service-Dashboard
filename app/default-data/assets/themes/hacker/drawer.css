@@ -58,6 +58,12 @@
     opacity: 0.98;
     pointer-events: none;
     overflow: visible;
+    transform: none;
+    transition: none;
+}
+
+#info-drawer.open {
+    transform: none;
 }
 
 #info-drawer .panel {
