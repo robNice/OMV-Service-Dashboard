@@ -33,6 +33,7 @@
                 flower.style.setProperty('--flower-petal', palette.petal);
                 flower.style.setProperty('--flower-petal-alt', palette.alt);
                 flower.style.setProperty('--flower-center', palette.center);
+                flower.style.setProperty('--flower-tilt', `${-25 + Math.round(Math.random() * 50)}deg`);
                 rain.appendChild(flower);
             }
 

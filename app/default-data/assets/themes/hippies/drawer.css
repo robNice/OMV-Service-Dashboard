@@ -44,7 +44,7 @@
 
 #info-drawer .panel {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     border-top-right-radius: 40px;
     border-bottom-right-radius: 40px;
 }
@@ -143,6 +143,8 @@
 
 #info-drawer .tab {
     top: 84px;
+    right: -30px;
+    z-index: 3;
     background:
         linear-gradient(135deg, rgba(255, 216, 75, 0.98), rgba(243, 123, 52, 0.98) 48%, rgba(245, 86, 142, 0.92));
     color: #fff8eb;
@@ -151,6 +153,7 @@
     padding: .6rem 1rem;
     letter-spacing: .22em;
     box-shadow: 0 12px 24px rgba(103, 42, 28, 0.22);
+    text-shadow: 0 1px 4px rgba(103, 42, 28, 0.22);
 }
 
 #info-drawer .tab:hover {

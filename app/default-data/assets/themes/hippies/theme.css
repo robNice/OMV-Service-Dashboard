@@ -98,11 +98,11 @@ body::after {
 }
 
 .page-header > .back-link::before {
-    content: "o ";
+    content: "\2190 ";
 }
 
 .page-header h1 {
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
     font-family: "Segoe Print", "Bradley Hand", "OutfitLocal", cursive;
     font-size: clamp(2.2rem, 4.7vw, 3.8rem);
     line-height: 1;
@@ -123,6 +123,11 @@ body::after {
     box-shadow:
         0 0 0 3px rgba(243, 123, 52, 0.18),
         0 12px 24px rgba(104, 43, 28, 0.22);
+    transition:
+        transform .55s cubic-bezier(.22, 1, .36, 1),
+        box-shadow .55s cubic-bezier(.22, 1, .36, 1),
+        opacity .35s ease,
+        border-color .4s ease;
 }
 
 .section-nav-item:nth-child(4n + 1) {
@@ -142,7 +147,7 @@ body::after {
 }
 
 .section-nav-item:hover {
-    transform: translateY(-3px) scale(1.03);
+    transform: translateY(-3px) scale(1.03) rotate(0deg);
 }
 
 .section-nav-item.active {
@@ -168,6 +173,10 @@ body::after {
     box-shadow:
         0 0 0 5px rgba(243, 123, 52, 0.12),
         var(--hippie-shadow);
+    transition:
+        transform .6s cubic-bezier(.22, 1, .36, 1),
+        box-shadow .6s cubic-bezier(.22, 1, .36, 1),
+        border-color .35s ease;
 }
 
 .service::before {
@@ -191,6 +200,9 @@ body::after {
 
 .service:hover {
     transform: translateY(-6px) rotate(-1deg);
+    box-shadow:
+        0 0 0 5px rgba(243, 123, 52, 0.16),
+        0 28px 50px rgba(103, 42, 28, 0.24);
 }
 
 .service a {
@@ -246,32 +258,32 @@ body::after {
 
 .flower-rain__flower::before {
     background:
-        radial-gradient(circle, var(--flower-center, #f5568e) 0 22%, transparent 23%),
-        radial-gradient(circle at 50% 6%, var(--flower-petal, #ffd84b) 0 18%, transparent 19%),
-        radial-gradient(circle at 50% 94%, var(--flower-petal, #ffd84b) 0 18%, transparent 19%),
-        radial-gradient(circle at 6% 50%, var(--flower-petal, #ffd84b) 0 18%, transparent 19%),
-        radial-gradient(circle at 94% 50%, var(--flower-petal, #ffd84b) 0 18%, transparent 19%),
-        radial-gradient(circle at 24% 24%, var(--flower-petal-alt, #5ebf63) 0 14%, transparent 15%),
-        radial-gradient(circle at 76% 24%, var(--flower-petal-alt, #5ebf63) 0 14%, transparent 15%),
-        radial-gradient(circle at 24% 76%, var(--flower-petal-alt, #5ebf63) 0 14%, transparent 15%),
-        radial-gradient(circle at 76% 76%, var(--flower-petal-alt, #5ebf63) 0 14%, transparent 15%);
+        radial-gradient(circle at 50% 50%, var(--flower-center, #f5568e) 0 20%, transparent 21%),
+        radial-gradient(ellipse 25% 17% at 50% 14%, var(--flower-petal, #ffd84b) 0 98%, transparent 100%),
+        radial-gradient(ellipse 25% 17% at 81% 31%, var(--flower-petal, #ffd84b) 0 98%, transparent 100%),
+        radial-gradient(ellipse 25% 17% at 81% 69%, var(--flower-petal-alt, #5ebf63) 0 98%, transparent 100%),
+        radial-gradient(ellipse 25% 17% at 50% 86%, var(--flower-petal, #ffd84b) 0 98%, transparent 100%),
+        radial-gradient(ellipse 25% 17% at 19% 69%, var(--flower-petal, #ffd84b) 0 98%, transparent 100%),
+        radial-gradient(ellipse 25% 17% at 19% 31%, var(--flower-petal-alt, #5ebf63) 0 98%, transparent 100%);
     filter: drop-shadow(0 6px 10px rgba(103, 42, 28, 0.12));
 }
 
 .flower-rain__flower::after {
-    inset: 34% 34% auto auto;
-    width: 28%;
-    height: 28%;
-    background: rgba(255, 255, 255, 0.26);
-    opacity: 0.6;
+    inset: 40% auto auto 44%;
+    width: 10%;
+    height: 34%;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(94, 191, 99, 0.85), rgba(27, 167, 160, 0.2));
+    transform: rotate(14deg);
+    opacity: 0.8;
 }
 
 @keyframes hippie-flower-fall {
     0% {
-        transform: translate3d(var(--flower-x, 0vw), -14vh, 0) rotate(0deg);
+        transform: translate3d(var(--flower-x, 0vw), -14vh, 0) rotate(var(--flower-tilt, 0deg));
     }
     100% {
-        transform: translate3d(calc(var(--flower-x, 0vw) + var(--flower-drift, 6vw)), 116vh, 0) rotate(360deg);
+        transform: translate3d(calc(var(--flower-x, 0vw) + var(--flower-drift, 6vw)), 116vh, 0) rotate(calc(360deg + var(--flower-tilt, 0deg)));
     }
 }
 
@@ -296,7 +308,7 @@ body::after {
 
     .page-header h1 {
         font-size: 2rem;
-        margin-bottom: 0.85rem;
+        margin-bottom: 2.2rem;
     }
 
     .section-nav {
