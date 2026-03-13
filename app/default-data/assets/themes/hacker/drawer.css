@@ -118,6 +118,14 @@
     letter-spacing: 0.05em;
 }
 
+#hacker-drawer-tab-host {
+    position: fixed;
+    inset: 0;
+    z-index: 1205;
+    pointer-events: none;
+}
+
+#hacker-drawer-tab-host .tab,
 #info-drawer .tab {
     position: fixed;
     top: .75rem;
@@ -138,7 +146,12 @@
     pointer-events: auto;
 }
 
-#info-drawer.open .tab {
+#hacker-drawer-tab-host .tab {
+    position: fixed;
+}
+
+#info-drawer.open .tab,
+#hacker-drawer-tab-host .tab.drawer-open {
     position: absolute;
     top: auto;
     bottom: 0;
@@ -243,6 +256,7 @@
         max-width: calc(100vw - .8rem);
     }
 
+    #hacker-drawer-tab-host .tab,
     #info-drawer .tab {
         right: .6rem;
         padding: .46rem .75rem;
