@@ -1,4 +1,4 @@
-body[data-theme="hacker"] {
+:root {
     --drawer-bg: rgba(1, 8, 2, 0.96);
     --drawer-border: rgba(89, 255, 129, 0.2);
     --chip-bg: rgba(42, 142, 59, 0.16);
@@ -25,7 +25,7 @@ body[data-theme="hacker"] {
     --status-down-text: #b7f58c;
 }
 
-body[data-theme="hacker"] #info-drawer .panel {
+#info-drawer .panel {
     background:
         linear-gradient(180deg, rgba(62, 255, 104, 0.04), transparent 22%),
         repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.05) 0 1px, transparent 1px 3px),
@@ -36,26 +36,26 @@ body[data-theme="hacker"] #info-drawer .panel {
         0 0 28px rgba(17, 78, 29, 0.16);
 }
 
-body[data-theme="hacker"] #info-drawer header,
-body[data-theme="hacker"] #info-drawer footer {
+#info-drawer header,
+#info-drawer footer {
     background: rgba(2, 18, 4, 0.9);
 }
 
-body[data-theme="hacker"] #info-drawer .section h3,
-body[data-theme="hacker"] #info-drawer .tab,
-body[data-theme="hacker"] #info-drawer .chip,
-body[data-theme="hacker"] #info-drawer .kv,
-body[data-theme="hacker"] #info-drawer footer {
+#info-drawer .section h3,
+#info-drawer .tab,
+#info-drawer .chip,
+#info-drawer .kv,
+#info-drawer footer {
     font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
 }
 
-body[data-theme="hacker"] #info-drawer .section > h3 {
+#info-drawer .section > h3 {
     display: inline-flex;
     align-items: center;
     gap: 0;
 }
 
-body[data-theme="hacker"] #info-drawer .section h3::before {
+#info-drawer .section h3::before {
     content: "-= ";
     inline-size: auto;
     block-size: auto;
@@ -66,17 +66,17 @@ body[data-theme="hacker"] #info-drawer .section h3::before {
     color: var(--muted);
 }
 
-body[data-theme="hacker"] #info-drawer .section h3::after {
+#info-drawer .section h3::after {
     content: " =-";
     color: var(--muted);
 }
 
-body[data-theme="hacker"] #info-drawer .section h3 {
+#info-drawer .section h3 {
     color: #96ffa4;
     letter-spacing: 0.05em;
 }
 
-body[data-theme="hacker"] #info-drawer .tab {
+#info-drawer .tab {
     background: #031005;
     color: transparent;
     border-color: rgba(89, 255, 129, 0.22);
@@ -84,27 +84,27 @@ body[data-theme="hacker"] #info-drawer .tab {
     font-size: 0;
 }
 
-body[data-theme="hacker"] #info-drawer .tab::before {
+#info-drawer .tab::before {
     content: "~/info";
     color: #96ffa4;
     font-size: 0.74rem;
 }
 
-body[data-theme="hacker"] #info-drawer .kv {
+#info-drawer .kv {
     border-left: 1px solid transparent;
     border-radius: 0;
 }
 
-body[data-theme="hacker"] #info-drawer .kv:hover {
+#info-drawer .kv:hover {
     background: rgba(65, 255, 106, 0.05);
     border-left-color: rgba(89, 255, 129, 0.36);
 }
 
-body[data-theme="hacker"] #info-drawer hr {
+#info-drawer hr {
     border-bottom-color: rgba(89, 255, 129, 0.18);
 }
 
-body[data-theme="hacker"] #info-drawer .bar {
+#info-drawer .bar {
     background: rgba(42, 142, 59, 0.16);
     border-radius: 0;
 }

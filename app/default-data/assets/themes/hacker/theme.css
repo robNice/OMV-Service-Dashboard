@@ -14,22 +14,22 @@
     font-display: swap;
 }
 
-:root:has(body[data-theme="hacker"]) {
+:root {
     --bg-opacity: 0.34;
 }
 
-html:has(body[data-theme="hacker"])::before {
+html::before {
     filter: blur(1px) saturate(0.35) brightness(0.18) contrast(1.05);
     transform: scale(1.02);
 }
 
-html:has(body[data-theme="hacker"])::after {
+html::after {
     background:
         radial-gradient(1000px 600px at 50% 0%, rgba(0, 48, 0, 0.12), rgba(0, 0, 0, 0.7)),
         linear-gradient(180deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.82));
 }
 
-body[data-theme="hacker"] {
+body {
     --bg-color: #020603;
     --text-color: #8cff98;
     --tile-bg: rgba(2, 10, 3, 0.78);
@@ -37,13 +37,13 @@ body[data-theme="hacker"] {
     text-shadow: 0 0 6px rgba(82, 255, 115, 0.12);
 }
 
-body[data-theme="hacker"] .page-header,
-body[data-theme="hacker"] .grid {
+.page-header,
+.grid {
     position: relative;
     z-index: 1;
 }
 
-body[data-theme="hacker"] .page-header {
+.page-header {
     padding: 0.7rem 0.95rem 0.8rem;
     border: 1px solid rgba(79, 255, 121, 0.28);
     background:
@@ -54,17 +54,17 @@ body[data-theme="hacker"] .page-header {
         0 0 30px rgba(0, 255, 85, 0.05);
 }
 
-body[data-theme="hacker"] .page-header > a,
-body[data-theme="hacker"] .page-header h1 {
+.page-header > a,
+.page-header h1 {
     color: #96ffa4;
     font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
 }
 
-body[data-theme="hacker"] .page-header > .back-link::before {
+.page-header > .back-link::before {
     content: "<- ";
 }
 
-body[data-theme="hacker"] .page-header h1 {
+.page-header h1 {
     text-align: left;
     margin-bottom: 2rem;
     font-size: clamp(2rem, 4vw, 3rem);
@@ -73,18 +73,18 @@ body[data-theme="hacker"] .page-header h1 {
     margin-left: 1em;
 }
 
-body[data-theme="hacker"] .page-header h1::after {
+.page-header h1::after {
     content: "_";
     margin-left: 0.15em;
     animation: hacker-cursor 0.95s steps(1) infinite;
 }
 
-body[data-theme="hacker"] .section-nav {
+.section-nav {
     justify-content: right;
     gap: 0.65rem;
 }
 
-body[data-theme="hacker"] .section-nav-item {
+.section-nav-item {
     position: relative;
     width: 84px;
     height: 54px;
@@ -94,7 +94,7 @@ body[data-theme="hacker"] .section-nav-item {
     box-shadow: 0 0 0 1px rgba(34, 74, 39, 0.34) inset;
 }
 
-body[data-theme="hacker"] .section-nav-item::before {
+.section-nav-item::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -104,18 +104,18 @@ body[data-theme="hacker"] .section-nav-item::before {
         repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.06) 0 1px, transparent 1px 3px);
 }
 
-body[data-theme="hacker"] .section-nav-item.active {
+.section-nav-item.active {
     border-color: rgba(140, 255, 152, 0.72);
     box-shadow:
         0 0 0 1px rgba(122, 255, 145, 0.34) inset,
         0 0 14px rgba(84, 255, 120, 0.15);
 }
 
-body[data-theme="hacker"] .grid {
+.grid {
     gap: 1.1rem;
 }
 
-body[data-theme="hacker"] .service {
+.service {
     position: relative;
     background:
         linear-gradient(180deg, rgba(56, 255, 103, 0.04), rgba(0, 0, 0, 0)),
@@ -127,7 +127,7 @@ body[data-theme="hacker"] .service {
         0 0 20px rgba(13, 79, 27, 0.12);
 }
 
-body[data-theme="hacker"] .service::before {
+.service::before {
     content: "::";
     position: absolute;
     top: 10px;
@@ -139,12 +139,12 @@ body[data-theme="hacker"] .service::before {
     line-height: 1;
 }
 
-body[data-theme="hacker"] .service a {
+.service a {
     position: relative;
     padding-bottom: 0;
 }
 
-body[data-theme="hacker"] .service a::after {
+.service a::after {
     content: "";
     position: absolute;
     top: 0;
@@ -157,11 +157,11 @@ body[data-theme="hacker"] .service a::after {
         repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.06) 0 1px, transparent 1px 3px);
 }
 
-body[data-theme="hacker"] .service img {
+.service img {
     filter: grayscale(1) brightness(0.32) contrast(1.08);
 }
 
-body[data-theme="hacker"] .service-title {
+.service-title {
     justify-content: flex-start;
     text-align: left;
     padding: 0.95rem 1rem 1rem 2rem;
@@ -172,7 +172,7 @@ body[data-theme="hacker"] .service-title {
     letter-spacing: 0.02em;
 }
 
-body[data-theme="hacker"] .service-title::before {
+.service-title::before {
     content: "> ";
     margin-right: 0.25rem;
 }
@@ -187,21 +187,21 @@ body[data-theme="hacker"] .service-title::before {
 }
 
 @media (max-width: 640px) {
-    body[data-theme="hacker"] .page-header {
+    .page-header {
         padding: 0.55rem 0.75rem 0.65rem;
     }
 
-    body[data-theme="hacker"] .page-header h1 {
+    .page-header h1 {
         font-size: 1.75rem;
     }
 
-    body[data-theme="hacker"] .section-nav {
+    .section-nav {
         justify-content: flex-start;
         overflow-x: auto;
         flex-wrap: nowrap;
     }
 
-    body[data-theme="hacker"] .service-title {
+    .service-title {
         padding-left: 1.8rem;
         font-size: 0.95rem;
     }
