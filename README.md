@@ -25,6 +25,11 @@
   - [Desktop dashboard overview](#desktop-dashboard-overview)
   - [Desktop dashboard section](#desktop-dashboard-section)
   - [Desktop info drawer](#desktop-info-drawer)
+  - [Theme 1984](#theme-1984)
+  - [Theme Classic](#theme-classic)
+  - [Theme Compact List](#theme-compact-list)
+  - [Theme Hacker](#theme-hacker)
+  - [Theme Hippies](#theme-hippies)
 - [License](#license)
 
 ---
@@ -154,6 +159,7 @@ The `context` passed to `init()` contains:
 - `version`
 
 The technical details, folder structure, and inheritance behavior are documented in [`CONFIG_README.md`](./CONFIG_README.md).
+Theme previews can be found starting at [Theme 1984](#theme-1984) below.
 
 ---
 
@@ -274,6 +280,26 @@ This mode is currently not actively tested and mainly exists for completeness.
 ### Desktop info drawer
 
 ![Dashboard info drawer desktop](docs/screenshots/omvsd_info_drawer_desktop.png)
+
+### Theme 1984
+
+![Theme 1984](docs/screenshots/1984.png)
+
+### Theme Classic
+
+![Theme Classic](docs/screenshots/classic.png)
+
+### Theme Compact List
+
+![Theme Compact List](docs/screenshots/compact-list.png)
+
+### Theme Hacker
+
+![Theme Hacker](docs/screenshots/hacker.png)
+
+### Theme Hippies
+
+![Theme Hippies](docs/screenshots/hippies.png)
 
 ---
 
