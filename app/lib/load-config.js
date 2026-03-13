@@ -4,13 +4,31 @@ const { APP_DATA, CONFIG_DIR } = require('./paths');
 
 const CONFIG_FILE   = path.join(CONFIG_DIR, 'config.json');
 const FALLBACK_FILE = path.join(APP_DATA, 'config.json');
+const DEFAULT_THEME = 'classic';
+const ALLOWED_THEMES = new Set(['classic', 'compact-list']);
+
+function normalizeTheme(theme) {
+    if (typeof theme !== 'string') {
+        return DEFAULT_THEME;
+    }
+
+    const normalized = theme.trim().toLowerCase();
+    return ALLOWED_THEMES.has(normalized) ? normalized : DEFAULT_THEME;
+}
+
+function normalizeConfiguration(config) {
+    return {
+        ...config,
+        theme: normalizeTheme(config?.theme)
+    };
+}
 
 function loadConfiguration() {
     const fileToUse = fs.existsSync(CONFIG_FILE)
         ? CONFIG_FILE
         : FALLBACK_FILE;
 
-    return JSON.parse(fs.readFileSync(fileToUse, 'utf8'));
+    return normalizeConfiguration(JSON.parse(fs.readFileSync(fileToUse, 'utf8')));
 }
 
 /**
@@ -20,13 +38,15 @@ function loadConfiguration() {
  */
 function saveConfiguration(config) {
     fs.mkdirSync(CONFIG_DIR, { recursive: true });
+    const normalized = normalizeConfiguration(config);
 
     const tmp = CONFIG_FILE + '.tmp';
-    fs.writeFileSync(tmp, JSON.stringify(config, null, 2), 'utf8');
+    fs.writeFileSync(tmp, JSON.stringify(normalized, null, 2), 'utf8');
     fs.renameSync(tmp, CONFIG_FILE);
 }
 
 module.exports = {
     loadConfiguration,
-    saveConfiguration
+    saveConfiguration,
+    normalizeTheme
 };

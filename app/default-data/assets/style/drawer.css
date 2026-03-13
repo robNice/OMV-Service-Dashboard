@@ -176,3 +176,33 @@
         right: -19px;
     }
 }
+
+body[data-theme="compact-list"] {
+    --drawer-bg: rgba(241, 245, 249, 0.94);
+    --drawer-border: rgba(15, 23, 42, 0.08);
+    --chip-bg: rgba(148, 163, 184, 0.16);
+    --text: #17212b;
+    --muted: #516070;
+    --accent: #1f6feb;
+}
+
+body[data-theme="compact-list"] #info-drawer .panel {
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.18);
+}
+
+body[data-theme="compact-list"] #info-drawer hr {
+    border-bottom-color: rgba(15, 23, 42, 0.12);
+}
+
+body[data-theme="compact-list"] #info-drawer .kv:hover {
+    background: rgba(15, 23, 42, 0.04);
+}
+
+body[data-theme="compact-list"] #info-drawer .bar {
+    background: rgba(15, 23, 42, 0.08);
+}
+
+body[data-theme="compact-list"] #info-drawer .tab {
+    background: #f8fafc;
+    color: var(--text);
+}

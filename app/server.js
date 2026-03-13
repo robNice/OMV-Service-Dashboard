@@ -241,7 +241,7 @@ function renderSectionNavItem(section, isActive = false) {
  * @param cards
  * @returns {*}
  */
-function setTemplate(req, template, backlink, version, title, cards, sectionNav = "") {
+function setTemplate(req, template, backlink, version, title, cards, sectionNav = "", theme = "classic") {
     return translateTextI18n(
         template
             .replace(/{{BACKLINK}}/g, backlink)
@@ -249,6 +249,7 @@ function setTemplate(req, template, backlink, version, title, cards, sectionNav 
             .replace(/{{TITLE}}/g, title)
             .replace(/{{SECTION_NAME}}/g, title)
             .replace(/{{SECTION_NAV}}/g, sectionNav)
+            .replace(/{{THEME}}/g, theme)
             .replace(/{{SECTIONS_SERVICES}}/g, cards),
         {locale: req.getLocale()}
     );
@@ -817,7 +818,8 @@ app.get("/", (req, res) => {
         APP_VERSION,
         config.title,
         sections,
-        ''
+        '',
+        config.theme
     );
 
     res.send(html);
@@ -854,7 +856,8 @@ app.get("/section/:id", (req, res) => {
         APP_VERSION,
         config.title + ' - ' + section.title,
         services,
-        sectionNav
+        sectionNav,
+        config.theme
     );
     res.send(html);
 });
