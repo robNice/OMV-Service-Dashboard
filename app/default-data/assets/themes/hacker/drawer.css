@@ -1,6 +1,6 @@
 :root {
     --drawer-w: min(960px, calc(100vw - 3rem));
-    --drawer-h: min(72vh, 760px);
+    --drawer-h: 100vh;
     --drawer-transition: transform .22s steps(8, end), opacity .18s linear;
     --drawer-panel-backdrop: none;
     --drawer-header-bg: rgba(2, 18, 4, 0.9);
@@ -52,15 +52,17 @@
 
 #info-drawer {
     inset: 0 0 auto 0;
-    width: min(100%, calc(var(--drawer-w) + 2rem));
+    width: 100%;
     height: var(--drawer-h);
     margin: 0 auto;
-    transform: translateY(calc(-1 * (var(--drawer-h) - 3.3rem)));
+    transform: translateY(calc(-1 * var(--drawer-h)));
     opacity: 0.98;
+    pointer-events: none;
 }
 
 #info-drawer.open {
     transform: translateY(0);
+    pointer-events: auto;
 }
 
 #info-drawer .panel {
@@ -114,9 +116,10 @@
 }
 
 #info-drawer .tab {
-    top: auto;
-    bottom: -1px;
-    right: 1.1rem;
+    position: fixed;
+    top: .75rem;
+    bottom: auto;
+    right: 1rem;
     transform: none;
     background: #031005;
     color: transparent;
@@ -129,6 +132,13 @@
     box-shadow:
         0 0 0 1px rgba(24, 75, 34, 0.4) inset,
         0 0 16px rgba(17, 78, 29, 0.14);
+    pointer-events: auto;
+}
+
+#info-drawer.open .tab {
+    position: absolute;
+    top: auto;
+    bottom: 0;
 }
 
 #info-drawer .tab::before {
@@ -179,6 +189,10 @@
     text-transform: lowercase;
 }
 
+#info-drawer [data-close] {
+    display: none;
+}
+
 #info-drawer.hacker-booting .panel::after {
     content: "";
     position: absolute;
@@ -215,12 +229,12 @@
 @media (max-width: 720px) {
     :root {
         --drawer-w: calc(100vw - 1.2rem);
-        --drawer-h: min(78vh, 680px);
+        --drawer-h: 100vh;
     }
 
     #info-drawer {
         width: 100%;
-        transform: translateY(calc(-1 * (var(--drawer-h) - 3rem)));
+        transform: translateY(calc(-1 * var(--drawer-h)));
     }
 
     #info-drawer .panel {
