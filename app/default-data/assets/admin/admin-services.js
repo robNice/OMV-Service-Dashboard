@@ -58,11 +58,12 @@ function applyImagePreview(previewEl, image) {
 }
 
 
-function showSaveStatus(text) {
+function showSaveStatus(text, tone = "success") {
     const el = document.getElementById("save-status");
     if (!el) return;
 
     el.textContent = text;
+    el.dataset.tone = tone;
 
     clearTimeout(saveStatusTimer);
     clearTimeout(saveStatusFadeTimer);
@@ -609,11 +610,10 @@ function bindSaveButton() {
 
             if (!res.ok) throw new Error();
 
-            showSaveStatus(I18N.saveSaved);
+            showSaveStatus(I18N.saveSaved, "success");
             clearDirty();
         } catch {
-            status.textContent = I18N.saveError;
-            showSaveStatus(I18N.saveSaved);
+            showSaveStatus(I18N.saveError, "error");
         } finally {
             spinner.classList.add("hidden");
             label.textContent = I18N.saveLabel;

@@ -447,19 +447,46 @@ button.primary:disabled {
     font-size: 0.8em;
     opacity: 0;
     white-space: nowrap;
-    background: rgba(0,0,0, 0.85);
-    color: #fff;
+    background: rgba(2, 6, 23, 0.94);
+    color: #e5e7eb;
     padding: 7px 14px;
     border-radius: 13px;
     z-index: -1;
-    font-style: italic;
     position: absolute;
     margin-top: 0;
     pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 24px rgba(0,0,0,.28);
 
     transition:
             opacity 250ms ease,
             margin-top 250ms ease;
+}
+#save-status::before {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    flex: 0 0 18px;
+}
+#save-status[data-tone="success"]::before {
+    content: "\2713";
+    background: rgba(34, 197, 94, .16);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, .35);
+}
+#save-status[data-tone="error"]::before {
+    content: "!";
+    background: rgba(248, 113, 113, .16);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, .35);
 }
 #save-status.is-visible {
     opacity: 0.8;
