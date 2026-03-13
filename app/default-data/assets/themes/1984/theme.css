@@ -23,8 +23,7 @@ body[data-theme="1984"]::after {
 }
 
 body[data-theme="1984"] .page-header,
-body[data-theme="1984"] .grid,
-body[data-theme="1984"] #info-drawer {
+body[data-theme="1984"] .grid {
     position: relative;
     z-index: 1;
 }

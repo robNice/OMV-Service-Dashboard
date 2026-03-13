@@ -27,29 +27,84 @@ body[data-theme="1984"] {
 
 body[data-theme="1984"] #info-drawer .panel {
     background:
-        linear-gradient(180deg, rgba(94, 232, 255, 0.05), transparent 18%),
+        linear-gradient(180deg, rgba(94, 232, 255, 0.08), transparent 18%),
+        repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px),
         var(--drawer-bg);
+    border-right: 2px solid rgba(110, 225, 255, 0.2);
     box-shadow:
         0 0 0 1px rgba(255, 95, 193, 0.12) inset,
+        0 0 0 2px rgba(94, 232, 255, 0.08),
         0 16px 34px rgba(0, 0, 0, 0.38);
+    clip-path: polygon(
+        0 18px, 18px 18px, 18px 0,
+        100% 0, 100% 100%,
+        18px 100%, 18px calc(100% - 18px), 0 calc(100% - 18px)
+    );
+}
+
+body[data-theme="1984"] #info-drawer header,
+body[data-theme="1984"] #info-drawer footer {
+    background:
+        linear-gradient(90deg, rgba(94, 232, 255, 0.1), rgba(255, 95, 193, 0.08)),
+        rgba(7, 12, 38, 0.5);
+}
+
+body[data-theme="1984"] #info-drawer header {
+    border-bottom-color: rgba(110, 225, 255, 0.22);
+}
+
+body[data-theme="1984"] #info-drawer footer {
+    border-top-color: rgba(255, 95, 193, 0.2);
+}
+
+body[data-theme="1984"] #info-drawer .content {
+    padding: 1rem 1rem 1.1rem;
+}
+
+body[data-theme="1984"] #info-drawer .section h3 {
+    color: #8be9ff;
+    text-shadow: 1px 0 0 rgba(255, 95, 193, 0.3);
+    letter-spacing: 0.14em;
 }
 
 body[data-theme="1984"] #info-drawer .tab {
-    background: #111a4f;
+    background:
+        linear-gradient(90deg, rgba(94, 232, 255, 0.2), rgba(255, 95, 193, 0.18)),
+        #111a4f;
     border-color: rgba(110, 225, 255, 0.28);
     color: #d7e2ff;
     letter-spacing: 0.22em;
     text-shadow: 1px 0 0 rgba(255, 95, 193, 0.28);
+    border-radius: 0;
+    box-shadow:
+        0 0 0 1px rgba(255, 95, 193, 0.16) inset,
+        0 6px 20px rgba(0, 0, 0, 0.35);
+    clip-path: polygon(
+        0 8px, 8px 8px, 8px 0,
+        calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
+        100% 100%, 0 100%
+    );
 }
 
 body[data-theme="1984"] #info-drawer .chip {
     box-shadow: 0 0 0 1px rgba(110, 225, 255, 0.12) inset;
 }
 
+body[data-theme="1984"] #info-drawer .kv {
+    border: 1px solid transparent;
+    border-radius: 0;
+}
+
 body[data-theme="1984"] #info-drawer .kv:hover {
     background: rgba(94, 232, 255, 0.05);
+    border-color: rgba(110, 225, 255, 0.16);
 }
 
 body[data-theme="1984"] #info-drawer hr {
     border-bottom-color: rgba(110, 225, 255, 0.18);
+}
+
+body[data-theme="1984"] #info-drawer .bar {
+    background: rgba(110, 225, 255, 0.08);
+    border-radius: 0;
 }
