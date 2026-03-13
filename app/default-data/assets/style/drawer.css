@@ -97,6 +97,25 @@
 #info-drawer .content {
     overflow: auto;
     padding: .9rem 1rem 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, .38) transparent;
+}
+
+#info-drawer .content::-webkit-scrollbar {
+    width: 6px;
+}
+
+#info-drawer .content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#info-drawer .content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .38);
+    border-radius: 999px;
+}
+
+#info-drawer .content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, .52);
 }
 
 #info-drawer .section {
