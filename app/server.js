@@ -54,6 +54,7 @@ const {initI18n} = require('./lib/i18n-config');
 initI18n({app});
 const {translateTextI18n} = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
+const {listThemes, normalizeTheme} = require('./lib/theme-registry');
 const {loadConfiguration, saveConfiguration} = require('./lib/load-config');
 const config = loadConfiguration();
 (async () => {
@@ -252,6 +253,13 @@ function setTemplate(req, template, backlink, version, title, cards, sectionNav 
             .replace(/{{THEME}}/g, theme)
             .replace(/{{SECTIONS_SERVICES}}/g, cards),
         {locale: req.getLocale()}
+    );
+}
+
+function renderThemeAdminTemplate(req, template, theme) {
+    return renderAdminTemplate(
+        req,
+        template.replace(/{{THEME_ID}}/g, theme)
     );
 }
 
@@ -468,6 +476,18 @@ app.get("/admin/setpassword", requireAdmin, (req, res) => {
     res.send(html);
 });
 
+app.get("/admin/theme", requireAdmin, (req, res) => {
+    const tpl = fs.readFileSync(
+        "/app/templates/admin-theme.html",
+        "utf8"
+    );
+
+    const config = loadConfiguration();
+    const html = renderThemeAdminTemplate(req, tpl, normalizeTheme(config.theme));
+
+    res.send(html);
+});
+
 
 app.post("/admin/setpassword", requireAdmin, express.urlencoded({extended: false}), (req, res) => {
     const {password, passwordRepeat} = req.body;
@@ -499,6 +519,22 @@ app.get("/admin/api/service-card-images", requireAdmin, (req, res) => {
     res.json({
         images: getServiceCardImages()
     });
+});
+
+app.get("/admin/api/themes", requireAdmin, (req, res) => {
+    const config = loadConfiguration();
+    res.json({
+        currentTheme: normalizeTheme(config.theme),
+        themes: listThemes()
+    });
+});
+
+app.post("/admin/api/theme", requireAdmin, express.json(), (req, res) => {
+    const theme = normalizeTheme(req.body?.theme);
+    const config = loadConfiguration();
+    config.theme = theme;
+    saveConfiguration(config);
+    res.json({ ok: true, theme });
 });
 
 app.get("/admin/api/services", requireAdmin, (req, res) => {

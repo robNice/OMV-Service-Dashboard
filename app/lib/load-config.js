@@ -1,20 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const { APP_DATA, CONFIG_DIR } = require('./paths');
+const { DEFAULT_THEME, normalizeTheme } = require('./theme-registry');
 
 const CONFIG_FILE   = path.join(CONFIG_DIR, 'config.json');
 const FALLBACK_FILE = path.join(APP_DATA, 'config.json');
-const DEFAULT_THEME = 'classic';
-const ALLOWED_THEMES = new Set(['classic', 'compact-list']);
-
-function normalizeTheme(theme) {
-    if (typeof theme !== 'string') {
-        return DEFAULT_THEME;
-    }
-
-    const normalized = theme.trim().toLowerCase();
-    return ALLOWED_THEMES.has(normalized) ? normalized : DEFAULT_THEME;
-}
 
 function normalizeConfiguration(config) {
     return {

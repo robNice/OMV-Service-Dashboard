@@ -64,6 +64,107 @@ body {
     margin-top: 2.5rem;
 }
 
+.admin-panel {
+    background: linear-gradient(180deg, #020617, #020617cc);
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.admin-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.admin-panel-head h2 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.admin-panel-copy {
+    margin: 0.35rem 0 0;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.theme-card {
+    display: block;
+    cursor: pointer;
+}
+
+.theme-card input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.theme-card-body {
+    height: 100%;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.75);
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.theme-card:hover .theme-card-body {
+    transform: translateY(-2px);
+    border-color: #475569;
+}
+
+.theme-card input:checked + .theme-card-body {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.5), 0 10px 26px rgba(0,0,0,0.22);
+}
+
+.theme-card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.theme-card h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.theme-card p {
+    margin: 0.75rem 0 0;
+    color: #94a3b8;
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+.theme-id,
+.theme-version {
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+    color: #94a3b8;
+}
+
+.theme-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.25rem 0.6rem;
+    background: rgba(37, 99, 235, 0.16);
+    border: 1px solid rgba(96, 165, 250, 0.3);
+    color: #93c5fd;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
 .admin-tile {
     background: linear-gradient(180deg, #020617, #020617cc);
     border: 1px solid #1e293b;
@@ -335,6 +436,10 @@ h1 {
 .error {
     margin-top: 0.5rem;
     color: #f87171;
+}
+
+.hint.success {
+    color: #4ade80;
 }
 
 .hidden {
