@@ -241,6 +241,13 @@ function setTemplate(req, template, backlink, version, title, cards) {
     );
 }
 
+function renderAdminTemplate(req, template) {
+    return translateTextI18n(
+        template.replace(/{{VERSION}}/g, APP_VERSION),
+        {locale: req.getLocale()}
+    );
+}
+
 /**
  *
  * @returns {string}
@@ -360,9 +367,9 @@ app.get("/admin/login", (req, res) => {
         "utf8"
     );
 
-    const html = translateTextI18n(
-        tpl.replace("{{MESSAGE}}", ""),
-        {locale: req.getLocale()}
+    const html = renderAdminTemplate(
+        req,
+        tpl.replace("{{MESSAGE}}", "")
     );
 
     res.send(html);
@@ -381,12 +388,12 @@ app.post(
                 "utf8"
             );
 
-            const html = translateTextI18n(
+            const html = renderAdminTemplate(
+                req,
                 tpl.replace(
                     "{{MESSAGE}}",
                     '<div class="error">{{__.admin.login.invalid}}</div>'
-                ),
-                {locale: req.getLocale()}
+                )
             );
 
             return res.status(401).send(html);
@@ -430,9 +437,7 @@ app.get("/admin", requireAdmin, (req, res) => {
         "utf8"
     );
 
-    const html = translateTextI18n(tpl, {
-        locale: req.getLocale()
-    });
+    const html = renderAdminTemplate(req, tpl);
 
     res.send(html);
 });
@@ -444,9 +449,7 @@ app.get("/admin/setpassword", requireAdmin, (req, res) => {
         "utf8"
     );
 
-    const html = translateTextI18n(tpl, {
-        locale: req.getLocale()
-    });
+    const html = renderAdminTemplate(req, tpl);
 
     res.send(html);
 });
@@ -456,7 +459,7 @@ app.post("/admin/setpassword", requireAdmin, express.urlencoded({extended: false
     const {password, passwordRepeat} = req.body;
 
     if (password !== passwordRepeat || password.length < 8) {
-        return res.send("Invalid password");
+        return res.status(400).json({error: "invalid_password"});
     }
 
     const config = loadConfiguration();
@@ -473,9 +476,7 @@ app.get("/admin/services", requireAdmin, (req, res) => {
         "utf8"
     );
 
-    const html = translateTextI18n(tpl, {
-        locale: req.getLocale()
-    });
+    const html = renderAdminTemplate(req, tpl);
 
     res.send(html);
 });
