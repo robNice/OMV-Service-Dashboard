@@ -50,11 +50,13 @@ body[data-theme="hacker"] #info-drawer footer {
 }
 
 body[data-theme="hacker"] #info-drawer .section h3::before {
+    content: "-= ";
     margin-right: 0.15rem;
+    color: var(--muted);
 }
 
 body[data-theme="hacker"] #info-drawer .section h3::after {
-    content: " ]";
+    content: " =-";
     color: var(--muted);
 }
 

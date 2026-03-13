@@ -58,6 +58,10 @@ body[data-theme="1984"] .page-header > a {
     text-shadow: 2px 0 0 rgba(255, 86, 198, 0.45);
 }
 
+body[data-theme="1984"] .page-header > .back-link::before {
+    content: "◀ ";
+}
+
 body[data-theme="1984"] .page-header h1 {
     font-family: "GianaLocal", var(--font-h1), system-ui, sans-serif;
     margin-bottom: 0.9rem;

@@ -888,7 +888,7 @@ app.get("/section/:id", (req, res) => {
     const html = setTemplate(
         req,
         loadTemplate(),
-        '<a href="/" style="margin: 1rem; display: inline-block;">← ' + __('label.back') + '</a>',
+        '<a class="back-link" href="/">' + __('label.back') + '</a>',
         APP_VERSION,
         config.title + ' - ' + section.title,
         services,

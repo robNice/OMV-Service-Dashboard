@@ -21,6 +21,10 @@ body[data-theme="compact-list"] .page-header > a {
     color: #1d4ed8;
 }
 
+body[data-theme="compact-list"] .page-header > .back-link::before {
+    content: "‹ ";
+}
+
 body[data-theme="compact-list"] .page-header h1 {
     text-align: left;
     max-width: none;

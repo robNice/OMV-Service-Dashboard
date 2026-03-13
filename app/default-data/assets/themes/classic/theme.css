@@ -36,6 +36,10 @@ body[data-theme="classic"] .page-header h1 {
     text-shadow: var(--page-header-shadow);
 }
 
+body[data-theme="classic"] .page-header > .back-link::before {
+    content: "← ";
+}
+
 body[data-theme="classic"] .page-header h1 {
     margin-bottom: 0.8rem;
 }

@@ -60,6 +60,10 @@ body[data-theme="hacker"] .page-header h1 {
     font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
 }
 
+body[data-theme="hacker"] .page-header > .back-link::before {
+    content: "<- ";
+}
+
 body[data-theme="hacker"] .page-header h1 {
     text-align: left;
     margin-bottom: 2rem;
