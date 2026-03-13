@@ -26,6 +26,7 @@ body[data-theme="1984"] {
 }
 
 body[data-theme="1984"] #info-drawer .panel {
+    position: relative;
     background:
         linear-gradient(180deg, rgba(94, 232, 255, 0.08), transparent 18%),
         repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px),
@@ -35,11 +36,32 @@ body[data-theme="1984"] #info-drawer .panel {
         0 0 0 1px rgba(255, 95, 193, 0.12) inset,
         0 0 0 2px rgba(94, 232, 255, 0.08),
         0 16px 34px rgba(0, 0, 0, 0.38);
-    clip-path: polygon(
-        0 18px, 18px 18px, 18px 0,
-        100% 0, 100% 100%,
-        18px 100%, 18px calc(100% - 18px), 0 calc(100% - 18px)
-    );
+}
+
+body[data-theme="1984"] #info-drawer .panel::before,
+body[data-theme="1984"] #info-drawer .panel::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+    z-index: 0;
+    background: var(--drawer-bg);
+}
+
+body[data-theme="1984"] #info-drawer .panel::before {
+    top: 0;
+    box-shadow:
+        2px 2px 0 0 rgba(110, 225, 255, 0.2),
+        0 0 0 1px rgba(255, 95, 193, 0.08) inset;
+}
+
+body[data-theme="1984"] #info-drawer .panel::after {
+    bottom: 0;
+    box-shadow:
+        2px -2px 0 0 rgba(110, 225, 255, 0.2),
+        0 0 0 1px rgba(255, 95, 193, 0.08) inset;
 }
 
 body[data-theme="1984"] #info-drawer header,
@@ -47,6 +69,8 @@ body[data-theme="1984"] #info-drawer footer {
     background:
         linear-gradient(90deg, rgba(94, 232, 255, 0.1), rgba(255, 95, 193, 0.08)),
         rgba(7, 12, 38, 0.5);
+    position: relative;
+    z-index: 1;
 }
 
 body[data-theme="1984"] #info-drawer header {
@@ -59,6 +83,8 @@ body[data-theme="1984"] #info-drawer footer {
 
 body[data-theme="1984"] #info-drawer .content {
     padding: 1rem 1rem 1.1rem;
+    position: relative;
+    z-index: 1;
 }
 
 body[data-theme="1984"] #info-drawer .section h3 {
