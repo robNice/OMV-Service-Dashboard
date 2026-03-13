@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{__.html.lang}}">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login</title>
+    <title>{{__.admin.login.title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/admin/admin.css">
 </head>
@@ -10,17 +10,17 @@
 
 <div class="admin-center">
     <form class="admin-card" method="post" action="/admin/login">
-        <h1>Admin Login</h1>
+        <h1>{{__.admin.login.title}}</h1>
 
         <input
                 type="password"
                 name="password"
-                placeholder="Password"
+                placeholder="{{__.admin.login.passwordPlaceholder}}"
                 required
                 autofocus
         >
 
-        <button type="submit">Login</button>
+        <button type="submit">{{__.admin.login.submit}}</button>
 
         {{MESSAGE}}
     </form>

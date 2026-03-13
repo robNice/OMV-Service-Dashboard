@@ -59,6 +59,7 @@
     "petabyte": "PB"
   },
   "admin": {
+    "logout": "Cerrar sesión",
     "title": "Admin",
     "subtitle": "Gestión de configuración",
     "services": {
@@ -101,6 +102,9 @@
       "mismatch": "Las contraseñas no coinciden."
     },
     "login": {
+      "title": "Inicio de sesión de administrador",
+      "passwordPlaceholder": "Contraseña",
+      "submit": "Iniciar sesión",
       "invalid": "Contraseña incorrecta."
     }
   }

@@ -59,6 +59,7 @@
     "petabyte": "PB"
   },
   "admin": {
+    "logout": "Wyloguj",
     "title": "Admin",
     "subtitle": "Zarządzanie konfiguracją",
     "services": {
@@ -101,6 +102,9 @@
       "mismatch": "Hasła nie są zgodne."
     },
     "login": {
+      "title": "Logowanie administratora",
+      "passwordPlaceholder": "Hasło",
+      "submit": "Zaloguj",
       "invalid": "Nieprawidłowe hasło."
     }
   }

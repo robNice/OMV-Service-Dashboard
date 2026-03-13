@@ -59,6 +59,7 @@
     "petabyte": "PB"
   },
   "admin": {
+    "logout": "Sair",
     "title": "Admin",
     "subtitle": "Gerenciamento de configuração",
     "services": {
@@ -101,6 +102,9 @@
       "mismatch": "As senhas não coincidem."
     },
     "login": {
+      "title": "Login do administrador",
+      "passwordPlaceholder": "Senha",
+      "submit": "Entrar",
       "invalid": "Senha incorreta."
     }
   }

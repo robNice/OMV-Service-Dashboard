@@ -59,6 +59,7 @@
     "petabyte": "PB"
   },
   "admin": {
+    "logout": "Disconnetti",
     "title": "Admin",
     "subtitle": "Gestione della configurazione",
     "services": {
@@ -101,6 +102,9 @@
       "mismatch": "Le password non corrispondono."
     },
     "login": {
+      "title": "Accesso amministratore",
+      "passwordPlaceholder": "Password",
+      "submit": "Accedi",
       "invalid": "Password non corretta."
     }
   }

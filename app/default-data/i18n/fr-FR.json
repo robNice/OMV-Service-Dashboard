@@ -59,6 +59,7 @@
     "petabyte": "Po"
   },
   "admin": {
+    "logout": "Se déconnecter",
     "title": "Admin",
     "subtitle": "Gestion de la configuration",
     "services": {
@@ -101,6 +102,9 @@
       "mismatch": "Les mots de passe ne correspondent pas."
     },
     "login": {
+      "title": "Connexion administrateur",
+      "passwordPlaceholder": "Mot de passe",
+      "submit": "Se connecter",
       "invalid": "Mot de passe incorrect."
     }
   }

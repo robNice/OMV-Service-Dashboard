@@ -59,6 +59,7 @@
     "petabyte": "PB"
   },
   "admin": {
+    "logout": "Çıkış yap",
     "title": "Admin",
     "subtitle": "Yapılandırma yönetimi",
     "services": {
@@ -101,6 +102,9 @@
       "mismatch": "Parolalar eşleşmiyor."
     },
     "login": {
+      "title": "Yönetici girişi",
+      "passwordPlaceholder": "Parola",
+      "submit": "Giriş yap",
       "invalid": "Hatalı parola."
     }
   }

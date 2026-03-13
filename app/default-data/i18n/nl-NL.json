@@ -59,6 +59,7 @@
     "petabyte": "PB"
   },
   "admin": {
+    "logout": "Uitloggen",
     "title": "Admin",
     "subtitle": "Configuratiebeheer",
     "services": {
@@ -101,6 +102,9 @@
       "mismatch": "Wachtwoorden komen niet overeen."
     },
     "login": {
+      "title": "Admin-aanmelding",
+      "passwordPlaceholder": "Wachtwoord",
+      "submit": "Inloggen",
       "invalid": "Onjuist wachtwoord."
     }
   }

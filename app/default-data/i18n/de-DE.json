@@ -59,6 +59,7 @@
     "petabyte": "PB"
   },
   "admin": {
+    "logout": "Abmelden",
     "title": "Admin",
     "subtitle": "Konfigurationsverwaltung",
     "services": {
@@ -101,6 +102,9 @@
       "mismatch": "Passwörter stimmen nicht überein."
     },
     "login": {
+      "title": "Admin-Anmeldung",
+      "passwordPlaceholder": "Passwort",
+      "submit": "Anmelden",
       "invalid": "Falsches Passwort."
     }
   }

@@ -360,9 +360,12 @@ app.get("/admin/login", (req, res) => {
         "utf8"
     );
 
-    res.send(
-        tpl.replace("{{MESSAGE}}", "")
+    const html = translateTextI18n(
+        tpl.replace("{{MESSAGE}}", ""),
+        {locale: req.getLocale()}
     );
+
+    res.send(html);
 });
 app.post(
     "/admin/login",

@@ -59,6 +59,7 @@
     "petabyte": "PB"
   },
   "admin": {
+    "logout": "ログアウト",
     "title": "管理",
     "subtitle": "設定管理",
     "services": {
@@ -101,6 +102,9 @@
       "mismatch": "パスワードが一致しません。"
     },
     "login": {
+      "title": "管理者ログイン",
+      "passwordPlaceholder": "パスワード",
+      "submit": "ログイン",
       "invalid": "パスワードが正しくありません。"
     }
   }
