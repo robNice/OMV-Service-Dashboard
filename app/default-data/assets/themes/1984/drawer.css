@@ -1,6 +1,6 @@
 :root {
     --drawer-w: 394px;
-    --drawer-transition: transform .26s steps(5, end);
+    --drawer-transition: transform .14s ease-in;
     --drawer-panel-backdrop: none;
     --drawer-content-pad: .95rem 1rem 1rem;
     --drawer-header-pad: .82rem .95rem;
@@ -138,6 +138,10 @@
     box-shadow: 0 0 0 1px rgba(110, 225, 255, 0.12) inset;
 }
 
+#info-drawer.open {
+    animation: drawer-boiiing-1984 .58s cubic-bezier(.2, .9, .25, 1.15);
+}
+
 #info-drawer .kv {
     border: 1px solid transparent;
     border-radius: 0;
@@ -159,4 +163,22 @@
 
 #info-drawer .kv {
     box-shadow: 0 0 0 1px rgba(255, 95, 193, 0.06) inset;
+}
+
+@keyframes drawer-boiiing-1984 {
+    0% {
+        transform: translateX(calc(-1 * var(--drawer-w)));
+    }
+    56% {
+        transform: translateX(12px);
+    }
+    74% {
+        transform: translateX(-8px);
+    }
+    88% {
+        transform: translateX(4px);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
