@@ -5,7 +5,7 @@ body[data-theme="classic"] {
 
 body[data-theme="classic"] .page-header {
     position: relative;
-    padding: 0.75rem 1.25rem 1rem;
+    padding: 0.35rem 1.25rem 0.4rem;
     border-radius: 24px;
     overflow: hidden;
 }
@@ -36,8 +36,16 @@ body[data-theme="classic"] .page-header h1 {
     text-shadow: var(--page-header-shadow);
 }
 
+body[data-theme="classic"] .page-header h1 {
+    margin-bottom: 0.8rem;
+}
+
+body[data-theme="classic"] .page-header:not(:has(.section-nav)) h1 {
+    margin-bottom: 0.25rem;
+}
+
 body[data-theme="classic"] .section-nav {
-    padding: 0 0.25rem 0.15rem;
+    padding: 0 0.25rem 0.05rem;
 }
 
 body[data-theme="classic"] .section-nav-item {
@@ -46,7 +54,11 @@ body[data-theme="classic"] .section-nav-item {
 
 @media (max-width: 640px) {
     body[data-theme="classic"] .page-header {
-        padding: 0.5rem 0.65rem 0.75rem;
+        padding: 0.3rem 0.65rem 0.35rem;
         border-radius: 18px;
+    }
+
+    body[data-theme="classic"] .page-header h1 {
+        margin-bottom: 0.65rem;
     }
 }

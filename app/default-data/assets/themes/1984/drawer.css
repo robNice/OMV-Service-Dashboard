@@ -1,0 +1,55 @@
+body[data-theme="1984"] {
+    --drawer-bg: rgba(10, 16, 48, 0.94);
+    --drawer-border: rgba(110, 225, 255, 0.22);
+    --chip-bg: rgba(94, 232, 255, 0.1);
+    --text: #d7e2ff;
+    --muted: #92a3d8;
+    --accent: #fff27a;
+    --status-good-bg: rgba(94, 232, 255, 0.12);
+    --status-good-border: rgba(94, 232, 255, 0.34);
+    --status-good-text: #9ef3ff;
+    --status-warn-bg: rgba(255, 242, 122, 0.12);
+    --status-warn-border: rgba(255, 242, 122, 0.34);
+    --status-warn-text: #fff6aa;
+    --status-bad-bg: rgba(255, 95, 193, 0.14);
+    --status-bad-border: rgba(255, 95, 193, 0.34);
+    --status-bad-text: #ffc1eb;
+    --status-neutral-bg: rgba(147, 163, 216, 0.12);
+    --status-neutral-border: rgba(147, 163, 216, 0.28);
+    --status-neutral-text: #dce6ff;
+    --status-up-bg: rgba(94, 232, 255, 0.12);
+    --status-up-border: rgba(94, 232, 255, 0.34);
+    --status-up-text: #9ef3ff;
+    --status-down-bg: rgba(255, 95, 193, 0.14);
+    --status-down-border: rgba(255, 95, 193, 0.34);
+    --status-down-text: #ffc1eb;
+}
+
+body[data-theme="1984"] #info-drawer .panel {
+    background:
+        linear-gradient(180deg, rgba(94, 232, 255, 0.05), transparent 18%),
+        var(--drawer-bg);
+    box-shadow:
+        0 0 0 1px rgba(255, 95, 193, 0.12) inset,
+        0 16px 34px rgba(0, 0, 0, 0.38);
+}
+
+body[data-theme="1984"] #info-drawer .tab {
+    background: #111a4f;
+    border-color: rgba(110, 225, 255, 0.28);
+    color: #d7e2ff;
+    letter-spacing: 0.22em;
+    text-shadow: 1px 0 0 rgba(255, 95, 193, 0.28);
+}
+
+body[data-theme="1984"] #info-drawer .chip {
+    box-shadow: 0 0 0 1px rgba(110, 225, 255, 0.12) inset;
+}
+
+body[data-theme="1984"] #info-drawer .kv:hover {
+    background: rgba(94, 232, 255, 0.05);
+}
+
+body[data-theme="1984"] #info-drawer hr {
+    border-bottom-color: rgba(110, 225, 255, 0.18);
+}
