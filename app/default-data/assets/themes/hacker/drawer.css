@@ -1,6 +1,7 @@
 :root {
-    --drawer-w: 348px;
-    --drawer-transition: transform .18s steps(6, end);
+    --drawer-w: min(960px, calc(100vw - 3rem));
+    --drawer-h: min(72vh, 760px);
+    --drawer-transition: transform .22s steps(8, end), opacity .18s linear;
     --drawer-panel-backdrop: none;
     --drawer-header-bg: rgba(2, 18, 4, 0.9);
     --drawer-footer-bg: rgba(2, 18, 4, 0.9);
@@ -18,8 +19,9 @@
     --drawer-chip-size: .72rem;
     --drawer-bar-height: 6px;
     --drawer-bar-radius: 0;
-    --drawer-tab-top: 3.2rem;
-    --drawer-tab-transform: translateY(0) rotate(-90deg);
+    --drawer-tab-top: auto;
+    --drawer-tab-right: 1.2rem;
+    --drawer-tab-transform: none;
     --drawer-scrollbar-thumb: rgba(89, 255, 129, 0.24);
     --drawer-scrollbar-thumb-hover: rgba(89, 255, 129, 0.38);
     --drawer-bg: rgba(1, 8, 2, 0.96);
@@ -48,12 +50,29 @@
     --status-down-text: #b7f58c;
 }
 
+#info-drawer {
+    inset: 0 0 auto 0;
+    width: min(100%, calc(var(--drawer-w) + 2rem));
+    height: var(--drawer-h);
+    margin: 0 auto;
+    transform: translateY(calc(-1 * (var(--drawer-h) - 3.3rem)));
+    opacity: 0.98;
+}
+
+#info-drawer.open {
+    transform: translateY(0);
+}
+
 #info-drawer .panel {
+    height: var(--drawer-h);
+    margin: 0 auto;
+    max-width: var(--drawer-w);
     background:
         linear-gradient(180deg, rgba(62, 255, 104, 0.04), transparent 22%),
         repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.05) 0 1px, transparent 1px 3px),
         var(--drawer-bg);
-    border-right: 1px solid rgba(89, 255, 129, 0.2);
+    border: 1px solid rgba(89, 255, 129, 0.2);
+    border-top: 0;
     box-shadow:
         0 0 0 1px rgba(24, 75, 34, 0.4) inset,
         0 0 28px rgba(17, 78, 29, 0.16);
@@ -95,17 +114,35 @@
 }
 
 #info-drawer .tab {
+    top: auto;
+    bottom: -1px;
+    right: 1.1rem;
+    transform: none;
     background: #031005;
     color: transparent;
     border-color: rgba(89, 255, 129, 0.22);
     border-radius: 0;
+    border-top: 1px solid rgba(89, 255, 129, 0.22);
+    border-bottom: 0;
+    padding: .5rem .9rem;
     font-size: 0;
+    box-shadow:
+        0 0 0 1px rgba(24, 75, 34, 0.4) inset,
+        0 0 16px rgba(17, 78, 29, 0.14);
 }
 
 #info-drawer .tab::before {
-    content: "~/info";
+    content: "SYS://INFO";
     color: #96ffa4;
     font-size: 0.74rem;
+    letter-spacing: 0.08em;
+}
+
+#info-drawer .tab::after {
+    content: " _";
+    color: #96ffa4;
+    font-size: 0.74rem;
+    animation: hacker-drawer-cursor .95s steps(1) infinite;
 }
 
 #info-drawer .kv {
@@ -126,4 +163,77 @@
 #info-drawer .bar {
     background: rgba(42, 142, 59, 0.16);
     border-radius: 0;
+}
+
+#info-drawer header::before {
+    content: "DIAG://LINK ESTABLISHED";
+    margin-right: auto;
+    color: rgba(150, 255, 164, 0.7);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+}
+
+#info-drawer footer::before {
+    content: "signal:stable";
+    color: rgba(150, 255, 164, 0.66);
+    text-transform: lowercase;
+}
+
+#info-drawer.hacker-booting .panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgba(120, 255, 142, 0) 0%, rgba(120, 255, 142, 0.22) 48%, rgba(120, 255, 142, 0) 100%);
+    animation: hacker-drawer-scan 1.15s linear 1;
+}
+
+@keyframes hacker-drawer-cursor {
+    0%, 49% {
+        opacity: 1;
+    }
+    50%, 100% {
+        opacity: 0;
+    }
+}
+
+@keyframes hacker-drawer-scan {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0.1;
+    }
+    20% {
+        opacity: 0.75;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 720px) {
+    :root {
+        --drawer-w: calc(100vw - 1.2rem);
+        --drawer-h: min(78vh, 680px);
+    }
+
+    #info-drawer {
+        width: 100%;
+        transform: translateY(calc(-1 * (var(--drawer-h) - 3rem)));
+    }
+
+    #info-drawer .panel {
+        max-width: calc(100vw - .8rem);
+    }
+
+    #info-drawer .tab {
+        right: .6rem;
+        padding: .46rem .75rem;
+    }
+
+    #info-drawer header::before,
+    #info-drawer footer::before {
+        display: none;
+    }
 }
