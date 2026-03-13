@@ -1,4 +1,27 @@
 :root {
+    --drawer-w: 348px;
+    --drawer-transition: transform .18s steps(6, end);
+    --drawer-panel-backdrop: none;
+    --drawer-header-bg: rgba(2, 18, 4, 0.9);
+    --drawer-footer-bg: rgba(2, 18, 4, 0.9);
+    --drawer-content-pad: .82rem .9rem .9rem;
+    --drawer-header-pad: .7rem .9rem;
+    --drawer-footer-pad: .58rem .9rem;
+    --drawer-section-gap: .9rem;
+    --drawer-heading-size: .8rem;
+    --drawer-heading-spacing: .05em;
+    --drawer-kv-size: .88rem;
+    --drawer-kv-pad: .28rem 0;
+    --drawer-kv-radius: 0;
+    --drawer-chip-pad: .16rem .38rem;
+    --drawer-chip-radius: 0;
+    --drawer-chip-size: .72rem;
+    --drawer-bar-height: 6px;
+    --drawer-bar-radius: 0;
+    --drawer-tab-top: 3.2rem;
+    --drawer-tab-transform: translateY(0) rotate(-90deg);
+    --drawer-scrollbar-thumb: rgba(89, 255, 129, 0.24);
+    --drawer-scrollbar-thumb-hover: rgba(89, 255, 129, 0.38);
     --drawer-bg: rgba(1, 8, 2, 0.96);
     --drawer-border: rgba(89, 255, 129, 0.2);
     --chip-bg: rgba(42, 142, 59, 0.16);
@@ -34,11 +57,6 @@
     box-shadow:
         0 0 0 1px rgba(24, 75, 34, 0.4) inset,
         0 0 28px rgba(17, 78, 29, 0.16);
-}
-
-#info-drawer header,
-#info-drawer footer {
-    background: rgba(2, 18, 4, 0.9);
 }
 
 #info-drawer .section h3,
@@ -92,6 +110,7 @@
 
 #info-drawer .kv {
     border-left: 1px solid transparent;
+    border-bottom: 1px dotted rgba(89, 255, 129, 0.14);
     border-radius: 0;
 }
 
