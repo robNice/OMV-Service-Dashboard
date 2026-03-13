@@ -73,6 +73,7 @@
       "deleteCustomImage" : "Custom-Image löschen"
     },
     "section": {
+      "toggle": "Auf- und zuklappen",
       "id": "Sektions-ID",
       "title": "Sektionsname",
       "delete": "Sektion löschen",

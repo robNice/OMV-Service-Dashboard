@@ -73,6 +73,7 @@
       "deleteCustomImage": "Aangepaste afbeelding verwijderen"
     },
     "section": {
+      "toggle": "In- of uitklappen",
       "id": "Sectie-ID",
       "title": "Sectienaam",
       "delete": "Sectie verwijderen",

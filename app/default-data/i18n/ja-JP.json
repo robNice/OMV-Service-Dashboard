@@ -73,6 +73,7 @@
       "deleteCustomImage": "カスタム画像を削除"
     },
     "section": {
+      "toggle": "開閉",
       "id": "セクションID",
       "title": "セクション名",
       "delete": "セクションを削除",

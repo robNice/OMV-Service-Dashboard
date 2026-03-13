@@ -27,8 +27,8 @@
     <header class="admin-header">
         <h1>{{__.admin.services.title}}</h1>
         <nav>
-            <a href="/admin">Admin</a> ·
-            <a href="/admin/logout">Logout</a>
+            <a href="/admin">{{__.admin.title}}</a> ·
+            <a href="/admin/logout">{{__.admin.logout}}</a>
         </nav>
     </header>
 
@@ -48,7 +48,7 @@
 <template id="tpl-section">
     <div class="section" draggable="true">
         <div class="section-header">
-            <button data-action="toggle-section" class="collapse-toggle" title="Toggle">▼</button>
+            <button data-action="toggle-section" class="collapse-toggle" title="{{__.admin.section.toggle}}">▼</button>
 
             <div>
                 <label>{{__.admin.section.id}}</label>

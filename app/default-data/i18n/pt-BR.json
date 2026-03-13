@@ -73,6 +73,7 @@
       "deleteCustomImage": "Excluir imagem personalizada"
     },
     "section": {
+      "toggle": "Expandir ou recolher",
       "id": "ID da seção",
       "title": "Nome da seção",
       "delete": "Excluir seção",

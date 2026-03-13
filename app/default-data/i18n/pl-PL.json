@@ -73,6 +73,7 @@
       "deleteCustomImage": "Usuń niestandardowy obraz"
     },
     "section": {
+      "toggle": "Rozwiń lub zwiń",
       "id": "ID sekcji",
       "title": "Nazwa sekcji",
       "delete": "Usuń sekcję",

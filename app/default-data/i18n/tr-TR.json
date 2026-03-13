@@ -73,6 +73,7 @@
       "deleteCustomImage": "Özel görseli sil"
     },
     "section": {
+      "toggle": "Genişlet veya daralt",
       "id": "Bölüm ID",
       "title": "Bölüm adı",
       "delete": "Bölümü sil",

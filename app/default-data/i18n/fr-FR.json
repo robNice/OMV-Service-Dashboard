@@ -73,6 +73,7 @@
       "deleteCustomImage": "Supprimer l’image personnalisée"
     },
     "section": {
+      "toggle": "Déplier ou replier",
       "id": "ID de section",
       "title": "Nom de la section",
       "delete": "Supprimer la section",

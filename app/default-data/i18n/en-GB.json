@@ -73,6 +73,7 @@
       "deleteCustomImage" : "delete custom image"
     },
     "section": {
+      "toggle": "Toggle",
       "id": "Section ID",
       "title": "Section title",
       "delete": "Delete section",

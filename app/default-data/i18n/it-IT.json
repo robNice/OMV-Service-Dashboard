@@ -73,6 +73,7 @@
       "deleteCustomImage": "Elimina immagine personalizzata"
     },
     "section": {
+      "toggle": "Espandi o comprimi",
       "id": "ID sezione",
       "title": "Nome sezione",
       "delete": "Elimina sezione",
