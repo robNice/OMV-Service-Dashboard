@@ -70,7 +70,11 @@
     },
     "image": {
       "resetToDefault": "Réinitialiser à l’image par défaut",
-      "deleteCustomImage": "Supprimer l’image personnalisée"
+      "deleteCustomImage": "Supprimer l’image personnalisée",
+      "uploadError": "Le téléversement a échoué",
+      "sourceCustom": "personnalisée",
+      "sourceAuto": "automatique",
+      "sourceDefault": "par défaut"
     },
     "section": {
       "toggle": "Déplier ou replier",

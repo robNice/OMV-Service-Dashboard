@@ -70,7 +70,11 @@
     },
     "image": {
       "resetToDefault": "Varsayılan görsele sıfırla",
-      "deleteCustomImage": "Özel görseli sil"
+      "deleteCustomImage": "Özel görseli sil",
+      "uploadError": "Yükleme başarısız oldu",
+      "sourceCustom": "özel",
+      "sourceAuto": "otomatik",
+      "sourceDefault": "varsayılan"
     },
     "section": {
       "toggle": "Genişlet veya daralt",

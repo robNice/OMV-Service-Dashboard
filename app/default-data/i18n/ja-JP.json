@@ -70,7 +70,11 @@
     },
     "image": {
       "resetToDefault": "標準画像に戻す",
-      "deleteCustomImage": "カスタム画像を削除"
+      "deleteCustomImage": "カスタム画像を削除",
+      "uploadError": "アップロードに失敗しました",
+      "sourceCustom": "カスタム",
+      "sourceAuto": "自動",
+      "sourceDefault": "既定"
     },
     "section": {
       "toggle": "開閉",

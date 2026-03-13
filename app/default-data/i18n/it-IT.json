@@ -70,7 +70,11 @@
     },
     "image": {
       "resetToDefault": "Ripristina immagine predefinita",
-      "deleteCustomImage": "Elimina immagine personalizzata"
+      "deleteCustomImage": "Elimina immagine personalizzata",
+      "uploadError": "Caricamento non riuscito",
+      "sourceCustom": "personalizzata",
+      "sourceAuto": "automatica",
+      "sourceDefault": "predefinita"
     },
     "section": {
       "toggle": "Espandi o comprimi",

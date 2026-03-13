@@ -70,7 +70,11 @@
     },
     "image": {
       "resetToDefault": "Przywróć obraz domyślny",
-      "deleteCustomImage": "Usuń niestandardowy obraz"
+      "deleteCustomImage": "Usuń niestandardowy obraz",
+      "uploadError": "Przesyłanie nie powiodło się",
+      "sourceCustom": "niestandardowy",
+      "sourceAuto": "automatyczny",
+      "sourceDefault": "domyślny"
     },
     "section": {
       "toggle": "Rozwiń lub zwiń",

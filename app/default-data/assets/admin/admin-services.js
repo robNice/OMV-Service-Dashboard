@@ -45,9 +45,9 @@ function applyImagePreview(previewEl, image) {
     // 🏷️ Badge immer auswerten
     if (status) {
         const LABELS = {
-            explicit: 'custom',
-            id:       'auto',
-            default:  'default'
+            explicit: I18N.imageSourceCustom || 'custom',
+            id:       I18N.imageSourceAuto || 'auto',
+            default:  I18N.imageSourceDefault || 'default'
         };
 
         const src = effectiveImage?.source;
@@ -180,7 +180,7 @@ function renderSection(section, sectionIndex) {
                 markDirty();
                 render();
             } catch {
-                alert("Upload fehlgeschlagen");
+                alert(I18N.imageUploadError || "Upload failed");
             }
         });
     }
@@ -231,7 +231,7 @@ function renderSection(section, sectionIndex) {
                 markDirty();
                 render();
             } catch {
-                alert("Upload fehlgeschlagen");
+                alert(I18N.imageUploadError || "Upload failed");
             }
         });
     }
@@ -299,7 +299,7 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
                 markDirty();
                 render();
             } catch {
-                alert("Upload fehlgeschlagen");
+                alert(I18N.imageUploadError || "Upload failed");
             }
         });
     }

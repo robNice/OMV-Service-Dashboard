@@ -70,7 +70,11 @@
     },
     "image": {
       "resetToDefault": "Terugzetten naar standaardafbeelding",
-      "deleteCustomImage": "Aangepaste afbeelding verwijderen"
+      "deleteCustomImage": "Aangepaste afbeelding verwijderen",
+      "uploadError": "Uploaden mislukt",
+      "sourceCustom": "aangepast",
+      "sourceAuto": "automatisch",
+      "sourceDefault": "standaard"
     },
     "section": {
       "toggle": "In- of uitklappen",

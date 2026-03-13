@@ -70,7 +70,11 @@
     },
     "image": {
       "resetToDefault" : "zurücksetzen auf Standard-Bild",
-      "deleteCustomImage" : "Custom-Image löschen"
+      "deleteCustomImage" : "Custom-Image löschen",
+      "uploadError": "Upload fehlgeschlagen",
+      "sourceCustom": "custom",
+      "sourceAuto": "auto",
+      "sourceDefault": "standard"
     },
     "section": {
       "toggle": "Auf- und zuklappen",

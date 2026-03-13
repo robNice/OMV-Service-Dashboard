@@ -70,7 +70,11 @@
     },
     "image": {
       "resetToDefault" : "reset to default image",
-      "deleteCustomImage" : "delete custom image"
+      "deleteCustomImage" : "delete custom image",
+      "uploadError": "Upload failed",
+      "sourceCustom": "custom",
+      "sourceAuto": "auto",
+      "sourceDefault": "default"
     },
     "section": {
       "toggle": "Toggle",

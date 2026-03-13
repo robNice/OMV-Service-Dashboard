@@ -70,7 +70,11 @@
     },
     "image": {
       "resetToDefault": "Repor imagem padrão",
-      "deleteCustomImage": "Eliminar imagem personalizada"
+      "deleteCustomImage": "Eliminar imagem personalizada",
+      "uploadError": "Falha no carregamento",
+      "sourceCustom": "personalizada",
+      "sourceAuto": "automática",
+      "sourceDefault": "predefinida"
     },
     "section": {
       "toggle": "Expandir ou recolher",
