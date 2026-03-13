@@ -1,6 +1,6 @@
 :root {
     --drawer-w: 388px;
-    --drawer-bg: linear-gradient(180deg, rgba(255, 246, 220, 0.96), rgba(255, 235, 193, 0.94));
+    --drawer-bg: linear-gradient(180deg, #fff6dc, #ffebc1);
     --drawer-border: rgba(166, 92, 43, 0.18);
     --chip-bg: rgba(255, 255, 255, 0.46);
     --text: #4a281d;
@@ -9,7 +9,7 @@
     --drawer-transition: transform .4s cubic-bezier(.22, 1, .36, 1);
     --drawer-tab-top: 66px;
     --drawer-tab-right: -22px;
-    --drawer-tab-transform: rotate(-90deg);
+    --drawer-tab-transform: rotate(90deg);
     --drawer-panel-shadow: 0 20px 46px rgba(103, 42, 28, 0.22);
     --drawer-panel-backdrop: blur(6px);
     --drawer-panel-radius: 0 40px 40px 0;
@@ -36,6 +36,18 @@
     --bar-yellow: linear-gradient(90deg, #ffd84b, #f8a33f);
     --bar-orange: linear-gradient(90deg, #f6a13e, #f37b34);
     --bar-red: linear-gradient(90deg, #f5568e, #cc455b);
+    --status-good-bg: #c9f0b6;
+    --status-good-border: #97cf71;
+    --status-good-text: #46712a;
+    --status-warn-bg: #ffe6a8;
+    --status-warn-border: #e1b74f;
+    --status-warn-text: #875e05;
+    --status-bad-bg: #ffc2ce;
+    --status-bad-border: #e68b9c;
+    --status-bad-text: #8d2c43;
+    --status-neutral-bg: #f5e4c2;
+    --status-neutral-border: #ddbb88;
+    --status-neutral-text: #7a5737;
 }
 
 #info-drawer {
@@ -47,6 +59,7 @@
     overflow: visible;
     border-top-right-radius: 40px;
     border-bottom-right-radius: 40px;
+    background-clip: padding-box;
 }
 
 #info-drawer .panel::before,
@@ -54,6 +67,7 @@
     content: "";
     position: absolute;
     pointer-events: none;
+    border-radius: inherit;
 }
 
 #info-drawer .panel::before {
