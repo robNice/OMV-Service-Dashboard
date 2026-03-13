@@ -8,6 +8,7 @@
             }
 
             let bootTimer = null;
+            let wasOpen = drawer.classList.contains('open');
             const runBootFx = () => {
                 drawer.classList.remove(BOOT_CLASS);
                 void drawer.offsetWidth;
@@ -23,9 +24,11 @@
             }
 
             const observer = new MutationObserver(() => {
-                if (drawer.classList.contains('open')) {
+                const isOpen = drawer.classList.contains('open');
+                if (isOpen && !wasOpen) {
                     runBootFx();
                 }
+                wasOpen = isOpen;
             });
 
             observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
