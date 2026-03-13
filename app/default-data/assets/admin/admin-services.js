@@ -181,7 +181,9 @@ function renderSection(section, sectionIndex) {
                 markDirty();
                 render();
             } catch {
-                alert(I18N.imageUploadError || "Upload failed");
+                if (I18N.imageUploadError || I18N.saveError) {
+                    alert(I18N.imageUploadError || I18N.saveError);
+                }
             }
         });
     }
@@ -232,7 +234,9 @@ function renderSection(section, sectionIndex) {
                 markDirty();
                 render();
             } catch {
-                alert(I18N.imageUploadError || "Upload failed");
+                if (I18N.imageUploadError || I18N.saveError) {
+                    alert(I18N.imageUploadError || I18N.saveError);
+                }
             }
         });
     }
@@ -300,7 +304,9 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
                 markDirty();
                 render();
             } catch {
-                alert(I18N.imageUploadError || "Upload failed");
+                if (I18N.imageUploadError || I18N.saveError) {
+                    alert(I18N.imageUploadError || I18N.saveError);
+                }
             }
         });
     }

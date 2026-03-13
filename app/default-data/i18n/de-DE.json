@@ -72,8 +72,8 @@
       "resetToDefault" : "zurücksetzen auf Standard-Bild",
       "deleteCustomImage" : "Custom-Image löschen",
       "uploadError": "Upload fehlgeschlagen",
-      "sourceCustom": "custom",
-      "sourceAuto": "auto",
+      "sourceCustom": "individuell",
+      "sourceAuto": "automatisch",
       "sourceDefault": "standard"
     },
     "section": {
