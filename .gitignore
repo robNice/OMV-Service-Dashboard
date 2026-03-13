@@ -135,3 +135,4 @@ dist
 /OMV-Landingpage.zip
 /TODO.md
 /.forgejo/workflows/deploy.yml
+/tmp/

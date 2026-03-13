@@ -123,10 +123,10 @@ body[data-theme="hacker"] .service {
 }
 
 body[data-theme="hacker"] .service::before {
-    content: ">";
+    content: "::";
     position: absolute;
     top: 10px;
-    left: 12px;
+    right: 12px;
     z-index: 2;
     color: rgba(154, 255, 169, 0.88);
     font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
