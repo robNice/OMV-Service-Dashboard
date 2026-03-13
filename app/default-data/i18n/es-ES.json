@@ -1,4 +1,7 @@
 {
+  "html": {
+    "lang": "es"
+  },
   "label": {
     "back": "Volver",
     "liveStats": "Estadísticas en vivo",
@@ -6,7 +9,7 @@
     "info": "Info",
     "days": "Días",
     "hours_short": "Hrs",
-    "storage": "Almacenamiento (HDD)",
+    "storage": "Almacenamiento (HDDs)",
     "temps": "Temperaturas",
     "versions": "Versiones",
     "system": "Sistema",
@@ -54,5 +57,60 @@
     "gigabyte": "GB",
     "terabyte": "TB",
     "petabyte": "PB"
+  },
+  "admin": {
+    "logout": "Cerrar sesión",
+    "title": "Admin",
+    "subtitle": "Gestión de configuración",
+    "services": {
+      "title": "Administrar secciones y servicios",
+      "desc": "Administra secciones, servicios y enlaces en el dashboard",
+      "addSection": "Añadir sección",
+      "cardimage": "Imagen de tarjeta"
+    },
+    "image": {
+      "resetToDefault": "Restablecer a imagen predeterminada",
+      "deleteCustomImage": "Eliminar imagen personalizada",
+      "uploadError": "La carga falló",
+      "sourceCustom": "personalizada",
+      "sourceAuto": "automática",
+      "sourceDefault": "predeterminada"
+    },
+    "section": {
+      "toggle": "Expandir o contraer",
+      "id": "ID de sección",
+      "title": "Nombre de la sección",
+      "delete": "Eliminar sección",
+      "addService": "Añadir servicio",
+      "backgroundimage": "Imagen de fondo",
+      "cardimage": "Imagen de tarjeta"
+    },
+    "service": {
+      "id": "ID del servicio",
+      "title": "Nombre del servicio",
+      "url": "URL del servicio",
+      "cardimage": "Imagen de tarjeta",
+      "delete": "Eliminar servicio"
+    },
+    "save": {
+      "label": "Guardar",
+      "saving": "guardando…",
+      "saved": "guardado",
+      "error": "Error al guardar"
+    },
+    "password": {
+      "title": "Cambiar contraseña",
+      "desc": "Cambia aquí tu contraseña de administrador.",
+      "new": "Nueva contraseña",
+      "repeat": "Repetir contraseña",
+      "tooShort": "La contraseña debe tener al menos 8 caracteres.",
+      "mismatch": "Las contraseñas no coinciden."
+    },
+    "login": {
+      "title": "Inicio de sesión de administrador",
+      "passwordPlaceholder": "Contraseña",
+      "submit": "Iniciar sesión",
+      "invalid": "Contraseña incorrecta."
+    }
   }
 }

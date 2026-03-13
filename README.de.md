@@ -8,12 +8,13 @@
 - [Funktionen](#funktionen)
 - [Konfiguration (wichtig)](#konfiguration-wichtig)
 - [Verzeichnisstruktur (relevante Teile)](#verzeichnisstruktur-relevante-teile)
-- [Installation: Docker (empfohlen)](#installation-docker-empfohlen)
-    - [Voraussetzungen](#voraussetzungen)
-    - [Schnellstart](#schnellstart)
-- [Installation: Standalone (fortgeschritten / ungetestet)](#installation-standalone-fortgeschritten--ungetestet)
-    - [Voraussetzungen](#voraussetzungen-1)
-    - [Schritte (Übersicht)](#schritte-übersicht)
+- [Installation](#installation)
+  - [Installation: Docker (empfohlen)](#installation-docker-empfohlen)
+      - [Voraussetzungen](#voraussetzungen)
+      - [Schnellstart](#schnellstart)
+  - [Installation: Standalone (fortgeschritten / ungetestet)](#installation-standalone-fortgeschritten--ungetestet)
+      - [Voraussetzungen](#voraussetzungen-1)
+      - [Schritte (Übersicht)](#schritte-übersicht)
 - [Hinweise](#hinweise)
 - [Screenshots](#screenshots)
     - [Mobile Dashboard-Übersicht](#mobile-dashboard-übersicht)
@@ -26,20 +27,13 @@
 
 ---
 
-## Einführung
+## Einführung / Wofür ist das?
 
-Ein kleines Node.js-basiertes Service- und System-Dashboard für einen OpenMediaVault-(OMV)-Host.  
-Es zeigt Hauptdienste* als Karten, gruppiert in Sektionen, und kann Live-Systemstatistiken anzeigen
-(Uptime, Festplattennutzung, Temperaturen, Docker-Container, …).
+Das OMV Service Dashboard dient in erster Linie als zentrale, übersichtliche Weboberfläche zur 
+Anzeige und zum Aufruf von Diensten und Systeminformationen rund um einen OpenMediaVault-Server.
 
-*Hauptdienste müssen in `/config/services.json` definiert werden.
-
-Die Anwendung ist dafür ausgelegt, entweder
-
-- in einem Docker-Container (empfohlen) oder
-- direkt auf dem OMV-Host („standalone“)
-
-zu laufen.
+Darüber hinaus eignet sich das Dashboard sehr gut als dauerhaft sichtbares Interface auf 
+Bildschirmen, wie im Smart-Home-Umfeld häufig eingesetzt.
 
 ---
 
@@ -55,17 +49,60 @@ zu laufen.
 
 ---
 
-## Konfiguration (wichtig)
+## Konfiguration
 
-Konfiguration, Übersetzungen und benutzerdefinierte Bilder werden **nicht im Anwendungscode** bearbeitet.
+Seitenstruktur, Konfiguration, Übersetzungen und benutzerdefinierte Bilder werden über den Adminbereich und Konfigurationsdateien festgelegt.
 
-Stattdessen befinden sich alle benutzerspezifischen Anpassungen in einem dedizierten
+Die Konfigurationsdateien befinden sich in einem dedizierten
 `/config`-Verzeichnis, das zur Laufzeit eingelesen wird und Updates sowie Container-Neubauten
 sicher übersteht.
 
 ➡️ **Bitte lies [`CONFIG_README.de.md`](./CONFIG_README.de.md) für Details.**
 
 Diese README hält Konfigurationsdetails bewusst kurz, um Redundanzen zu vermeiden.
+
+Die eigentliche Struktur deiner Portalseite wird im Adminbereich des OMV-Webinterfaces konfiguriert.
+
+## Admin-Bereich
+
+Die Konfiguration der Sektionen und Services erfolgt über einen integrierten Admin-Bereich, erreichbar unter:
+> {dashboard-url}/admin
+
+Das Default-Passwort ist
+> dashboard
+
+
+> ⚠️ Die  `services.json` muss nicht mehr manuell bearbeitet werden.
+Änderungen werden über die Web-Oberfläche vorgenommen. Die Datei dient nur noch als persistente Datenbasis.
+
+Es existieren schon Grafiken (Card- und Hintergrundgrafiken) für bestimmte Sektionen. Wenn du diese benutzen möchtest, nutze folgende Sektionen-IDs:
+- admin
+- files
+- kitchen
+- media
+- network
+- smart-home
+
+Default-Bilder für Sektionen sowie Services können bei Bedarf hier abgelegt werden:
+
+```
+/config
+ └─ assets/
+     ├─ backgrounds/
+     │   ├─ _default.png
+     │   └─ _home.png (Background Startseite)
+     └─ cards/
+         ├─ sections/
+         │   └─ _default.png 
+         └─ services/
+              └─ _default.png
+```
+
+Für hochgeladene Card-Bilder empfehle ich eine Größe von ~`305px × 185px`.
+
+---
+
+
 
 ---
 
@@ -89,23 +126,35 @@ Benutzerdefinierte Konfigurationen und Assets liegen außerhalb des App-Codes in
 ```
 
 ---
+## Installation
 
-## Installation: Docker (empfohlen)
+Die Anwendung ist dafür ausgelegt, entweder
 
-### Voraussetzungen
+- in einem Docker-Container (empfohlen) oder
+- direkt auf dem OMV-Host („standalone“)
+
+zu laufen.
+
+
+### Installation: Docker (empfohlen)
+
+
+
+#### Voraussetzungen
 
 - Docker
 - Docker Compose (oder `docker compose`)
 
-### Schnellstart
+#### Schnellstart
 
 Siehe die Datei [`example.docker-compose.yml`](./example.docker-compose.yml).
 
-1. Beispielkonfiguration kopieren:
+1. Nur wenn du vor dem ersten Start etwas ändern musst, kopiere die Beispiel-Konfiguration:
 
 ```bash
 cp -r config.example path-to-your-config-directory
 ```
+Du musst die Konfigurationsdatei jedoch nicht zwingend kopieren, da sie beim Start des Dienstes automatisch erstellt wird.
 
 Vergiss nicht, das Config-Verzeichnis im Docker-Compose-File auf das Config-Volume zu mappen.
 
@@ -126,17 +175,17 @@ alles innerhalb von `/config` bleibt erhalten.
 
 ---
 
-## Installation: Standalone (fortgeschritten / ungetestet)
+### Installation: Standalone (fortgeschritten / ungetestet)
 
 > ⚠️ Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsächlich der Vollständigkeit halber vorhanden.
 
-### Voraussetzungen
+#### Voraussetzungen
 
 - Node.js (v18+ oder v20+ empfohlen)
 - npm
 - OpenMediaVault-Host
 
-### Schritte (Übersicht)
+#### Schritte (Übersicht)
 
 1. Repository klonen
 2. Abhängigkeiten installieren
@@ -145,10 +194,8 @@ alles innerhalb von `/config` bleibt erhalten.
 
 ---
 
-## Hinweise
+### Hinweise
 
-- Das `/config`-Verzeichnis *scheint* optional zu sein; fehlende Dateien greifen auf integrierte Defaults zurück.  
-  **ABER:** Du solltest mindestens eine eigene `services.json` definieren.
 - JavaScript und CSS sind Teil des Anwendungskerns und **nicht anpassbar**.
 - Visuelle Anpassungen beschränken sich auf Hintergründe und Kartenbilder.
 - Übersetzungen aus `/config/i18n` werden über die integrierten Übersetzungen gelegt.

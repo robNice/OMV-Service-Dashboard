@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="{{__.html.lang}}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{__.admin.login.title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/admin/admin.css?v={{VERSION}}">
+</head>
+<body>
+
+<div class="admin-center">
+    <form class="admin-card" method="post" action="/admin/login">
+        <h1>{{__.admin.login.title}}</h1>
+
+        <input
+                type="password"
+                name="password"
+                placeholder="{{__.admin.login.passwordPlaceholder}}"
+                required
+                autofocus
+        >
+
+        <button type="submit">{{__.admin.login.submit}}</button>
+
+        {{MESSAGE}}
+    </form>
+</div>
+
+</body>
+</html>
