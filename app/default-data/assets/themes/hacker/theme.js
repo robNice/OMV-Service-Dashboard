@@ -26,9 +26,20 @@
             }
 
             let bootTimer = null;
+            let closeTabTimer = null;
             let wasOpen = drawer.classList.contains('open');
-            const syncTabState = () => {
-                tab.classList.toggle('drawer-open', drawer.classList.contains('open'));
+            const syncTabState = (isOpen) => {
+                window.clearTimeout(closeTabTimer);
+
+                if (isOpen) {
+                    tab.classList.add('drawer-open');
+                    return;
+                }
+
+                // Keep the tab docked until the panel has finished sliding up.
+                closeTabTimer = window.setTimeout(() => {
+                    tab.classList.remove('drawer-open');
+                }, 240);
             };
             const runBootFx = () => {
                 drawer.classList.remove(BOOT_CLASS);
@@ -43,11 +54,11 @@
             if (drawer.classList.contains('open')) {
                 runBootFx();
             }
-            syncTabState();
+            syncTabState(drawer.classList.contains('open'));
 
             const observer = new MutationObserver(() => {
                 const isOpen = drawer.classList.contains('open');
-                syncTabState();
+                syncTabState(isOpen);
                 if (isOpen && !wasOpen) {
                     runBootFx();
                 }
@@ -57,6 +68,7 @@
             observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
             drawer._omvThemeDestroy = () => {
                 window.clearTimeout(bootTimer);
+                window.clearTimeout(closeTabTimer);
                 observer.disconnect();
                 drawer.classList.remove(BOOT_CLASS);
                 if (tabHost && tab.parentElement === tabHost && panel.firstElementChild) {
