@@ -69,11 +69,11 @@
       "cardimage" : "Card-Bild"
     },
     "theme": {
-      "title": "Theme auswÃ¤hlen",
-      "desc": "Lege das Layout-Theme fÃ¼r das Ã¶ffentliche Dashboard fest",
-      "available": "VerfÃ¼gbare Themes",
-      "hint": "Themes steuern nur das Ã¶ffentliche Dashboard, nicht den Admin-Bereich.",
-      "loading": "Themes werden geladenâ€¦",
+      "title": "Theme auswählen",
+      "desc": "Lege das Layout-Theme für das öffentliche Dashboard fest",
+      "available": "Verfügbare Themes",
+      "hint": "Themes steuern nur das öffentliche Dashboard, nicht den Admin-Bereich.",
+      "loading": "Themes werden geladen...",
       "current": "Aktiv",
       "version": "Version",
       "empty": "Keine Themes gefunden"
