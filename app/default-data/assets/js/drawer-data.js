@@ -61,15 +61,15 @@
     function statusStyle(s) {
         const v = String(s || "UNKNOWN").toUpperCase();
         if (v.includes("GOOD") || v === "PASSED") {
-            return "background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.35);color:#86efac;";
+            return "background:var(--status-good-bg,rgba(34,197,94,.2));border:1px solid var(--status-good-border,rgba(34,197,94,.35));color:var(--status-good-text,#86efac);";
         }
         if (v.includes("WARN") || v.includes("PRE-FAIL") || v.includes("DEGRADED")) {
-            return "background:rgba(234,179,8,.18);border:1px solid rgba(234,179,8,.38);color:#fde68a;";
+            return "background:var(--status-warn-bg,rgba(234,179,8,.18));border:1px solid var(--status-warn-border,rgba(234,179,8,.38));color:var(--status-warn-text,#fde68a);";
         }
         if (v.includes("FAIL") || v.includes("BAD") || v.includes("CRIT")) {
-            return "background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.35);color:#fecaca;";
+            return "background:var(--status-bad-bg,rgba(239,68,68,.2));border:1px solid var(--status-bad-border,rgba(239,68,68,.35));color:var(--status-bad-text,#fecaca);";
         }
-        return "background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#e5e7eb;";
+        return "background:var(--status-neutral-bg,rgba(255,255,255,.08));border:1px solid var(--status-neutral-border,rgba(255,255,255,.12));color:var(--status-neutral-text,#e5e7eb);";
     }
 
     /**
@@ -111,9 +111,9 @@
     function containerStatusStyle(status) {
         const s = String(status || "").toLowerCase();
         if (s.startsWith("up")) {
-            return "background:rgba(34,197,94,.18);border:1px solid rgba(34,197,94,.35);color:#bbf7d0;";
+            return "background:var(--status-up-bg,rgba(34,197,94,.18));border:1px solid var(--status-up-border,rgba(34,197,94,.35));color:var(--status-up-text,#bbf7d0);";
         }
-        return "background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.35);color:#fecaca;";
+        return "background:var(--status-down-bg,rgba(239,68,68,.2));border:1px solid var(--status-down-border,rgba(239,68,68,.35));color:var(--status-down-text,#fecaca);";
     }
 
     /**

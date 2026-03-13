@@ -6,6 +6,7 @@ const { APP_DATA, CONFIG_DIR } = require('./paths');
 const OVERLAY_PATHS = [
     'backgrounds/',
     'cards/',
+    'themes/',
 ];
 
 function isOverlayAllowed(relPath) {

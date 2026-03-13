@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="{{__.html.lang}}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{__.admin.theme.title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/admin/admin.css?v={{VERSION}}">
+</head>
+<body>
+<div class="admin-page">
+
+    <header class="admin-header">
+        <div>
+            <h1>{{__.admin.theme.title}}</h1>
+            <p class="admin-subtitle">{{__.admin.theme.desc}}</p>
+        </div>
+        <nav>
+            <a href="/admin">{{__.admin.title}}</a> ·
+            <a href="/admin/logout">{{__.admin.logout}}</a>
+        </nav>
+    </header>
+
+    <section
+        class="admin-panel"
+        id="theme-settings"
+        data-current-theme="{{THEME_ID}}"
+        data-loading="{{__.admin.theme.loading}}"
+        data-save-label="{{__.admin.save.label}}"
+        data-save-saving="{{__.admin.save.saving}}"
+        data-save-saved="{{__.admin.save.saved}}"
+        data-save-error="{{__.admin.save.error}}"
+        data-current-label="{{__.admin.theme.current}}"
+        data-version-label="{{__.admin.theme.version}}"
+        data-empty-label="{{__.admin.theme.empty}}">
+
+        <div class="admin-panel-head">
+            <div>
+                <h2>{{__.admin.theme.available}}</h2>
+                <p class="admin-panel-copy">{{__.admin.theme.hint}}</p>
+            </div>
+            <button id="theme-save" class="primary" disabled>
+                <span class="label">{{__.admin.save.label}}</span>
+                <span class="spinner hidden"></span>
+            </button>
+        </div>
+
+        <div id="theme-status" class="hint"></div>
+        <div id="theme-list" class="theme-grid"></div>
+    </section>
+
+</div>
+
+<script src="/assets/admin/admin-theme.js?v={{VERSION}}"></script>
+</body>
+</html>

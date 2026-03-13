@@ -1,0 +1,97 @@
+body[data-theme="hacker"] {
+    --drawer-bg: rgba(1, 8, 2, 0.96);
+    --drawer-border: rgba(89, 255, 129, 0.2);
+    --chip-bg: rgba(42, 142, 59, 0.16);
+    --text: #96ffa4;
+    --muted: #5fb06b;
+    --accent: #b9ff8f;
+    --status-good-bg: rgba(46, 170, 67, 0.18);
+    --status-good-border: rgba(87, 255, 123, 0.28);
+    --status-good-text: #a5ffb2;
+    --status-warn-bg: rgba(124, 168, 31, 0.18);
+    --status-warn-border: rgba(181, 224, 66, 0.28);
+    --status-warn-text: #d8ff8f;
+    --status-bad-bg: rgba(47, 74, 20, 0.24);
+    --status-bad-border: rgba(116, 183, 63, 0.24);
+    --status-bad-text: #b7f58c;
+    --status-neutral-bg: rgba(36, 95, 46, 0.16);
+    --status-neutral-border: rgba(80, 170, 97, 0.24);
+    --status-neutral-text: #98eda4;
+    --status-up-bg: rgba(46, 170, 67, 0.18);
+    --status-up-border: rgba(87, 255, 123, 0.28);
+    --status-up-text: #a5ffb2;
+    --status-down-bg: rgba(47, 74, 20, 0.24);
+    --status-down-border: rgba(116, 183, 63, 0.24);
+    --status-down-text: #b7f58c;
+}
+
+body[data-theme="hacker"] #info-drawer .panel {
+    background:
+        linear-gradient(180deg, rgba(62, 255, 104, 0.04), transparent 22%),
+        repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.05) 0 1px, transparent 1px 3px),
+        var(--drawer-bg);
+    border-right: 1px solid rgba(89, 255, 129, 0.2);
+    box-shadow:
+        0 0 0 1px rgba(24, 75, 34, 0.4) inset,
+        0 0 28px rgba(17, 78, 29, 0.16);
+}
+
+body[data-theme="hacker"] #info-drawer header,
+body[data-theme="hacker"] #info-drawer footer {
+    background: rgba(2, 18, 4, 0.9);
+}
+
+body[data-theme="hacker"] #info-drawer .section h3,
+body[data-theme="hacker"] #info-drawer .tab,
+body[data-theme="hacker"] #info-drawer .chip,
+body[data-theme="hacker"] #info-drawer .kv,
+body[data-theme="hacker"] #info-drawer footer {
+    font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
+}
+
+body[data-theme="hacker"] #info-drawer .section h3::before {
+    margin-right: 0.15rem;
+}
+
+body[data-theme="hacker"] #info-drawer .section h3::after {
+    content: " ]";
+    color: var(--muted);
+}
+
+body[data-theme="hacker"] #info-drawer .section h3 {
+    color: #96ffa4;
+    letter-spacing: 0.05em;
+}
+
+body[data-theme="hacker"] #info-drawer .tab {
+    background: #031005;
+    color: transparent;
+    border-color: rgba(89, 255, 129, 0.22);
+    border-radius: 0;
+    font-size: 0;
+}
+
+body[data-theme="hacker"] #info-drawer .tab::before {
+    content: "~/info";
+    color: #96ffa4;
+    font-size: 0.74rem;
+}
+
+body[data-theme="hacker"] #info-drawer .kv {
+    border-left: 1px solid transparent;
+    border-radius: 0;
+}
+
+body[data-theme="hacker"] #info-drawer .kv:hover {
+    background: rgba(65, 255, 106, 0.05);
+    border-left-color: rgba(89, 255, 129, 0.36);
+}
+
+body[data-theme="hacker"] #info-drawer hr {
+    border-bottom-color: rgba(89, 255, 129, 0.18);
+}
+
+body[data-theme="hacker"] #info-drawer .bar {
+    background: rgba(42, 142, 59, 0.16);
+    border-radius: 0;
+}

@@ -104,6 +104,7 @@ dist
 
 # vuepress v2.x temp and cache directory
 .temp
+.tmp
 .cache
 
 # Docusaurus cache and generated files
@@ -134,3 +135,4 @@ dist
 /OMV-Landingpage.zip
 /TODO.md
 /.forgejo/workflows/deploy.yml
+/tmp/

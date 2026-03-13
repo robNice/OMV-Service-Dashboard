@@ -11,6 +11,25 @@
     --bar-yellow: linear-gradient(to right, #eab308, #ca8a04);
     --bar-orange: linear-gradient(to right, #f97316, #ea580c);
     --bar-red: linear-gradient(to right, #ef4444, #b91c1c);
+
+    --status-good-bg: rgba(34,197,94,.2);
+    --status-good-border: rgba(34,197,94,.35);
+    --status-good-text: #86efac;
+    --status-warn-bg: rgba(234,179,8,.18);
+    --status-warn-border: rgba(234,179,8,.38);
+    --status-warn-text: #fde68a;
+    --status-bad-bg: rgba(239,68,68,.2);
+    --status-bad-border: rgba(239,68,68,.35);
+    --status-bad-text: #fecaca;
+    --status-neutral-bg: rgba(255,255,255,.08);
+    --status-neutral-border: rgba(255,255,255,.12);
+    --status-neutral-text: #e5e7eb;
+    --status-up-bg: rgba(34,197,94,.18);
+    --status-up-border: rgba(34,197,94,.35);
+    --status-up-text: #bbf7d0;
+    --status-down-bg: rgba(239,68,68,.2);
+    --status-down-border: rgba(239,68,68,.35);
+    --status-down-text: #fecaca;
 }
 
 #info-drawer,

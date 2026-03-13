@@ -1,16 +1,24 @@
 const fs = require('fs');
 const path = require('path');
 const { APP_DATA, CONFIG_DIR } = require('./paths');
+const { DEFAULT_THEME, normalizeTheme } = require('./theme-registry');
 
 const CONFIG_FILE   = path.join(CONFIG_DIR, 'config.json');
 const FALLBACK_FILE = path.join(APP_DATA, 'config.json');
+
+function normalizeConfiguration(config) {
+    return {
+        ...config,
+        theme: normalizeTheme(config?.theme)
+    };
+}
 
 function loadConfiguration() {
     const fileToUse = fs.existsSync(CONFIG_FILE)
         ? CONFIG_FILE
         : FALLBACK_FILE;
 
-    return JSON.parse(fs.readFileSync(fileToUse, 'utf8'));
+    return normalizeConfiguration(JSON.parse(fs.readFileSync(fileToUse, 'utf8')));
 }
 
 /**
@@ -20,13 +28,15 @@ function loadConfiguration() {
  */
 function saveConfiguration(config) {
     fs.mkdirSync(CONFIG_DIR, { recursive: true });
+    const normalized = normalizeConfiguration(config);
 
     const tmp = CONFIG_FILE + '.tmp';
-    fs.writeFileSync(tmp, JSON.stringify(config, null, 2), 'utf8');
+    fs.writeFileSync(tmp, JSON.stringify(normalized, null, 2), 'utf8');
     fs.renameSync(tmp, CONFIG_FILE);
 }
 
 module.exports = {
     loadConfiguration,
-    saveConfiguration
+    saveConfiguration,
+    normalizeTheme
 };

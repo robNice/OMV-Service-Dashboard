@@ -68,6 +68,16 @@
       "addSection": "セクションを追加",
       "cardimage": "カード画像"
     },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found"
+    },
     "image": {
       "resetToDefault": "標準画像に戻す",
       "deleteCustomImage": "カスタム画像を削除",

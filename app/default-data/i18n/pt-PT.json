@@ -68,6 +68,16 @@
       "addSection": "Adicionar secção",
       "cardimage": "Imagem do cartão"
     },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found"
+    },
     "image": {
       "resetToDefault": "Repor imagem padrão",
       "deleteCustomImage": "Eliminar imagem personalizada",

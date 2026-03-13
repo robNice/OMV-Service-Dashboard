@@ -68,6 +68,16 @@
       "addSection": "Add section",
       "cardimage" : "Card image"
     },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found"
+    },
     "image": {
       "resetToDefault" : "reset to default image",
       "deleteCustomImage" : "delete custom image",

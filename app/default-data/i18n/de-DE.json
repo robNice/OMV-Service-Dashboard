@@ -68,6 +68,16 @@
       "addSection": "Sektion hinzufügen",
       "cardimage" : "Card-Bild"
     },
+    "theme": {
+      "title": "Theme auswählen",
+      "desc": "Lege das Layout-Theme für das öffentliche Dashboard fest",
+      "available": "Verfügbare Themes",
+      "hint": "Themes steuern nur das öffentliche Dashboard, nicht den Admin-Bereich.",
+      "loading": "Themes werden geladen...",
+      "current": "Aktiv",
+      "version": "Version",
+      "empty": "Keine Themes gefunden"
+    },
     "image": {
       "resetToDefault" : "zurücksetzen auf Standard-Bild",
       "deleteCustomImage" : "Custom-Image löschen",
