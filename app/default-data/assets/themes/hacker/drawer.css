@@ -64,7 +64,7 @@
     position: relative;
     height: var(--drawer-h);
     margin: 0 auto;
-    max-width: var(--drawer-w);
+    width: var(--drawer-w);
     background:
         linear-gradient(180deg, rgba(62, 255, 104, 0.04), transparent 22%),
         repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.05) 0 1px, transparent 1px 3px),
@@ -120,17 +120,21 @@
 
 #hacker-drawer-tab-host {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 50%;
+    width: var(--drawer-w);
+    height: 0;
+    transform: translateX(-50%);
     z-index: 1205;
     pointer-events: none;
 }
 
 #hacker-drawer-tab-host .tab,
 #info-drawer .tab {
-    position: fixed;
+    position: absolute;
     top: .75rem;
     bottom: auto;
-    right: 1rem;
+    right: 0;
     transform: none;
     background: #031005;
     color: transparent;
@@ -146,17 +150,14 @@
     pointer-events: auto;
 }
 
-#hacker-drawer-tab-host .tab {
-    position: fixed;
-}
-
 #info-drawer.open .tab,
 #hacker-drawer-tab-host .tab.drawer-open {
     position: absolute;
-    top: auto;
-    bottom: 0;
+    top: calc(var(--drawer-h) - 1px);
+    bottom: auto;
 }
 
+#hacker-drawer-tab-host .tab::before,
 #info-drawer .tab::before {
     content: "SYS://INFO";
     color: #96ffa4;
@@ -164,6 +165,7 @@
     letter-spacing: 0.08em;
 }
 
+#hacker-drawer-tab-host .tab::after,
 #info-drawer .tab::after {
     content: " _";
     color: #96ffa4;
@@ -253,12 +255,11 @@
     }
 
     #info-drawer .panel {
-        max-width: calc(100vw - .8rem);
+        width: calc(100vw - .8rem);
     }
 
     #hacker-drawer-tab-host .tab,
     #info-drawer .tab {
-        right: .6rem;
         padding: .46rem .75rem;
     }
 
