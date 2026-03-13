@@ -1,7 +1,7 @@
 :root {
     --drawer-w: min(960px, calc(100vw - 3rem));
     --drawer-h: 100vh;
-    --drawer-transition: transform .22s steps(8, end), opacity .18s linear;
+    --drawer-transition: top .22s steps(8, end), opacity .18s linear;
     --drawer-panel-backdrop: none;
     --drawer-header-bg: rgba(2, 18, 4, 0.9);
     --drawer-footer-bg: rgba(2, 18, 4, 0.9);
@@ -62,10 +62,11 @@
 
 #info-drawer .panel {
     position: fixed;
-    top: 0;
+    top: calc(-1 * var(--drawer-h));
     left: 50%;
     height: var(--drawer-h);
     width: var(--drawer-w);
+    margin-left: calc(var(--drawer-w) / -2);
     background:
         linear-gradient(180deg, rgba(62, 255, 104, 0.04), transparent 22%),
         repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.05) 0 1px, transparent 1px 3px),
@@ -75,13 +76,12 @@
     box-shadow:
         0 0 0 1px rgba(24, 75, 34, 0.4) inset,
         0 0 28px rgba(17, 78, 29, 0.16);
-    transform: translate(-50%, calc(-1 * var(--drawer-h)));
     transition: var(--drawer-transition);
     pointer-events: auto;
 }
 
 #info-drawer.open .panel {
-    transform: translate(-50%, 0);
+    top: 0;
 }
 
 #info-drawer .section h3,
@@ -149,6 +149,7 @@
         0 0 0 1px rgba(24, 75, 34, 0.4) inset,
         0 0 16px rgba(17, 78, 29, 0.14);
     pointer-events: auto;
+    cursor: pointer;
 }
 
 #info-drawer.open .tab,
