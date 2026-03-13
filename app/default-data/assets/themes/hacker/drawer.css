@@ -49,8 +49,19 @@ body[data-theme="hacker"] #info-drawer footer {
     font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
 }
 
+body[data-theme="hacker"] #info-drawer .section > h3 {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+}
+
 body[data-theme="hacker"] #info-drawer .section h3::before {
     content: "-= ";
+    inline-size: auto;
+    block-size: auto;
+    mask: none;
+    -webkit-mask: none;
+    background: none;
     margin-right: 0.15rem;
     color: var(--muted);
 }
