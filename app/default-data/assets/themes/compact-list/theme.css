@@ -4,25 +4,37 @@ body[data-theme="compact-list"] {
     --tile-bg: rgba(255, 255, 255, 0.84);
 }
 
-body[data-theme="compact-list"] > a {
-    display: block;
+body[data-theme="compact-list"] .page-header {
     max-width: 960px;
-    width: min(960px, calc(100% - 2rem));
-    margin: 0 auto 0.75rem !important;
+    margin-bottom: 1.25rem;
+    padding: 1rem 1.15rem;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.72));
+    box-shadow: 0 14px 30px rgba(22, 32, 43, 0.1);
+    backdrop-filter: blur(10px);
 }
 
-body[data-theme="compact-list"] h1 {
-    text-align: left;
+body[data-theme="compact-list"] .page-header > a {
+    display: inline-block;
     max-width: 960px;
-    margin: 0 auto 1rem;
+    margin: 0 0 0.6rem !important;
+    color: #1d4ed8;
+}
+
+body[data-theme="compact-list"] .page-header h1 {
+    text-align: left;
+    max-width: none;
+    margin: 0 0 1rem;
     font-size: clamp(2rem, 4vw, 3.2rem);
+    color: #0f172a;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 body[data-theme="compact-list"] .section-nav {
     flex-wrap: nowrap;
     justify-content: flex-start;
     gap: 0.65rem;
-    max-width: 960px;
+    max-width: none;
     overflow-x: auto;
     padding: 0 0 0.35rem;
     scrollbar-width: thin;
@@ -81,19 +93,20 @@ body[data-theme="compact-list"] .service-title {
 }
 
 @media (max-width: 640px) {
-    body[data-theme="compact-list"] > a {
-        width: 100%;
-        margin-bottom: 0.5rem !important;
+    body[data-theme="compact-list"] .page-header {
+        padding: 0.85rem 0.9rem;
+        border-radius: 16px;
     }
 
-    body[data-theme="compact-list"] h1 {
-        max-width: none;
+    body[data-theme="compact-list"] .page-header > a {
         margin-bottom: 0.75rem;
+    }
+
+    body[data-theme="compact-list"] .page-header h1 {
         font-size: 1.9rem;
     }
 
     body[data-theme="compact-list"] .section-nav {
-        max-width: none;
         margin: 0 auto 1rem;
     }
 
