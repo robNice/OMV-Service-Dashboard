@@ -1,3 +1,11 @@
+@font-face {
+    font-family: "GianaLocal";
+    src: url("/assets/themes/1984/assets/Giana.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 body[data-theme="1984"] {
     --bg-color: #0a1030;
     --text-color: #d7e2ff;
@@ -15,10 +23,10 @@ body[data-theme="1984"]::after {
     inset: 0;
     pointer-events: none;
     background:
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.04), transparent 16%, transparent 84%, rgba(255, 255, 255, 0.03)),
-        repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 4px);
-    mix-blend-mode: soft-light;
-    opacity: 0.32;
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.06), transparent 14%, transparent 86%, rgba(255, 255, 255, 0.05)),
+        repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.055) 0 1px, rgba(255, 255, 255, 0.01) 1px 2px, transparent 2px 4px);
+    mix-blend-mode: screen;
+    opacity: 0.44;
     z-index: 0;
 }
 
@@ -51,6 +59,7 @@ body[data-theme="1984"] .page-header > a {
 }
 
 body[data-theme="1984"] .page-header h1 {
+    font-family: "GianaLocal", var(--font-h1), system-ui, sans-serif;
     margin-bottom: 0.9rem;
     color: #f2f6ff;
     text-shadow:

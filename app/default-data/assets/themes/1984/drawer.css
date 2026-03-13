@@ -88,12 +88,14 @@ body[data-theme="1984"] #info-drawer .content {
 }
 
 body[data-theme="1984"] #info-drawer .section h3 {
+    font-family: "GianaLocal", var(--font-h1), system-ui, sans-serif;
     color: #8be9ff;
     text-shadow: 1px 0 0 rgba(255, 95, 193, 0.3);
     letter-spacing: 0.14em;
 }
 
 body[data-theme="1984"] #info-drawer .tab {
+    font-family: "GianaLocal", var(--font-h1), system-ui, sans-serif;
     background:
         linear-gradient(90deg, rgba(94, 232, 255, 0.2), rgba(255, 95, 193, 0.18)),
         #111a4f;
