@@ -130,6 +130,29 @@ theme.css
 drawer.css
 ```
 
+Themes koennen optional auch ein clientseitiges Skript mitbringen:
+
+```text
+theme.js
+```
+
+Wenn fuer das aktive Theme eine Datei unter `/assets/themes/<theme-id>/theme.js` existiert, wird sie vom Frontend automatisch geladen.
+
+Konvention fuer Theme-Skripte:
+
+- Genau ein globales Objekt unter `window.OMVTheme` registrieren
+- Eine Funktion `init(context)` bereitstellen
+- Optional eine Funktion `destroy()` fuer Cleanup bereitstellen
+- Theme-spezifisches DOM und Verhalten im Theme-Ordner halten statt gemeinsame Core-Skripte zu veraendern
+
+Der an `init()` uebergebene `context` enthaelt:
+
+- `theme`
+- `body`
+- `document`
+- `drawer`
+- `version`
+
 Die technischen Details, die Ordnerstruktur und das Verhalten der Style-Vererbung sind in [`CONFIG_README.de.md`](./CONFIG_README.de.md) dokumentiert.
 
 ---

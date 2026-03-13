@@ -8,6 +8,7 @@
             (document.querySelector('meta[name="omv-bg"]') || {}).content ||
             html.dataset.bg ||
             (document.body && document.body.dataset ? document.body.dataset.bg : null);
+
         if (override) {
             setBg(override);
             return;

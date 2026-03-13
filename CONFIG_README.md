@@ -20,6 +20,7 @@
     - [`meta.json`](#metajson)
     - [`theme.css`](#themecss)
     - [`drawer.css`](#drawercss)
+    - [`theme.js` (optional)](#themejs-optional)
     - [Style inheritance](#style-inheritance)
 - [Summary](#summary)
 
@@ -199,10 +200,11 @@ The backend reads available themes from `/config/assets/themes/<theme-id>/meta.j
 ├─ meta.json
 ├─ theme.css
 ├─ drawer.css
+├─ theme.js
 └─ assets/
 ```
 
-`assets/` is optional and can contain theme-local fonts or images referenced by the theme CSS.
+`theme.js` and `assets/` are optional. `assets/` can contain theme-local fonts or images referenced by the theme CSS.
 
 #### `meta.json`
 
@@ -249,6 +251,47 @@ Typical targets are:
 - `#info-drawer .section h3`
 - `#info-drawer .kv`
 
+#### `theme.js` (optional)
+
+Themes may also provide an optional client-side script at:
+
+```text
+/config/assets/themes/<theme-id>/theme.js
+```
+
+If that file exists for the active theme, the frontend loads it automatically after the shared frontend scripts.
+
+Convention:
+
+- register a single global object at `window.OMVTheme`
+- provide `init(context)` as the theme entry point
+- optionally provide `destroy()` for cleanup
+- keep theme-specific DOM and behavior in this file instead of editing shared core scripts
+
+The `context` object currently contains:
+
+- `theme`
+- `body`
+- `document`
+- `drawer`
+- `version`
+
+Example:
+
+```js
+window.OMVTheme = {
+  init({ body }) {
+    if (document.getElementById('my-theme-root')) return;
+    const el = document.createElement('div');
+    el.id = 'my-theme-root';
+    body.appendChild(el);
+  },
+  destroy() {
+    document.getElementById('my-theme-root')?.remove();
+  }
+};
+```
+
 #### Style inheritance
 
 Theme CSS does not replace the whole frontend. It extends the shared base styles.
@@ -258,6 +301,7 @@ Load order for the public page:
 1. Shared base styles such as `style.css`, `bg.css`, `drawer.css`, and `drawer-icons.css`
 2. The selected theme's `theme.css`
 3. The selected theme's `drawer.css`
+4. The selected theme's `theme.js` if present
 
 That means:
 
@@ -265,6 +309,7 @@ That means:
 - the selected theme overrides only what it needs
 - your custom theme CSS should use normal selectors like `.page-header` or `#info-drawer .panel`
 - wrapping selectors like `body[data-theme="..."]` are not required in custom themes
+- theme-specific JavaScript should use the `window.OMVTheme.init(context)` convention
 
 ---
 
@@ -274,4 +319,4 @@ That means:
 - Missing files always fall back to integrated defaults
 - Translation files are merged
 - Images and other assets under `/config/assets` override the matching visual assets
-- Themes are discovered via `meta.json` and styled via `theme.css` and `drawer.css`
+- Themes are discovered via `meta.json`, styled via `theme.css` and `drawer.css`, and may optionally extend behavior via `theme.js`

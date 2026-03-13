@@ -20,6 +20,7 @@
     - [`meta.json`](#metajson)
     - [`theme.css`](#themecss)
     - [`drawer.css`](#drawercss)
+    - [`theme.js` (optional)](#themejs-optional)
     - [Style-Vererbung](#style-vererbung)
 - [Zusammenfassung](#zusammenfassung)
 
@@ -199,10 +200,11 @@ Das Backend liest verfuegbare Themes aus `/config/assets/themes/<theme-id>/meta.
 ├─ meta.json
 ├─ theme.css
 ├─ drawer.css
+├─ theme.js
 └─ assets/
 ```
 
-`assets/` ist optional und kann theme-lokale Fonts oder Bilder enthalten, die von der Theme-CSS referenziert werden.
+`theme.js` und `assets/` sind optional. `assets/` kann theme-lokale Fonts oder Bilder enthalten, die von der Theme-CSS referenziert werden.
 
 #### `meta.json`
 
@@ -249,6 +251,47 @@ Typische Ziele sind:
 - `#info-drawer .section h3`
 - `#info-drawer .kv`
 
+#### `theme.js` (optional)
+
+Themes koennen optional ein clientseitiges Skript unter folgendem Pfad mitbringen:
+
+```text
+/config/assets/themes/<theme-id>/theme.js
+```
+
+Wenn diese Datei fuer das aktive Theme existiert, wird sie nach den gemeinsamen Frontend-Skripten automatisch geladen.
+
+Konvention:
+
+- genau ein globales Objekt unter `window.OMVTheme` registrieren
+- `init(context)` als Einstiegspunkt bereitstellen
+- optional `destroy()` fuer Cleanup bereitstellen
+- theme-spezifisches DOM und Verhalten in dieser Datei halten statt gemeinsame Core-Skripte anzupassen
+
+Das `context`-Objekt enthaelt aktuell:
+
+- `theme`
+- `body`
+- `document`
+- `drawer`
+- `version`
+
+Beispiel:
+
+```js
+window.OMVTheme = {
+  init({ body }) {
+    if (document.getElementById('my-theme-root')) return;
+    const el = document.createElement('div');
+    el.id = 'my-theme-root';
+    body.appendChild(el);
+  },
+  destroy() {
+    document.getElementById('my-theme-root')?.remove();
+  }
+};
+```
+
 #### Style-Vererbung
 
 Theme-CSS ersetzt nicht das komplette Frontend, sondern erweitert die gemeinsamen Basis-Styles.
@@ -258,6 +301,7 @@ Ladereihenfolge auf der oeffentlichen Seite:
 1. Gemeinsame Basis-Styles wie `style.css`, `bg.css`, `drawer.css` und `drawer-icons.css`
 2. `theme.css` des ausgewaehlten Themes
 3. `drawer.css` des ausgewaehlten Themes
+4. `theme.js` des ausgewaehlten Themes, falls vorhanden
 
 Das bedeutet:
 
@@ -265,6 +309,7 @@ Das bedeutet:
 - das aktive Theme ueberschreibt nur die Teile, die es veraendern moechte
 - eigene Themes sollten mit normalen Selektoren wie `.page-header` oder `#info-drawer .panel` arbeiten
 - Klammer-Selektoren wie `body[data-theme="..."]` sind in eigenen Themes nicht erforderlich
+- theme-spezifisches JavaScript sollte der Konvention `window.OMVTheme.init(context)` folgen
 
 ---
 
@@ -274,4 +319,4 @@ Das bedeutet:
 - Fehlende Dateien fallen immer auf integrierte Defaults zurueck
 - Uebersetzungsdateien werden gemerged
 - Bilder und andere Assets unter `/config/assets` ueberschreiben die passenden visuellen Assets
-- Themes werden ueber `meta.json` erkannt und ueber `theme.css` und `drawer.css` gestaltet
+- Themes werden ueber `meta.json` erkannt, ueber `theme.css` und `drawer.css` gestaltet und koennen Verhalten optional ueber `theme.js` erweitern

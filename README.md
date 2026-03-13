@@ -130,6 +130,29 @@ theme.css
 drawer.css
 ```
 
+Themes may also provide an optional client-side script:
+
+```text
+theme.js
+```
+
+If `/assets/themes/<theme-id>/theme.js` exists for the active theme, the frontend loads it automatically.
+
+Theme script convention:
+
+- Register a single global object at `window.OMVTheme`
+- Provide an `init(context)` function
+- Optionally provide a `destroy()` function for cleanup
+- Keep theme-specific DOM and behavior inside the theme directory instead of modifying shared core scripts
+
+The `context` passed to `init()` contains:
+
+- `theme`
+- `body`
+- `document`
+- `drawer`
+- `version`
+
 The technical details, folder structure, and inheritance behavior are documented in [`CONFIG_README.md`](./CONFIG_README.md).
 
 ---
