@@ -21,3 +21,25 @@ License obligations relevant to redistribution of the bundled font:
 The full license text is included verbatim in:
 
 - `app/default-data/assets/themes/1984/assets/FreeLicense.txt`
+
+## IBM Plex Mono
+
+- Font name: `IBM Plex Mono`
+- Provider: IBM Corp.
+- Source URL: `https://github.com/IBM/plex/releases`
+- Files:
+  - `app/default-data/assets/themes/hacker/assets/IBMPlexMono-Regular.woff2`
+  - `app/default-data/assets/themes/hacker/assets/IBMPlexMono-SemiBold.woff2`
+  - `app/default-data/assets/themes/hacker/assets/LICENSE.txt`
+- License: `SIL Open Font License 1.1`
+
+License notes relevant to redistribution:
+
+- The font may be bundled, embedded, redistributed and sold with software.
+- The font itself may not be sold by itself.
+- Modified versions must not use reserved font names without permission.
+- Redistribution must include the copyright notice and license text.
+
+The full license text is included in:
+
+- `app/default-data/assets/themes/hacker/assets/LICENSE.txt`

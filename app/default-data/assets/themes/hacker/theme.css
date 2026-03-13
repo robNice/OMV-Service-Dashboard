@@ -1,0 +1,214 @@
+@font-face {
+    font-family: "IBMPlexMonoLocal";
+    src: url("/assets/themes/hacker/assets/IBMPlexMono-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "IBMPlexMonoLocal";
+    src: url("/assets/themes/hacker/assets/IBMPlexMono-SemiBold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root:has(body[data-theme="hacker"]) {
+    --bg-opacity: 0.34;
+}
+
+html:has(body[data-theme="hacker"])::before {
+    filter: blur(1px) saturate(0.35) brightness(0.18) contrast(1.05);
+    transform: scale(1.02);
+}
+
+html:has(body[data-theme="hacker"])::after {
+    background:
+        radial-gradient(1000px 600px at 50% 0%, rgba(0, 48, 0, 0.12), rgba(0, 0, 0, 0.7)),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.82));
+}
+
+body[data-theme="hacker"] {
+    --bg-color: #020603;
+    --text-color: #8cff98;
+    --tile-bg: rgba(2, 10, 3, 0.78);
+    font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
+    text-shadow: 0 0 6px rgba(82, 255, 115, 0.12);
+}
+
+body[data-theme="hacker"] .page-header,
+body[data-theme="hacker"] .grid {
+    position: relative;
+    z-index: 1;
+}
+
+body[data-theme="hacker"] .page-header {
+    padding: 0.7rem 0.95rem 0.8rem;
+    border: 1px solid rgba(79, 255, 121, 0.28);
+    background:
+        linear-gradient(180deg, rgba(60, 255, 111, 0.06), rgba(0, 0, 0, 0)),
+        rgba(0, 7, 0, 0.78);
+    box-shadow:
+        0 0 0 1px rgba(41, 120, 53, 0.28) inset,
+        0 0 30px rgba(0, 255, 85, 0.05);
+}
+
+body[data-theme="hacker"] .page-header > a,
+body[data-theme="hacker"] .page-header h1 {
+    color: #96ffa4;
+    font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
+}
+
+body[data-theme="hacker"] .page-header > a::before {
+    content: "> ";
+}
+
+body[data-theme="hacker"] .page-header h1 {
+    text-align: left;
+    margin-bottom: 0.85rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+body[data-theme="hacker"] .page-header h1::after {
+    content: "_";
+    margin-left: 0.15em;
+    animation: hacker-cursor 0.95s steps(1) infinite;
+}
+
+body[data-theme="hacker"] .section-nav {
+    justify-content: center;
+    gap: 0.65rem;
+}
+
+body[data-theme="hacker"] .section-nav-item {
+    position: relative;
+    width: 84px;
+    height: 54px;
+    border-radius: 0;
+    border: 1px solid rgba(95, 255, 133, 0.28);
+    background: rgba(0, 8, 0, 0.72);
+    box-shadow: 0 0 0 1px rgba(34, 74, 39, 0.34) inset;
+}
+
+body[data-theme="hacker"] .section-nav-item::before {
+    content: ">";
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    z-index: 2;
+    color: rgba(154, 255, 169, 0.88);
+    font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+body[data-theme="hacker"] .section-nav-item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 16, 0, 0.28) 100%),
+        repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.06) 0 1px, transparent 1px 3px);
+}
+
+body[data-theme="hacker"] .section-nav-item.active {
+    border-color: rgba(140, 255, 152, 0.72);
+    box-shadow:
+        0 0 0 1px rgba(122, 255, 145, 0.34) inset,
+        0 0 14px rgba(84, 255, 120, 0.15);
+}
+
+body[data-theme="hacker"] .grid {
+    gap: 1.1rem;
+}
+
+body[data-theme="hacker"] .service {
+    position: relative;
+    background:
+        linear-gradient(180deg, rgba(56, 255, 103, 0.04), rgba(0, 0, 0, 0)),
+        rgba(2, 10, 3, 0.74);
+    border: 1px solid rgba(78, 255, 120, 0.22);
+    border-radius: 0;
+    box-shadow:
+        0 0 0 1px rgba(33, 70, 38, 0.32) inset,
+        0 0 20px rgba(13, 79, 27, 0.12);
+}
+
+body[data-theme="hacker"] .service::before {
+    content: ">";
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    z-index: 2;
+    color: rgba(154, 255, 169, 0.88);
+    font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+body[data-theme="hacker"] .service a {
+    position: relative;
+    padding-bottom: 0;
+}
+
+body[data-theme="hacker"] .service a::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 16, 0, 0.38) 100%),
+        repeating-linear-gradient(180deg, rgba(120, 255, 142, 0.06) 0 1px, transparent 1px 3px);
+}
+
+body[data-theme="hacker"] .service img {
+    filter: grayscale(1) brightness(0.32) contrast(1.08);
+}
+
+body[data-theme="hacker"] .service-title {
+    justify-content: flex-start;
+    text-align: left;
+    padding: 0.95rem 1rem 1rem 2rem;
+    color: #96ffa4;
+    font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+@keyframes hacker-cursor {
+    0%, 49% {
+        opacity: 1;
+    }
+    50%, 100% {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    body[data-theme="hacker"] .page-header {
+        padding: 0.55rem 0.75rem 0.65rem;
+    }
+
+    body[data-theme="hacker"] .page-header h1 {
+        font-size: 1.75rem;
+    }
+
+    body[data-theme="hacker"] .section-nav {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    body[data-theme="hacker"] .service-title {
+        padding-left: 1.8rem;
+        font-size: 0.95rem;
+    }
+}
