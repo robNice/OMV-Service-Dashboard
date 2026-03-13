@@ -61,9 +61,10 @@
 }
 
 #info-drawer .panel {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 50%;
     height: var(--drawer-h);
-    margin: 0 auto;
     width: var(--drawer-w);
     background:
         linear-gradient(180deg, rgba(62, 255, 104, 0.04), transparent 22%),
@@ -74,13 +75,13 @@
     box-shadow:
         0 0 0 1px rgba(24, 75, 34, 0.4) inset,
         0 0 28px rgba(17, 78, 29, 0.16);
-    transform: translateY(calc(-1 * var(--drawer-h)));
+    transform: translate(-50%, calc(-1 * var(--drawer-h)));
     transition: var(--drawer-transition);
     pointer-events: auto;
 }
 
 #info-drawer.open .panel {
-    transform: translateY(0);
+    transform: translate(-50%, 0);
 }
 
 #info-drawer .section h3,
@@ -208,7 +209,7 @@
 }
 
 #info-drawer [data-close] {
-    display: none;
+    display: inline-flex;
 }
 
 #info-drawer.hacker-booting .panel::after {
