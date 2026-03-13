@@ -73,7 +73,6 @@ function normalizeTag(tag) {
     const parts = tag.replace('_', '-').split('-');
     if (parts.length === 1) {
         const p = parts[0].toLowerCase();
-        // keep simple language code lower (e.g. "en", "de")
         return p.length === 2 ? p.toLowerCase() : p;
     }
     const lang = parts[0].toLowerCase();

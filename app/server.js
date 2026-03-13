@@ -218,6 +218,18 @@ function renderSection(section) {
     </div>`;
 }
 
+function renderSectionNavItem(section, isActive = false) {
+    return `
+    <a
+      class="section-nav-item${isActive ? " active" : ""}"
+      href="/section/${encodeURIComponent(section.id)}"
+      title="${section.title}"
+      aria-label="${section.title}"
+    >
+      <img src="${section.cardImage.src}" alt="${section.title}" />
+    </a>`;
+}
+
 
 /**
  *
@@ -229,13 +241,14 @@ function renderSection(section) {
  * @param cards
  * @returns {*}
  */
-function setTemplate(req, template, backlink, version, title, cards) {
+function setTemplate(req, template, backlink, version, title, cards, sectionNav = "") {
     return translateTextI18n(
         template
             .replace(/{{BACKLINK}}/g, backlink)
             .replace(/{{VERSION}}/g, version)
             .replace(/{{TITLE}}/g, title)
             .replace(/{{SECTION_NAME}}/g, title)
+            .replace(/{{SECTION_NAV}}/g, sectionNav)
             .replace(/{{SECTIONS_SERVICES}}/g, cards),
         {locale: req.getLocale()}
     );
@@ -803,7 +816,8 @@ app.get("/", (req, res) => {
         '',
         APP_VERSION,
         config.title,
-        sections
+        sections,
+        ''
     );
 
     res.send(html);
@@ -813,7 +827,12 @@ app.get("/", (req, res) => {
 app.get("/section/:id", (req, res) => {
     const data = loadData();
     const config = loadConfiguration()
-    const section = data.sections.find(s => s.id === req.params.id);
+    const sections = data.sections.map(item => ({
+        ...item,
+        cardImage: resolveSectionCardImage(item),
+        backgroundImage: resolveSectionBackgroundImage(item)
+    }));
+    const section = sections.find(s => s.id === req.params.id);
     if (!section) {
         return res.status(404).send("Sektion nicht gefunden");
     }
@@ -822,6 +841,11 @@ app.get("/section/:id", (req, res) => {
             renderService({...service, id})
         )
         .join("\n");
+    const sectionNav = `
+        <div class="section-nav" aria-label="Sektionen">
+            ${sections.map(item => renderSectionNavItem(item, item.id === section.id)).join("\n")}
+        </div>
+    `;
 
     const html = setTemplate(
         req,
@@ -829,7 +853,8 @@ app.get("/section/:id", (req, res) => {
         '<a href="/" style="margin: 1rem; display: inline-block;">← ' + __('label.back') + '</a>',
         APP_VERSION,
         config.title + ' - ' + section.title,
-        services
+        services,
+        sectionNav
     );
     res.send(html);
 });

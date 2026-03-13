@@ -23,14 +23,12 @@ function applyImagePreview(previewEl, image) {
 
     let effectiveImage = image;
 
-    // 🔴 Delete oder kein Image → Default erzwingen
     if (!image || image._delete === true) {
         if (img && img.dataset.defaultimg) {
             img.src = img.dataset.defaultimg;
             img.title = '';
         }
 
-        // 👇 WICHTIG: image NICHT returnen, sondern normalisieren
         effectiveImage = image && image.source
             ? image
             : { source: 'default' };
@@ -42,7 +40,6 @@ function applyImagePreview(previewEl, image) {
         }
     }
 
-    // 🏷️ Badge immer auswerten
     if (status) {
         const LABELS = {
             explicit: I18N.imageSourceCustom || 'custom',

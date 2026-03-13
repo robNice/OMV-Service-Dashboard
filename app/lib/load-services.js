@@ -33,7 +33,6 @@ function migrateSection(section) {
         section.serviceOrder = order;
     }
 
-    // services schon Map, aber keine Order
     if (!section.serviceOrder) {
         section.serviceOrder = Object.keys(section.services || {});
     }
