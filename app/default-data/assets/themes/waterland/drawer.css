@@ -1,5 +1,7 @@
 :root {
     --drawer-w: 430px;
+    --drawer-h: 84vh;
+    --drawer-bubble-size: 72px;
     --drawer-bg: linear-gradient(180deg, rgba(230, 251, 255, 0.94), rgba(199, 243, 250, 0.95));
     --drawer-border: rgba(17, 111, 142, 0.18);
     --chip-bg: rgba(255, 255, 255, 0.45);
@@ -35,6 +37,7 @@
     left: 1rem;
     bottom: auto;
     width: var(--drawer-w);
+    height: var(--drawer-h);
     transform: translateY(-50%);
     transform-origin: left center;
     opacity: 1;
@@ -48,10 +51,20 @@
 }
 
 #info-drawer .panel {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: var(--drawer-bubble-size);
+    height: var(--drawer-bubble-size);
+    transform: translateY(-50%);
     overflow: visible;
-    border-radius: 36px;
-    clip-path: circle(39px at 18px 50%);
+    border-radius: 50%;
+    clip-path: inset(0 round 50%);
     transition:
+        width .46s cubic-bezier(.22, 1, .36, 1),
+        height .46s cubic-bezier(.22, 1, .36, 1),
+        top .46s cubic-bezier(.22, 1, .36, 1),
+        transform .46s cubic-bezier(.22, 1, .36, 1),
         clip-path .46s cubic-bezier(.22, 1, .36, 1),
         border-radius .46s cubic-bezier(.22, 1, .36, 1),
         box-shadow .46s cubic-bezier(.22, 1, .36, 1);
@@ -62,11 +75,15 @@
 }
 
 #info-drawer.open .panel {
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    border-radius: 36px;
     clip-path: inset(0 round 36px);
 }
 
 #info-drawer:not(.open) .panel {
-    border-radius: 999px;
     box-shadow:
         0 0 0 4px rgba(149, 231, 243, 0.18),
         0 16px 30px rgba(10, 81, 107, 0.14);
@@ -132,10 +149,10 @@
 }
 
 #info-drawer .tab {
-    left: -18px;
+    left: 0;
     right: auto;
-    width: 72px;
-    height: 72px;
+    width: var(--drawer-bubble-size);
+    height: var(--drawer-bubble-size);
     border-radius: 50%;
     border: 3px solid rgba(244, 253, 255, 0.85);
     background:
@@ -189,6 +206,8 @@
 @media (max-width: 720px) {
     :root {
         --drawer-w: min(88vw, 390px);
+        --drawer-h: 78vh;
+        --drawer-bubble-size: 64px;
     }
 
     #info-drawer {
@@ -197,8 +216,6 @@
     }
 
     #info-drawer .tab {
-        width: 64px;
-        height: 64px;
-        left: -14px;
+        left: 0;
     }
 }
