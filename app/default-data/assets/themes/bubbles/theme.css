@@ -304,23 +304,23 @@ body::after {
     }
 
     .section-nav-item {
-        width: 58px;
-        height: 58px;
+        width: 52px;
+        height: 52px;
         border-width: 3px;
     }
 
     .service {
-        width: min(calc(50vw - 1.25rem), 178px);
-        height: min(calc(50vw - 1.25rem), 178px);
+        width: min(40vw, 156px);
+        height: min(40vw, 156px);
         border-width: 4px;
     }
 
     .service-title {
         inset-inline: 0;
-        top: 81%;
+        top: 80%;
         bottom: auto;
-        padding: 0.8rem 0 46px;
-        font-size: 0.8rem;
+        padding: 0.72rem 0 38px;
+        font-size: 0.72rem;
         letter-spacing: 0.04em;
     }
 }
