@@ -35,27 +35,41 @@
     left: 1rem;
     bottom: auto;
     width: var(--drawer-w);
-    transform: translate(calc(-1 * (var(--drawer-w) - 54px)), -50%) scale(0.14);
-    transform-origin: 27px 50%;
-    opacity: 0.94;
+    transform: translateY(-50%);
+    transform-origin: left center;
+    opacity: 1;
+    overflow: visible;
+    transition: none;
 }
 
 #info-drawer.open {
-    transform: translate(0, -50%) scale(1);
+    transform: translateY(-50%);
     opacity: 1;
 }
 
 #info-drawer .panel {
     overflow: visible;
     border-radius: 36px;
+    clip-path: circle(39px at 18px 50%);
+    transition:
+        clip-path .46s cubic-bezier(.22, 1, .36, 1),
+        border-radius .46s cubic-bezier(.22, 1, .36, 1),
+        box-shadow .46s cubic-bezier(.22, 1, .36, 1);
     background:
         radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.38) 0 10%, transparent 11%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0)),
         var(--drawer-bg);
 }
 
+#info-drawer.open .panel {
+    clip-path: inset(0 round 36px);
+}
+
 #info-drawer:not(.open) .panel {
     border-radius: 999px;
+    box-shadow:
+        0 0 0 4px rgba(149, 231, 243, 0.18),
+        0 16px 30px rgba(10, 81, 107, 0.14);
 }
 
 #info-drawer .panel::before {
@@ -118,6 +132,8 @@
     padding: 0;
     text-indent: -9999px;
     overflow: hidden;
+    cursor: pointer;
+    z-index: 3;
 }
 
 #info-drawer .tab::before,
@@ -158,7 +174,7 @@
 
     #info-drawer {
         left: .8rem;
-        transform: translate(calc(-1 * (var(--drawer-w) - 48px)), -50%) scale(0.14);
+        transform: translateY(-50%);
     }
 
     #info-drawer .tab {
