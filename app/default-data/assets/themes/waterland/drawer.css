@@ -72,6 +72,22 @@
         0 16px 30px rgba(10, 81, 107, 0.14);
 }
 
+#info-drawer header,
+#info-drawer .content,
+#info-drawer footer {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .18s ease, visibility 0s linear .18s;
+}
+
+#info-drawer.open header,
+#info-drawer.open .content,
+#info-drawer.open footer {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .26s ease .14s, visibility 0s linear 0s;
+}
+
 #info-drawer .panel::before {
     content: "";
     position: absolute;
@@ -130,6 +146,9 @@
         0 0 0 6px rgba(149, 231, 243, 0.2),
         0 14px 28px rgba(10, 81, 107, 0.18);
     padding: 0;
+    font-size: 0;
+    line-height: 0;
+    white-space: nowrap;
     text-indent: -9999px;
     overflow: hidden;
     cursor: pointer;

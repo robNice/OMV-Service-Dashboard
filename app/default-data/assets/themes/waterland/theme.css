@@ -8,6 +8,16 @@
     --water-foam: rgba(244, 253, 255, 0.85);
     --water-sand: #f4deb1;
     --water-shadow: 0 22px 44px rgba(10, 81, 107, 0.18);
+    --bubble-size: 26px;
+    --bubble-x: 0vw;
+    --bubble-drift: 3vw;
+    --bubble-duration: 20s;
+    --bubble-delay: 0s;
+    --bubble-opacity: 0.28;
+    --fish-size: 70px;
+    --fish-y: 40vh;
+    --fish-duration: 26s;
+    --fish-delay: 0s;
 }
 
 html::before {
@@ -170,12 +180,14 @@ body::after {
 
 .service-title {
     position: absolute;
-    inset: 50% 1.2rem auto 1.2rem;
+    inset: auto 0 17% 0;
     min-height: 0;
-    padding: 0.8rem 1.1rem;
-    transform: translateY(-50%);
-    border-radius: 999px;
-    background: rgba(8, 53, 73, 0.44);
+    padding: 0.95rem 1.15rem;
+    transform: none;
+    border-radius: 0;
+    background:
+        linear-gradient(180deg, rgba(8, 53, 73, 0.24), rgba(8, 53, 73, 0.58)),
+        rgba(8, 53, 73, 0.28);
     backdrop-filter: blur(10px);
     color: #f3fcff;
     font-size: 1rem;
@@ -302,8 +314,9 @@ body::after {
     }
 
     .service-title {
-        inset-inline: 1rem;
-        padding: 0.7rem 0.95rem;
+        inset-inline: 0;
+        bottom: 16%;
+        padding: 0.8rem 0.9rem;
         font-size: 0.92rem;
     }
 }
