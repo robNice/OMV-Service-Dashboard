@@ -37,7 +37,12 @@ const APP_VERSION = pkg.version;
 function initDefaultData() {
     const source = '/app/default-data';
     const target = '/data';
+    const targetThemes = path.join(target, 'assets', 'themes');
     fs.mkdirSync(target, {recursive: true});
+
+    // Built-in themes are fully managed by the app image. Remove stale
+    // directories first so renamed/removed defaults do not linger in /data.
+    fs.rmSync(targetThemes, {recursive: true, force: true});
     fs.cpSync(source, target, {recursive: true});
 }
 

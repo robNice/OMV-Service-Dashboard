@@ -30,6 +30,24 @@
     --bar-yellow: linear-gradient(90deg, #ffd772, #f5a95a);
     --bar-orange: linear-gradient(90deg, #ffae65, #f07f55);
     --bar-red: linear-gradient(90deg, #ff8e9e, #e56482);
+    --status-good-bg: #c2f0d8;
+    --status-good-border: #76c99e;
+    --status-good-text: #1f7656;
+    --status-warn-bg: #ffe4ab;
+    --status-warn-border: #d9b263;
+    --status-warn-text: #7c5a12;
+    --status-bad-bg: #ffd0d8;
+    --status-bad-border: #e49aa8;
+    --status-bad-text: #96384d;
+    --status-neutral-bg: #e3f3f8;
+    --status-neutral-border: #b5d4de;
+    --status-neutral-text: #29536a;
+    --status-up-bg: #bfeacb;
+    --status-up-border: #79c28d;
+    --status-up-text: #286747;
+    --status-down-bg: #ffd0d8;
+    --status-down-border: #df93a3;
+    --status-down-text: #91354a;
 }
 
 #info-drawer {
@@ -146,6 +164,11 @@
 #info-drawer .chip {
     border: 1px solid rgba(17, 111, 142, 0.08);
     box-shadow: 0 6px 14px rgba(17, 111, 142, 0.08);
+}
+
+#info-drawer .kv .chip {
+    color: #134b62;
+    font-weight: 700;
 }
 
 #info-drawer header .chip:first-child {

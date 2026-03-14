@@ -28,10 +28,11 @@
   - [Theme 1984](#theme-1984)
   - [Theme Bubbles](#theme-bubbles)
   - [Theme Classic](#theme-classic)
-  - [Theme Compact List](#theme-compact-list)
-  - [Theme Hacker](#theme-hacker)
-  - [Theme Hippies](#theme-hippies)
+- [Theme Compact List](#theme-compact-list)
+- [Theme Hacker](#theme-hacker)
+- [Theme Hippies](#theme-hippies)
 - [Lizenz](#lizenz)
+- [Hinweise zu Drittanbieter-Komponenten](#hinweise-zu-drittanbieter-komponenten)
 
 ---
 
@@ -311,3 +312,7 @@ Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsaechlich der Vollst
 ## Lizenz
 
 [`MIT`](./LICENSE)
+
+## Hinweise zu Drittanbieter-Komponenten
+
+[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)
