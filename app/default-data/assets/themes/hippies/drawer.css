@@ -38,16 +38,22 @@
     --bar-red: linear-gradient(90deg, #f5568e, #cc455b);
     --status-good-bg: #c9f0b6;
     --status-good-border: #97cf71;
-    --status-good-text: #46712a;
+    --status-good-text: #2f5f1e;
     --status-warn-bg: #ffe6a8;
     --status-warn-border: #e1b74f;
-    --status-warn-text: #875e05;
+    --status-warn-text: #774d00;
     --status-bad-bg: #ffc2ce;
     --status-bad-border: #e68b9c;
-    --status-bad-text: #8d2c43;
+    --status-bad-text: #7a2238;
     --status-neutral-bg: #f5e4c2;
     --status-neutral-border: #ddbb88;
     --status-neutral-text: #7a5737;
+    --status-up-bg: #bfe6b6;
+    --status-up-border: #82c47a;
+    --status-up-text: #2f5f1e;
+    --status-down-bg: #ffc9cf;
+    --status-down-border: #df92a0;
+    --status-down-text: #7a2238;
 }
 
 #info-drawer {
