@@ -6,7 +6,7 @@
     font-display: swap;
 }
 
-body[data-theme="1984"] {
+body {
     --bg-color: #0a1030;
     --text-color: #d7e2ff;
     --tile-bg: rgba(17, 24, 61, 0.92);
@@ -17,7 +17,7 @@ body[data-theme="1984"] {
     background-attachment: fixed;
 }
 
-body[data-theme="1984"]::after {
+body::after {
     content: "";
     position: fixed;
     inset: 0;
@@ -30,13 +30,13 @@ body[data-theme="1984"]::after {
     z-index: 0;
 }
 
-body[data-theme="1984"] .page-header,
-body[data-theme="1984"] .grid {
+.page-header,
+.grid {
     position: relative;
     z-index: 1;
 }
 
-body[data-theme="1984"] .page-header {
+.page-header {
     padding: 0.7rem 1rem 0.85rem;
     background:
         linear-gradient(90deg, rgba(87, 238, 255, 0.18), rgba(255, 95, 193, 0.14)),
@@ -53,12 +53,16 @@ body[data-theme="1984"] .page-header {
     );
 }
 
-body[data-theme="1984"] .page-header > a {
+.page-header > a {
     color: #8be9ff;
     text-shadow: 2px 0 0 rgba(255, 86, 198, 0.45);
 }
 
-body[data-theme="1984"] .page-header h1 {
+.page-header > .back-link::before {
+    content: "◀ ";
+}
+
+.page-header h1 {
     font-family: "GianaLocal", var(--font-h1), system-ui, sans-serif;
     margin-bottom: 0.9rem;
     color: #f2f6ff;
@@ -69,7 +73,7 @@ body[data-theme="1984"] .page-header h1 {
     letter-spacing: 0.03em;
 }
 
-body[data-theme="1984"] .section-nav {
+.section-nav {
     justify-content: center;
     gap: 0.65rem;
     padding: 0.05rem 0 0;
@@ -77,7 +81,7 @@ body[data-theme="1984"] .section-nav {
     flex-wrap: nowrap;
 }
 
-body[data-theme="1984"] .section-nav-item {
+.section-nav-item {
     position: relative;
     flex: 0 0 88px;
     height: 58px;
@@ -95,14 +99,14 @@ body[data-theme="1984"] .section-nav-item {
     );
 }
 
-body[data-theme="1984"] .section-nav-item.active {
+.section-nav-item.active {
     border-color: #fff27a;
     box-shadow:
         0 0 0 1px rgba(255, 242, 122, 0.35) inset,
         0 0 16px rgba(255, 242, 122, 0.18);
 }
 
-body[data-theme="1984"] .section-nav-item::after {
+.section-nav-item::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -114,7 +118,7 @@ body[data-theme="1984"] .section-nav-item::after {
     opacity: 0.45;
 }
 
-body[data-theme="1984"] .service {
+.service {
     width: 300px;
     background:
         linear-gradient(180deg, rgba(117, 242, 255, 0.06), transparent 30%),
@@ -132,11 +136,11 @@ body[data-theme="1984"] .service {
     );
 }
 
-body[data-theme="1984"] .service a {
+.service a {
     position: relative;
 }
 
-body[data-theme="1984"] .service a::after {
+.service a::after {
     content: "";
     position: absolute;
     top: 0;
@@ -151,35 +155,35 @@ body[data-theme="1984"] .service a::after {
     opacity: 0.42;
 }
 
-body[data-theme="1984"] .service:hover {
+.service:hover {
     transform: translateY(-4px);
 }
 
-body[data-theme="1984"] .service-title {
+.service-title {
     color: #eef4ff;
     text-shadow: 1px 0 0 rgba(255, 95, 193, 0.25);
 }
 
 @media (max-width: 640px) {
-    body[data-theme="1984"] .page-header {
+    .page-header {
         padding: 0.5rem 0.7rem 0.65rem;
     }
 
-    body[data-theme="1984"] .page-header h1 {
+    .page-header h1 {
         margin-bottom: 0.7rem;
         font-size: 1.95rem;
     }
 
-    body[data-theme="1984"] .section-nav-item {
+    .section-nav-item {
         flex-basis: 72px;
         height: 48px;
     }
 
-    body[data-theme="1984"] .section-nav {
+    .section-nav {
         justify-content: flex-start;
     }
 
-    body[data-theme="1984"] .service a::after {
+    .service a::after {
         height: 180px;
     }
 }

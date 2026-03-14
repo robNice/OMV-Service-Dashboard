@@ -1,4 +1,24 @@
-body[data-theme="1984"] {
+:root {
+    --drawer-w: 394px;
+    --drawer-transition: transform .14s ease-in;
+    --drawer-panel-backdrop: none;
+    --drawer-content-pad: .95rem 1rem 1rem;
+    --drawer-header-pad: .82rem .95rem;
+    --drawer-footer-pad: .68rem .95rem;
+    --drawer-section-gap: 1.05rem;
+    --drawer-heading-size: .9rem;
+    --drawer-heading-spacing: .14em;
+    --drawer-kv-pad: .38rem .42rem;
+    --drawer-kv-radius: 0;
+    --drawer-chip-pad: .24rem .46rem;
+    --drawer-chip-radius: 0;
+    --drawer-chip-size: .76rem;
+    --drawer-bar-height: 7px;
+    --drawer-bar-radius: 0;
+    --drawer-tab-top: 4.25rem;
+    --drawer-tab-transform: translateY(0) rotate(-90deg);
+    --drawer-scrollbar-thumb: rgba(110, 225, 255, 0.28);
+    --drawer-scrollbar-thumb-hover: rgba(255, 95, 193, 0.36);
     --drawer-bg: rgba(10, 16, 48, 0.94);
     --drawer-border: rgba(110, 225, 255, 0.22);
     --chip-bg: rgba(94, 232, 255, 0.1);
@@ -25,7 +45,7 @@ body[data-theme="1984"] {
     --status-down-text: #ffc1eb;
 }
 
-body[data-theme="1984"] #info-drawer .panel {
+#info-drawer .panel {
     position: relative;
     background:
         linear-gradient(180deg, rgba(94, 232, 255, 0.08), transparent 18%),
@@ -38,8 +58,8 @@ body[data-theme="1984"] #info-drawer .panel {
         0 16px 34px rgba(0, 0, 0, 0.38);
 }
 
-body[data-theme="1984"] #info-drawer .panel::before,
-body[data-theme="1984"] #info-drawer .panel::after {
+#info-drawer .panel::before,
+#info-drawer .panel::after {
     content: "";
     position: absolute;
     left: 0;
@@ -50,22 +70,22 @@ body[data-theme="1984"] #info-drawer .panel::after {
     background: var(--drawer-bg);
 }
 
-body[data-theme="1984"] #info-drawer .panel::before {
+#info-drawer .panel::before {
     top: 0;
     box-shadow:
         2px 2px 0 0 rgba(110, 225, 255, 0.2),
         0 0 0 1px rgba(255, 95, 193, 0.08) inset;
 }
 
-body[data-theme="1984"] #info-drawer .panel::after {
+#info-drawer .panel::after {
     bottom: 0;
     box-shadow:
         2px -2px 0 0 rgba(110, 225, 255, 0.2),
         0 0 0 1px rgba(255, 95, 193, 0.08) inset;
 }
 
-body[data-theme="1984"] #info-drawer header,
-body[data-theme="1984"] #info-drawer footer {
+#info-drawer header,
+#info-drawer footer {
     background:
         linear-gradient(90deg, rgba(94, 232, 255, 0.1), rgba(255, 95, 193, 0.08)),
         rgba(7, 12, 38, 0.5);
@@ -73,28 +93,28 @@ body[data-theme="1984"] #info-drawer footer {
     z-index: 1;
 }
 
-body[data-theme="1984"] #info-drawer header {
+#info-drawer header {
     border-bottom-color: rgba(110, 225, 255, 0.22);
 }
 
-body[data-theme="1984"] #info-drawer footer {
+#info-drawer footer {
     border-top-color: rgba(255, 95, 193, 0.2);
 }
 
-body[data-theme="1984"] #info-drawer .content {
+#info-drawer .content {
     padding: 1rem 1rem 1.1rem;
     position: relative;
     z-index: 1;
 }
 
-body[data-theme="1984"] #info-drawer .section h3 {
+#info-drawer .section h3 {
     font-family: "GianaLocal", var(--font-h1), system-ui, sans-serif;
     color: #8be9ff;
     text-shadow: 1px 0 0 rgba(255, 95, 193, 0.3);
     letter-spacing: 0.14em;
 }
 
-body[data-theme="1984"] #info-drawer .tab {
+#info-drawer .tab {
     font-family: "GianaLocal", var(--font-h1), system-ui, sans-serif;
     background:
         linear-gradient(90deg, rgba(94, 232, 255, 0.2), rgba(255, 95, 193, 0.18)),
@@ -114,25 +134,51 @@ body[data-theme="1984"] #info-drawer .tab {
     );
 }
 
-body[data-theme="1984"] #info-drawer .chip {
+#info-drawer .chip {
     box-shadow: 0 0 0 1px rgba(110, 225, 255, 0.12) inset;
 }
 
-body[data-theme="1984"] #info-drawer .kv {
+#info-drawer.open {
+    animation: drawer-boiiing-1984 .58s cubic-bezier(.2, .9, .25, 1.15);
+}
+
+#info-drawer .kv {
     border: 1px solid transparent;
     border-radius: 0;
 }
 
-body[data-theme="1984"] #info-drawer .kv:hover {
+#info-drawer .kv:hover {
     background: rgba(94, 232, 255, 0.05);
     border-color: rgba(110, 225, 255, 0.16);
 }
 
-body[data-theme="1984"] #info-drawer hr {
+#info-drawer hr {
     border-bottom-color: rgba(110, 225, 255, 0.18);
 }
 
-body[data-theme="1984"] #info-drawer .bar {
+#info-drawer .bar {
     background: rgba(110, 225, 255, 0.08);
     border-radius: 0;
+}
+
+#info-drawer .kv {
+    box-shadow: 0 0 0 1px rgba(255, 95, 193, 0.06) inset;
+}
+
+@keyframes drawer-boiiing-1984 {
+    0% {
+        transform: translateX(calc(-1 * var(--drawer-w)));
+    }
+    56% {
+        transform: translateX(12px);
+    }
+    74% {
+        transform: translateX(-8px);
+    }
+    88% {
+        transform: translateX(4px);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }

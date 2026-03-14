@@ -1,10 +1,10 @@
-body[data-theme="compact-list"] {
+:root {
     --bg-color: #e8edf1;
     --text-color: #17212b;
     --tile-bg: rgba(255, 255, 255, 0.84);
 }
 
-body[data-theme="compact-list"] .page-header {
+.page-header {
     max-width: 960px;
     margin-bottom: 1.25rem;
     padding: 1rem 1.15rem;
@@ -14,14 +14,18 @@ body[data-theme="compact-list"] .page-header {
     backdrop-filter: blur(10px);
 }
 
-body[data-theme="compact-list"] .page-header > a {
+.page-header > a {
     display: inline-block;
     max-width: 960px;
     margin: 0 0 0.6rem !important;
     color: #1d4ed8;
 }
 
-body[data-theme="compact-list"] .page-header h1 {
+.page-header > .back-link::before {
+    content: "‹ ";
+}
+
+.page-header h1 {
     text-align: left;
     max-width: none;
     margin: 0 0 1rem;
@@ -30,7 +34,7 @@ body[data-theme="compact-list"] .page-header h1 {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
-body[data-theme="compact-list"] .section-nav {
+.section-nav {
     flex-wrap: nowrap;
     justify-content: center;
     gap: 0.65rem;
@@ -38,9 +42,27 @@ body[data-theme="compact-list"] .section-nav {
     overflow-x: auto;
     padding: 0 0 0.35rem;
     scrollbar-width: thin;
+    scrollbar-color: rgba(15, 23, 42, 0.28) transparent;
 }
 
-body[data-theme="compact-list"] .section-nav-item {
+.section-nav::-webkit-scrollbar {
+    height: 6px;
+}
+
+.section-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.section-nav::-webkit-scrollbar-thumb {
+    background: rgba(15, 23, 42, 0.28);
+    border-radius: 999px;
+}
+
+.section-nav::-webkit-scrollbar-thumb:hover {
+    background: rgba(15, 23, 42, 0.4);
+}
+
+.section-nav-item {
     flex: 0 0 88px;
     height: 58px;
     border-radius: 10px;
@@ -48,11 +70,11 @@ body[data-theme="compact-list"] .section-nav-item {
     border-color: rgba(23, 33, 43, 0.08);
 }
 
-body[data-theme="compact-list"] .section-nav-item.active {
+.section-nav-item.active {
     border-color: rgba(23, 33, 43, 0.85);
 }
 
-body[data-theme="compact-list"] .grid {
+.grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
@@ -60,7 +82,7 @@ body[data-theme="compact-list"] .grid {
     margin: 0 auto;
 }
 
-body[data-theme="compact-list"] .service {
+.service {
     width: auto;
     border-radius: 18px;
     background: var(--tile-bg);
@@ -68,24 +90,24 @@ body[data-theme="compact-list"] .service {
     backdrop-filter: blur(8px);
 }
 
-body[data-theme="compact-list"] .service:hover {
+.service:hover {
     transform: translateY(-2px);
 }
 
-body[data-theme="compact-list"] .service a {
+.service a {
     display: grid;
     grid-template-columns: 164px minmax(0, 1fr);
     align-items: stretch;
     padding-bottom: 0;
 }
 
-body[data-theme="compact-list"] .service img {
+.service img {
     width: 164px;
     height: 100%;
     min-height: 108px;
 }
 
-body[data-theme="compact-list"] .service-title {
+.service-title {
     justify-content: flex-start;
     text-align: left;
     padding: 1rem 1.25rem;
@@ -93,47 +115,47 @@ body[data-theme="compact-list"] .service-title {
 }
 
 @media (max-width: 640px) {
-    body[data-theme="compact-list"] .page-header {
+    .page-header {
         padding: 0.85rem 0.9rem;
         border-radius: 16px;
     }
 
-    body[data-theme="compact-list"] .page-header > a {
+    .page-header > a {
         margin-bottom: 0.75rem;
     }
 
-    body[data-theme="compact-list"] .page-header h1 {
+    .page-header h1 {
         font-size: 1.9rem;
     }
 
-    body[data-theme="compact-list"] .section-nav {
+    .section-nav {
         justify-content: flex-start;
         margin: 0 auto 1rem;
     }
 
-    body[data-theme="compact-list"] .section-nav-item {
+    .section-nav-item {
         flex-basis: 72px;
         height: 48px;
     }
 
-    body[data-theme="compact-list"] .grid {
+    .grid {
         gap: 0.75rem;
     }
 
-    body[data-theme="compact-list"] .service {
+    .service {
         border-radius: 14px;
     }
 
-    body[data-theme="compact-list"] .service a {
+    .service a {
         grid-template-columns: 92px minmax(0, 1fr);
     }
 
-    body[data-theme="compact-list"] .service img {
+    .service img {
         width: 92px;
         min-height: 92px;
     }
 
-    body[data-theme="compact-list"] .service-title {
+    .service-title {
         padding: 0.85rem 1rem;
         font-size: 0.95rem;
     }

@@ -14,9 +14,54 @@
             <h1>{{__.admin.theme.title}}</h1>
             <p class="admin-subtitle">{{__.admin.theme.desc}}</p>
         </div>
-        <nav>
-            <a href="/admin">{{__.admin.title}}</a> ·
-            <a href="/admin/logout">{{__.admin.logout}}</a>
+        <nav class="admin-nav" aria-label="Admin">
+            <div class="admin-nav-group">
+                <a href="/admin/services" class="admin-nav-link">
+                    <span class="admin-nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="4" width="8" height="7" rx="1.5"></rect>
+                            <rect x="13" y="4" width="8" height="7" rx="1.5"></rect>
+                            <rect x="3" y="13" width="8" height="7" rx="1.5"></rect>
+                            <rect x="13" y="13" width="8" height="7" rx="1.5"></rect>
+                        </svg>
+                    </span>
+                    <span>{{__.admin.services.title}}</span>
+                </a>
+                <a href="/admin/theme" class="admin-nav-link admin-nav-link-current">
+                    <span class="admin-nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 4.2C7.69 4.2 4.2 7.69 4.2 12C4.2 16.31 7.69 19.8 12 19.8C12.55 19.8 13 19.35 13 18.8C13 18.51 12.87 18.24 12.66 18.05C12.46 17.86 12.33 17.59 12.33 17.29C12.33 16.74 12.78 16.29 13.33 16.29H15.14C18.49 16.29 21.2 13.58 21.2 10.23C21.2 6.9 18.97 4.2 12 4.2Z"></path>
+                            <circle cx="7.9" cy="11.2" r="1.1"></circle>
+                            <circle cx="10.6" cy="8.2" r="1.1"></circle>
+                            <circle cx="14.2" cy="8.7" r="1.1"></circle>
+                            <circle cx="16.4" cy="12.1" r="1.1"></circle>
+                        </svg>
+                    </span>
+                    <span>{{__.admin.theme.title}}</span>
+                </a>
+                <a href="/admin/setpassword" class="admin-nav-link">
+                    <span class="admin-nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                            <path d="M8 11V8C8 5.79 9.79 4 12 4C14.21 4 16 5.79 16 8V11"></path>
+                            <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"></circle>
+                        </svg>
+                    </span>
+                    <span>{{__.admin.password.title}}</span>
+                </a>
+            </div>
+            <div class="admin-nav-group admin-nav-group-end">
+                <a href="/admin/logout" class="admin-nav-link admin-nav-link-logout">
+                    <span class="admin-nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M10 5H6C4.9 5 4 5.9 4 7V17C4 18.1 4.9 19 6 19H10"></path>
+                            <path d="M14 16L20 12L14 8"></path>
+                            <path d="M20 12H9"></path>
+                        </svg>
+                    </span>
+                    <span>{{__.admin.logout}}</span>
+                </a>
+            </div>
         </nav>
     </header>
 

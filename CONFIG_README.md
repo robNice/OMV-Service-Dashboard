@@ -1,57 +1,50 @@
 # Configuration (`/config`)
 
---- 
+---
 
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [TL;DR – Docker users](#tldr--docker-users)
-- [Basic notes](#basic-notes)
-- [Directory structure](#directory-structure)
-- [Configuration files](#configuration-files)
-    - [`config.json`](#configjson)
-    - [`services.json`](#servicesjson)
-    - [`i18n-settings.json`](#i18n-settingsjson)
-    - [Translations (`/config/i18n`)](#translations-configi18n)
-        - [How translations work](#how-translations-work)
-        - [Example: `i18n/fr-FR.json`](#example-i18nfr-frjson)
+- [TL;DR for Docker users](#tldr-for-docker-users)
+- [Basic Notes](#basic-notes)
+- [Directory Structure](#directory-structure)
+- [Configuration Files](#configuration-files)
+  - [`config.json`](#configjson)
+  - [`services.json`](#servicesjson)
+  - [`i18n-settings.json`](#i18n-settingsjson)
+  - [Translations (`/config/i18n`)](#translations-configi18n)
+    - [How translations work](#how-translations-work)
+    - [Example: `i18n/fr-FR.json`](#example-i18nfr-frjson)
+  - [Themes (`/config/assets/themes`)](#themes-configassetsthemes)
+    - [Theme directory structure](#theme-directory-structure)
+    - [`meta.json`](#metajson)
+    - [`theme.css`](#themecss)
+    - [`drawer.css`](#drawercss)
+    - [`theme.js` (optional)](#themejs-optional)
+    - [Style inheritance](#style-inheritance)
 - [Summary](#summary)
 
 ---
 
 ## Introduction
 
-Whenever this `/config` is mentioned, it refers to **your personal**
-`/config` directory for this application, which is either mounted in your
-`docker-compose.yml` or defined via the environment variable
-`OMV_SERVICE_DASHBOARD_CONFIG`.
+Whenever `/config` is mentioned here, it refers to your personal configuration directory for this application. It is either mounted in `docker-compose.yml` or defined via the `OMV_SERVICE_DASHBOARD_CONFIG` environment variable.
 
-The `/config` directory contains **optional user overrides** for the
-OMV Service Dashboard.
+The `/config` directory contains optional user overrides for the OMV Service Dashboard.
 
-To make getting started easier, copy the `config-example` directory into your
-`/config` directory and adjust it to your needs.
+To get started more easily, copy the `config.example` directory into your own `/config` directory and adjust it as needed.
 
-All files in this directory are **read at runtime** and
-**override the integrated default values** shipped with the application.  
-Nothing in `/config` is mandatory – if a file is missing, the application
-automatically falls back to its internal defaults.
+All files in `/config` are read at runtime and override the integrated defaults where supported. Missing files automatically fall back to the internal defaults.
 
-The `config.json` is created when the service starts if it does not yet exist.  
-If the file is missing, you can copy it from the `config-example` directory into
-your `/config` directory.  
-The `services.json` is only created after saving for the first time in the admin area.
+The `config.json` file is created on first start if it does not yet exist. The `services.json` file is created after the first save in the admin area.
 
-> ⚠️ This directory is intended exclusively for **configuration and content**.  
-> **JavaScript, CSS, and other core application files must not be placed here.  
-> They will not be read there anyway ;)**
+This directory is intended for configuration, content, and supported frontend overrides such as themes. Arbitrary core application files should not be placed here.
 
 ---
 
-## TL;DR – Docker users
+## TL;DR for Docker users
 
-If you run the OMV Service Dashboard via Docker, define your personal
-configuration directory as follows:
+If you run the OMV Service Dashboard via Docker, mount your personal configuration directory like this:
 
 ```yaml
 services:
@@ -63,51 +56,56 @@ services:
 
 ---
 
-## Basic notes
+## Basic Notes
 
-- `/config` is the **only directory** you should customize
+- `/config` is the only directory you should customize
 - You can safely update or recreate the container at any time
-- Your configurations, translations, and images remain untouched
-- If a file does not exist in `/config`, the integrated default values are used automatically
+- Your configuration, translations, images, and themes remain untouched
+- If a file does not exist in `/config`, the integrated defaults are used automatically
 
-You must **never** modify files inside the container.
+You should never modify files inside the container.
 
 ---
 
-## Directory structure
+## Directory Structure
 
-```
+```text
 /config
- ├─ config.json
- ├─ services.json
- ├─ i18n-settings.json
- ├─ i18n/
- │   └─ en-GB.json
- └─ assets/
-     ├─ backgrounds/
-     └─ cards/
-         ├─ sections/
-         └─ services/
+├─ config.json
+├─ services.json
+├─ i18n-settings.json
+├─ i18n/
+│  └─ en-GB.json
+└─ assets/
+   ├─ backgrounds/
+   ├─ cards/
+   │  ├─ sections/
+   │  └─ services/
+   └─ themes/
+      └─ <theme-id>/
+         ├─ meta.json
+         ├─ theme.css
+         ├─ drawer.css
+         └─ assets/
 ```
 
 ---
 
-## Configuration files
+## Configuration Files
 
 ### `config.json`
 
-General application configuration (e.g. title, default language).
+General application configuration such as title, fallback language, backend settings, and the active public theme.
 
-If present, this file **completely replaces** the internal
-default configuration.
+Example:
 
-Example `config.json`:
 ```json
 {
   "title": "OMV Service Dashboard",
   "defaultLang": "en-GB",
+  "theme": "classic",
   "infoDrawerRefreshInterval": 30,
-  "port"      : 3000,
+  "port": 3000,
   "omvRpcPath": "/usr/sbin/omv-rpc",
   "admin": {
     "passwordHash": "3a33aaf60a0f71503b9c399e414e6ab8:e472941cd72ddc6807c2e5cb1291250ecec8664c5d9f1b9453196d410e900f7d",
@@ -116,34 +114,23 @@ Example `config.json`:
 }
 ```
 
-- title: Used as the base title tag and as the h1
-- defaultLang: Used as the fallback language if no matching locale is found
-- infoDrawerRefreshInterval: Defines how often the info drawer is refreshed (in seconds)
-- port: Port the application listens on
-- omvRpcPath: Path to the omv-rpc binary – required to read disk lists / SMART info
-- admin: Set the admin block exactly as shown to reset the admin password to the default password `dashboard`
+- `title`: Used as the base title and page heading
+- `defaultLang`: Fallback language if no matching locale is found
+- `theme`: Active public dashboard theme
+- `infoDrawerRefreshInterval`: Info drawer refresh interval in seconds
+- `port`: Port the application listens on
+- `omvRpcPath`: Path to the `omv-rpc` binary
+- `admin`: Admin password block; setting it to the default example resets the admin password to `dashboard`
 
 ### `services.json`
 
 Defines the sections and services shown in the dashboard.
-Since the introduction of the admin area, manual editing of this file
-is no longer required.
 
----
+Since the admin area exists, manual editing of this file is usually no longer necessary.
 
 ### `i18n-settings.json`
 
-> ⚠️ Although you could theoretically use this file to override the integrated
-> translation settings, this is not recommended.
->
-> I strongly recommend **not** placing this file in your `/config` directory
-> unless you have a very good reason.
-> Otherwise, you might miss future translations.
-
-Controls which languages are available and how language fallbacks work.
-The language is determined by the browser language
-(more precisely by the `Accept-Language` header sent by your browser)
-and falls back to the default language if no matching locale is found.
+Controls which languages are available and how locale fallbacks work.
 
 Example:
 
@@ -159,62 +146,29 @@ Example:
 }
 ```
 
-- `locales`  
-  List of enabled locales.
-
-- `fallbacks`  
-  Maps language codes (from the `Accept-Language` header) to a fallback locale.
-
-  Example: If you are French and your browser sends
-  `Accept-Language: fr;(...)`, the fallback locale for `fr`
-  is `fr-FR`.
-
-  Without this mapping, the fallback value would be the one defined as
-  `defaultLang` in your `config.json`.
-
-If this file is missing, the integrated default values are used.
-
----
+If this file is missing, the integrated defaults are used.
 
 ### Translations (`/config/i18n`)
 
-Each file in `/config/i18n` represents **one locale** and must be named as follows:
+Each file in `/config/i18n` represents one locale and must be named like this:
 
-```
+```text
 <locale>.json
 ```
 
 Example:
 
-```
+```text
 /config/i18n/fr-FR.json
 ```
 
-Complete (and hopefully correct) translations are already included for the following
-languages:
+#### How translations work
 
-- English
-- German
-- French
-- Spanish
-- Italian
-- Dutch
-- Polish
-- Portuguese
-- Turkish
-- Japanese
-
-If you translate the application into another language or find errors in the
-existing translations, please consider contributing your translations
-to the project.
-
-### How translations work
-
-- Translations from `/config/i18n` are applied **on top of** the integrated translations
-- You only need to define the keys you want to **override or extend**
+- Translations from `/config/i18n` are applied on top of the integrated translations
+- You only need to define the keys you want to override or extend
 - Missing keys automatically fall back to the internal language files
 
-### Example: `i18n/fr-FR.json`
+#### Example: `i18n/fr-FR.json`
 
 ```json
 {
@@ -233,12 +187,136 @@ to the project.
 }
 ```
 
+### Themes (`/config/assets/themes`)
+
+The public dashboard theme can be switched in the backend and is stored in `config.json` via the `theme` key.
+
+The backend reads available themes from `/config/assets/themes/<theme-id>/meta.json` and lists them in the theme selector.
+
+#### Theme directory structure
+
+```text
+/config/assets/themes/<theme-id>/
+├─ meta.json
+├─ theme.css
+├─ drawer.css
+├─ theme.js
+└─ assets/
+```
+
+`theme.js` and `assets/` are optional. `assets/` can contain theme-local fonts or images referenced by the theme CSS.
+
+#### `meta.json`
+
+Minimal example:
+
+```json
+{
+  "id": "test",
+  "label": "Test",
+  "description": "Custom dashboard theme",
+  "version": "1.0.0"
+}
+```
+
+Rules:
+
+- `id` must match the theme folder name
+- the backend uses this file to list the theme
+- if `meta.json` is missing or invalid, the theme is not offered in the backend
+
+#### `theme.css`
+
+This file contains the main public dashboard styling for the selected theme.
+
+It is loaded only for the active theme.
+
+Typical targets are:
+
+- `.page-header`
+- `.section-nav`
+- `.service`
+- `.service-title`
+
+#### `drawer.css`
+
+This file contains theme-specific styling for the info drawer.
+
+It is also loaded only for the active theme.
+
+Typical targets are:
+
+- `#info-drawer .panel`
+- `#info-drawer .tab`
+- `#info-drawer .section h3`
+- `#info-drawer .kv`
+
+#### `theme.js` (optional)
+
+Themes may also provide an optional client-side script at:
+
+```text
+/config/assets/themes/<theme-id>/theme.js
+```
+
+If that file exists for the active theme, the frontend loads it automatically after the shared frontend scripts.
+
+Convention:
+
+- register a single global object at `window.OMVTheme`
+- provide `init(context)` as the theme entry point
+- optionally provide `destroy()` for cleanup
+- keep theme-specific DOM and behavior in this file instead of editing shared core scripts
+
+The `context` object currently contains:
+
+- `theme`
+- `body`
+- `document`
+- `drawer`
+- `version`
+
+Example:
+
+```js
+window.OMVTheme = {
+  init({ body }) {
+    if (document.getElementById('my-theme-root')) return;
+    const el = document.createElement('div');
+    el.id = 'my-theme-root';
+    body.appendChild(el);
+  },
+  destroy() {
+    document.getElementById('my-theme-root')?.remove();
+  }
+};
+```
+
+#### Style inheritance
+
+Theme CSS does not replace the whole frontend. It extends the shared base styles.
+
+Load order for the public page:
+
+1. Shared base styles such as `style.css`, `bg.css`, `drawer.css`, and `drawer-icons.css`
+2. The selected theme's `theme.css`
+3. The selected theme's `drawer.css`
+4. The selected theme's `theme.js` if present
+
+That means:
+
+- base layout and shared behavior still come from the built-in styles
+- the selected theme overrides only what it needs
+- your custom theme CSS should use normal selectors like `.page-header` or `#info-drawer .panel`
+- wrapping selectors like `body[data-theme="..."]` are not required in custom themes
+- theme-specific JavaScript should use the `window.OMVTheme.init(context)` convention
+
 ---
 
 ## Summary
 
-- `/config` is **optional**
+- `/config` is optional
 - Missing files always fall back to integrated defaults
-- Configuration files replace default values
-- Translation files are **merged**
-- Assets override visual content only
+- Translation files are merged
+- Images and other assets under `/config/assets` override the matching visual assets
+- Themes are discovered via `meta.json`, styled via `theme.css` and `drawer.css`, and may optionally extend behavior via `theme.js`

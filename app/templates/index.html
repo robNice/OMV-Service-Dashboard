@@ -2,6 +2,7 @@
 <html lang="de">
     <head>
         <script>
+            window.OMV_VERSION = "{{VERSION}}";
             window.I18N_UNITS = {
                 B: "{{__.units.byte}}",
                 KB: "{{__.units.kilobyte}}",
@@ -28,6 +29,7 @@
         <link rel="stylesheet" href="/assets/themes/{{THEME}}/theme.css?v={{VERSION}}">
         <link rel="stylesheet" href="/assets/themes/{{THEME}}/drawer.css?v={{VERSION}}">
         <script src="/assets/js/bg.js?v={{VERSION}}" defer></script>
+        <script src="/assets/js/theme-loader.js?v={{VERSION}}" defer></script>
     </head>
 
     <body data-theme="{{THEME}}">
