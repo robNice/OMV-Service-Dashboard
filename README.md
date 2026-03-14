@@ -26,6 +26,7 @@
   - [Desktop dashboard section](#desktop-dashboard-section)
   - [Desktop info drawer](#desktop-info-drawer)
   - [Theme 1984](#theme-1984)
+  - [Theme Bubbles](#theme-bubbles)
   - [Theme Classic](#theme-classic)
   - [Theme Compact List](#theme-compact-list)
   - [Theme Hacker](#theme-hacker)
@@ -284,6 +285,10 @@ This mode is currently not actively tested and mainly exists for completeness.
 ### Theme 1984
 
 ![Theme 1984](docs/screenshots/1984.png)
+
+### Theme Bubbles
+
+![Theme Bubbles](docs/screenshots/bubbles.png)
 
 ### Theme Classic
 
