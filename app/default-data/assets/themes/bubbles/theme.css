@@ -88,12 +88,12 @@ body::after {
 
 .page-header > a,
 .page-header h1 {
-    color: #f8feff;
+    color: #1b384d;
     text-shadow: 0 3px 12px rgba(9, 67, 88, 0.2);
 }
 
 .page-header > .back-link::before {
-    content: "\2039 ";
+    content: "<°(((>< ";
 }
 
 .page-header h1 {
