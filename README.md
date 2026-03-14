@@ -28,10 +28,11 @@
   - [Theme 1984](#theme-1984)
   - [Theme Bubbles](#theme-bubbles)
   - [Theme Classic](#theme-classic)
-  - [Theme Compact List](#theme-compact-list)
-  - [Theme Hacker](#theme-hacker)
-  - [Theme Hippies](#theme-hippies)
+- [Theme Compact List](#theme-compact-list)
+- [Theme Hacker](#theme-hacker)
+- [Theme Hippies](#theme-hippies)
 - [License](#license)
+- [Third-Party Notices](#third-party-notices)
 
 ---
 
@@ -311,3 +312,7 @@ This mode is currently not actively tested and mainly exists for completeness.
 ## License
 
 [`MIT`](./LICENSE)
+
+## Third-Party Notices
+
+[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)

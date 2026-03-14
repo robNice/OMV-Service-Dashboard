@@ -130,6 +130,8 @@
 #info-drawer .chip {
     border: 1px solid rgba(166, 92, 43, 0.12);
     box-shadow: 0 4px 12px rgba(166, 92, 43, 0.08);
+    color: #5a311f;
+    font-weight: 700;
 }
 
 #info-drawer header .chip:first-child,
@@ -148,6 +150,12 @@
 
 #info-drawer .section:nth-of-type(4n + 4) .chip {
     background: rgba(245, 86, 142, 0.18);
+}
+
+#info-drawer footer .chip {
+    background: rgba(255, 225, 141, 0.82);
+    color: #7a4922;
+    border-color: rgba(202, 134, 63, 0.24);
 }
 
 #info-drawer .bar {
