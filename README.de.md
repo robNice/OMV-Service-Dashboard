@@ -7,7 +7,6 @@
 - [Einfuehrung](#einfuehrung)
 - [Funktionen](#funktionen)
 - [Admin-Bereich](#admin-bereich)
-  - [Zugang](#zugang)
   - [Sektionen und Dienste verwalten](#sektionen-und-dienste-verwalten)
   - [Theme auswaehlen](#theme-auswaehlen)
   - [Konfiguration bearbeiten](#konfiguration-bearbeiten)
@@ -68,9 +67,12 @@ Darüber hinaus eignet sich das Dashboard sehr gut als dauerhaft sichtbares Inte
 
 Der Admin-Bereich ist in diese Unterbereiche gegliedert:
 
-### Zugang
+ - Sektionen und Dienste verwalten
+ - Theme auswaehlen
+ - Konfiguration bearbeiten
+ - Passwort aendern
 
-Der Admin-Bereich ist hier erreichbar:
+und hier erreichbar:
 
 ```text
 {dashboard-url}/admin
