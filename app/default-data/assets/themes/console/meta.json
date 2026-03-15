@@ -1,0 +1,6 @@
+{
+  "id": "console",
+  "label": "Console",
+  "description": "Amber terminal shell with ASCII boxes, monospace console styling, and keyboard navigation.",
+  "version": "1.0.0"
+}

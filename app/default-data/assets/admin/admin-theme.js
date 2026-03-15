@@ -45,7 +45,7 @@ function renderThemes() {
                         </div>
                         <div class="theme-card-heading">
                             <h3>${theme.label}</h3>
-                            <div class="theme-id">${theme.id}</div>
+                            <div class="theme-id">#${theme.id}</div>
                         </div>
                     </div>
                     <p>${theme.description || ""}</p>

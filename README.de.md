@@ -28,9 +28,11 @@
   - [Theme 1984](#theme-1984)
   - [Theme Bubbles](#theme-bubbles)
   - [Theme Classic](#theme-classic)
-- [Theme Compact List](#theme-compact-list)
-- [Theme Hacker](#theme-hacker)
-- [Theme Hippies](#theme-hippies)
+  - [Theme Compact List](#theme-compact-list)
+  - [Theme Console](#theme-console)
+  - [Theme Hacker](#theme-hacker)
+  - [Theme Hippies](#theme-hippies)
+  - [Theme Waaaah-Waaah-Waaaaaah](#theme-waaaah-waaah-waaaaaah)
 - [Lizenz](#lizenz)
 - [Hinweise zu Drittanbieter-Komponenten](#hinweise-zu-drittanbieter-komponenten)
 
@@ -299,6 +301,10 @@ Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsaechlich der Vollst
 
 ![Theme Compact List](docs/screenshots/compact-list.png)
 
+### Theme Console
+
+![Theme Console](docs/screenshots/console.png)
+
 ### Theme Hacker
 
 ![Theme Hacker](docs/screenshots/hacker.png)
@@ -306,6 +312,10 @@ Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsaechlich der Vollst
 ### Theme Hippies
 
 ![Theme Hippies](docs/screenshots/hippies.png)
+
+### Theme Waaaah-Waaah-Waaaaaah
+
+![Theme Waaaah-Waaah-Waaaaaah](docs/screenshots/waaaah-waaah-waaaaaah.png)
 
 ---
 
