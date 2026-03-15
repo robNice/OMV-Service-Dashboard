@@ -92,6 +92,10 @@ body::after {
     text-shadow: 0 3px 12px rgba(9, 67, 88, 0.2);
 }
 
+.page-header > a {
+    font-size: 1.12rem;
+}
+
 .page-header > .back-link::before {
     content: "<°(((>< ";
 }
@@ -190,7 +194,7 @@ body::after {
         rgba(8, 53, 73, 0.24);
     backdrop-filter: blur(10px);
     color: #f3fcff;
-    font-size: 1rem;
+    font-size: 1.08rem;
     line-height: 1.25;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -320,7 +324,7 @@ body::after {
         top: 80%;
         bottom: auto;
         padding: 0.72rem 0 38px;
-        font-size: 0.72rem;
+        font-size: 0.88rem;
         letter-spacing: 0.04em;
     }
 }

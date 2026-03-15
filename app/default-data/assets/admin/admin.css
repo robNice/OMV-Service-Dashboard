@@ -134,10 +134,20 @@ body {
 }
 
 .theme-card-top {
+    display: grid;
+    gap: 0.75rem;
+    align-items: start;
+}
+
+.theme-card-badge-row {
     display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    align-items: flex-start;
+    justify-content: flex-end;
+    min-height: 1.75rem;
+}
+
+.theme-card-heading {
+    display: grid;
+    gap: 0.35rem;
 }
 
 .theme-card h3 {
@@ -164,9 +174,9 @@ body {
     align-items: center;
     border-radius: 999px;
     padding: 0.25rem 0.6rem;
-    background: rgba(37, 99, 235, 0.16);
-    border: 1px solid rgba(96, 165, 250, 0.3);
-    color: #93c5fd;
+    background: rgba(34, 197, 94, 0.18);
+    border: 1px solid rgba(74, 222, 128, 0.34);
+    color: #86efac;
     font-size: 0.75rem;
     white-space: nowrap;
 }

@@ -58,6 +58,7 @@ body {
     text-decoration: none;
     font-family: var(--font-h1), system-ui, sans-serif;
     font-weight: var(--h1-weight);
+    font-size: 1.1rem;
     display: inline-block;
     margin: 0 0 1rem;
 }
@@ -142,7 +143,7 @@ body {
 .service-title {
     padding: 1rem;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     flex-grow: 1;
     display: flex;
     align-items: center;
@@ -187,6 +188,14 @@ body {
         width: 72px;
         height: 48px;
         border-radius: 10px;
+    }
+
+    .page-header > a {
+        font-size: 1.05rem;
+    }
+
+    .service-title {
+        font-size: 1.08rem;
     }
 
 }

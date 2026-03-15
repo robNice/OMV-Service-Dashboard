@@ -60,6 +60,10 @@ body {
     font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
 }
 
+.page-header > a {
+    font-size: 1.08rem;
+}
+
 .page-header > .back-link::before {
     content: "<- ";
 }
@@ -167,7 +171,7 @@ body {
     padding: 0.95rem 1rem 1rem 2rem;
     color: #96ffa4;
     font-family: "IBMPlexMonoLocal", "Consolas", "Menlo", monospace;
-    font-size: 1rem;
+    font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 0.02em;
 }
@@ -203,6 +207,6 @@ body {
 
     .service-title {
         padding-left: 1.8rem;
-        font-size: 0.95rem;
+        font-size: 1rem;
     }
 }

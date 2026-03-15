@@ -19,6 +19,7 @@
     max-width: 960px;
     margin: 0 0 0.6rem !important;
     color: #1d4ed8;
+    font-size: 1.08rem;
 }
 
 .page-header > .back-link::before {
@@ -111,7 +112,7 @@
     justify-content: flex-start;
     text-align: left;
     padding: 1rem 1.25rem;
-    font-size: 1rem;
+    font-size: 1.12rem;
 }
 
 @media (max-width: 640px) {
@@ -157,6 +158,6 @@
 
     .service-title {
         padding: 0.85rem 1rem;
-        font-size: 0.95rem;
+        font-size: 1.02rem;
     }
 }

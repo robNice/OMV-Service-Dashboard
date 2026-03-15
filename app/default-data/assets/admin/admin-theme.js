@@ -40,11 +40,13 @@ function renderThemes() {
                 <input type="radio" name="theme" value="${theme.id}" ${checked}>
                 <div class="theme-card-body">
                     <div class="theme-card-top">
-                        <div>
+                        <div class="theme-card-badge-row">
+                            ${current}
+                        </div>
+                        <div class="theme-card-heading">
                             <h3>${theme.label}</h3>
                             <div class="theme-id">${theme.id}</div>
                         </div>
-                        ${current}
                     </div>
                     <p>${theme.description || ""}</p>
                     ${version}
