@@ -6,8 +6,13 @@
 
 - [Introduction](#introduction)
 - [Features](#features)
-- [Configuration](#configuration)
 - [Admin Area](#admin-area)
+  - [Access](#access)
+  - [Manage Sections and Services](#manage-sections-and-services)
+  - [Choose Theme](#choose-theme)
+  - [Edit Configuration](#edit-configuration)
+  - [Change Password](#change-password)
+- [Manual Configuration](#manual-configuration)
 - [Theming](#theming)
 - [Directory Structure (relevant parts)](#directory-structure-relevant-parts)
 - [Installation](#installation)
@@ -59,19 +64,13 @@ It also works well as a permanently visible dashboard on wall displays or smart 
 
 ---
 
-## Configuration
-
-Page structure, configuration, translations, and custom images are defined via the admin area and configuration files.
-
-The configuration files live in a dedicated `/config` directory. They are read at runtime and survive updates and container rebuilds.
-
-Please read [`CONFIG_README.md`](./CONFIG_README.md) for the full configuration reference.
-
----
-
 ## Admin Area
 
-Sections, services, and the active public theme can be managed in the integrated admin area:
+The admin area is split into these sections:
+
+### Access
+
+The admin area is available here:
 
 ```text
 {dashboard-url}/admin
@@ -83,9 +82,13 @@ The default password is:
 dashboard
 ```
 
-The `services.json` file no longer needs to be edited manually. Changes are made via the web interface and persisted automatically.
+---
 
-Graphics for some built-in section IDs already exist. If you want to use them, use these section IDs:
+### Manage Sections and Services
+
+Here you can create, edit, sort, and delete sections and services. You can also manage names, links, descriptions, preview images, and backgrounds here.
+
+Graphics for some built-in section IDs already exist. If you want to use them, use these IDs:
 
 - `admin`
 - `files`
@@ -110,6 +113,40 @@ Default images for sections and services can be placed here:
 ```
 
 For uploaded card images, a size of roughly `305px x 185px` is recommended.
+
+---
+
+### Choose Theme
+
+Here you can select the active public theme. The list includes both built-in themes and additional themes placed in the user config directory under `/config/assets/themes`.
+
+---
+
+### Edit Configuration
+
+Here you can edit the most important configuration values, for example:
+
+- `Title`: base title and page heading of the dashboard
+- `Fallback Language`: default language if no matching locale is found
+- `Info Drawer Refresh Interval`: refresh interval of the info drawer in seconds
+- `Port`: port the application listens on
+- `OMV RPC Path`: path to the `omv-rpc` binary
+
+---
+
+### Change Password
+
+Here you can change the admin password.
+
+---
+
+## Manual Configuration
+
+Configuration data is stored in `/config/config.json` and `/config/services.json` and can also be edited manually if needed.
+
+In normal use, changes are made via the admin area and persisted automatically. Direct file editing is mainly useful if the backend configuration has become inconsistent.
+
+Please read [`CONFIG_README.md`](./CONFIG_README.md) for the full configuration reference.
 
 ---
 
