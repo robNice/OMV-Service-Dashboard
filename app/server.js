@@ -33,6 +33,8 @@ const fs = require("fs");
 const path = require("path");
 const pkg = require('./package.json');
 const APP_VERSION = pkg.version;
+const PROJECT_NAME = pkg.name || 'OMV-Service-Dashboard';
+const PROJECT_URL = 'https://github.com/robNice/OMV-Service-Dashboard';
 
 function initDefaultData() {
     const source = '/app/default-data';
@@ -268,9 +270,20 @@ function renderThemeAdminTemplate(req, template, theme) {
     );
 }
 
+function buildAdminMetaFooter() {
+    return `
+<footer class="admin-meta-footer">
+    <span class="admin-meta-item">${PROJECT_NAME}</span>
+    <a class="admin-meta-item admin-meta-link" href="${PROJECT_URL}" target="_blank" rel="noopener noreferrer">${PROJECT_URL}</a>
+    <span class="admin-meta-item">v${APP_VERSION}</span>
+</footer>`;
+}
+
 function renderAdminTemplate(req, template) {
     return translateTextI18n(
-        template.replace(/{{VERSION}}/g, APP_VERSION),
+        template
+            .replace(/{{VERSION}}/g, APP_VERSION)
+            .replace(/{{ADMIN_META_FOOTER}}/g, buildAdminMetaFooter()),
         {locale: req.getLocale()}
     );
 }

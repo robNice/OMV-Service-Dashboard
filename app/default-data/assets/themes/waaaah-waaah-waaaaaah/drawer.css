@@ -1,3 +1,19 @@
+@font-face {
+    font-family: "Arvo Local";
+    src: url("./assets/Arvo-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Arvo Local";
+    src: url("./assets/Arvo-Bold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
 :root {
     --drawer-w: 384px;
     --drawer-bg:
@@ -12,10 +28,15 @@
     --text: #f4dfbd;
     --muted: #f2c893;
     --accent: #f0b565;
-    --drawer-transition: transform .34s cubic-bezier(.22, 1, .36, 1);
+    --drawer-transition: transform .42s cubic-bezier(.2, .88, .3, 1);
     --drawer-tab-top: 88px;
-    --drawer-tab-right: -25px;
+    --drawer-tab-right: -24px;
     --drawer-tab-transform: translateY(0) rotate(90deg);
+    --drawer-closed-rotation: 90deg;
+    --drawer-closed-origin-x: calc(100% + 22px);
+    --drawer-closed-origin-y: calc(var(--drawer-tab-top) - 38px);
+    --drawer-closed-shift-x: 0px;
+    --drawer-closed-shift-y: -28px;
     --drawer-panel-shadow: 0 18px 42px rgba(33, 15, 6, 0.34);
     --drawer-panel-backdrop: blur(4px);
     --drawer-panel-radius: 0 16px 16px 0;
@@ -37,6 +58,8 @@
     --drawer-bar-height: 12px;
     --drawer-scrollbar-thumb: rgba(244, 215, 171, 0.34);
     --drawer-scrollbar-thumb-hover: rgba(244, 215, 171, 0.5);
+    --drawer-font-body: "Arvo Local", Georgia, serif;
+    --drawer-font-display: "Rye Local", Georgia, serif;
 
     --bar-green: linear-gradient(90deg, #98b861, #69823e);
     --bar-yellow: linear-gradient(90deg, #e0b15c, #bb7b2d);
@@ -64,6 +87,20 @@
 
 #info-drawer {
     z-index: 12;
+    font-family: var(--drawer-font-body);
+    transform-origin:
+        var(--drawer-mobile-closed-origin-x, var(--drawer-closed-origin-x))
+        var(--drawer-mobile-closed-origin-y, var(--drawer-closed-origin-y));
+    transform:
+        translate(
+            var(--drawer-mobile-closed-shift-x, var(--drawer-closed-shift-x)),
+            var(--drawer-mobile-closed-shift-y, var(--drawer-closed-shift-y))
+        )
+        rotate(var(--drawer-mobile-closed-rotation, var(--drawer-closed-rotation)));
+}
+
+#info-drawer.open {
+    transform: translate(0, 0) rotate(0deg);
 }
 
 #info-drawer .panel {
@@ -110,6 +147,9 @@
 
 #info-drawer .section h3 {
     color: #ffd9a5;
+    font-family: var(--drawer-font-display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 #info-drawer .chip {
@@ -125,6 +165,9 @@
 
 #info-drawer .tab {
     z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background:
         linear-gradient(180deg, rgba(255, 236, 204, 0.99), rgba(223, 170, 99, 0.99) 52%, rgba(147, 88, 42, 0.99));
     color: #2b1408;
@@ -141,6 +184,12 @@
         0 1px 0 rgba(255, 244, 223, 0.65),
         0 0 10px rgba(255, 236, 204, 0.18);
     cursor: pointer;
+    font-family: var(--drawer-font-display);
+}
+
+#info-drawer .tab-label {
+    display: inline-block;
+    transform: rotate(180deg);
 }
 
 #info-drawer .tab:hover {
@@ -158,7 +207,12 @@
 @media (max-width: 720px) {
     :root {
         --drawer-w: 88vw;
+        --drawer-tab-top: 72px;
         --drawer-panel-radius: 0 14px 14px 0;
+        --drawer-mobile-closed-origin-x: calc(100% + 20px);
+        --drawer-mobile-closed-origin-y: calc(var(--drawer-tab-top) - 45px);
+        --drawer-mobile-closed-shift-x: 0px;
+        --drawer-mobile-closed-shift-y: -10px;
     }
 
     #info-drawer .panel {
@@ -167,7 +221,6 @@
     }
 
     #info-drawer .tab {
-        top: 72px;
         padding: .62rem .95rem;
         font-size: .9rem;
     }
