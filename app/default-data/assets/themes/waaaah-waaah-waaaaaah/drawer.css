@@ -1,3 +1,19 @@
+@font-face {
+    font-family: "Arvo Local";
+    src: url("./assets/Arvo-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Arvo Local";
+    src: url("./assets/Arvo-Bold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
 :root {
     --drawer-w: 384px;
     --drawer-bg:
@@ -16,6 +32,9 @@
     --drawer-tab-top: 88px;
     --drawer-tab-right: -25px;
     --drawer-tab-transform: translateY(0) rotate(90deg);
+    --drawer-closed-rotation: 90deg;
+    --drawer-closed-origin-x: calc(100% + 22px);
+    --drawer-closed-origin-y: calc(var(--drawer-tab-top) + 24px);
     --drawer-panel-shadow: 0 18px 42px rgba(33, 15, 6, 0.34);
     --drawer-panel-backdrop: blur(4px);
     --drawer-panel-radius: 0 16px 16px 0;
@@ -37,6 +56,8 @@
     --drawer-bar-height: 12px;
     --drawer-scrollbar-thumb: rgba(244, 215, 171, 0.34);
     --drawer-scrollbar-thumb-hover: rgba(244, 215, 171, 0.5);
+    --drawer-font-body: "Arvo Local", Georgia, serif;
+    --drawer-font-display: "Rye Local", Georgia, serif;
 
     --bar-green: linear-gradient(90deg, #98b861, #69823e);
     --bar-yellow: linear-gradient(90deg, #e0b15c, #bb7b2d);
@@ -64,6 +85,13 @@
 
 #info-drawer {
     z-index: 12;
+    font-family: var(--drawer-font-body);
+    transform-origin: var(--drawer-closed-origin-x) var(--drawer-closed-origin-y);
+    transform: rotate(var(--drawer-closed-rotation));
+}
+
+#info-drawer.open {
+    transform: rotate(0deg);
 }
 
 #info-drawer .panel {
@@ -110,6 +138,9 @@
 
 #info-drawer .section h3 {
     color: #ffd9a5;
+    font-family: var(--drawer-font-display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 #info-drawer .chip {
@@ -141,6 +172,7 @@
         0 1px 0 rgba(255, 244, 223, 0.65),
         0 0 10px rgba(255, 236, 204, 0.18);
     cursor: pointer;
+    font-family: var(--drawer-font-display);
 }
 
 #info-drawer .tab:hover {
@@ -159,6 +191,8 @@
     :root {
         --drawer-w: 88vw;
         --drawer-panel-radius: 0 14px 14px 0;
+        --drawer-closed-origin-x: calc(100% + 20px);
+        --drawer-closed-origin-y: calc(var(--drawer-tab-top) + 20px);
     }
 
     #info-drawer .panel {
