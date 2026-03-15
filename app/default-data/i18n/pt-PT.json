@@ -78,6 +78,23 @@
       "version": "Version",
       "empty": "No themes found"
     },
+    "config": {
+      "title": "Editar configuração",
+      "desc": "Gere as definições principais do dashboard e as opções de execução",
+      "sectionTitle": "Configuração geral",
+      "hint": "Estes valores afetam o comportamento global do dashboard. As alterações de porta só produzem efeito após reiniciar.",
+      "useDefaultRpcPath": "Usar caminho RPC predefinido",
+      "portHint": "Altere a porta apenas se souber exatamente o que está a fazer. Uma porta incorreta pode tornar o dashboard inacessível após o reinício e também pode exigir ajustes no proxy reverso, Docker ou firewall.",
+      "portConfirmTitle": "Confirmar alteração de porta",
+      "portConfirmBody": "Alterou a porta do dashboard. Esta alteração só será aplicada após reiniciar. Se a nova porta estiver incorreta ou não estiver exposta, o dashboard pode deixar de estar acessível. Pretende continuar mesmo assim?",
+      "fields": {
+        "title": "Título do dashboard",
+        "defaultLang": "Idioma de fallback",
+        "infoDrawerRefreshInterval": "Intervalo de atualização do painel de informação (segundos)",
+        "omvRpcPath": "Caminho OMV RPC",
+        "port": "Porta"
+      }
+    },
     "image": {
       "resetToDefault": "Repor imagem padrão",
       "deleteCustomImage": "Eliminar imagem personalizada",

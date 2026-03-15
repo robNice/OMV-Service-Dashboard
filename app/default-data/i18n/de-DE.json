@@ -78,6 +78,23 @@
       "version": "Version",
       "empty": "Keine Themes gefunden"
     },
+    "config": {
+      "title": "Konfiguration bearbeiten",
+      "desc": "Verwalte zentrale Dashboard-Einstellungen und laufzeitrelevante Optionen",
+      "sectionTitle": "Allgemeine Konfiguration",
+      "hint": "Diese Werte beeinflussen das globale Verhalten des Dashboards. Port-Änderungen wirken erst nach einem Neustart.",
+      "useDefaultRpcPath": "Standard-RPC-Pfad verwenden",
+      "portHint": "Ändere den Port nur, wenn du genau weißt, was du tust. Ein falscher Port kann dazu führen, dass das Dashboard nach einem Neustart nicht mehr erreichbar ist und Reverse-Proxy-, Docker- oder Firewall-Einstellungen angepasst werden müssen.",
+      "portConfirmTitle": "Port-Änderung bestätigen",
+      "portConfirmBody": "Du hast den Dashboard-Port geändert. Diese Änderung wird erst nach einem Neustart wirksam. Wenn der neue Port falsch ist oder nicht freigegeben wurde, ist das Dashboard danach möglicherweise nicht mehr erreichbar. Trotzdem fortfahren?",
+      "fields": {
+        "title": "Dashboard-Titel",
+        "defaultLang": "Fallback-Sprache",
+        "infoDrawerRefreshInterval": "Info-Drawer-Aktualisierungsintervall (Sekunden)",
+        "omvRpcPath": "OMV-RPC-Pfad",
+        "port": "Port"
+      }
+    },
     "image": {
       "resetToDefault" : "zurücksetzen auf Standard-Bild",
       "deleteCustomImage" : "Custom-Image löschen",

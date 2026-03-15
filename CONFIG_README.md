@@ -122,6 +122,8 @@ Example:
 - `omvRpcPath`: Path to the `omv-rpc` binary
 - `admin`: Admin password block; setting it to the default example resets the admin password to `dashboard`
 
+If you forgot the admin password, you can delete the `admin` block from `config.json` and then restart the service. On the next start, the admin password will be set back to the default password `dashboard`.
+
 ### `services.json`
 
 Defines the sections and services shown in the dashboard.

@@ -2,7 +2,7 @@
 <html lang="{{__.html.lang}}">
 <head>
     <meta charset="UTF-8">
-    <title>{{__.admin.theme.title}}</title>
+    <title>{{__.admin.config.title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/admin/admin.css?v={{VERSION}}">
 </head>
@@ -11,8 +11,8 @@
 
     <header class="admin-header">
         <div>
-            <h1>{{__.admin.theme.title}}</h1>
-            <p class="admin-subtitle">{{__.admin.theme.desc}}</p>
+            <h1>{{__.admin.config.title}}</h1>
+            <p class="admin-subtitle">{{__.admin.config.desc}}</p>
         </div>
         <nav class="admin-nav" aria-label="Admin">
             <div class="admin-nav-group">
@@ -27,7 +27,7 @@
                     </span>
                     <span>{{__.admin.services.title}}</span>
                 </a>
-                <a href="/admin/theme" class="admin-nav-link admin-nav-link-current">
+                <a href="/admin/theme" class="admin-nav-link">
                     <span class="admin-nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none">
                             <path d="M12 4.2C7.69 4.2 4.2 7.69 4.2 12C4.2 16.31 7.69 19.8 12 19.8C12.55 19.8 13 19.35 13 18.8C13 18.51 12.87 18.24 12.66 18.05C12.46 17.86 12.33 17.59 12.33 17.29C12.33 16.74 12.78 16.29 13.33 16.29H15.14C18.49 16.29 21.2 13.58 21.2 10.23C21.2 6.9 18.97 4.2 12 4.2Z"></path>
@@ -39,7 +39,7 @@
                     </span>
                     <span>{{__.admin.theme.title}}</span>
                 </a>
-                <a href="/admin/config" class="admin-nav-link">
+                <a href="/admin/config" class="admin-nav-link admin-nav-link-current">
                     <span class="admin-nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none">
                             <path d="M10.32 4.32L9.58 6.1C9.22 6.24 8.88 6.44 8.57 6.67L6.7 6.48L5.38 8.77L6.52 10.24C6.47 10.61 6.47 10.99 6.52 11.36L5.38 12.83L6.7 15.12L8.57 14.93C8.88 15.16 9.22 15.36 9.58 15.5L10.32 17.28H12.96L13.7 15.5C14.06 15.36 14.4 15.16 14.71 14.93L16.58 15.12L17.9 12.83L16.76 11.36C16.81 10.99 16.81 10.61 16.76 10.24L17.9 8.77L16.58 6.48L14.71 6.67C14.4 6.44 14.06 6.24 13.7 6.1L12.96 4.32H10.32Z"></path>
@@ -76,35 +76,62 @@
 
     <section
         class="admin-panel"
-        id="theme-settings"
-        data-current-theme="{{THEME_ID}}"
-        data-loading="{{__.admin.theme.loading}}"
+        id="config-settings"
         data-save-label="{{__.admin.save.label}}"
         data-save-saving="{{__.admin.save.saving}}"
         data-save-saved="{{__.admin.save.saved}}"
         data-save-error="{{__.admin.save.error}}"
-        data-current-label="{{__.admin.theme.current}}"
-        data-version-label="{{__.admin.theme.version}}"
-        data-empty-label="{{__.admin.theme.empty}}">
+        data-port-confirm-title="{{__.admin.config.portConfirmTitle}}"
+        data-port-confirm-body="{{__.admin.config.portConfirmBody}}">
 
         <div class="admin-panel-head">
             <div>
-                <h2>{{__.admin.theme.available}}</h2>
-                <p class="admin-panel-copy">{{__.admin.theme.hint}}</p>
+                <h2>{{__.admin.config.sectionTitle}}</h2>
+                <p class="admin-panel-copy">{{__.admin.config.hint}}</p>
             </div>
-            <button id="theme-save" class="primary" disabled>
+            <button id="config-save" class="primary" disabled>
                 <span class="label">{{__.admin.save.label}}</span>
                 <span class="spinner hidden"></span>
             </button>
         </div>
 
-        <div id="theme-status" class="hint"></div>
-        <div id="theme-list" class="theme-grid"></div>
+        <div id="config-status" class="hint"></div>
+
+        <div class="admin-form-grid">
+            <div class="field">
+                <label for="config-title">{{__.admin.config.fields.title}}</label>
+                <input id="config-title" type="text" autocomplete="off">
+            </div>
+
+            <div class="field">
+                <label for="config-default-lang">{{__.admin.config.fields.defaultLang}}</label>
+                <select id="config-default-lang"></select>
+            </div>
+
+            <div class="field">
+                <label for="config-refresh-interval">{{__.admin.config.fields.infoDrawerRefreshInterval}}</label>
+                <input id="config-refresh-interval" type="number" min="1" step="1">
+            </div>
+
+            <div class="field admin-field-span-2">
+                <label for="config-omv-rpc-path">{{__.admin.config.fields.omvRpcPath}}</label>
+                <div class="admin-inline-row">
+                    <input id="config-omv-rpc-path" type="text" autocomplete="off" spellcheck="false">
+                    <button id="config-omv-rpc-reset" type="button" class="secondary">{{__.admin.config.useDefaultRpcPath}}</button>
+                </div>
+            </div>
+
+            <div class="field admin-field-span-2">
+                <label for="config-port">{{__.admin.config.fields.port}}</label>
+                <input id="config-port" type="number" min="1" max="65535" step="1">
+                <p class="admin-field-note">{{__.admin.config.portHint}}</p>
+            </div>
+        </div>
     </section>
 
 </div>
 
-<script src="/assets/admin/admin-theme.js?v={{VERSION}}"></script>
+<script src="/assets/admin/admin-config.js?v={{VERSION}}"></script>
 {{ADMIN_META_FOOTER}}
 </body>
 </html>

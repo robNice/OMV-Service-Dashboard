@@ -6,8 +6,13 @@
 
 - [Einfuehrung](#einfuehrung)
 - [Funktionen](#funktionen)
-- [Konfiguration](#konfiguration)
 - [Admin-Bereich](#admin-bereich)
+  - [Zugang](#zugang)
+  - [Sektionen und Dienste verwalten](#sektionen-und-dienste-verwalten)
+  - [Theme auswaehlen](#theme-auswaehlen)
+  - [Konfiguration bearbeiten](#konfiguration-bearbeiten)
+  - [Passwort aendern](#passwort-aendern)
+- [Manuelle Konfiguration](#manuelle-konfiguration)
 - [Theming](#theming)
 - [Verzeichnisstruktur (relevante Teile)](#verzeichnisstruktur-relevante-teile)
 - [Installation](#installation)
@@ -40,38 +45,32 @@
 
 ## Einfuehrung
 
-Das OMV Service Dashboard dient in erster Linie als zentrale, uebersichtliche Weboberflaeche zur Anzeige und zum Aufruf von Diensten und Systeminformationen rund um einen OpenMediaVault-Server.
+Das OMV Service Dashboard dient in erster Linie als zentrale, übersichtliche Weboberfläche zur Anzeige und zum Aufruf von Diensten und Systeminformationen rund um einen OpenMediaVault-Server.
 
-Darueber hinaus eignet sich das Dashboard sehr gut als dauerhaft sichtbares Interface auf Bildschirmen, wie es im Smart-Home-Umfeld haeufig eingesetzt wird.
+Darüber hinaus eignet sich das Dashboard sehr gut als dauerhaft sichtbares Interface auf Bildschirmen, wie es im Smart-Home-Umfeld häufig eingesetzt wird.
 
 ---
 
 ## Funktionen
 
-- Uebersichtliches Dashboard mit Sektionen wie `System`, `Media` oder `Smart Home`
+- Übersichtliches Dashboard mit Sektionen wie `System`, `Media` oder `Smart Home`
 - Service-Karten mit Links zu OMV, Home Assistant, Mealie, Jellyfin und mehr
 - Hintergrundbilder pro Sektion
 - Vorschaubilder pro Sektion und Service
-- Live-Statistik-Drawer mit Uptime, RAM, Datentraegern, Temperaturen und Docker-Containern
+- Live-Statistik-Drawer mit Uptime, RAM, Datenträgern, Temperaturen und Docker-Containern
 - Docker-Integration mit Containerliste, Status und Update-Informationen
-- Mehrsprachige Benutzeroberflaeche
-- Umschaltbare Frontend-Themes fuer das oeffentliche Dashboard
-
----
-
-## Konfiguration
-
-Seitenstruktur, Konfiguration, Uebersetzungen und benutzerdefinierte Bilder werden ueber den Admin-Bereich und Konfigurationsdateien festgelegt.
-
-Die Konfigurationsdateien liegen in einem eigenen `/config`-Verzeichnis. Dieses wird zur Laufzeit eingelesen und uebersteht Updates sowie Container-Neubauten sicher.
-
-Bitte lies [`CONFIG_README.de.md`](./CONFIG_README.de.md) fuer die vollstaendige Konfigurationsreferenz.
+- Mehrsprachige Benutzeroberfläche
+- Umschaltbare Frontend-Themes für das öffentliche Dashboard
 
 ---
 
 ## Admin-Bereich
 
-Sektionen, Services und das aktive oeffentliche Theme koennen im integrierten Admin-Bereich verwaltet werden:
+Der Admin-Bereich ist in diese Unterbereiche gegliedert:
+
+### Zugang
+
+Der Admin-Bereich ist hier erreichbar:
 
 ```text
 {dashboard-url}/admin
@@ -83,9 +82,13 @@ Das Standard-Passwort ist:
 dashboard
 ```
 
-Die `services.json` muss in der Regel nicht mehr manuell bearbeitet werden. Aenderungen erfolgen ueber die Weboberflaeche und werden automatisch gespeichert.
+---
 
-Fuer einige eingebaute Sektionen-IDs existieren bereits Grafiken. Wenn du diese nutzen moechtest, verwende diese IDs:
+### Sektionen und Dienste verwalten
+
+Hier können Sektionen und Dienste angelegt, bearbeitet, sortiert und gelöscht werden. Außerdem lassen sich dort Namen, Links, Beschreibungen sowie die verwendeten Vorschaubilder und Hintergründe pflegen.
+
+Für einige eingebaute Sektionen-IDs existieren bereits Grafiken. Wenn du diese nutzen möchtest, verwende diese IDs:
 
 - `admin`
 - `files`
@@ -94,7 +97,7 @@ Fuer einige eingebaute Sektionen-IDs existieren bereits Grafiken. Wenn du diese 
 - `network`
 - `smart-home`
 
-Default-Bilder fuer Sektionen und Services koennen hier abgelegt werden:
+Default-Bilder für Sektionen und Services können hier abgelegt werden:
 
 ```text
 /config
@@ -109,13 +112,47 @@ Default-Bilder fuer Sektionen und Services koennen hier abgelegt werden:
          └─ _default.png
 ```
 
-Fuer hochgeladene Card-Bilder ist eine Groesse von etwa `305px x 185px` empfehlenswert.
+Für hochgeladene Card-Bilder ist eine Größe von etwa `305px x 185px` empfehlenswert.
+
+---
+
+### Theme auswaehlen
+
+Hier kann das aktive öffentliche Theme ausgewählt werden. Aufgelistet werden sowohl die integrierten Themes als auch zusätzlich im User-Config-Verzeichnis unter `/config/assets/themes` abgelegte Themes.
+
+---
+
+### Konfiguration bearbeiten
+
+Hier können die wichtigsten Konfigurationswerte bearbeitet werden, zum Beispiel:
+
+- `Titel`: Basistitel und Seitenüberschrift des Dashboards
+- `Fallback-Sprache`: Standardsprache, wenn keine passende Locale gefunden wird
+- `Info-Drawer-Refresh-Intervall`: Aktualisierungsintervall des Info-Drawers in Sekunden
+- `Port`: Port, auf dem die Anwendung lauscht
+- `OMV-RPC-Pfad`: Pfad zur `omv-rpc`-Binary
+
+---
+
+### Passwort aendern
+
+Hier kann das Admin-Passwort geändert werden.
+
+---
+
+## Manuelle Konfiguration
+
+Die Konfigurationsdaten werden in `/config/config.json` und `/config/services.json` abgelegt und können bei Bedarf auch manuell bearbeitet werden.
+
+Im Normalfall erfolgen Änderungen über den Admin-Bereich und werden dort automatisch gespeichert. Direktes Bearbeiten der Dateien ist vor allem dann sinnvoll, wenn man sich im Backend kaputtkonfiguriert hat.
+
+Bitte lies [`CONFIG_README.de.md`](./CONFIG_README.de.md), um mehr über die manuelle Konfiguration zu erfahren.
 
 ---
 
 ## Theming
 
-Das oeffentliche Dashboard unterstuetzt umschaltbare Themes. Das aktive Theme wird in der `config.json` gespeichert und kann auch im Backend ausgewaehlt werden.
+Das öffentliche Dashboard unterstützt umschaltbare Themes. Das aktive Theme wird in der `config.json` gespeichert und kann auch im Backend ausgewählt werden.
 
 Beispiel:
 
@@ -125,7 +162,7 @@ Beispiel:
 }
 ```
 
-Eigene Themes koennen unter folgendem Pfad abgelegt werden:
+Eigene Themes können unter folgendem Pfad abgelegt werden:
 
 ```text
 /config/assets/themes/<theme-id>/
@@ -139,22 +176,22 @@ theme.css
 drawer.css
 ```
 
-Themes koennen optional auch ein clientseitiges Skript mitbringen:
+Themes können optional auch ein clientseitiges Skript mitbringen:
 
 ```text
 theme.js
 ```
 
-Wenn fuer das aktive Theme eine Datei unter `/assets/themes/<theme-id>/theme.js` existiert, wird sie vom Frontend automatisch geladen.
+Wenn für das aktive Theme eine Datei unter `/assets/themes/<theme-id>/theme.js` existiert, wird sie vom Frontend automatisch geladen.
 
-Konvention fuer Theme-Skripte:
+Konvention für Theme-Skripte:
 
 - Genau ein globales Objekt unter `window.OMVTheme` registrieren
 - Eine Funktion `init(context)` bereitstellen
-- Optional eine Funktion `destroy()` fuer Cleanup bereitstellen
-- Theme-spezifisches DOM und Verhalten im Theme-Ordner halten statt gemeinsame Core-Skripte zu veraendern
+- Optional eine Funktion `destroy()` für Cleanup bereitstellen
+- Theme-spezifisches DOM und Verhalten im Theme-Ordner halten statt gemeinsame Core-Skripte zu verändern
 
-Der an `init()` uebergebene `context` enthaelt:
+Der an `init()` übergebene `context` enthält:
 
 - `theme`
 - `body`
@@ -176,11 +213,11 @@ app/
   templates/          # HTML-Templates
   default-data/       # wird zur Laufzeit nach /data kopiert
     assets/           # integrierte Assets (JS, CSS, Bilder)
-    i18n/             # integrierte Uebersetzungen
+    i18n/             # integrierte Übersetzungen
 config.example/       # Beispielkonfiguration
 ```
 
-Benutzerdefinierte Konfigurationen und Assets liegen ausserhalb des App-Codes:
+Benutzerdefinierte Konfigurationen und Assets liegen außerhalb des App-Codes:
 
 ```text
 /config               # Benutzerkonfiguration (gemountetes Volume)
@@ -190,7 +227,7 @@ Benutzerdefinierte Konfigurationen und Assets liegen ausserhalb des App-Codes:
 
 ## Installation
 
-Die Anwendung ist dafuer ausgelegt, entweder:
+Die Anwendung ist dafür ausgelegt, entweder:
 
 - in einem Docker-Container (empfohlen)
 - direkt auf dem OMV-Host (standalone)
@@ -206,7 +243,7 @@ Die Anwendung ist dafuer ausgelegt, entweder:
 
 Siehe [`example.docker-compose.yml`](./example.docker-compose.yml).
 
-1. Wenn du vor dem ersten Start bereits eine eigene Konfiguration vorbereiten moechtest, kopiere die Beispielkonfiguration:
+1. Wenn du vor dem ersten Start bereits eine eigene Konfiguration vorbereiten möchtest, kopiere die Beispielkonfiguration:
 
 ```bash
 cp -r config.example path-to-your-config-directory
@@ -222,19 +259,19 @@ Du musst die Konfigurationsdatei nicht zwingend kopieren, da sie beim ersten Sta
 docker compose up -d
 ```
 
-4. Oeffne das Dashboard im Browser:
+4. Öffne das Dashboard im Browser:
 
 ```text
 http://<host>:<port>/
 ```
 
-Updates und Neuaufsetzen des Containers sind jederzeit moeglich. Alles innerhalb von `/config` bleibt erhalten.
+Updates und Neuaufsetzen des Containers sind jederzeit möglich. Alles innerhalb von `/config` bleibt erhalten.
 
 ---
 
 ### Installation: Standalone (fortgeschritten / ungetestet)
 
-Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsaechlich der Vollstaendigkeit halber vorhanden.
+Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsächlich der Vollständigkeit halber vorhanden.
 
 #### Voraussetzungen
 
@@ -245,7 +282,7 @@ Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsaechlich der Vollst
 #### Schritte (Uebersicht)
 
 1. Repository klonen.
-2. Abhaengigkeiten installieren.
+2. Abhängigkeiten installieren.
 3. `config.example/` nach `config/` kopieren.
 4. Server mit `node server.js` starten.
 
@@ -253,9 +290,9 @@ Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsaechlich der Vollst
 
 ## Hinweise
 
-- Das oeffentliche Dashboard kann ueber `/config/assets/themes` gethemed werden.
-- Der Admin-Bereich behaelt bewusst sein eigenes Styling und wird nicht gethemed.
-- Uebersetzungen aus `/config/i18n` werden ueber die integrierten Uebersetzungen gelegt.
+- Das öffentliche Dashboard kann über `/config/assets/themes` gethemed werden.
+- Der Admin-Bereich behält bewusst sein eigenes Styling und wird nicht gethemed.
+- Übersetzungen aus `/config/i18n` werden über die integrierten Übersetzungen gelegt.
 
 ---
 

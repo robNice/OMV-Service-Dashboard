@@ -122,6 +122,8 @@ Beispiel:
 - `omvRpcPath`: Pfad zur `omv-rpc`-Binary
 - `admin`: Admin-Passwortblock; wenn er wie im Beispiel gesetzt wird, wird das Admin-Passwort auf `dashboard` zurueckgesetzt
 
+Wenn du das Admin-Passwort vergessen hast, kannst du den `admin`-Block in der `config.json` loeschen und den Dienst anschliessend neu starten. Beim naechsten Start wird das Admin-Passwort dann erneut auf das Default-Passwort `dashboard` gesetzt.
+
 ### `services.json`
 
 Definiert die im Dashboard angezeigten Sektionen und Dienste.

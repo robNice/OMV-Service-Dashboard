@@ -78,6 +78,23 @@
       "version": "Version",
       "empty": "No themes found"
     },
+    "config": {
+      "title": "Edit configuration",
+      "desc": "Manage core dashboard settings and runtime-related options",
+      "sectionTitle": "General configuration",
+      "hint": "These values affect global dashboard behavior. Port changes only take effect after a restart.",
+      "useDefaultRpcPath": "Use default RPC path",
+      "portHint": "Change the port only if you know exactly what you are doing. A wrong port can make the dashboard unreachable after restart and may also require adjusting reverse proxy, Docker, or firewall settings.",
+      "portConfirmTitle": "Confirm port change",
+      "portConfirmBody": "You changed the dashboard port. This change applies after restart. If the new port is wrong or not exposed, the dashboard may no longer be reachable. Continue anyway?",
+      "fields": {
+        "title": "Dashboard title",
+        "defaultLang": "Fallback language",
+        "infoDrawerRefreshInterval": "Info drawer refresh interval (seconds)",
+        "omvRpcPath": "OMV RPC path",
+        "port": "Port"
+      }
+    },
     "image": {
       "resetToDefault" : "reset to default image",
       "deleteCustomImage" : "delete custom image",

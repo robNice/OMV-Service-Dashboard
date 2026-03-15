@@ -78,6 +78,23 @@
       "version": "Version",
       "empty": "No themes found"
     },
+    "config": {
+      "title": "Edytuj konfigurację",
+      "desc": "Zarządzaj głównymi ustawieniami dashboardu i opcjami środowiska uruchomieniowego",
+      "sectionTitle": "Konfiguracja ogólna",
+      "hint": "Te wartości wpływają na globalne działanie dashboardu. Zmiany portu zaczną działać dopiero po restarcie.",
+      "useDefaultRpcPath": "Użyj domyślnej ścieżki RPC",
+      "portHint": "Zmieniaj port tylko wtedy, gdy dokładnie wiesz, co robisz. Błędny port może spowodować, że po restarcie dashboard przestanie być dostępny, a także może wymagać zmian w reverse proxy, Dockerze lub zaporze sieciowej.",
+      "portConfirmTitle": "Potwierdź zmianę portu",
+      "portConfirmBody": "Zmieniono port dashboardu. Ta zmiana zacznie obowiązywać po restarcie. Jeśli nowy port jest błędny albo nie został udostępniony, dashboard może przestać być osiągalny. Czy mimo to kontynuować?",
+      "fields": {
+        "title": "Tytuł dashboardu",
+        "defaultLang": "Język zapasowy",
+        "infoDrawerRefreshInterval": "Interwał odświeżania panelu informacji (sekundy)",
+        "omvRpcPath": "Ścieżka OMV RPC",
+        "port": "Port"
+      }
+    },
     "image": {
       "resetToDefault": "Przywróć obraz domyślny",
       "deleteCustomImage": "Usuń niestandardowy obraz",

@@ -78,6 +78,23 @@
       "version": "Version",
       "empty": "No themes found"
     },
+    "config": {
+      "title": "Yapılandırmayı düzenle",
+      "desc": "Gösterge panelinin temel ayarlarını ve çalışma zamanı seçeneklerini yönetin",
+      "sectionTitle": "Genel yapılandırma",
+      "hint": "Bu değerler gösterge panelinin genel davranışını etkiler. Port değişiklikleri ancak yeniden başlatmadan sonra geçerli olur.",
+      "useDefaultRpcPath": "Varsayılan RPC yolunu kullan",
+      "portHint": "Portu yalnızca tam olarak ne yaptığınızı biliyorsanız değiştirin. Yanlış bir port, yeniden başlatmadan sonra gösterge panelinin erişilemez olmasına neden olabilir ve ters proxy, Docker veya güvenlik duvarı ayarlarında değişiklik gerektirebilir.",
+      "portConfirmTitle": "Port değişikliğini onayla",
+      "portConfirmBody": "Gösterge paneli portunu değiştirdiniz. Bu değişiklik yeniden başlatmadan sonra uygulanacaktır. Yeni port yanlışsa veya dışarı açılmadıysa gösterge paneline artık erişilemeyebilir. Yine de devam edilsin mi?",
+      "fields": {
+        "title": "Gösterge paneli başlığı",
+        "defaultLang": "Yedek dil",
+        "infoDrawerRefreshInterval": "Bilgi çekmecesi yenileme aralığı (saniye)",
+        "omvRpcPath": "OMV RPC yolu",
+        "port": "Port"
+      }
+    },
     "image": {
       "resetToDefault": "Varsayılan görsele sıfırla",
       "deleteCustomImage": "Özel görseli sil",
