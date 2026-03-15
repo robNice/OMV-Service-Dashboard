@@ -608,12 +608,12 @@ h1 {
 .admin-meta-footer {
     width: min(1100px, calc(100% - 3rem));
     margin: 2.5rem auto 1rem;
-    padding-top: 0.85rem;
+    padding-top: 0.15rem;
     border-top: 1px solid rgba(148, 163, 184, 0.14);
     display: flex;
     flex-wrap: wrap;
     gap: 0.55rem 1rem;
-    justify-content: center;
+    justify-content: right;
     font-size: 0.74rem;
     line-height: 1.4;
     color: rgba(226, 232, 240, 0.48);
