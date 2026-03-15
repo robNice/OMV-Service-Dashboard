@@ -605,6 +605,34 @@ h1 {
     align-items: center;
 }
 
+.admin-meta-footer {
+    width: min(1100px, calc(100% - 3rem));
+    margin: 2.5rem auto 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 1rem;
+    justify-content: center;
+    font-size: 0.74rem;
+    line-height: 1.4;
+    color: rgba(226, 232, 240, 0.48);
+}
+
+.admin-meta-item {
+    white-space: nowrap;
+}
+
+.admin-meta-link {
+    color: rgba(148, 163, 184, 0.68);
+    text-decoration: none;
+}
+
+.admin-meta-link:hover {
+    color: rgba(191, 219, 254, 0.82);
+    text-decoration: underline;
+}
+
 button.primary {
     background: #2563eb;
     min-width: 140px;
