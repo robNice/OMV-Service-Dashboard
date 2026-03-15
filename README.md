@@ -7,7 +7,6 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Admin Area](#admin-area)
-  - [Access](#access)
   - [Manage Sections and Services](#manage-sections-and-services)
   - [Choose Theme](#choose-theme)
   - [Edit Configuration](#edit-configuration)
@@ -68,9 +67,12 @@ It also works well as a permanently visible dashboard on wall displays or smart 
 
 The admin area is split into these sections:
 
-### Access
+ - Sections and services
+ - Themes
+ - Configuration
+ - Change password
 
-The admin area is available here:
+and is available here:
 
 ```text
 {dashboard-url}/admin
