@@ -25,6 +25,28 @@ const TXT = {
 
 let initialConfig = null;
 let defaultOmvRpcPath = "/usr/sbin/omv-rpc";
+let availableLanguages = [];
+
+function syncLanguageOptions(selectedValue = "") {
+    const current = String(selectedValue || "").trim();
+    const values = [...availableLanguages];
+
+    if (current && !values.includes(current)) {
+        values.push(current);
+    }
+
+    values.sort((a, b) => a.localeCompare(b));
+
+    fields.defaultLang.innerHTML = "";
+    for (const locale of values) {
+        const option = document.createElement("option");
+        option.value = locale;
+        option.textContent = locale;
+        fields.defaultLang.appendChild(option);
+    }
+
+    fields.defaultLang.value = current;
+}
 
 function normalizedFormValue() {
     return {
@@ -86,7 +108,7 @@ function applyConfig(config) {
     };
 
     fields.title.value = initialConfig.title;
-    fields.defaultLang.value = initialConfig.defaultLang;
+    syncLanguageOptions(initialConfig.defaultLang);
     fields.infoDrawerRefreshInterval.value = String(initialConfig.infoDrawerRefreshInterval);
     fields.omvRpcPath.value = initialConfig.omvRpcPath;
     fields.port.value = String(initialConfig.port);
@@ -102,14 +124,18 @@ async function loadConfig() {
 
     const data = await response.json();
     defaultOmvRpcPath = String(data.defaultOmvRpcPath || defaultOmvRpcPath);
+    availableLanguages = Array.isArray(data.availableLanguages) ? data.availableLanguages.map(String) : [];
     applyConfig(data);
 }
 
 Object.values(fields).forEach((field) => {
-    field.addEventListener("input", () => {
+    const onChange = () => {
         setStatus("");
         syncSaveState();
-    });
+    };
+
+    field.addEventListener("input", onChange);
+    field.addEventListener("change", onChange);
 });
 
 resetRpcBtn.addEventListener("click", () => {

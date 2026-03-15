@@ -51,7 +51,8 @@ function initDefaultData() {
 
 initDefaultData();
 // initDataDir();
-const {CONFIG_DIR} = require('./lib/paths');
+const {APP_DATA, CONFIG_DIR} = require('./lib/paths');
+const { _internals: { normalizeTag } } = require('./lib/i18n-config');
 const {resolveAssetPath} = require('./lib/asset-resolver');
 const app = express();
 
@@ -287,6 +288,31 @@ function renderAdminTemplate(req, template) {
             .replace(/{{ADMIN_META_FOOTER}}/g, buildAdminMetaFooter()),
         {locale: req.getLocale()}
     );
+}
+
+function listAvailableAdminLocales() {
+    const dirs = [
+        path.join(APP_DATA, 'i18n'),
+        path.join(CONFIG_DIR, 'i18n')
+    ];
+    const locales = new Set();
+
+    for (const dir of dirs) {
+        if (!fs.existsSync(dir)) continue;
+
+        for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
+            if (!entry.isFile() || path.extname(entry.name).toLowerCase() !== '.json') {
+                continue;
+            }
+
+            const locale = normalizeTag(path.basename(entry.name, '.json'));
+            if (locale) {
+                locales.add(locale);
+            }
+        }
+    }
+
+    return Array.from(locales).sort((a, b) => a.localeCompare(b));
 }
 
 /**
@@ -569,9 +595,11 @@ app.post("/admin/api/theme", requireAdmin, express.json(), (req, res) => {
 
 app.get("/admin/api/config", requireAdmin, (req, res) => {
     const config = loadConfiguration();
+    const availableLanguages = listAvailableAdminLocales();
     res.json({
         title: String(config.title || ""),
         defaultLang: String(config.defaultLang || ""),
+        availableLanguages,
         infoDrawerRefreshInterval: Number(config.infoDrawerRefreshInterval) || 0,
         omvRpcPath: String(config.omvRpcPath || DEFAULT_OMV_RPC_PATH),
         defaultOmvRpcPath: DEFAULT_OMV_RPC_PATH,
@@ -582,16 +610,17 @@ app.get("/admin/api/config", requireAdmin, (req, res) => {
 app.post("/admin/api/config", requireAdmin, express.json(), (req, res) => {
     const payload = req.body || {};
     const nextTitle = String(payload.title || "").trim();
-    const nextDefaultLang = String(payload.defaultLang || "").trim();
+    const nextDefaultLang = normalizeTag(String(payload.defaultLang || "").trim());
     const nextOmvRpcPath = String(payload.omvRpcPath || "").trim() || DEFAULT_OMV_RPC_PATH;
     const nextRefreshInterval = Number.parseInt(payload.infoDrawerRefreshInterval, 10);
     const nextPort = Number.parseInt(payload.port, 10);
+    const availableLanguages = new Set(listAvailableAdminLocales());
 
     if (!nextTitle) {
         return res.status(400).json({ error: "invalid_title" });
     }
 
-    if (!nextDefaultLang) {
+    if (!nextDefaultLang || !availableLanguages.has(nextDefaultLang)) {
         return res.status(400).json({ error: "invalid_default_lang" });
     }
 
