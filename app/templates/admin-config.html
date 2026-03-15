@@ -2,22 +2,18 @@
 <html lang="{{__.html.lang}}">
 <head>
     <meta charset="UTF-8">
-    <title>{{__.admin.title}}</title>
+    <title>{{__.admin.config.title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/admin/admin.css?v={{VERSION}}">
 </head>
 <body>
-
 <div class="admin-page">
 
     <header class="admin-header">
         <div>
-            <h1>{{__.admin.title}}</h1>
-            <p class="admin-subtitle">
-                {{__.admin.subtitle}}
-            </p>
+            <h1>{{__.admin.config.title}}</h1>
+            <p class="admin-subtitle">{{__.admin.config.desc}}</p>
         </div>
-
         <nav class="admin-nav" aria-label="Admin">
             <div class="admin-nav-group">
                 <a href="/admin/services" class="admin-nav-link">
@@ -31,6 +27,14 @@
                     </span>
                     <span>{{__.admin.services.title}}</span>
                 </a>
+                <a href="/admin/config" class="admin-nav-link admin-nav-link-current">
+                    <span class="admin-nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 3L13.9 6.9L18 7.5L15 10.5L15.7 14.6L12 12.7L8.3 14.6L9 10.5L6 7.5L10.1 6.9L12 3Z"></path>
+                        </svg>
+                    </span>
+                    <span>{{__.admin.config.title}}</span>
+                </a>
                 <a href="/admin/theme" class="admin-nav-link">
                     <span class="admin-nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none">
@@ -42,14 +46,6 @@
                         </svg>
                     </span>
                     <span>{{__.admin.theme.title}}</span>
-                </a>
-                <a href="/admin/config" class="admin-nav-link">
-                    <span class="admin-nav-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 3L13.9 6.9L18 7.5L15 10.5L15.7 14.6L12 12.7L8.3 14.6L9 10.5L6 7.5L10.1 6.9L12 3Z"></path>
-                        </svg>
-                    </span>
-                    <span>{{__.admin.config.title}}</span>
                 </a>
                 <a href="/admin/setpassword" class="admin-nav-link">
                     <span class="admin-nav-icon" aria-hidden="true">
@@ -77,62 +73,64 @@
         </nav>
     </header>
 
-    <div class="admin-dashboard">
+    <section
+        class="admin-panel"
+        id="config-settings"
+        data-save-label="{{__.admin.save.label}}"
+        data-save-saving="{{__.admin.save.saving}}"
+        data-save-saved="{{__.admin.save.saved}}"
+        data-save-error="{{__.admin.save.error}}"
+        data-port-confirm-title="{{__.admin.config.portConfirmTitle}}"
+        data-port-confirm-body="{{__.admin.config.portConfirmBody}}">
 
-        <a href="/admin/services" class="admin-tile primary">
-            <span class="admin-tile-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="4" width="8" height="7" rx="1.5"></rect>
-                    <rect x="13" y="4" width="8" height="7" rx="1.5"></rect>
-                    <rect x="3" y="13" width="8" height="7" rx="1.5"></rect>
-                    <rect x="13" y="13" width="8" height="7" rx="1.5"></rect>
-                </svg>
-            </span>
-            <h2>{{__.admin.services.title}}</h2>
-            <p>{{__.admin.services.desc}}</p>
-        </a>
+        <div class="admin-panel-head">
+            <div>
+                <h2>{{__.admin.config.sectionTitle}}</h2>
+                <p class="admin-panel-copy">{{__.admin.config.hint}}</p>
+            </div>
+            <button id="config-save" class="primary" disabled>
+                <span class="label">{{__.admin.save.label}}</span>
+                <span class="spinner hidden"></span>
+            </button>
+        </div>
 
-        <a href="/admin/theme" class="admin-tile">
-            <span class="admin-tile-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M12 4.2C7.69 4.2 4.2 7.69 4.2 12C4.2 16.31 7.69 19.8 12 19.8C12.55 19.8 13 19.35 13 18.8C13 18.51 12.87 18.24 12.66 18.05C12.46 17.86 12.33 17.59 12.33 17.29C12.33 16.74 12.78 16.29 13.33 16.29H15.14C18.49 16.29 21.2 13.58 21.2 10.23C21.2 6.9 18.97 4.2 12 4.2Z"></path>
-                    <circle cx="7.9" cy="11.2" r="1.1"></circle>
-                    <circle cx="10.6" cy="8.2" r="1.1"></circle>
-                    <circle cx="14.2" cy="8.7" r="1.1"></circle>
-                    <circle cx="16.4" cy="12.1" r="1.1"></circle>
-                </svg>
-            </span>
-            <h2>{{__.admin.theme.title}}</h2>
-            <p>{{__.admin.theme.desc}}</p>
-        </a>
+        <div id="config-status" class="hint"></div>
 
-        <a href="/admin/config" class="admin-tile">
-            <span class="admin-tile-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M12 3L13.9 6.9L18 7.5L15 10.5L15.7 14.6L12 12.7L8.3 14.6L9 10.5L6 7.5L10.1 6.9L12 3Z"></path>
-                </svg>
-            </span>
-            <h2>{{__.admin.config.title}}</h2>
-            <p>{{__.admin.config.desc}}</p>
-        </a>
+        <div class="admin-form-grid">
+            <div class="field">
+                <label for="config-title">{{__.admin.config.fields.title}}</label>
+                <input id="config-title" type="text" autocomplete="off">
+            </div>
 
-        <a href="/admin/setpassword" class="admin-tile">
-            <span class="admin-tile-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <rect x="5" y="11" width="14" height="10" rx="2"></rect>
-                    <path d="M8 11V8C8 5.79 9.79 4 12 4C14.21 4 16 5.79 16 8V11"></path>
-                    <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"></circle>
-                </svg>
-            </span>
-            <h2>{{__.admin.password.title}}</h2>
-            <p>{{__.admin.password.desc}}</p>
-        </a>
+            <div class="field">
+                <label for="config-default-lang">{{__.admin.config.fields.defaultLang}}</label>
+                <input id="config-default-lang" type="text" autocomplete="off" spellcheck="false">
+            </div>
 
-    </div>
+            <div class="field">
+                <label for="config-refresh-interval">{{__.admin.config.fields.infoDrawerRefreshInterval}}</label>
+                <input id="config-refresh-interval" type="number" min="1" step="1">
+            </div>
+
+            <div class="field admin-field-span-2">
+                <label for="config-omv-rpc-path">{{__.admin.config.fields.omvRpcPath}}</label>
+                <div class="admin-inline-row">
+                    <input id="config-omv-rpc-path" type="text" autocomplete="off" spellcheck="false">
+                    <button id="config-omv-rpc-reset" type="button" class="secondary">{{__.admin.config.useDefaultRpcPath}}</button>
+                </div>
+            </div>
+
+            <div class="field admin-field-span-2">
+                <label for="config-port">{{__.admin.config.fields.port}}</label>
+                <input id="config-port" type="number" min="1" max="65535" step="1">
+                <p class="admin-field-note">{{__.admin.config.portHint}}</p>
+            </div>
+        </div>
+    </section>
 
 </div>
 
+<script src="/assets/admin/admin-config.js?v={{VERSION}}"></script>
 {{ADMIN_META_FOOTER}}
-
 </body>
 </html>

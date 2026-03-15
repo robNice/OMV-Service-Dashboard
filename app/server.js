@@ -35,6 +35,7 @@ const pkg = require('./package.json');
 const APP_VERSION = pkg.version;
 const PROJECT_NAME = pkg.name || 'OMV-Service-Dashboard';
 const PROJECT_URL = 'https://github.com/robNice/OMV-Service-Dashboard';
+const DEFAULT_OMV_RPC_PATH = "/usr/sbin/omv-rpc";
 
 function initDefaultData() {
     const source = '/app/default-data';
@@ -506,6 +507,17 @@ app.get("/admin/theme", requireAdmin, (req, res) => {
     res.send(html);
 });
 
+app.get("/admin/config", requireAdmin, (req, res) => {
+    const tpl = fs.readFileSync(
+        "/app/templates/admin-config.html",
+        "utf8"
+    );
+
+    const html = renderAdminTemplate(req, tpl);
+
+    res.send(html);
+});
+
 
 app.post("/admin/setpassword", requireAdmin, express.urlencoded({extended: false}), (req, res) => {
     const {password, passwordRepeat} = req.body;
@@ -553,6 +565,65 @@ app.post("/admin/api/theme", requireAdmin, express.json(), (req, res) => {
     config.theme = theme;
     saveConfiguration(config);
     res.json({ ok: true, theme });
+});
+
+app.get("/admin/api/config", requireAdmin, (req, res) => {
+    const config = loadConfiguration();
+    res.json({
+        title: String(config.title || ""),
+        defaultLang: String(config.defaultLang || ""),
+        infoDrawerRefreshInterval: Number(config.infoDrawerRefreshInterval) || 0,
+        omvRpcPath: String(config.omvRpcPath || DEFAULT_OMV_RPC_PATH),
+        defaultOmvRpcPath: DEFAULT_OMV_RPC_PATH,
+        port: Number(config.port) || PORT
+    });
+});
+
+app.post("/admin/api/config", requireAdmin, express.json(), (req, res) => {
+    const payload = req.body || {};
+    const nextTitle = String(payload.title || "").trim();
+    const nextDefaultLang = String(payload.defaultLang || "").trim();
+    const nextOmvRpcPath = String(payload.omvRpcPath || "").trim() || DEFAULT_OMV_RPC_PATH;
+    const nextRefreshInterval = Number.parseInt(payload.infoDrawerRefreshInterval, 10);
+    const nextPort = Number.parseInt(payload.port, 10);
+
+    if (!nextTitle) {
+        return res.status(400).json({ error: "invalid_title" });
+    }
+
+    if (!nextDefaultLang) {
+        return res.status(400).json({ error: "invalid_default_lang" });
+    }
+
+    if (!Number.isFinite(nextRefreshInterval) || nextRefreshInterval <= 0) {
+        return res.status(400).json({ error: "invalid_info_drawer_refresh_interval" });
+    }
+
+    if (!Number.isFinite(nextPort) || nextPort < 1 || nextPort > 65535) {
+        return res.status(400).json({ error: "invalid_port" });
+    }
+
+    const config = loadConfiguration();
+    const previousPort = Number(config.port) || PORT;
+
+    config.title = nextTitle;
+    config.defaultLang = nextDefaultLang;
+    config.infoDrawerRefreshInterval = nextRefreshInterval;
+    config.omvRpcPath = nextOmvRpcPath;
+    config.port = nextPort;
+    saveConfiguration(config);
+
+    res.json({
+        ok: true,
+        portChanged: previousPort !== nextPort,
+        config: {
+            title: config.title,
+            defaultLang: config.defaultLang,
+            infoDrawerRefreshInterval: config.infoDrawerRefreshInterval,
+            omvRpcPath: config.omvRpcPath,
+            port: config.port
+        }
+    });
 });
 
 app.get("/admin/api/services", requireAdmin, (req, res) => {
