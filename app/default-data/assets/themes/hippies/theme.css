@@ -94,7 +94,7 @@ body::after {
 
 .page-header > a {
     font-family: "Segoe Print", "Bradley Hand", cursive;
-    font-size: 1.05rem;
+    font-size: 1.16rem;
 }
 
 .page-header > .back-link::before {
@@ -220,7 +220,7 @@ body::after {
     padding: 1rem 1.1rem 1.15rem;
     color: #4b2219;
     font-family: "OutfitLocal", "Trebuchet MS", sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.22rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -347,7 +347,7 @@ body::after {
 
     .service-title {
         min-height: 78px;
-        font-size: 1rem;
+        font-size: 1.08rem;
     }
 
     .service::before {
