@@ -2,6 +2,15 @@
 
 This file records third-party assets that are bundled with this repository.
 
+## Contents
+
+- [`Font: Giana Font`](#giana-font)
+- [`Font: IBM Plex Mono`](#ibm-plex-mono)
+- [`Font: Arvo`](#arvo)
+- [`Font: Rye`](#rye)
+
+---
+
 ## Giana Font
 
 - Font name: `Giana`
@@ -21,6 +30,8 @@ License obligations relevant to redistribution of the bundled font:
 The full license text is included verbatim in:
 
 - `app/default-data/assets/themes/1984/assets/FreeLicense.txt`
+
+---
 
 ## IBM Plex Mono
 
@@ -43,3 +54,50 @@ License notes relevant to redistribution:
 The full license text is included in:
 
 - `app/default-data/assets/themes/hacker/assets/LICENSE.txt`
+
+---
+
+## Arvo
+
+- Font name: `Arvo`
+- Provider: Anton Koovit
+- Source URL: `https://github.com/google/fonts/tree/main/ofl/arvo`
+- Files:
+  - `app/default-data/assets/themes/waaaah-waaah-waaaaaah/assets/Arvo-Regular.ttf`
+  - `app/default-data/assets/themes/waaaah-waaah-waaaaaah/assets/Arvo-Bold.ttf`
+  - `app/default-data/assets/themes/waaaah-waaah-waaaaaah/assets/ARVO-LICENSE.txt`
+- License: `SIL Open Font License 1.1`
+
+License notes relevant to redistribution:
+
+- The font may be bundled, embedded, redistributed and sold with software.
+- The font itself may not be sold on its own.
+- Modified versions must not use the reserved font name without permission.
+- Redistribution must include the copyright notice and license text.
+
+The full license text is included in:
+
+- `app/default-data/assets/themes/waaaah-waaah-waaaaaah/assets/ARVO-LICENSE.txt`
+
+---
+
+## Rye
+
+- Font name: `Rye`
+- Provider: Sorkin Type Co
+- Source URL: `https://github.com/google/fonts/tree/main/ofl/rye`
+- Files:
+  - `app/default-data/assets/themes/waaaah-waaah-waaaaaah/assets/Rye-Regular.ttf`
+  - `app/default-data/assets/themes/waaaah-waaah-waaaaaah/assets/RYE-LICENSE.txt`
+- License: `SIL Open Font License 1.1`
+
+License notes relevant to redistribution:
+
+- The font may be bundled, embedded, redistributed and sold with software.
+- The font itself may not be sold on its own.
+- Modified versions must not use the reserved font name without permission.
+- Redistribution must include the copyright notice and license text.
+
+The full license text is included in:
+
+- `app/default-data/assets/themes/waaaah-waaah-waaaaaah/assets/RYE-LICENSE.txt`

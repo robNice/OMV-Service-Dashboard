@@ -34,7 +34,9 @@
     --drawer-tab-transform: translateY(0) rotate(90deg);
     --drawer-closed-rotation: 90deg;
     --drawer-closed-origin-x: calc(100% + 22px);
-    --drawer-closed-origin-y: calc(var(--drawer-tab-top) + 24px);
+    --drawer-closed-origin-y: calc(var(--drawer-tab-top) - 38px);
+    --drawer-closed-shift-x: 0px;
+    --drawer-closed-shift-y: -28px;
     --drawer-panel-shadow: 0 18px 42px rgba(33, 15, 6, 0.34);
     --drawer-panel-backdrop: blur(4px);
     --drawer-panel-radius: 0 16px 16px 0;
@@ -87,11 +89,11 @@
     z-index: 12;
     font-family: var(--drawer-font-body);
     transform-origin: var(--drawer-closed-origin-x) var(--drawer-closed-origin-y);
-    transform: rotate(var(--drawer-closed-rotation));
+    transform: translate(var(--drawer-closed-shift-x), var(--drawer-closed-shift-y)) rotate(var(--drawer-closed-rotation));
 }
 
 #info-drawer.open {
-    transform: rotate(0deg);
+    transform: translate(0, 0) rotate(0deg);
 }
 
 #info-drawer .panel {
@@ -156,6 +158,9 @@
 
 #info-drawer .tab {
     z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background:
         linear-gradient(180deg, rgba(255, 236, 204, 0.99), rgba(223, 170, 99, 0.99) 52%, rgba(147, 88, 42, 0.99));
     color: #2b1408;
@@ -173,6 +178,11 @@
         0 0 10px rgba(255, 236, 204, 0.18);
     cursor: pointer;
     font-family: var(--drawer-font-display);
+}
+
+#info-drawer .tab-label {
+    display: inline-block;
+    transform: rotate(180deg);
 }
 
 #info-drawer .tab:hover {
@@ -193,6 +203,7 @@
         --drawer-panel-radius: 0 14px 14px 0;
         --drawer-closed-origin-x: calc(100% + 20px);
         --drawer-closed-origin-y: calc(var(--drawer-tab-top) + 20px);
+        --drawer-closed-shift-y: -24px;
     }
 
     #info-drawer .panel {
