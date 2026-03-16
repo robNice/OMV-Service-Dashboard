@@ -56,11 +56,12 @@
             for (let index = 0; index < fishCount; index += 1) {
                 const fish = document.createElement('span');
                 const size = Math.round(fishSize.min + Math.random() * (fishSize.max - fishSize.min));
+                const duration = 26 + Math.round(Math.random() * 18);
                 fish.className = 'water-fish';
                 fish.style.setProperty('--fish-size', `${size}px`);
                 fish.style.setProperty('--fish-y', `${18 + Math.round(Math.random() * 58)}vh`);
-                fish.style.setProperty('--fish-duration', `${26 + Math.round(Math.random() * 18)}s`);
-                fish.style.setProperty('--fish-delay', `${(index * 9 + Math.random() * 8).toFixed(2)}s`);
+                fish.style.setProperty('--fish-duration', `${duration}s`);
+                fish.style.setProperty('--fish-delay', `${(-1 * Math.random() * duration).toFixed(2)}s`);
                 root.appendChild(fish);
             }
 
