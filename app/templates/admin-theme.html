@@ -85,7 +85,11 @@
         data-save-error="{{__.admin.save.error}}"
         data-current-label="{{__.admin.theme.current}}"
         data-version-label="{{__.admin.theme.version}}"
-        data-empty-label="{{__.admin.theme.empty}}">
+        data-empty-label="{{__.admin.theme.empty}}"
+        data-config-title="{{__.admin.theme.settings.title}}"
+        data-config-empty="{{__.admin.theme.settings.empty}}"
+        data-config-reset="{{__.admin.theme.settings.reset}}"
+        data-config-no-description="{{__.admin.theme.settings.noDescription}}">
 
         <div class="admin-panel-head">
             <div>
@@ -100,6 +104,18 @@
 
         <div id="theme-status" class="hint"></div>
         <div id="theme-list" class="theme-grid"></div>
+
+        <div class="theme-settings-panel">
+            <div class="theme-settings-head">
+                <div>
+                    <h2 id="theme-config-title">{{__.admin.theme.settings.title}}</h2>
+                    <p id="theme-config-description" class="admin-panel-copy"></p>
+                </div>
+                <button id="theme-reset" class="secondary" type="button">{{__.admin.theme.settings.reset}}</button>
+            </div>
+            <div id="theme-config-empty" class="admin-subtitle hidden">{{__.admin.theme.settings.empty}}</div>
+            <div id="theme-config-form" class="theme-config-form"></div>
+        </div>
     </section>
 
 </div>

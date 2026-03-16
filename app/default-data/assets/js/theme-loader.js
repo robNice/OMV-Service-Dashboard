@@ -1,6 +1,8 @@
 (function () {
     const body = document.body;
     const theme = body?.dataset?.theme;
+    const settingsEl = document.getElementById('omv-theme-settings');
+    const settings = settingsEl?.textContent ? JSON.parse(settingsEl.textContent) : {};
     const version = window.OMV_VERSION || '';
 
     if (!body || !theme) {
@@ -20,6 +22,7 @@
 
         api.init({
             theme,
+            settings,
             body,
             document,
             drawer: document.getElementById('info-drawer'),

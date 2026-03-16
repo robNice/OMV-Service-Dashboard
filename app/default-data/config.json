@@ -2,6 +2,7 @@
   "title": "OMV Service Dashboard",
   "defaultLang": "en-gb",
   "theme": "classic",
+  "themeSettings": {},
   "infoDrawerRefreshInterval": 30,
   "omvRpcPath": "/usr/sbin/omv-rpc",
   "port"      : 3000

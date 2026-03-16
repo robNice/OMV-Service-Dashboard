@@ -1,143 +1,149 @@
-{
-  "html": {
-    "lang": "de"
-  },
-  "label": {
-    "back": "Zurück",
-    "liveStats": "Live-Stats",
-    "close": "Schließen",
-    "info": "Info",
-    "days": "Tage",
-    "hours_short": "Std",
-    "storage": "Speicher (HDDs)",
-    "temps": "Temperaturen",
-    "versions": "Versionen",
-    "system": "System",
-    "docker": "Docker-Container",
-    "host": "Host",
-    "os": "OS",
-    "kernel": "Kernel",
-    "cpu": "CPU",
-    "gpu": "GPU",
-    "uptime": "Uptime",
-    "hddAvg": "HDD Ø",
-    "chassis": "Chassis",
-    "cpuLoad": "Load",
-    "plugins": "Erweiterungen",
-    "ram": "RAM",
-    "ramSlot": "RAM-Slot",
-    "used": "Belegt",
-    "gb": "GB"
-  },
-  "status": {
-    "updatedAt": "Letztes Update",
-    "now": "jetzt"
-  },
-  "tooltip": {
-    "infodrawer": "Systeminformationen öffnen/schließen",
-    "systemLoad": "Durschnitt der Systemlast: letzte Minute / letzte 5 Minuten / letzte 15 Minuten"
-  },
-  "docker": {
-    "status": {
-      "up": "Läuft",
-      "created": "Erstellt"
-    }
-  },
-  "errors": {
-    "missingKey": "Fehlende Übersetzung: {key}",
-    "noDisksFound": "Keine Laufwerke erkannt"
-  },
-  "log": {
-    "listening": "Service Dashboard läuft auf Port"
-  },
-  "units": {
-    "byte": "B",
-    "kilobyte": "KB",
-    "megabyte": "MB",
-    "gigabyte": "GB",
-    "terabyte": "TB",
-    "petabyte": "PB"
-  },
-  "admin": {
-    "logout": "Abmelden",
-    "title": "Admin",
-    "subtitle": "Konfigurationsverwaltung",
-    "services": {
-      "title": "Sektionen und Dienste verwalten",
-      "desc": "Verwalte Sektionen, Dienste und Links auf dem Dashboard",
-      "addSection": "Sektion hinzufügen",
-      "cardimage" : "Card-Bild"
-    },
-    "theme": {
-      "title": "Theme auswählen",
-      "desc": "Lege das Layout-Theme für das öffentliche Dashboard fest",
-      "available": "Verfügbare Themes",
-      "hint": "Themes steuern nur das öffentliche Dashboard, nicht den Admin-Bereich.",
-      "loading": "Themes werden geladen...",
-      "current": "Aktiv",
-      "version": "Version",
-      "empty": "Keine Themes gefunden"
-    },
-    "config": {
-      "title": "Konfiguration bearbeiten",
-      "desc": "Verwalte zentrale Dashboard-Einstellungen und laufzeitrelevante Optionen",
-      "sectionTitle": "Allgemeine Konfiguration",
-      "hint": "Diese Werte beeinflussen das globale Verhalten des Dashboards. Port-Änderungen wirken erst nach einem Neustart.",
-      "useDefaultRpcPath": "Standard-RPC-Pfad verwenden",
-      "portHint": "Ändere den Port nur, wenn du genau weißt, was du tust. Ein falscher Port kann dazu führen, dass das Dashboard nach einem Neustart nicht mehr erreichbar ist und Reverse-Proxy-, Docker- oder Firewall-Einstellungen angepasst werden müssen.",
-      "portConfirmTitle": "Port-Änderung bestätigen",
-      "portConfirmBody": "Du hast den Dashboard-Port geändert. Diese Änderung wird erst nach einem Neustart wirksam. Wenn der neue Port falsch ist oder nicht freigegeben wurde, ist das Dashboard danach möglicherweise nicht mehr erreichbar. Trotzdem fortfahren?",
-      "fields": {
-        "title": "Dashboard-Titel",
-        "defaultLang": "Fallback-Sprache",
-        "infoDrawerRefreshInterval": "Info-Drawer-Aktualisierungsintervall (Sekunden)",
-        "omvRpcPath": "OMV-RPC-Pfad",
-        "port": "Port"
-      }
-    },
-    "image": {
-      "resetToDefault" : "zurücksetzen auf Standard-Bild",
-      "deleteCustomImage" : "Custom-Image löschen",
-      "uploadError": "Upload fehlgeschlagen",
-      "sourceCustom": "individuell",
-      "sourceAuto": "automatisch",
-      "sourceDefault": "standard"
-    },
-    "section": {
-      "toggle": "Auf- und zuklappen",
-      "id": "Sektions-ID",
-      "title": "Sektionsname",
-      "delete": "Sektion löschen",
-      "addService": "Service hinzufügen",
-      "backgroundimage": "Hintergrundbild",
-      "cardimage" : "Card-Bild"
-    },
-    "service": {
-      "id": "Service-ID",
-      "title": "Service-Name",
-      "url": "Service-URL",
-      "cardimage": "Card-Bild",
-      "delete": "Service löschen"
-    },
-    "save": {
-      "label": "Speichern",
-      "saving": "speichere…",
-      "saved": "gespeichert",
-      "error": "Speichern fehlgeschlagen"
-    },
-    "password": {
-      "title": "Passwort ändern",
-      "desc": "Ändere hier dein Admin-Passwort.",
-      "new": "Neues Password",
-      "repeat": "Passwort wiederholen",
-      "tooShort": "Passwort muss mindestens 8 Zeichen lang sein.",
-      "mismatch": "Passwörter stimmen nicht überein."
-    },
-    "login": {
-      "title": "Admin-Anmeldung",
-      "passwordPlaceholder": "Passwort",
-      "submit": "Anmelden",
-      "invalid": "Falsches Passwort."
-    }
-  }
+﻿{
+    "html":  {
+                 "lang":  "de"
+             },
+    "label":  {
+                  "back":  "ZurÃ¼ck",
+                  "liveStats":  "Live-Stats",
+                  "close":  "SchlieÃŸen",
+                  "info":  "Info",
+                  "days":  "Tage",
+                  "hours_short":  "Std",
+                  "storage":  "Speicher (HDDs)",
+                  "temps":  "Temperaturen",
+                  "versions":  "Versionen",
+                  "system":  "System",
+                  "docker":  "Docker-Container",
+                  "host":  "Host",
+                  "os":  "OS",
+                  "kernel":  "Kernel",
+                  "cpu":  "CPU",
+                  "gpu":  "GPU",
+                  "uptime":  "Uptime",
+                  "hddAvg":  "HDD Ã˜",
+                  "chassis":  "Chassis",
+                  "cpuLoad":  "Load",
+                  "plugins":  "Erweiterungen",
+                  "ram":  "RAM",
+                  "ramSlot":  "RAM-Slot",
+                  "used":  "Belegt",
+                  "gb":  "GB"
+              },
+    "status":  {
+                   "updatedAt":  "Letztes Update",
+                   "now":  "jetzt"
+               },
+    "tooltip":  {
+                    "infodrawer":  "Systeminformationen Ã¶ffnen/schlieÃŸen",
+                    "systemLoad":  "Durschnitt der Systemlast: letzte Minute / letzte 5 Minuten / letzte 15 Minuten"
+                },
+    "docker":  {
+                   "status":  {
+                                  "up":  "LÃ¤uft",
+                                  "created":  "Erstellt"
+                              }
+               },
+    "errors":  {
+                   "missingKey":  "Fehlende Ãœbersetzung: {key}",
+                   "noDisksFound":  "Keine Laufwerke erkannt"
+               },
+    "log":  {
+                "listening":  "Service Dashboard lÃ¤uft auf Port"
+            },
+    "units":  {
+                  "byte":  "B",
+                  "kilobyte":  "KB",
+                  "megabyte":  "MB",
+                  "gigabyte":  "GB",
+                  "terabyte":  "TB",
+                  "petabyte":  "PB"
+              },
+    "admin":  {
+                  "logout":  "Abmelden",
+                  "title":  "Admin",
+                  "subtitle":  "Konfigurationsverwaltung",
+                  "services":  {
+                                   "title":  "Sektionen und Dienste verwalten",
+                                   "desc":  "Verwalte Sektionen, Dienste und Links auf dem Dashboard",
+                                   "addSection":  "Sektion hinzufÃ¼gen",
+                                   "cardimage":  "Card-Bild"
+                               },
+                  "theme":  {
+                                "title":  "Theme auswÃ¤hlen",
+                                "desc":  "Lege das Layout-Theme fÃ¼r das Ã¶ffentliche Dashboard fest",
+                                "available":  "VerfÃ¼gbare Themes",
+                                "hint":  "Themes steuern nur das Ã¶ffentliche Dashboard, nicht den Admin-Bereich.",
+                                "loading":  "Themes werden geladen...",
+                                "current":  "Aktiv",
+                                "version":  "Version",
+                                "empty":  "Keine Themes gefunden",
+                                "settings":  {
+                                                 "title":  "Theme-Einstellungen",
+                                                 "empty":  "Für dieses Theme gibt es keine konfigurierbaren Einstellungen.",
+                                                 "reset":  "Standardwerte laden",
+                                                 "noDescription":  ""
+                                             }
+                            },
+                  "config":  {
+                                 "title":  "Konfiguration bearbeiten",
+                                 "desc":  "Verwalte zentrale Dashboard-Einstellungen und laufzeitrelevante Optionen",
+                                 "sectionTitle":  "Allgemeine Konfiguration",
+                                 "hint":  "Diese Werte beeinflussen das globale Verhalten des Dashboards. Port-Ã„nderungen wirken erst nach einem Neustart.",
+                                 "useDefaultRpcPath":  "Standard-RPC-Pfad verwenden",
+                                 "portHint":  "Ã„ndere den Port nur, wenn du genau weiÃŸt, was du tust. Ein falscher Port kann dazu fÃ¼hren, dass das Dashboard nach einem Neustart nicht mehr erreichbar ist und Reverse-Proxy-, Docker- oder Firewall-Einstellungen angepasst werden mÃ¼ssen.",
+                                 "portConfirmTitle":  "Port-Ã„nderung bestÃ¤tigen",
+                                 "portConfirmBody":  "Du hast den Dashboard-Port geÃ¤ndert. Diese Ã„nderung wird erst nach einem Neustart wirksam. Wenn der neue Port falsch ist oder nicht freigegeben wurde, ist das Dashboard danach mÃ¶glicherweise nicht mehr erreichbar. Trotzdem fortfahren?",
+                                 "fields":  {
+                                                "title":  "Dashboard-Titel",
+                                                "defaultLang":  "Fallback-Sprache",
+                                                "infoDrawerRefreshInterval":  "Info-Drawer-Aktualisierungsintervall (Sekunden)",
+                                                "omvRpcPath":  "OMV-RPC-Pfad",
+                                                "port":  "Port"
+                                            }
+                             },
+                  "image":  {
+                                "resetToDefault":  "zurÃ¼cksetzen auf Standard-Bild",
+                                "deleteCustomImage":  "Custom-Image lÃ¶schen",
+                                "uploadError":  "Upload fehlgeschlagen",
+                                "sourceCustom":  "individuell",
+                                "sourceAuto":  "automatisch",
+                                "sourceDefault":  "standard"
+                            },
+                  "section":  {
+                                  "toggle":  "Auf- und zuklappen",
+                                  "id":  "Sektions-ID",
+                                  "title":  "Sektionsname",
+                                  "delete":  "Sektion lÃ¶schen",
+                                  "addService":  "Service hinzufÃ¼gen",
+                                  "backgroundimage":  "Hintergrundbild",
+                                  "cardimage":  "Card-Bild"
+                              },
+                  "service":  {
+                                  "id":  "Service-ID",
+                                  "title":  "Service-Name",
+                                  "url":  "Service-URL",
+                                  "cardimage":  "Card-Bild",
+                                  "delete":  "Service lÃ¶schen"
+                              },
+                  "save":  {
+                               "label":  "Speichern",
+                               "saving":  "speichereâ€¦",
+                               "saved":  "gespeichert",
+                               "error":  "Speichern fehlgeschlagen"
+                           },
+                  "password":  {
+                                   "title":  "Passwort Ã¤ndern",
+                                   "desc":  "Ã„ndere hier dein Admin-Passwort.",
+                                   "new":  "Neues Password",
+                                   "repeat":  "Passwort wiederholen",
+                                   "tooShort":  "Passwort muss mindestens 8 Zeichen lang sein.",
+                                   "mismatch":  "PasswÃ¶rter stimmen nicht Ã¼berein."
+                               },
+                  "login":  {
+                                "title":  "Admin-Anmeldung",
+                                "passwordPlaceholder":  "Passwort",
+                                "submit":  "Anmelden",
+                                "invalid":  "Falsches Passwort."
+                            }
+              }
 }

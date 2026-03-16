@@ -119,6 +119,22 @@ body::after {
     opacity: 0.45;
 }
 
+.section-nav-item img.omv-1984-source {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.section-nav-item .omv-1984-pixel-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    filter: saturate(0.92) contrast(1.08);
+}
+
 .service {
     width: 300px;
     background:
@@ -139,6 +155,28 @@ body::after {
 
 .service a {
     position: relative;
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0;
+}
+
+.service img.omv-1984-source {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.service .omv-1984-pixel-image {
+    display: block;
+    width: 100%;
+    height: 180px;
+    background:
+        linear-gradient(180deg, rgba(115, 232, 255, 0.06), rgba(18, 21, 60, 0.24)),
+        #141943;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    filter: saturate(0.92) contrast(1.08);
 }
 
 .service a::after {

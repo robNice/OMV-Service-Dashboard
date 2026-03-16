@@ -1,143 +1,149 @@
-{
-  "html": {
-    "lang": "fr"
-  },
-  "label": {
-    "back": "Retour",
-    "liveStats": "Statistiques en direct",
-    "close": "Fermer",
-    "info": "Infos",
-    "days": "jours",
-    "hours_short": "h",
-    "storage": "Stockage (HDDs)",
-    "temps": "Températures",
-    "versions": "Versions",
-    "system": "Système",
-    "docker": "Conteneurs Docker",
-    "host": "Hôte",
-    "os": "Système",
-    "kernel": "Noyau",
-    "cpu": "Processeur",
-    "gpu": "Carte graphique",
-    "uptime": "Temps de fonctionnement",
-    "hddAvg": "HDD moy.",
-    "chassis": "Châssis",
-    "cpuLoad": "Charge",
-    "plugins": "Extensions",
-    "ram": "RAM",
-    "ramSlot": "Emplacement RAM",
-    "used": "Utilisé",
-    "gb": "Go"
-  },
-  "status": {
-    "updatedAt": "Dernière mise à jour",
-    "now": "maintenant"
-  },
-  "tooltip": {
-    "infodrawer": "Ouvrir/fermer les informations système",
-    "systemLoad": "Moyenne de la charge système : dernière minute / 5 dernières minutes / 15 dernières minutes"
-  },
-  "docker": {
-    "status": {
-      "up": "Actif",
-      "created": "Créé"
-    }
-  },
-  "errors": {
-    "missingKey": "Traduction manquante : {key}",
-    "noDisksFound": "Aucun disque détecté"
-  },
-  "log": {
-    "listening": "Service Dashboard à l'écoute sur le port"
-  },
-  "units": {
-    "byte": "o",
-    "kilobyte": "Ko",
-    "megabyte": "Mo",
-    "gigabyte": "Go",
-    "terabyte": "To",
-    "petabyte": "Po"
-  },
-  "admin": {
-    "logout": "Se déconnecter",
-    "title": "Admin",
-    "subtitle": "Gestion de la configuration",
-    "services": {
-      "title": "Gérer les sections et services",
-      "desc": "Gérez les sections, les services et les liens du tableau de bord",
-      "addSection": "Ajouter une section",
-      "cardimage": "Image de carte"
-    },
-    "theme": {
-      "title": "Select theme",
-      "desc": "Choose the layout theme for the public dashboard",
-      "available": "Available themes",
-      "hint": "Themes affect the public dashboard only, not the admin area.",
-      "loading": "Loading themes...",
-      "current": "Current",
-      "version": "Version",
-      "empty": "No themes found"
-    },
-    "config": {
-      "title": "Modifier la configuration",
-      "desc": "Gérez les paramètres principaux du tableau de bord et les options liées à l'exécution",
-      "sectionTitle": "Configuration générale",
-      "hint": "Ces valeurs influencent le comportement global du tableau de bord. Les changements de port ne prennent effet qu'après un redémarrage.",
-      "useDefaultRpcPath": "Utiliser le chemin RPC par défaut",
-      "portHint": "Ne modifiez le port que si vous savez exactement ce que vous faites. Un port incorrect peut rendre le tableau de bord inaccessible après un redémarrage et nécessiter aussi des ajustements du reverse proxy, de Docker ou du pare-feu.",
-      "portConfirmTitle": "Confirmer le changement de port",
-      "portConfirmBody": "Vous avez modifié le port du tableau de bord. Ce changement prendra effet après un redémarrage. Si le nouveau port est incorrect ou non exposé, le tableau de bord risque de ne plus être accessible. Voulez-vous continuer ?",
-      "fields": {
-        "title": "Titre du tableau de bord",
-        "defaultLang": "Langue de secours",
-        "infoDrawerRefreshInterval": "Intervalle d'actualisation du panneau d'information (secondes)",
-        "omvRpcPath": "Chemin OMV RPC",
-        "port": "Port"
-      }
-    },
-    "image": {
-      "resetToDefault": "Réinitialiser à l’image par défaut",
-      "deleteCustomImage": "Supprimer l’image personnalisée",
-      "uploadError": "Le téléversement a échoué",
-      "sourceCustom": "personnalisée",
-      "sourceAuto": "automatique",
-      "sourceDefault": "par défaut"
-    },
-    "section": {
-      "toggle": "Déplier ou replier",
-      "id": "ID de section",
-      "title": "Nom de la section",
-      "delete": "Supprimer la section",
-      "addService": "Ajouter un service",
-      "backgroundimage": "Image d’arrière-plan",
-      "cardimage": "Image de carte"
-    },
-    "service": {
-      "id": "ID du service",
-      "title": "Nom du service",
-      "url": "URL du service",
-      "cardimage": "Image de carte",
-      "delete": "Supprimer le service"
-    },
-    "save": {
-      "label": "Enregistrer",
-      "saving": "enregistrement…",
-      "saved": "enregistré",
-      "error": "Échec de l’enregistrement"
-    },
-    "password": {
-      "title": "Changer le mot de passe",
-      "desc": "Modifiez ici votre mot de passe administrateur.",
-      "new": "Nouveau mot de passe",
-      "repeat": "Répéter le mot de passe",
-      "tooShort": "Le mot de passe doit contenir au moins 8 caractères.",
-      "mismatch": "Les mots de passe ne correspondent pas."
-    },
-    "login": {
-      "title": "Connexion administrateur",
-      "passwordPlaceholder": "Mot de passe",
-      "submit": "Se connecter",
-      "invalid": "Mot de passe incorrect."
-    }
-  }
+﻿{
+    "html":  {
+                 "lang":  "fr"
+             },
+    "label":  {
+                  "back":  "Retour",
+                  "liveStats":  "Statistiques en direct",
+                  "close":  "Fermer",
+                  "info":  "Infos",
+                  "days":  "jours",
+                  "hours_short":  "h",
+                  "storage":  "Stockage (HDDs)",
+                  "temps":  "TempÃ©ratures",
+                  "versions":  "Versions",
+                  "system":  "SystÃ¨me",
+                  "docker":  "Conteneurs Docker",
+                  "host":  "HÃ´te",
+                  "os":  "SystÃ¨me",
+                  "kernel":  "Noyau",
+                  "cpu":  "Processeur",
+                  "gpu":  "Carte graphique",
+                  "uptime":  "Temps de fonctionnement",
+                  "hddAvg":  "HDD moy.",
+                  "chassis":  "ChÃ¢ssis",
+                  "cpuLoad":  "Charge",
+                  "plugins":  "Extensions",
+                  "ram":  "RAM",
+                  "ramSlot":  "Emplacement RAM",
+                  "used":  "UtilisÃ©",
+                  "gb":  "Go"
+              },
+    "status":  {
+                   "updatedAt":  "DerniÃ¨re mise Ã  jour",
+                   "now":  "maintenant"
+               },
+    "tooltip":  {
+                    "infodrawer":  "Ouvrir/fermer les informations systÃ¨me",
+                    "systemLoad":  "Moyenne de la charge systÃ¨me : derniÃ¨re minute / 5 derniÃ¨res minutes / 15 derniÃ¨res minutes"
+                },
+    "docker":  {
+                   "status":  {
+                                  "up":  "Actif",
+                                  "created":  "CrÃ©Ã©"
+                              }
+               },
+    "errors":  {
+                   "missingKey":  "Traduction manquante : {key}",
+                   "noDisksFound":  "Aucun disque dÃ©tectÃ©"
+               },
+    "log":  {
+                "listening":  "Service Dashboard Ã  l\u0027Ã©coute sur le port"
+            },
+    "units":  {
+                  "byte":  "o",
+                  "kilobyte":  "Ko",
+                  "megabyte":  "Mo",
+                  "gigabyte":  "Go",
+                  "terabyte":  "To",
+                  "petabyte":  "Po"
+              },
+    "admin":  {
+                  "logout":  "Se dÃ©connecter",
+                  "title":  "Admin",
+                  "subtitle":  "Gestion de la configuration",
+                  "services":  {
+                                   "title":  "GÃ©rer les sections et services",
+                                   "desc":  "GÃ©rez les sections, les services et les liens du tableau de bord",
+                                   "addSection":  "Ajouter une section",
+                                   "cardimage":  "Image de carte"
+                               },
+                  "theme":  {
+                                "title":  "Select theme",
+                                "desc":  "Choose the layout theme for the public dashboard",
+                                "available":  "Available themes",
+                                "hint":  "Themes affect the public dashboard only, not the admin area.",
+                                "loading":  "Loading themes...",
+                                "current":  "Current",
+                                "version":  "Version",
+                                "empty":  "No themes found",
+                                "settings":  {
+                                                 "title":  "Theme settings",
+                                                 "empty":  "This theme has no configurable settings.",
+                                                 "reset":  "Load defaults",
+                                                 "noDescription":  ""
+                                             }
+                            },
+                  "config":  {
+                                 "title":  "Modifier la configuration",
+                                 "desc":  "GÃ©rez les paramÃ¨tres principaux du tableau de bord et les options liÃ©es Ã  l\u0027exÃ©cution",
+                                 "sectionTitle":  "Configuration gÃ©nÃ©rale",
+                                 "hint":  "Ces valeurs influencent le comportement global du tableau de bord. Les changements de port ne prennent effet qu\u0027aprÃ¨s un redÃ©marrage.",
+                                 "useDefaultRpcPath":  "Utiliser le chemin RPC par dÃ©faut",
+                                 "portHint":  "Ne modifiez le port que si vous savez exactement ce que vous faites. Un port incorrect peut rendre le tableau de bord inaccessible aprÃ¨s un redÃ©marrage et nÃ©cessiter aussi des ajustements du reverse proxy, de Docker ou du pare-feu.",
+                                 "portConfirmTitle":  "Confirmer le changement de port",
+                                 "portConfirmBody":  "Vous avez modifiÃ© le port du tableau de bord. Ce changement prendra effet aprÃ¨s un redÃ©marrage. Si le nouveau port est incorrect ou non exposÃ©, le tableau de bord risque de ne plus Ãªtre accessible. Voulez-vous continuer ?",
+                                 "fields":  {
+                                                "title":  "Titre du tableau de bord",
+                                                "defaultLang":  "Langue de secours",
+                                                "infoDrawerRefreshInterval":  "Intervalle d\u0027actualisation du panneau d\u0027information (secondes)",
+                                                "omvRpcPath":  "Chemin OMV RPC",
+                                                "port":  "Port"
+                                            }
+                             },
+                  "image":  {
+                                "resetToDefault":  "RÃ©initialiser Ã  lâ€™image par dÃ©faut",
+                                "deleteCustomImage":  "Supprimer lâ€™image personnalisÃ©e",
+                                "uploadError":  "Le tÃ©lÃ©versement a Ã©chouÃ©",
+                                "sourceCustom":  "personnalisÃ©e",
+                                "sourceAuto":  "automatique",
+                                "sourceDefault":  "par dÃ©faut"
+                            },
+                  "section":  {
+                                  "toggle":  "DÃ©plier ou replier",
+                                  "id":  "ID de section",
+                                  "title":  "Nom de la section",
+                                  "delete":  "Supprimer la section",
+                                  "addService":  "Ajouter un service",
+                                  "backgroundimage":  "Image dâ€™arriÃ¨re-plan",
+                                  "cardimage":  "Image de carte"
+                              },
+                  "service":  {
+                                  "id":  "ID du service",
+                                  "title":  "Nom du service",
+                                  "url":  "URL du service",
+                                  "cardimage":  "Image de carte",
+                                  "delete":  "Supprimer le service"
+                              },
+                  "save":  {
+                               "label":  "Enregistrer",
+                               "saving":  "enregistrementâ€¦",
+                               "saved":  "enregistrÃ©",
+                               "error":  "Ã‰chec de lâ€™enregistrement"
+                           },
+                  "password":  {
+                                   "title":  "Changer le mot de passe",
+                                   "desc":  "Modifiez ici votre mot de passe administrateur.",
+                                   "new":  "Nouveau mot de passe",
+                                   "repeat":  "RÃ©pÃ©ter le mot de passe",
+                                   "tooShort":  "Le mot de passe doit contenir au moins 8 caractÃ¨res.",
+                                   "mismatch":  "Les mots de passe ne correspondent pas."
+                               },
+                  "login":  {
+                                "title":  "Connexion administrateur",
+                                "passwordPlaceholder":  "Mot de passe",
+                                "submit":  "Se connecter",
+                                "invalid":  "Mot de passe incorrect."
+                            }
+              }
 }

@@ -22,6 +22,7 @@
     - [`drawer.css`](#drawercss)
     - [`theme.js` (optional)](#themejs-optional)
     - [Style inheritance](#style-inheritance)
+    - [Overriding built-in themes](#overriding-built-in-themes)
 - [Summary](#summary)
 
 ---
@@ -31,6 +32,8 @@
 Whenever `/config` is mentioned here, it refers to your personal configuration directory for this application. It is either mounted in `docker-compose.yml` or defined via the `OMV_SERVICE_DASHBOARD_CONFIG` environment variable.
 
 The `/config` directory contains optional user overrides for the OMV Service Dashboard.
+
+Most changes can be managed conveniently through the application's admin area. This README is mainly relevant if you want to edit configuration files manually, add translations, or provide your own themes and assets.
 
 To get started more easily, copy the `config.example` directory into your own `/config` directory and adjust it as needed.
 
@@ -193,9 +196,13 @@ Example:
 
 The public dashboard theme can be switched in the backend and is stored in `config.json` via the `theme` key.
 
-The backend reads available themes from `/config/assets/themes/<theme-id>/meta.json` and lists them in the theme selector.
+The backend discovers available themes from the application's built-in theme directories and from `/config/assets/themes/<theme-id>/meta.json`.
+
+Themes from `/config` extend the built-in themes and may also override them when they use the same `id`.
 
 #### Theme directory structure
+
+The following directory structure applies when you want to create your own theme inside the user config directory.
 
 ```text
 /config/assets/themes/<theme-id>/
@@ -294,6 +301,8 @@ window.OMVTheme = {
 };
 ```
 
+A complete example showing both CSS overrides and a small `theme.js` implementation is available at [`config.example/assets/themes/sunrise`](./config.example/assets/themes/sunrise/).
+
 #### Style inheritance
 
 Theme CSS does not replace the whole frontend. It extends the shared base styles.
@@ -313,6 +322,14 @@ That means:
 - wrapping selectors like `body[data-theme="..."]` are not required in custom themes
 - theme-specific JavaScript should use the `window.OMVTheme.init(context)` convention
 
+#### Overriding built-in themes
+
+If you create a directory under `/config/assets/themes/<theme-id>/` using an existing theme ID and provide a matching `meta.json`, that theme is used in the backend and during asset resolution instead of the built-in version.
+
+This lets you adjust or fully replace a built-in theme without editing files in the app directory.
+
+Files with the same name such as `theme.css`, `drawer.css`, `theme.js`, and theme-local assets from `/config` take precedence over the built-in variant.
+
 ---
 
 ## Summary
@@ -321,4 +338,4 @@ That means:
 - Missing files always fall back to integrated defaults
 - Translation files are merged
 - Images and other assets under `/config/assets` override the matching visual assets
-- Themes are discovered via `meta.json`, styled via `theme.css` and `drawer.css`, and may optionally extend behavior via `theme.js`
+- Themes are composed from built-in assets and `/config/assets/themes`, can override built-in variants, and may optionally extend behavior via `theme.js`

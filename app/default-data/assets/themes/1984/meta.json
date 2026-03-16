@@ -2,5 +2,42 @@
   "id": "1984",
   "label": "1984",
   "description": "Retro computer theme with demo-scene gradients, stepped panel edges and subtle CRT styling.",
-  "version": "1.0.0"
+  "version": "1.2.0",
+  "settings": [
+    {
+      "id": "info-drawer-bg",
+      "label": "Info drawer background color",
+      "description": "Background color of the 1984 info drawer.",
+      "type": "color",
+      "default": "#0a1030"
+    },
+    {
+      "id": "card-pixel-width",
+      "label": "Card pixel width",
+      "description": "Horizontal pixel resolution used for service cards.",
+      "type": "number",
+      "default": 40
+    },
+    {
+      "id": "card-pixel-height",
+      "label": "Card pixel height",
+      "description": "Vertical pixel resolution used for service cards.",
+      "type": "number",
+      "default": 24
+    },
+    {
+      "id": "nav-pixel-width",
+      "label": "Navigation pixel width",
+      "description": "Horizontal pixel resolution used for section navigation cards.",
+      "type": "number",
+      "default": 18
+    },
+    {
+      "id": "nav-pixel-height",
+      "label": "Navigation pixel height",
+      "description": "Vertical pixel resolution used for section navigation cards.",
+      "type": "number",
+      "default": 12
+    }
+  ]
 }

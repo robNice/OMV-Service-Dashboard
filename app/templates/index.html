@@ -19,6 +19,7 @@
                 NO_DISKS_FOUND: "{{__.errors.noDisksFound}}",
             }
         </script>
+        <script id="omv-theme-settings" type="application/json">{{THEME_SETTINGS_JSON}}</script>
         <meta charset="UTF-8">
         <title>{{TITLE}}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,7 +33,7 @@
         <script src="/assets/js/theme-loader.js?v={{VERSION}}" defer></script>
     </head>
 
-    <body data-theme="{{THEME}}">
+    <body data-theme="{{THEME}}" {{THEME_SETTINGS_BODY_ATTRS}} style="{{THEME_SETTINGS_BODY_STYLE}}">
         <header class="page-header">
             {{BACKLINK}}
             <h1>{{SECTION_NAME}}</h1>

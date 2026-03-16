@@ -65,7 +65,8 @@ body::after {
 .grid {
     position: relative;
     z-index: 1;
-    max-width: 1280px;
+    /*max-width: 1280px;*/
+    max-width: 100%;
     margin-inline: auto;
 }
 

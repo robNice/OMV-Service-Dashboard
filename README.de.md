@@ -44,20 +44,26 @@
 
 ## Einfuehrung
 
-Das OMV Service Dashboard dient in erster Linie als zentrale, übersichtliche Weboberfläche zur Anzeige und zum Aufruf von Diensten und Systeminformationen rund um einen OpenMediaVault-Server.
+Wer kennt es nicht. Du hast deine NAS erfolgreich aufgebaut und sie um etliche extra Services ergänzt. Gleichzeitig liegen in deinem Netzwerk vielleicht noch weitere Dienste vor, die du allesamt über ein Webfrontend öffnen und verwalten kannst, und sie sind natürlich alle mit ihrer eigenen URL konfiguriert. Dieses Dashboard soll dir helfen, alle Dienste zu sammeln und kategorisiert aufzulisten.
 
-Darüber hinaus eignet sich das Dashboard sehr gut als dauerhaft sichtbares Interface auf Bildschirmen, wie es im Smart-Home-Umfeld häufig eingesetzt wird.
+Zusätzlich bietet dir der integrierte Info-Drawer eine schnelle Übersicht über den Gesamtzustand deiner OMV-NAS.
+
+Dieses themebare Dashboard eignet sich auch sehr gut als dauerhaft sichtbares Interface auf Bildschirmen, wie es im Smart-Home-Umfeld häufig eingesetzt wird.
+
+> **Hinweise**
+>
+> Die Kategorien werden hier nachfolgend als "Sektionen" und die darin konfigurierten Dienste als "Services" bezeichnet.
+>
+> Wenn hier `/config` erwähnt wird, ist damit dein persönliches Konfigurationsverzeichnis für diese Anwendung gemeint. Es wird entweder in der `docker-compose.yml` gemountet oder über die Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG` definiert.
 
 ---
 
 ## Funktionen
 
-- Übersichtliches Dashboard mit Sektionen wie `System`, `Media` oder `Smart Home`
-- Service-Karten mit Links zu OMV, Home Assistant, Mealie, Jellyfin und mehr
+- Übersichtliches Dashboard mit Sektionen wie zum Beispiel `System`, `Media` oder `Smart Home`
+- Service-Karten mit Links zu deinen konfigurierten Netzwerkdiensten
 - Hintergrundbilder pro Sektion
-- Vorschaubilder pro Sektion und Service
-- Live-Statistik-Drawer mit Uptime, RAM, Datenträgern, Temperaturen und Docker-Containern
-- Docker-Integration mit Containerliste, Status und Update-Informationen
+- Live-Statistik-Drawer (Info-Drawer) mit Uptime, RAM, Datenträgern, Temperaturen und Docker-Containern
 - Mehrsprachige Benutzeroberfläche
 - Umschaltbare Frontend-Themes für das öffentliche Dashboard
 
@@ -67,10 +73,10 @@ Darüber hinaus eignet sich das Dashboard sehr gut als dauerhaft sichtbares Inte
 
 Der Admin-Bereich ist in diese Unterbereiche gegliedert:
 
- - Sektionen und Dienste verwalten
- - Theme auswaehlen
- - Konfiguration bearbeiten
- - Passwort aendern
+- Sektionen und Dienste verwalten
+- Theme auswaehlen
+- Konfiguration bearbeiten
+- Passwort aendern
 
 und hier erreichbar:
 
@@ -170,6 +176,8 @@ Eigene Themes können unter folgendem Pfad abgelegt werden:
 /config/assets/themes/<theme-id>/
 ```
 
+Ein vollständiges Beispiel-Theme mit `meta.json`, `theme.css`, `drawer.css` und `theme.js` liegt unter [`config.example/assets/themes/sunrise`](./config.example/assets/themes/sunrise/).
+
 Jedes Theme-Verzeichnis sollte mindestens diese Dateien enthalten:
 
 ```text
@@ -201,7 +209,9 @@ Der an `init()` übergebene `context` enthält:
 - `drawer`
 - `version`
 
-Die technischen Details, die Ordnerstruktur und das Verhalten der Style-Vererbung sind in [`CONFIG_README.de.md`](./CONFIG_README.de.md) dokumentiert.
+Eigene Themes können dort auch eine bestehende eingebaute Theme-ID übernehmen und so ein System-Theme aus `/config/assets/themes` heraus überschreiben.
+
+Die technischen Details, die Ordnerstruktur, die Style-Vererbung und das Überschreiben eingebauter Themes sind in [`CONFIG_README.de.md`](./CONFIG_README.de.md) dokumentiert.
 Theme-Vorschauen findest du weiter unten ab [Theme 1984](#theme-1984).
 
 ---
@@ -234,12 +244,16 @@ Die Anwendung ist dafür ausgelegt, entweder:
 - in einem Docker-Container (empfohlen)
 - direkt auf dem OMV-Host (standalone)
 
+---
+
 ### Installation: Docker (empfohlen)
 
 #### Voraussetzungen
 
 - Docker
 - Docker Compose oder `docker compose`
+
+---
 
 #### Schnellstart
 
@@ -275,11 +289,15 @@ Updates und Neuaufsetzen des Containers sind jederzeit möglich. Alles innerhalb
 
 Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsächlich der Vollständigkeit halber vorhanden.
 
+---
+
 #### Voraussetzungen
 
 - Node.js v18+ oder v20+
 - npm
 - OpenMediaVault-Host
+
+---
 
 #### Schritte (Uebersicht)
 
@@ -300,57 +318,85 @@ Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsächlich der Vollst
 
 ## Screenshots
 
+---
+
 ### Mobile Dashboard-Uebersicht
 
 ![Dashboard overview mobile](docs/screenshots/omvsd_overview_mobile.png)
+
+---
 
 ### Mobile Dashboard-Sektion
 
 ![Dashboard section mobile](docs/screenshots/omvsd_section_mobile.png)
 
+---
+
 ### Mobile Info-Drawer
 
 ![Dashboard info drawer mobile](docs/screenshots/omvsd_info_drawer_mobile.png)
+
+---
 
 ### Desktop Dashboard-Uebersicht
 
 ![Dashboard overview desktop](docs/screenshots/omvsd_overview_desktop.png)
 
+---
+
 ### Desktop Dashboard-Sektion
 
 ![Dashboard section desktop](docs/screenshots/omvsd_section_desktop.png)
+
+---
 
 ### Desktop Info-Drawer
 
 ![Dashboard info drawer desktop](docs/screenshots/omvsd_info_drawer_desktop.png)
 
+---
+
 ### Theme 1984
 
 ![Theme 1984](docs/screenshots/1984.png)
+
+---
 
 ### Theme Bubbles
 
 ![Theme Bubbles](docs/screenshots/bubbles.png)
 
+---
+
 ### Theme Classic
 
 ![Theme Classic](docs/screenshots/classic.png)
+
+---
 
 ### Theme Compact List
 
 ![Theme Compact List](docs/screenshots/compact-list.png)
 
+---
+
 ### Theme Console
 
 ![Theme Console](docs/screenshots/console.png)
+
+---
 
 ### Theme Hacker
 
 ![Theme Hacker](docs/screenshots/hacker.png)
 
+---
+
 ### Theme Hippies
 
 ![Theme Hippies](docs/screenshots/hippies.png)
+
+---
 
 ### Theme Waaaah-Waaah-Waaaaaah
 
@@ -361,6 +407,8 @@ Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsächlich der Vollst
 ## Lizenz
 
 [`MIT`](./LICENSE)
+
+---
 
 ## Hinweise zu Drittanbieter-Komponenten
 

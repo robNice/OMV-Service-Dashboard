@@ -1,0 +1,6 @@
+{
+  "id": "sunrise",
+  "label": "Sunrise Example",
+  "description": "Example theme demonstrating CSS overrides and a small theme.js enhancement.",
+  "version": "1.0.0"
+}
