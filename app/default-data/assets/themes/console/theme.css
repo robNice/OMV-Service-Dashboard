@@ -281,8 +281,8 @@ body:has(.section-nav) .page-header::before {
     border-radius: 0;
     background: transparent;
     box-shadow:
-        inset 1px 0 0 rgba(255, 191, 95, 0.34),
-        inset -1px 0 0 rgba(255, 191, 95, 0.34);
+        inset 1px 0 0 var(--console-border),
+        inset -1px 0 0 var(--console-border);
     overflow: visible;
 }
 
