@@ -2,7 +2,7 @@
   "id": "1984",
   "label": "1984",
   "description": "Retro computer theme with demo-scene gradients, stepped panel edges and subtle CRT styling.",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "settings": [
     {
       "id": "info-drawer-bg",
@@ -53,12 +53,12 @@
       "default": "#d7e2ff"
     },
     {
-      "id": "drawer-tab-height",
+      "id": "drawer-tab-top",
       "group": "Drawer Tab",
-      "label": "Tab height",
-      "description": "Vertical size of the closed info drawer tab.",
+      "label": "Tab top position",
+      "description": "Vertical position of the closed info drawer tab from the top edge.",
       "type": "number",
-      "default": 36
+      "default": 68
     },
     {
       "id": "status-good-bg",

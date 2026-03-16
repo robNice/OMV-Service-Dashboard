@@ -18,6 +18,16 @@
   - [Themes (`/config/assets/themes`)](#themes-configassetsthemes)
     - [Theme directory structure](#theme-directory-structure)
     - [`meta.json`](#metajson)
+      - [Theme settings schema](#theme-settings-schema)
+      - [Supported field types](#supported-field-types)
+      - [`text`](#text)
+      - [`textarea`](#textarea)
+      - [`number`](#number)
+      - [`range`](#range)
+      - [`color`](#color)
+      - [`select`](#select)
+      - [`radio`](#radio)
+      - [`boolean`](#boolean)
     - [`theme.css`](#themecss)
     - [`drawer.css`](#drawercss)
     - [`theme.js` (optional)](#themejs-optional)
@@ -233,6 +243,242 @@ Rules:
 - `id` must match the theme folder name
 - the backend uses this file to list the theme
 - if `meta.json` is missing or invalid, the theme is not offered in the backend
+
+If you want to expose theme-specific options in the admin area, you can add a `settings` array to `meta.json`.
+
+Extended example:
+
+```json
+{
+  "id": "test",
+  "label": "Test",
+  "description": "Custom dashboard theme",
+  "version": "1.0.0",
+  "settings": [
+    {
+      "id": "accent-color",
+      "group": "Colors",
+      "label": "Accent color",
+      "description": "Used for buttons and highlights.",
+      "type": "color",
+      "default": "#60a5fa"
+    }
+  ]
+}
+```
+
+##### Theme settings schema
+
+Each entry in `settings` describes one configurable value for the selected theme.
+
+Supported keys:
+
+- `id`: Stable setting key. This is also used to generate CSS variables and `data-` attributes.
+- `group`: Optional group label shown in the admin modal. Use it to organize larger setting collections such as `Drawer`, `Cards`, or `Status Chips`.
+- `label`: Human-readable field label in the admin area.
+- `description`: Optional help text shown below the label.
+- `type`: Defines validation and the rendered form control.
+- `default`: Default value used when the user has not saved an override yet.
+- `options`: Required for `select` and `radio`. Each option needs `value` and `label`.
+
+Behavior notes:
+
+- settings are defined by the theme in `meta.json`
+- user-selected values are stored separately in `config.json`
+- the backend validates values against the schema before sending them to the frontend
+- frontend output uses a fixed `themesetting` prefix
+- CSS variables look like `--themesetting-accent-color`
+- HTML data attributes look like `data-themesetting-card-style="glass"`
+- theme JavaScript receives validated values via `window.OMVTheme.init({ settings })`
+
+##### Supported field types
+
+The following field types are supported by the backend and admin UI.
+
+##### `text`
+
+Use for short free-form strings.
+
+Example:
+
+```json
+{
+  "id": "headline-text",
+  "group": "Header",
+  "label": "Headline text",
+  "type": "text",
+  "default": "Dashboard"
+}
+```
+
+Typical use:
+
+- short labels
+- CSS class names or style tokens
+- small text snippets
+
+##### `textarea`
+
+Use for multi-line text input.
+
+Example:
+
+```json
+{
+  "id": "welcome-copy",
+  "group": "Header",
+  "label": "Welcome copy",
+  "type": "textarea",
+  "default": "Welcome to the dashboard."
+}
+```
+
+Typical use:
+
+- longer text blocks
+- notes
+- theme-specific copy
+
+##### `number`
+
+Use for numeric values that are entered directly.
+
+Example:
+
+```json
+{
+  "id": "card-pixel-width",
+  "group": "Pixelation",
+  "label": "Card pixel width",
+  "type": "number",
+  "default": 40
+}
+```
+
+Typical use:
+
+- dimensions
+- spacing values
+- counts
+
+##### `range`
+
+Use for numeric values that should be adjusted with a slider.
+
+Example:
+
+```json
+{
+  "id": "overlay-opacity",
+  "group": "Effects",
+  "label": "Overlay opacity",
+  "type": "range",
+  "default": 60
+}
+```
+
+Typical use:
+
+- opacity
+- intensity
+- scale-like values
+
+##### `color`
+
+Use for color values. The admin area renders a color picker.
+
+Example:
+
+```json
+{
+  "id": "drawer-text-color",
+  "group": "Drawer",
+  "label": "Drawer text color",
+  "type": "color",
+  "default": "#d7e2ff"
+}
+```
+
+Typical use:
+
+- text colors
+- background colors
+- chip colors
+- borders or highlights
+
+##### `select`
+
+Use for a compact dropdown with predefined options.
+
+Example:
+
+```json
+{
+  "id": "card-style",
+  "group": "Cards",
+  "label": "Card style",
+  "type": "select",
+  "default": "glass",
+  "options": [
+    { "value": "solid", "label": "Solid" },
+    { "value": "glass", "label": "Glass" }
+  ]
+}
+```
+
+Typical use:
+
+- mode switches with several options
+- compact enumerations
+
+##### `radio`
+
+Use for a small set of mutually exclusive options that should stay immediately visible.
+
+Example:
+
+```json
+{
+  "id": "header-alignment",
+  "group": "Header",
+  "label": "Header alignment",
+  "type": "radio",
+  "default": "center",
+  "options": [
+    { "value": "left", "label": "Left" },
+    { "value": "center", "label": "Center" },
+    { "value": "right", "label": "Right" }
+  ]
+}
+```
+
+Typical use:
+
+- layout variants
+- alignment choices
+- small option sets
+
+##### `boolean`
+
+Use for true/false values. The admin area renders a checkbox.
+
+Example:
+
+```json
+{
+  "id": "show-glow",
+  "group": "Effects",
+  "label": "Enable glow",
+  "type": "boolean",
+  "default": true
+}
+```
+
+Typical use:
+
+- toggles
+- enable/disable flags
+- optional effects
 
 #### `theme.css`
 

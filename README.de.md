@@ -56,6 +56,8 @@ Dieses themebare Dashboard eignet sich auch sehr gut als dauerhaft sichtbares In
 >
 > Wenn hier `/config` erwähnt wird, ist damit dein persönliches Konfigurationsverzeichnis für diese Anwendung gemeint. Es wird entweder in der `docker-compose.yml` gemountet oder über die Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG` definiert.
 
+
+
 ---
 
 ## Funktionen

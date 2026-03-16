@@ -18,6 +18,16 @@
   - [Themes (`/config/assets/themes`)](#themes-configassetsthemes)
     - [Theme-Verzeichnisstruktur](#theme-verzeichnisstruktur)
     - [`meta.json`](#metajson)
+      - [Theme-Settings-Schema](#theme-settings-schema)
+      - [Unterstuetzte Feldtypen](#unterstuetzte-feldtypen)
+      - [`text`](#text)
+      - [`textarea`](#textarea)
+      - [`number`](#number)
+      - [`range`](#range)
+      - [`color`](#color)
+      - [`select`](#select)
+      - [`radio`](#radio)
+      - [`boolean`](#boolean)
     - [`theme.css`](#themecss)
     - [`drawer.css`](#drawercss)
     - [`theme.js` (optional)](#themejs-optional)
@@ -251,7 +261,241 @@ Regeln:
 - das Backend nutzt diese Datei, um das Theme aufzulisten
 - fehlt `meta.json` oder ist sie ungültig, wird das Theme im Backend nicht angeboten
 
----
+Wenn du im Admin-Bereich theme-spezifische Optionen anbieten willst, kannst du in `meta.json` zusätzlich ein Array `settings` definieren.
+
+Erweitertes Beispiel:
+
+```json
+{
+  "id": "test",
+  "label": "Test",
+  "description": "Eigenes Dashboard-Theme",
+  "version": "1.0.0",
+  "settings": [
+    {
+      "id": "accent-color",
+      "group": "Farben",
+      "label": "Akzentfarbe",
+      "description": "Wird für Buttons und Hervorhebungen verwendet.",
+      "type": "color",
+      "default": "#60a5fa"
+    }
+  ]
+}
+```
+
+##### Theme-Settings-Schema
+
+Jeder Eintrag in `settings` beschreibt genau einen konfigurierbaren Wert für das ausgewählte Theme.
+
+Unterstützte Schlüssel:
+
+- `id`: Stabiler Setting-Key. Daraus werden auch CSS-Variablen und `data-`Attribute erzeugt.
+- `group`: Optionale Gruppenbezeichnung im Admin-Modal. Damit kannst du größere Settings-Sammlungen wie `Drawer`, `Cards` oder `Status Chips` strukturieren.
+- `label`: Sichtbare Feldbezeichnung im Admin-Bereich.
+- `description`: Optionaler Hilfetext unter dem Feld.
+- `type`: Bestimmt Validierung und verwendetes Formular-Element.
+- `default`: Standardwert, solange der Benutzer noch keinen Override gespeichert hat.
+- `options`: Pflicht für `select` und `radio`. Jede Option braucht `value` und `label`.
+
+Wichtige Hinweise:
+
+- die Settings werden vom Theme in `meta.json` beschrieben
+- die vom Benutzer gewählten Werte werden getrennt in `config.json` gespeichert
+- das Backend validiert alle Werte gegen das Schema, bevor sie ans Frontend gehen
+- das Frontend verwendet dafür immer den festen Prefix `themesetting`
+- CSS-Variablen sehen dann z. B. so aus: `--themesetting-accent-color`
+- HTML-Attribute sehen dann z. B. so aus: `data-themesetting-card-style="glass"`
+- Theme-JavaScript erhält die validierten Werte über `window.OMVTheme.init({ settings })`
+
+##### Unterstuetzte Feldtypen
+
+Die folgenden Feldtypen werden aktuell von Backend und Admin-UI unterstützt.
+
+##### `text`
+
+Für kurze freie Texteingaben.
+
+Beispiel:
+
+```json
+{
+  "id": "headline-text",
+  "group": "Header",
+  "label": "Headline-Text",
+  "type": "text",
+  "default": "Dashboard"
+}
+```
+
+Typische Einsätze:
+
+- kurze Labels
+- CSS-Klassen oder Style-Tokens
+- kleine Textbausteine
+
+##### `textarea`
+
+Für mehrzeilige Texteingaben.
+
+Beispiel:
+
+```json
+{
+  "id": "welcome-copy",
+  "group": "Header",
+  "label": "Einleitungstext",
+  "type": "textarea",
+  "default": "Willkommen im Dashboard."
+}
+```
+
+Typische Einsätze:
+
+- längere Textblöcke
+- Hinweise
+- theme-spezifische Texte
+
+##### `number`
+
+Für numerische Werte mit direkter Eingabe.
+
+Beispiel:
+
+```json
+{
+  "id": "card-pixel-width",
+  "group": "Pixelation",
+  "label": "Card-Pixelbreite",
+  "type": "number",
+  "default": 40
+}
+```
+
+Typische Einsätze:
+
+- Abmessungen
+- Abstände
+- Zählwerte
+
+##### `range`
+
+Für numerische Werte, die sich besser per Slider einstellen lassen.
+
+Beispiel:
+
+```json
+{
+  "id": "overlay-opacity",
+  "group": "Effekte",
+  "label": "Overlay-Deckkraft",
+  "type": "range",
+  "default": 60
+}
+```
+
+Typische Einsätze:
+
+- Deckkraft
+- Intensität
+- skalierbare Werte
+
+##### `color`
+
+Für Farbwerte. Im Admin-Bereich wird dafür ein Color-Picker gerendert.
+
+Beispiel:
+
+```json
+{
+  "id": "drawer-text-color",
+  "group": "Drawer",
+  "label": "Drawer-Textfarbe",
+  "type": "color",
+  "default": "#d7e2ff"
+}
+```
+
+Typische Einsätze:
+
+- Schriftfarben
+- Hintergrundfarben
+- Chip-Farben
+- Rahmen oder Highlights
+
+##### `select`
+
+Für kompakte Dropdowns mit vordefinierten Optionen.
+
+Beispiel:
+
+```json
+{
+  "id": "card-style",
+  "group": "Cards",
+  "label": "Card-Stil",
+  "type": "select",
+  "default": "glass",
+  "options": [
+    { "value": "solid", "label": "Solid" },
+    { "value": "glass", "label": "Glass" }
+  ]
+}
+```
+
+Typische Einsätze:
+
+- Modi mit mehreren Optionen
+- kompakte Auswahllisten
+
+##### `radio`
+
+Für kleine Mengen gegenseitig ausschließender Optionen, die direkt sichtbar bleiben sollen.
+
+Beispiel:
+
+```json
+{
+  "id": "header-alignment",
+  "group": "Header",
+  "label": "Header-Ausrichtung",
+  "type": "radio",
+  "default": "center",
+  "options": [
+    { "value": "left", "label": "Links" },
+    { "value": "center", "label": "Zentriert" },
+    { "value": "right", "label": "Rechts" }
+  ]
+}
+```
+
+Typische Einsätze:
+
+- Layout-Varianten
+- Ausrichtungsoptionen
+- kleine Optionsmengen
+
+##### `boolean`
+
+Für Wahr/Falsch-Werte. Im Admin-Bereich wird dafür eine Checkbox gerendert.
+
+Beispiel:
+
+```json
+{
+  "id": "show-glow",
+  "group": "Effekte",
+  "label": "Glow aktivieren",
+  "type": "boolean",
+  "default": true
+}
+```
+
+Typische Einsätze:
+
+- Umschalter
+- Ein/Aus-Flags
+- optionale Effekte
 
 #### `theme.css`
 
