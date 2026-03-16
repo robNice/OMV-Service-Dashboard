@@ -7,9 +7,12 @@ const configTitleEl = document.getElementById("theme-config-title");
 const configDescriptionEl = document.getElementById("theme-config-description");
 const configEmptyEl = document.getElementById("theme-config-empty");
 const configFormEl = document.getElementById("theme-config-form");
+const modalEl = document.getElementById("theme-config-modal");
+const modalCloseBtn = document.getElementById("theme-modal-close");
 
 let currentTheme = root.dataset.currentTheme || "classic";
 let selectedTheme = currentTheme;
+let modalTheme = currentTheme;
 let themes = [];
 let themeSettings = {};
 let drafts = {};
@@ -83,11 +86,17 @@ function hasUnsavedChanges() {
 
 function setSaving(isSaving) {
     saveBtn.disabled = isSaving || !hasUnsavedChanges();
-    resetBtn.disabled = isSaving || !(getThemeById(selectedTheme)?.settings || []).length;
     saveBtn.querySelector(".label").textContent = isSaving
         ? root.dataset.saveSaving
         : root.dataset.saveLabel;
     saveBtn.querySelector(".spinner").classList.toggle("hidden", !isSaving);
+}
+
+function setModalOpen(isOpen) {
+    modalEl.classList.toggle("hidden", !isOpen);
+    modalEl.classList.toggle("is-open", isOpen);
+    modalEl.setAttribute("aria-hidden", String(!isOpen));
+    document.body.classList.toggle("theme-modal-open", isOpen);
 }
 
 function renderThemes() {
@@ -103,7 +112,7 @@ function renderThemes() {
             : "";
         const settingsCount = Array.isArray(theme.settings) ? theme.settings.length : 0;
         const settingsBadge = settingsCount
-            ? `<span class="theme-badge theme-badge-secondary">${settingsCount} ${escapeHtml(root.dataset.settingsCountLabel)}</span>`
+            ? `<button type="button" class="theme-badge theme-badge-secondary theme-settings-trigger" data-theme-settings="${escapeHtml(theme.id)}">${settingsCount} ${escapeHtml(root.dataset.settingsCountLabel)}</button>`
             : "";
         const version = theme.version
             ? `<div class="theme-version">${root.dataset.versionLabel}: ${escapeHtml(theme.version)}</div>`
@@ -223,27 +232,25 @@ function renderField(setting, value) {
     `;
 }
 
-function renderSettings() {
-    const theme = getThemeById(selectedTheme);
+function renderSettings(themeId) {
+    const theme = getThemeById(themeId);
     const settings = theme?.settings || [];
-    const values = getDraftSettings(selectedTheme);
+    const values = getDraftSettings(themeId);
 
-    configTitleEl.textContent = `${root.dataset.configTitle}: ${theme?.label || selectedTheme}`;
+    modalTheme = themeId;
+    configTitleEl.textContent = `${root.dataset.configTitle}: ${theme?.label || themeId}`;
     configDescriptionEl.textContent = theme?.description || root.dataset.configNoDescription || "";
+    resetBtn.disabled = !settings.length;
 
     if (!settings.length) {
         configFormEl.innerHTML = "";
-        configEmptyEl.textContent = `${theme?.label || selectedTheme}: ${root.dataset.configEmpty}`;
+        configEmptyEl.textContent = `${theme?.label || themeId}: ${root.dataset.configEmpty}`;
         configEmptyEl.classList.remove("hidden");
-        resetBtn.classList.add("hidden");
-        setSaving(false);
         return;
     }
 
     configEmptyEl.classList.add("hidden");
-    resetBtn.classList.remove("hidden");
     configFormEl.innerHTML = settings.map((setting) => renderField(setting, values[setting.id])).join("");
-    setSaving(false);
 }
 
 async function loadThemes() {
@@ -258,25 +265,51 @@ async function loadThemes() {
     themeSettings = data.themeSettings || {};
     currentTheme = data.currentTheme || currentTheme;
     selectedTheme = currentTheme;
+    modalTheme = currentTheme;
     drafts = {};
     renderThemes();
-    renderSettings();
     setStatus("");
+    setSaving(false);
 }
 
-function updateDraft(settingId, value) {
-    drafts[selectedTheme] = {
-        ...getDraftSettings(selectedTheme),
+function updateDraft(themeId, settingId, value) {
+    drafts[themeId] = {
+        ...getDraftSettings(themeId),
         [settingId]: value
     };
     setSaving(false);
+}
+
+function openSettingsModal(themeId) {
+    renderSettings(themeId);
+    setModalOpen(true);
+}
+
+function closeSettingsModal() {
+    setModalOpen(false);
 }
 
 listEl.addEventListener("change", (event) => {
     if (event.target.name !== "theme") return;
     selectedTheme = event.target.value;
     renderThemes();
-    renderSettings();
+    setStatus("");
+    setSaving(false);
+});
+
+listEl.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-theme-settings]");
+    if (!trigger) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const themeId = trigger.dataset.themeSettings;
+    if (!themeId) return;
+
+    selectedTheme = themeId;
+    renderThemes();
+    openSettingsModal(themeId);
     setStatus("");
 });
 
@@ -284,7 +317,7 @@ configFormEl.addEventListener("input", (event) => {
     const settingId = event.target.dataset.settingId;
     if (!settingId) return;
 
-    const theme = getThemeById(selectedTheme);
+    const theme = getThemeById(modalTheme);
     const setting = (theme?.settings || []).find((item) => item.id === settingId);
     if (!setting) return;
 
@@ -292,7 +325,7 @@ configFormEl.addEventListener("input", (event) => {
         ? event.target.checked
         : event.target.value;
 
-    updateDraft(settingId, value);
+    updateDraft(modalTheme, settingId, value);
 
     if (setting.type === "range") {
         const output = configFormEl.querySelector(`[data-range-output="${settingId}"]`);
@@ -306,7 +339,7 @@ configFormEl.addEventListener("change", (event) => {
     const settingId = event.target.dataset.settingId;
     if (!settingId) return;
 
-    const theme = getThemeById(selectedTheme);
+    const theme = getThemeById(modalTheme);
     const setting = (theme?.settings || []).find((item) => item.id === settingId);
     if (!setting) return;
 
@@ -314,14 +347,28 @@ configFormEl.addEventListener("change", (event) => {
         ? event.target.checked
         : event.target.value;
 
-    updateDraft(settingId, value);
+    updateDraft(modalTheme, settingId, value);
 });
 
 resetBtn.addEventListener("click", () => {
-    const theme = getThemeById(selectedTheme);
-    drafts[selectedTheme] = getDefaultSettings(theme);
-    renderSettings();
+    const theme = getThemeById(modalTheme);
+    drafts[modalTheme] = getDefaultSettings(theme);
+    renderSettings(modalTheme);
     setStatus("");
+});
+
+modalCloseBtn.addEventListener("click", closeSettingsModal);
+
+modalEl.addEventListener("click", (event) => {
+    if (event.target.hasAttribute("data-modal-close")) {
+        closeSettingsModal();
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modalEl.classList.contains("is-open")) {
+        closeSettingsModal();
+    }
 });
 
 saveBtn.addEventListener("click", async () => {
@@ -350,7 +397,9 @@ saveBtn.addEventListener("click", async () => {
         delete drafts[currentTheme];
         selectedTheme = currentTheme;
         renderThemes();
-        renderSettings();
+        if (modalEl.classList.contains("is-open")) {
+            renderSettings(modalTheme);
+        }
         setStatus(root.dataset.saveSaved, "success");
     } catch {
         setStatus(root.dataset.saveError, "error");
