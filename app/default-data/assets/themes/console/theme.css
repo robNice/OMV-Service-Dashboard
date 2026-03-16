@@ -21,6 +21,7 @@ body {
     --console-amber: var(--themesetting-console-accent-color, #ffbf5f);
     --console-amber-soft: var(--themesetting-console-text-color, #ffd899);
     --console-amber-dim: var(--themesetting-console-muted-text-color, #c6a172);
+    --console-amber-bright: color-mix(in srgb, var(--console-amber-soft) 88%, white 12%);
     --console-amber-faint: color-mix(in srgb, var(--console-amber) 16%, transparent);
     --console-border: color-mix(in srgb, var(--console-amber) 34%, transparent);
     --text-color: var(--console-amber-soft);
@@ -215,7 +216,7 @@ body:has(.section-nav) .page-header::before {
 }
 
 .section-nav-item.active::after {
-    color: #fff0cd;
+    color: var(--console-amber-bright);
 }
 
 .grid {
@@ -335,7 +336,7 @@ body:has(.section-nav) .page-header::before {
     line-height: 1.34;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #ffe1a9;
+    color: var(--console-amber-bright);
 }
 
 .service-title::after {

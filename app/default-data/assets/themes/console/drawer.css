@@ -63,6 +63,13 @@
     --status-down-text: #ffbf94;
 }
 
+body {
+    --text: var(--console-amber-soft, #ffd899);
+    --muted: var(--console-amber-dim, #c6a172);
+    --accent: var(--console-amber, #ffbf5f);
+    --drawer-border: color-mix(in srgb, var(--console-amber, #ffbf5f) 32%, transparent);
+}
+
 #info-drawer,
 #info-drawer * {
     font-family: "Cascadia Mono", "Consolas", "Lucida Console", "Courier New", monospace;
@@ -178,7 +185,7 @@
 
 #info-drawer .tab:hover {
     background: linear-gradient(180deg, #5b3316, #2d180a);
-    color: #ffe0a8;
+    color: color-mix(in srgb, var(--console-amber-soft, #ffd899) 88%, white 12%);
 }
 
 .console-drawer-tab-host {
