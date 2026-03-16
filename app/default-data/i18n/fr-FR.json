@@ -76,7 +76,14 @@
       "loading": "Loading themes...",
       "current": "Current",
       "version": "Version",
-      "empty": "No themes found"
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": "",
+        "count": "settings"
+      }
     },
     "config": {
       "title": "Modifier la configuration",
@@ -86,7 +93,7 @@
       "useDefaultRpcPath": "Utiliser le chemin RPC par défaut",
       "portHint": "Ne modifiez le port que si vous savez exactement ce que vous faites. Un port incorrect peut rendre le tableau de bord inaccessible après un redémarrage et nécessiter aussi des ajustements du reverse proxy, de Docker ou du pare-feu.",
       "portConfirmTitle": "Confirmer le changement de port",
-      "portConfirmBody": "Vous avez modifié le port du tableau de bord. Ce changement prendra effet après un redémarrage. Si le nouveau port est incorrect ou non exposé, le tableau de bord risque de ne plus être accessible. Voulez-vous continuer ?",
+      "portConfirmBody": "Vous avez modifi� le port du tableau de bord. Ce changement prendra effet apr�s un red�marrage. Si le nouveau port est incorrect ou non expos�, le tableau de bord risque de ne plus �tre accessible. Voulez-vous continuer ?",
       "fields": {
         "title": "Titre du tableau de bord",
         "defaultLang": "Langue de secours",

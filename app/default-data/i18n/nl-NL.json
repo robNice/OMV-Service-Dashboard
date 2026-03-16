@@ -76,7 +76,14 @@
       "loading": "Loading themes...",
       "current": "Current",
       "version": "Version",
-      "empty": "No themes found"
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": "",
+        "count": "settings"
+      }
     },
     "config": {
       "title": "Configuratie bewerken",

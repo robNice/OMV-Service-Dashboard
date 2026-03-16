@@ -76,7 +76,14 @@
       "loading": "Loading themes...",
       "current": "Current",
       "version": "Version",
-      "empty": "No themes found"
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": "",
+        "count": "settings"
+      }
     },
     "config": {
       "title": "Editar configuração",
@@ -86,7 +93,7 @@
       "useDefaultRpcPath": "Usar caminho RPC padrão",
       "portHint": "Altere a porta apenas se você souber exatamente o que está fazendo. Uma porta incorreta pode fazer com que o dashboard fique inacessível após a reinicialização e também pode exigir ajustes no proxy reverso, Docker ou firewall.",
       "portConfirmTitle": "Confirmar alteração de porta",
-      "portConfirmBody": "Você alterou a porta do dashboard. Essa mudança será aplicada após a reinicialização. Se a nova porta estiver incorreta ou não estiver exposta, o dashboard poderá deixar de estar acessível. Deseja continuar mesmo assim?",
+      "portConfirmBody": "Voc� alterou a porta do dashboard. Essa mudan�a ser� aplicada ap�s a reinicializa��o. Se a nova porta estiver incorreta ou n�o estiver exposta, o dashboard poder� deixar de estar acess�vel. Deseja continuar mesmo assim?",
       "fields": {
         "title": "Título do dashboard",
         "defaultLang": "Idioma de fallback",

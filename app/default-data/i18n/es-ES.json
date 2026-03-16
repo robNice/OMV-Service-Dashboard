@@ -76,7 +76,14 @@
       "loading": "Loading themes...",
       "current": "Current",
       "version": "Version",
-      "empty": "No themes found"
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": "",
+        "count": "settings"
+      }
     },
     "config": {
       "title": "Editar configuración",
@@ -86,7 +93,7 @@
       "useDefaultRpcPath": "Usar la ruta RPC predeterminada",
       "portHint": "Cambia el puerto solo si sabes exactamente lo que haces. Un puerto incorrecto puede hacer que el dashboard deje de estar accesible después de reiniciar y también puede requerir ajustes en el proxy inverso, Docker o el firewall.",
       "portConfirmTitle": "Confirmar cambio de puerto",
-      "portConfirmBody": "Has cambiado el puerto del dashboard. Este cambio se aplicará después de reiniciar. Si el nuevo puerto es incorrecto o no está expuesto, es posible que el dashboard deje de ser accesible. ¿Quieres continuar?",
+      "portConfirmBody": "Has cambiado el puerto del dashboard. Este cambio se aplicar� despu�s de reiniciar. Si el nuevo puerto es incorrecto o no est� expuesto, es posible que el dashboard deje de ser accesible. �Quieres continuar?",
       "fields": {
         "title": "Título del dashboard",
         "defaultLang": "Idioma de reserva",

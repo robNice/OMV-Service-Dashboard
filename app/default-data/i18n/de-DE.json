@@ -66,7 +66,7 @@
       "title": "Sektionen und Dienste verwalten",
       "desc": "Verwalte Sektionen, Dienste und Links auf dem Dashboard",
       "addSection": "Sektion hinzufügen",
-      "cardimage" : "Card-Bild"
+      "cardimage": "Card-Bild"
     },
     "theme": {
       "title": "Theme auswählen",
@@ -76,7 +76,14 @@
       "loading": "Themes werden geladen...",
       "current": "Aktiv",
       "version": "Version",
-      "empty": "Keine Themes gefunden"
+      "empty": "Keine Themes gefunden",
+      "settings": {
+        "title": "Theme-Einstellungen",
+        "empty": "F?r dieses Theme gibt es keine konfigurierbaren Einstellungen.",
+        "reset": "Standardwerte laden",
+        "noDescription": "",
+        "count": "Einstellungen"
+      }
     },
     "config": {
       "title": "Konfiguration bearbeiten",
@@ -86,7 +93,7 @@
       "useDefaultRpcPath": "Standard-RPC-Pfad verwenden",
       "portHint": "Ändere den Port nur, wenn du genau weißt, was du tust. Ein falscher Port kann dazu führen, dass das Dashboard nach einem Neustart nicht mehr erreichbar ist und Reverse-Proxy-, Docker- oder Firewall-Einstellungen angepasst werden müssen.",
       "portConfirmTitle": "Port-Änderung bestätigen",
-      "portConfirmBody": "Du hast den Dashboard-Port geändert. Diese Änderung wird erst nach einem Neustart wirksam. Wenn der neue Port falsch ist oder nicht freigegeben wurde, ist das Dashboard danach möglicherweise nicht mehr erreichbar. Trotzdem fortfahren?",
+      "portConfirmBody": "Du hast den Dashboard-Port ge�ndert. Diese �\u001enderung wird erst nach einem Neustart wirksam. Wenn der neue Port falsch ist oder nicht freigegeben wurde, ist das Dashboard danach m�glicherweise nicht mehr erreichbar. Trotzdem fortfahren?",
       "fields": {
         "title": "Dashboard-Titel",
         "defaultLang": "Fallback-Sprache",
@@ -96,8 +103,8 @@
       }
     },
     "image": {
-      "resetToDefault" : "zurücksetzen auf Standard-Bild",
-      "deleteCustomImage" : "Custom-Image löschen",
+      "resetToDefault": "zurücksetzen auf Standard-Bild",
+      "deleteCustomImage": "Custom-Image löschen",
       "uploadError": "Upload fehlgeschlagen",
       "sourceCustom": "individuell",
       "sourceAuto": "automatisch",
@@ -110,7 +117,7 @@
       "delete": "Sektion löschen",
       "addService": "Service hinzufügen",
       "backgroundimage": "Hintergrundbild",
-      "cardimage" : "Card-Bild"
+      "cardimage": "Card-Bild"
     },
     "service": {
       "id": "Service-ID",

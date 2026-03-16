@@ -1,0 +1,16 @@
+{
+  "id": "sunrise",
+  "label": "Sunrise Example",
+  "description": "Example theme demonstrating CSS overrides and a small theme.js enhancement.",
+  "version": "1.1.0",
+  "settings": [
+    {
+      "id": "accent-color",
+      "group": "Colors",
+      "label": "Accent color",
+      "description": "Primary accent used for active navigation, drawer headings and badges.",
+      "type": "color",
+      "default": "#ff8a3d"
+    }
+  ]
+}

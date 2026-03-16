@@ -136,3 +136,4 @@ dist
 /TODO.md
 /.forgejo/workflows/deploy.yml
 /tmp/
+AGENTS.md

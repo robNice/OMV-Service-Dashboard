@@ -76,7 +76,14 @@
       "loading": "Loading themes...",
       "current": "Current",
       "version": "Version",
-      "empty": "No themes found"
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": "",
+        "count": "settings"
+      }
     },
     "config": {
       "title": "Modifica configurazione",
@@ -86,7 +93,7 @@
       "useDefaultRpcPath": "Usa il percorso RPC predefinito",
       "portHint": "Modifica la porta solo se sai esattamente cosa stai facendo. Una porta errata può rendere la dashboard irraggiungibile dopo il riavvio e potrebbe richiedere anche modifiche a reverse proxy, Docker o firewall.",
       "portConfirmTitle": "Conferma modifica porta",
-      "portConfirmBody": "Hai modificato la porta della dashboard. Questa modifica sarà applicata dopo un riavvio. Se la nuova porta è errata o non è esposta, la dashboard potrebbe non essere più raggiungibile. Vuoi continuare comunque?",
+      "portConfirmBody": "Hai modificato la porta della dashboard. Questa modifica sar� applicata dopo un riavvio. Se la nuova porta � errata o non � esposta, la dashboard potrebbe non essere pi� raggiungibile. Vuoi continuare comunque?",
       "fields": {
         "title": "Titolo dashboard",
         "defaultLang": "Lingua di fallback",

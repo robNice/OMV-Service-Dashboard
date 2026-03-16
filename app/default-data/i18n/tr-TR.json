@@ -4,18 +4,18 @@
   },
   "label": {
     "back": "Geri",
-    "liveStats": "Canlı istatistikler",
+    "liveStats": "Canl1 istatistikler",
     "close": "Kapat",
     "info": "Bilgi",
     "days": "Gün",
     "hours_short": "Saat",
     "storage": "Depolama (HDDs)",
-    "temps": "Sıcaklıklar",
+    "temps": "S1cakl1klar",
     "versions": "Sürümler",
     "system": "Sistem",
     "docker": "Docker konteynerleri",
     "host": "Host",
-    "os": "İS",
+    "os": "0S",
     "kernel": "Kernel",
     "cpu": "CPU",
     "gpu": "GPU",
@@ -25,8 +25,8 @@
     "cpuLoad": "Yük",
     "plugins": "Eklentiler",
     "ram": "RAM",
-    "ramSlot": "RAM yuvası",
-    "used": "Kullanılan",
+    "ramSlot": "RAM yuvas1",
+    "used": "Kullan1lan",
     "gb": "GB"
   },
   "status": {
@@ -76,17 +76,24 @@
       "loading": "Loading themes...",
       "current": "Current",
       "version": "Version",
-      "empty": "No themes found"
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": "",
+        "count": "settings"
+      }
     },
     "config": {
       "title": "Yapılandırmayı düzenle",
       "desc": "Gösterge panelinin temel ayarlarını ve çalışma zamanı seçeneklerini yönetin",
-      "sectionTitle": "Genel yapılandırma",
+      "sectionTitle": "Genel yap1land1rma",
       "hint": "Bu değerler gösterge panelinin genel davranışını etkiler. Port değişiklikleri ancak yeniden başlatmadan sonra geçerli olur.",
-      "useDefaultRpcPath": "Varsayılan RPC yolunu kullan",
+      "useDefaultRpcPath": "Varsay1lan RPC yolunu kullan",
       "portHint": "Portu yalnızca tam olarak ne yaptığınızı biliyorsanız değiştirin. Yanlış bir port, yeniden başlatmadan sonra gösterge panelinin erişilemez olmasına neden olabilir ve ters proxy, Docker veya güvenlik duvarı ayarlarında değişiklik gerektirebilir.",
       "portConfirmTitle": "Port değişikliğini onayla",
-      "portConfirmBody": "Gösterge paneli portunu değiştirdiniz. Bu değişiklik yeniden başlatmadan sonra uygulanacaktır. Yeni port yanlışsa veya dışarı açılmadıysa gösterge paneline artık erişilemeyebilir. Yine de devam edilsin mi?",
+      "portConfirmBody": "G�sterge paneli portunu de�xi�xtirdiniz. Bu de�xi�xiklik yeniden ba�xlatmadan sonra uygulanacakt1r. Yeni port yanl1�xsa veya d1�xar1 a�1lmad1ysa g�sterge paneline art1k eri�xilemeyebilir. Yine de devam edilsin mi?",
       "fields": {
         "title": "Gösterge paneli başlığı",
         "defaultLang": "Yedek dil",
@@ -101,7 +108,7 @@
       "uploadError": "Yükleme başarısız oldu",
       "sourceCustom": "özel",
       "sourceAuto": "otomatik",
-      "sourceDefault": "varsayılan"
+      "sourceDefault": "varsay1lan"
     },
     "section": {
       "toggle": "Genişlet veya daralt",
@@ -114,7 +121,7 @@
     },
     "service": {
       "id": "Servis ID",
-      "title": "Servis adı",
+      "title": "Servis ad1",
       "url": "Servis URL",
       "cardimage": "Kart görseli",
       "delete": "Servisi sil"
@@ -129,15 +136,15 @@
       "title": "Parola değiştir",
       "desc": "Yönetici parolanızı buradan değiştirin.",
       "new": "Yeni parola",
-      "repeat": "Parolayı tekrar et",
-      "tooShort": "Parola en az 8 karakter olmalıdır.",
+      "repeat": "Parolay1 tekrar et",
+      "tooShort": "Parola en az 8 karakter olmal1d1r.",
       "mismatch": "Parolalar eşleşmiyor."
     },
     "login": {
       "title": "Yönetici girişi",
       "passwordPlaceholder": "Parola",
       "submit": "Giriş yap",
-      "invalid": "Hatalı parola."
+      "invalid": "Hatal1 parola."
     }
   }
 }

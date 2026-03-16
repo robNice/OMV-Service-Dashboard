@@ -63,7 +63,7 @@ const {initI18n} = require('./lib/i18n-config');
 initI18n({app});
 const {translateTextI18n} = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
-const {listThemes, normalizeTheme} = require('./lib/theme-registry');
+const {getTheme, listThemes, normalizeTheme, sanitizeThemeSettings} = require('./lib/theme-registry');
 const {loadConfiguration, saveConfiguration} = require('./lib/load-config');
 const config = loadConfiguration();
 (async () => {
@@ -240,6 +240,42 @@ function renderSectionNavItem(section, isActive = false) {
     </a>`;
 }
 
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function buildThemeSettings(themeId, config) {
+    const theme = getTheme(themeId);
+    return sanitizeThemeSettings(theme, config?.themeSettings?.[theme?.id]);
+}
+
+function buildThemeSettingMarkup(themeId, config) {
+    const settings = buildThemeSettings(themeId, config);
+    const attrs = [];
+    const cssVars = [];
+
+    for (const [id, value] of Object.entries(settings)) {
+        const attrValue = typeof value === 'boolean' ? String(value) : String(value);
+        attrs.push(`data-themesetting-${id}="${escapeHtml(attrValue)}"`);
+        cssVars.push(`--themesetting-${id}:${String(value)}`);
+    }
+
+    return {
+        settings,
+        bodyAttrs: attrs.join(' '),
+        bodyStyle: cssVars.join('; '),
+        serializedSettings: JSON.stringify(settings)
+            .replace(/</g, '\\u003c')
+            .replace(/>/g, '\\u003e')
+            .replace(/&/g, '\\u0026')
+    };
+}
+
 
 /**
  *
@@ -251,7 +287,9 @@ function renderSectionNavItem(section, isActive = false) {
  * @param cards
  * @returns {*}
  */
-function setTemplate(req, template, backlink, version, title, cards, sectionNav = "", theme = "classic") {
+function setTemplate(req, template, backlink, version, title, cards, sectionNav = "", theme = "classic", config = {}) {
+    const themeMarkup = buildThemeSettingMarkup(theme, config);
+
     return translateTextI18n(
         template
             .replace(/{{BACKLINK}}/g, backlink)
@@ -260,6 +298,9 @@ function setTemplate(req, template, backlink, version, title, cards, sectionNav 
             .replace(/{{SECTION_NAME}}/g, title)
             .replace(/{{SECTION_NAV}}/g, sectionNav)
             .replace(/{{THEME}}/g, theme)
+            .replace(/{{THEME_SETTINGS_BODY_ATTRS}}/g, themeMarkup.bodyAttrs)
+            .replace(/{{THEME_SETTINGS_BODY_STYLE}}/g, themeMarkup.bodyStyle)
+            .replace(/{{THEME_SETTINGS_JSON}}/g, themeMarkup.serializedSettings)
             .replace(/{{SECTIONS_SERVICES}}/g, cards),
         {locale: req.getLocale()}
     );
@@ -579,8 +620,10 @@ app.get("/admin/api/service-card-images", requireAdmin, (req, res) => {
 
 app.get("/admin/api/themes", requireAdmin, (req, res) => {
     const config = loadConfiguration();
+    res.set("Cache-Control", "no-store");
     res.json({
         currentTheme: normalizeTheme(config.theme),
+        themeSettings: config.themeSettings || {},
         themes: listThemes()
     });
 });
@@ -588,9 +631,19 @@ app.get("/admin/api/themes", requireAdmin, (req, res) => {
 app.post("/admin/api/theme", requireAdmin, express.json(), (req, res) => {
     const theme = normalizeTheme(req.body?.theme);
     const config = loadConfiguration();
+    const themeDefinition = getTheme(theme);
+
     config.theme = theme;
+    config.themeSettings = {
+        ...(config.themeSettings || {}),
+        [theme]: sanitizeThemeSettings(themeDefinition, req.body?.settings)
+    };
     saveConfiguration(config);
-    res.json({ ok: true, theme });
+    res.json({
+        ok: true,
+        theme,
+        settings: config.themeSettings[theme]
+    });
 });
 
 app.get("/admin/api/config", requireAdmin, (req, res) => {
@@ -855,6 +908,13 @@ app.get('/assets/*', (req, res) => {
         return sendAsset(res, file);
     }
 
+    if (relPath.startsWith('admin/')) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        return sendAsset(res, file);
+    }
+
     const stat = fs.statSync(file);
     const etag = buildEtag(stat);
 
@@ -973,7 +1033,8 @@ app.get("/", (req, res) => {
         config.title,
         sections,
         '',
-        config.theme
+        config.theme,
+        config
     );
 
     res.send(html);
@@ -1011,7 +1072,8 @@ app.get("/section/:id", (req, res) => {
         config.title + ' - ' + section.title,
         services,
         sectionNav,
-        config.theme
+        config.theme,
+        config
     );
     res.send(html);
 });

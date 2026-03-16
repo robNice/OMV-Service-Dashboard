@@ -44,20 +44,28 @@
 
 ## Introduction
 
-The OMV Service Dashboard provides a central web interface for displaying and opening services and system information around an OpenMediaVault server.
+You probably know the situation: you have successfully set up your NAS and expanded it with a range of additional services. At the same time, there may be other services elsewhere in your network that you can open and manage through their own web frontends, each configured with its own URL. This dashboard is intended to help you collect all of those services and list them in a structured, categorized way.
 
-It also works well as a permanently visible dashboard on wall displays or smart home screens.
+In addition, the integrated info drawer gives you a quick overview of the overall status of your OMV NAS.
+
+This themeable dashboard is also well suited as a permanently visible interface on displays, as is often used in smart home environments.
+
+> **Notes**
+> 
+> Throughout this document, categories are referred to as "sections" and the configured entries within them as "services".
+> 
+> Whenever `/config` is mentioned here, it refers to your personal configuration directory for this application. It is either mounted in `docker-compose.yml` or defined via the `OMV_SERVICE_DASHBOARD_CONFIG` environment variable.
+> 
+> The `/config` directory contains optional user overrides for the OMV Service Dashboard.
 
 ---
 
 ## Features
 
-- Clear dashboard with sections such as `System`, `Media`, or `Smart Home`
-- Service cards with links to OMV, Home Assistant, Mealie, Jellyfin, and more
+- Clear dashboard with sections like for example `System`, `Media` or `Smart Home`
+- Service cards with links to your configured network services
 - Background images per section
-- Preview images per section and service
-- Live statistics drawer with uptime, RAM, disks, temperatures, and Docker containers
-- Docker integration with container list, status, and update information
+- Live statistics drawer (info drawer) with uptime, RAM, disks, temperatures, and Docker containers
 - Multilingual user interface
 - Switchable frontend themes for the public dashboard
 
@@ -170,6 +178,8 @@ Custom themes can be added under:
 /config/assets/themes/<theme-id>/
 ```
 
+A complete example theme with `meta.json`, `theme.css`, `drawer.css`, and `theme.js` is available under [`config.example/assets/themes/sunrise`](./config.example/assets/themes/sunrise/).
+
 Each theme directory should contain at least:
 
 ```text
@@ -201,7 +211,9 @@ The `context` passed to `init()` contains:
 - `drawer`
 - `version`
 
-The technical details, folder structure, and inheritance behavior are documented in [`CONFIG_README.md`](./CONFIG_README.md).
+Custom themes can also reuse an existing built-in theme ID and thereby override a system theme from `/config/assets/themes`.
+
+The technical details, folder structure, style inheritance, and overriding built-in themes are documented in [`CONFIG_README.md`](./CONFIG_README.md).
 Theme previews can be found starting at [Theme 1984](#theme-1984) below.
 
 ---

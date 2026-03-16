@@ -18,33 +18,46 @@
   - [Themes (`/config/assets/themes`)](#themes-configassetsthemes)
     - [Theme-Verzeichnisstruktur](#theme-verzeichnisstruktur)
     - [`meta.json`](#metajson)
+      - [Theme-Settings-Schema](#theme-settings-schema)
+      - [Unterstuetzte Feldtypen](#unterstuetzte-feldtypen)
+      - [`text`](#text)
+      - [`textarea`](#textarea)
+      - [`number`](#number)
+      - [`range`](#range)
+      - [`color`](#color)
+      - [`select`](#select)
+      - [`radio`](#radio)
+      - [`boolean`](#boolean)
     - [`theme.css`](#themecss)
     - [`drawer.css`](#drawercss)
     - [`theme.js` (optional)](#themejs-optional)
     - [Style-Vererbung](#style-vererbung)
+    - [Eingebaute Themes ueberschreiben](#eingebaute-themes-ueberschreiben)
 - [Zusammenfassung](#zusammenfassung)
 
 ---
 
 ## Einfuehrung
 
-Wann immer hier von `/config` die Rede ist, ist damit dein persoenliches Konfigurationsverzeichnis fuer diese Anwendung gemeint. Es wird entweder in `docker-compose.yml` gemountet oder ueber die Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG` definiert.
+Wann immer hier von `/config` die Rede ist, ist damit dein persönliches Konfigurationsverzeichnis für diese Anwendung gemeint. Es wird entweder in `docker-compose.yml` gemountet oder über die Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG` definiert.
 
-Das `/config`-Verzeichnis enthaelt optionale Benutzer-Overrides fuer das OMV Service Dashboard.
+Das `/config`-Verzeichnis enthält optionale Benutzer-Overrides für das OMV Service Dashboard.
+
+Die meisten Änderungen kannst du bequem über den Admin-Bereich der Anwendung vornehmen. Diese README ist vor allem dann relevant, wenn du Konfigurationen manuell bearbeiten, Übersetzungen ergänzen oder eigene Themes und Assets hinterlegen möchtest.
 
 Um den Einstieg zu erleichtern, kannst du das Verzeichnis `config.example` in dein eigenes `/config`-Verzeichnis kopieren und dort anpassen.
 
-Alle Dateien in `/config` werden zur Laufzeit eingelesen und ueberschreiben dort, wo es vorgesehen ist, die integrierten Standardwerte. Fehlende Dateien fallen automatisch auf die internen Defaults zurueck.
+Alle Dateien in `/config` werden zur Laufzeit eingelesen und überschreiben dort, wo es vorgesehen ist, die integrierten Standardwerte. Fehlende Dateien fallen automatisch auf die internen Defaults zurück.
 
 Die `config.json` wird beim ersten Start angelegt, falls sie noch nicht existiert. Die `services.json` entsteht nach dem ersten Speichern im Admin-Bereich.
 
-Dieses Verzeichnis ist fuer Konfiguration, Inhalte und unterstuetzte Frontend-Overrides wie Themes gedacht. Beliebige Core-Dateien der Anwendung sollten hier nicht abgelegt werden.
+Dieses Verzeichnis ist für Konfiguration, Inhalte und unterstützte Frontend-Overrides wie Themes gedacht. Beliebige Core-Dateien der Anwendung sollten hier nicht abgelegt werden.
 
 ---
 
 ## TL;DR fuer Docker-Nutzer
 
-Wenn du das OMV Service Dashboard ueber Docker betreibst, mounte dein persoenliches Konfigurationsverzeichnis so:
+Wenn du das OMV Service Dashboard über Docker betreibst, mounte dein persönliches Konfigurationsverzeichnis so:
 
 ```yaml
 services:
@@ -60,10 +73,10 @@ services:
 
 - `/config` ist das einzige Verzeichnis, das du anpassen solltest
 - Du kannst den Container jederzeit sicher aktualisieren oder neu erstellen
-- Deine Konfiguration, Uebersetzungen, Bilder und Themes bleiben dabei erhalten
+- Deine Konfiguration, Übersetzungen, Bilder und Themes bleiben dabei erhalten
 - Existiert eine Datei nicht in `/config`, werden automatisch die integrierten Standardwerte verwendet
 
-Dateien innerhalb des Containers sollten nicht manuell veraendert werden.
+Dateien innerhalb des Containers sollten nicht manuell verändert werden.
 
 ---
 
@@ -86,6 +99,7 @@ Dateien innerhalb des Containers sollten nicht manuell veraendert werden.
          ├─ meta.json
          ├─ theme.css
          ├─ drawer.css
+         ├─ theme.js
          └─ assets/
 ```
 
@@ -95,7 +109,7 @@ Dateien innerhalb des Containers sollten nicht manuell veraendert werden.
 
 ### `config.json`
 
-Allgemeine Anwendungskonfiguration wie Titel, Fallback-Sprache, Backend-Einstellungen und das aktive oeffentliche Theme.
+Allgemeine Anwendungskonfiguration wie Titel, Fallback-Sprache, Backend-Einstellungen und das aktive öffentliche Theme.
 
 Beispiel:
 
@@ -114,15 +128,17 @@ Beispiel:
 }
 ```
 
-- `title`: Wird als Basistitel und Seitenueberschrift verwendet
+- `title`: Wird als Basistitel und Seitenüberschrift verwendet
 - `defaultLang`: Fallback-Sprache, falls keine passende Locale gefunden wird
-- `theme`: Aktives Theme fuer das oeffentliche Dashboard
+- `theme`: Aktives Theme für das öffentliche Dashboard
 - `infoDrawerRefreshInterval`: Aktualisierungsintervall des Info-Drawers in Sekunden
 - `port`: Port, auf dem die Anwendung lauscht
 - `omvRpcPath`: Pfad zur `omv-rpc`-Binary
-- `admin`: Admin-Passwortblock; wenn er wie im Beispiel gesetzt wird, wird das Admin-Passwort auf `dashboard` zurueckgesetzt
+- `admin`: Admin-Passwortblock; wenn er wie im Beispiel gesetzt wird, wird das Admin-Passwort auf `dashboard` zurückgesetzt
 
-Wenn du das Admin-Passwort vergessen hast, kannst du den `admin`-Block in der `config.json` loeschen und den Dienst anschliessend neu starten. Beim naechsten Start wird das Admin-Passwort dann erneut auf das Default-Passwort `dashboard` gesetzt.
+Wenn du das Admin-Passwort vergessen hast, kannst du den `admin`-Block in der `config.json` löschen und den Dienst anschließend neu starten. Beim nächsten Start wird das Admin-Passwort dann erneut auf das Default-Passwort `dashboard` gesetzt.
+
+---
 
 ### `services.json`
 
@@ -130,9 +146,11 @@ Definiert die im Dashboard angezeigten Sektionen und Dienste.
 
 Seit es den Admin-Bereich gibt, ist die manuelle Bearbeitung dieser Datei normalerweise nicht mehr notwendig.
 
+---
+
 ### `i18n-settings.json`
 
-Steuert, welche Sprachen verfuegbar sind und wie Locale-Fallbacks funktionieren.
+Steuert, welche Sprachen verfügbar sind und wie Locale-Fallbacks funktionieren.
 
 Beispiel:
 
@@ -150,9 +168,11 @@ Beispiel:
 
 Fehlt diese Datei, werden die integrierten Standardwerte verwendet.
 
+---
+
 ### Uebersetzungen (`/config/i18n`)
 
-Jede Datei in `/config/i18n` repraesentiert genau eine Locale und muss so benannt sein:
+Jede Datei in `/config/i18n` repräsentiert genau eine Locale und muss so benannt sein:
 
 ```text
 <locale>.json
@@ -164,11 +184,15 @@ Beispiel:
 /config/i18n/fr-FR.json
 ```
 
+---
+
 #### Wie Uebersetzungen funktionieren
 
-- Uebersetzungen aus `/config/i18n` werden ueber die integrierten Uebersetzungen gelegt
-- Du musst nur die Keys definieren, die du ueberschreiben oder ergaenzen moechtest
-- Fehlende Keys fallen automatisch auf die internen Sprachdateien zurueck
+- Übersetzungen aus `/config/i18n` werden über die integrierten Übersetzungen gelegt
+- Du musst nur die Keys definieren, die du überschreiben oder ergänzen möchtest
+- Fehlende Keys fallen automatisch auf die internen Sprachdateien zurück
+
+---
 
 #### Beispiel: `i18n/fr-FR.json`
 
@@ -189,13 +213,21 @@ Beispiel:
 }
 ```
 
+---
+
 ### Themes (`/config/assets/themes`)
 
-Das Theme des oeffentlichen Dashboards kann im Backend umgeschaltet werden und wird ueber den Schluessel `theme` in der `config.json` gespeichert.
+Das Theme des öffentlichen Dashboards kann im Backend umgeschaltet werden und wird über den Schlüssel `theme` in der `config.json` gespeichert.
 
-Das Backend liest verfuegbare Themes aus `/config/assets/themes/<theme-id>/meta.json` und bietet sie in der Theme-Auswahl an.
+Das Backend ermittelt verfügbare Themes aus den integrierten Theme-Verzeichnissen der Anwendung und aus `/config/assets/themes/<theme-id>/meta.json`.
+
+Themes aus `/config` ergänzen dabei die eingebauten Themes und können sie bei gleicher `id` auch überlagern.
+
+---
 
 #### Theme-Verzeichnisstruktur
+
+Die folgende Verzeichnisstruktur gilt, wenn du im User-Config-Verzeichnis ein eigenes Theme anlegen möchtest.
 
 ```text
 /config/assets/themes/<theme-id>/
@@ -207,6 +239,8 @@ Das Backend liest verfuegbare Themes aus `/config/assets/themes/<theme-id>/meta.
 ```
 
 `theme.js` und `assets/` sind optional. `assets/` kann theme-lokale Fonts oder Bilder enthalten, die von der Theme-CSS referenziert werden.
+
+---
 
 #### `meta.json`
 
@@ -225,13 +259,249 @@ Regeln:
 
 - `id` muss zum Theme-Ordnernamen passen
 - das Backend nutzt diese Datei, um das Theme aufzulisten
-- fehlt `meta.json` oder ist sie ungueltig, wird das Theme im Backend nicht angeboten
+- fehlt `meta.json` oder ist sie ungültig, wird das Theme im Backend nicht angeboten
+
+Wenn du im Admin-Bereich theme-spezifische Optionen anbieten willst, kannst du in `meta.json` zusätzlich ein Array `settings` definieren.
+
+Erweitertes Beispiel:
+
+```json
+{
+  "id": "test",
+  "label": "Test",
+  "description": "Eigenes Dashboard-Theme",
+  "version": "1.0.0",
+  "settings": [
+    {
+      "id": "accent-color",
+      "group": "Farben",
+      "label": "Akzentfarbe",
+      "description": "Wird für Buttons und Hervorhebungen verwendet.",
+      "type": "color",
+      "default": "#60a5fa"
+    }
+  ]
+}
+```
+
+##### Theme-Settings-Schema
+
+Jeder Eintrag in `settings` beschreibt genau einen konfigurierbaren Wert für das ausgewählte Theme.
+
+Unterstützte Schlüssel:
+
+- `id`: Stabiler Setting-Key. Daraus werden auch CSS-Variablen und `data-`Attribute erzeugt.
+- `group`: Optionale Gruppenbezeichnung im Admin-Modal. Damit kannst du größere Settings-Sammlungen wie `Drawer`, `Cards` oder `Status Chips` strukturieren.
+- `label`: Sichtbare Feldbezeichnung im Admin-Bereich.
+- `description`: Optionaler Hilfetext unter dem Feld.
+- `type`: Bestimmt Validierung und verwendetes Formular-Element.
+- `default`: Standardwert, solange der Benutzer noch keinen Override gespeichert hat.
+- `options`: Pflicht für `select` und `radio`. Jede Option braucht `value` und `label`.
+
+Wichtige Hinweise:
+
+- die Settings werden vom Theme in `meta.json` beschrieben
+- die vom Benutzer gewählten Werte werden getrennt in `config.json` gespeichert
+- das Backend validiert alle Werte gegen das Schema, bevor sie ans Frontend gehen
+- das Frontend verwendet dafür immer den festen Prefix `themesetting`
+- CSS-Variablen sehen dann z. B. so aus: `--themesetting-accent-color`
+- HTML-Attribute sehen dann z. B. so aus: `data-themesetting-card-style="glass"`
+- Theme-JavaScript erhält die validierten Werte über `window.OMVTheme.init({ settings })`
+
+##### Unterstuetzte Feldtypen
+
+Die folgenden Feldtypen werden aktuell von Backend und Admin-UI unterstützt.
+
+##### `text`
+
+Für kurze freie Texteingaben.
+
+Beispiel:
+
+```json
+{
+  "id": "headline-text",
+  "group": "Header",
+  "label": "Headline-Text",
+  "type": "text",
+  "default": "Dashboard"
+}
+```
+
+Typische Einsätze:
+
+- kurze Labels
+- CSS-Klassen oder Style-Tokens
+- kleine Textbausteine
+
+##### `textarea`
+
+Für mehrzeilige Texteingaben.
+
+Beispiel:
+
+```json
+{
+  "id": "welcome-copy",
+  "group": "Header",
+  "label": "Einleitungstext",
+  "type": "textarea",
+  "default": "Willkommen im Dashboard."
+}
+```
+
+Typische Einsätze:
+
+- längere Textblöcke
+- Hinweise
+- theme-spezifische Texte
+
+##### `number`
+
+Für numerische Werte mit direkter Eingabe.
+
+Beispiel:
+
+```json
+{
+  "id": "card-pixel-width",
+  "group": "Pixelation",
+  "label": "Card-Pixelbreite",
+  "type": "number",
+  "default": 40
+}
+```
+
+Typische Einsätze:
+
+- Abmessungen
+- Abstände
+- Zählwerte
+
+##### `range`
+
+Für numerische Werte, die sich besser per Slider einstellen lassen.
+
+Beispiel:
+
+```json
+{
+  "id": "overlay-opacity",
+  "group": "Effekte",
+  "label": "Overlay-Deckkraft",
+  "type": "range",
+  "default": 60
+}
+```
+
+Typische Einsätze:
+
+- Deckkraft
+- Intensität
+- skalierbare Werte
+
+##### `color`
+
+Für Farbwerte. Im Admin-Bereich wird dafür ein Color-Picker gerendert.
+
+Beispiel:
+
+```json
+{
+  "id": "drawer-text-color",
+  "group": "Drawer",
+  "label": "Drawer-Textfarbe",
+  "type": "color",
+  "default": "#d7e2ff"
+}
+```
+
+Typische Einsätze:
+
+- Schriftfarben
+- Hintergrundfarben
+- Chip-Farben
+- Rahmen oder Highlights
+
+##### `select`
+
+Für kompakte Dropdowns mit vordefinierten Optionen.
+
+Beispiel:
+
+```json
+{
+  "id": "card-style",
+  "group": "Cards",
+  "label": "Card-Stil",
+  "type": "select",
+  "default": "glass",
+  "options": [
+    { "value": "solid", "label": "Solid" },
+    { "value": "glass", "label": "Glass" }
+  ]
+}
+```
+
+Typische Einsätze:
+
+- Modi mit mehreren Optionen
+- kompakte Auswahllisten
+
+##### `radio`
+
+Für kleine Mengen gegenseitig ausschließender Optionen, die direkt sichtbar bleiben sollen.
+
+Beispiel:
+
+```json
+{
+  "id": "header-alignment",
+  "group": "Header",
+  "label": "Header-Ausrichtung",
+  "type": "radio",
+  "default": "center",
+  "options": [
+    { "value": "left", "label": "Links" },
+    { "value": "center", "label": "Zentriert" },
+    { "value": "right", "label": "Rechts" }
+  ]
+}
+```
+
+Typische Einsätze:
+
+- Layout-Varianten
+- Ausrichtungsoptionen
+- kleine Optionsmengen
+
+##### `boolean`
+
+Für Wahr/Falsch-Werte. Im Admin-Bereich wird dafür eine Checkbox gerendert.
+
+Beispiel:
+
+```json
+{
+  "id": "show-glow",
+  "group": "Effekte",
+  "label": "Glow aktivieren",
+  "type": "boolean",
+  "default": true
+}
+```
+
+Typische Einsätze:
+
+- Umschalter
+- Ein/Aus-Flags
+- optionale Effekte
 
 #### `theme.css`
 
-Diese Datei enthaelt das Haupt-Styling fuer das oeffentliche Dashboard des ausgewaehlten Themes.
+Diese Datei enthält das Haupt-Styling für das öffentliche Dashboard des ausgewählten Themes.
 
-Sie wird nur fuer das aktive Theme geladen.
+Sie wird nur für das aktive Theme geladen.
 
 Typische Ziele sind:
 
@@ -240,11 +510,13 @@ Typische Ziele sind:
 - `.service`
 - `.service-title`
 
+---
+
 #### `drawer.css`
 
-Diese Datei enthaelt das Theme-spezifische Styling fuer den Info-Drawer.
+Diese Datei enthält das Theme-spezifische Styling für den Info-Drawer.
 
-Sie wird ebenfalls nur fuer das aktive Theme geladen.
+Sie wird ebenfalls nur für das aktive Theme geladen.
 
 Typische Ziele sind:
 
@@ -253,24 +525,26 @@ Typische Ziele sind:
 - `#info-drawer .section h3`
 - `#info-drawer .kv`
 
+---
+
 #### `theme.js` (optional)
 
-Themes koennen optional ein clientseitiges Skript unter folgendem Pfad mitbringen:
+Themes können optional ein clientseitiges Skript unter folgendem Pfad mitbringen:
 
 ```text
 /config/assets/themes/<theme-id>/theme.js
 ```
 
-Wenn diese Datei fuer das aktive Theme existiert, wird sie nach den gemeinsamen Frontend-Skripten automatisch geladen.
+Wenn diese Datei für das aktive Theme existiert, wird sie nach den gemeinsamen Frontend-Skripten automatisch geladen.
 
 Konvention:
 
 - genau ein globales Objekt unter `window.OMVTheme` registrieren
 - `init(context)` als Einstiegspunkt bereitstellen
-- optional `destroy()` fuer Cleanup bereitstellen
+- optional `destroy()` für Cleanup bereitstellen
 - theme-spezifisches DOM und Verhalten in dieser Datei halten statt gemeinsame Core-Skripte anzupassen
 
-Das `context`-Objekt enthaelt aktuell:
+Das `context`-Objekt enthält aktuell:
 
 - `theme`
 - `body`
@@ -294,31 +568,45 @@ window.OMVTheme = {
 };
 ```
 
+Ein vollständiges Beispiel, das sowohl CSS-Overrides als auch ein kleines `theme.js` zeigt, findest du unter [`config.example/assets/themes/sunrise`](./config.example/assets/themes/sunrise/).
+
+---
+
 #### Style-Vererbung
 
 Theme-CSS ersetzt nicht das komplette Frontend, sondern erweitert die gemeinsamen Basis-Styles.
 
-Ladereihenfolge auf der oeffentlichen Seite:
+Ladereihenfolge auf der öffentlichen Seite:
 
 1. Gemeinsame Basis-Styles wie `style.css`, `bg.css`, `drawer.css` und `drawer-icons.css`
-2. `theme.css` des ausgewaehlten Themes
-3. `drawer.css` des ausgewaehlten Themes
-4. `theme.js` des ausgewaehlten Themes, falls vorhanden
+2. `theme.css` des ausgewählten Themes
+3. `drawer.css` des ausgewählten Themes
+4. `theme.js` des ausgewählten Themes, falls vorhanden
 
 Das bedeutet:
 
 - Basislayout und gemeinsames Verhalten kommen weiterhin aus den integrierten Styles
-- das aktive Theme ueberschreibt nur die Teile, die es veraendern moechte
+- das aktive Theme überschreibt nur die Teile, die es verändern möchte
 - eigene Themes sollten mit normalen Selektoren wie `.page-header` oder `#info-drawer .panel` arbeiten
 - Klammer-Selektoren wie `body[data-theme="..."]` sind in eigenen Themes nicht erforderlich
 - theme-spezifisches JavaScript sollte der Konvention `window.OMVTheme.init(context)` folgen
 
 ---
 
+#### Eingebaute Themes ueberschreiben
+
+Wenn du unter `/config/assets/themes/<theme-id>/` einen Ordner mit einer bereits existierenden Theme-ID anlegst und dort eine passende `meta.json` hinterlegst, wird dieses Theme im Backend und bei der Asset-Auflösung anstelle des eingebauten Themes verwendet.
+
+Dadurch kannst du ein eingebautes Theme gezielt anpassen oder vollständig ersetzen, ohne Dateien im App-Verzeichnis zu ändern.
+
+Gleichnamige Dateien wie `theme.css`, `drawer.css`, `theme.js` und theme-lokale Assets aus `/config` haben dabei Vorrang gegenüber der eingebauten Variante.
+
+---
+
 ## Zusammenfassung
 
 - `/config` ist optional
-- Fehlende Dateien fallen immer auf integrierte Defaults zurueck
-- Uebersetzungsdateien werden gemerged
-- Bilder und andere Assets unter `/config/assets` ueberschreiben die passenden visuellen Assets
-- Themes werden ueber `meta.json` erkannt, ueber `theme.css` und `drawer.css` gestaltet und koennen Verhalten optional ueber `theme.js` erweitern
+- Fehlende Dateien fallen immer auf integrierte Defaults zurück
+- Übersetzungsdateien werden gemerged
+- Bilder und andere Assets unter `/config/assets` überschreiben die passenden visuellen Assets
+- Themes werden aus integrierten Assets und `/config/assets/themes` zusammengesetzt, können eingebaute Varianten überlagern und Verhalten optional über `theme.js` erweitern

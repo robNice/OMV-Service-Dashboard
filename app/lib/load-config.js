@@ -1,15 +1,31 @@
 const fs = require('fs');
 const path = require('path');
 const { APP_DATA, CONFIG_DIR } = require('./paths');
-const { DEFAULT_THEME, normalizeTheme } = require('./theme-registry');
+const { DEFAULT_THEME, getTheme, normalizeTheme, sanitizeThemeSettings } = require('./theme-registry');
 
 const CONFIG_FILE   = path.join(CONFIG_DIR, 'config.json');
 const FALLBACK_FILE = path.join(APP_DATA, 'config.json');
 
 function normalizeConfiguration(config) {
+    const theme = normalizeTheme(config?.theme);
+    const rawThemeSettings = config?.themeSettings && typeof config.themeSettings === 'object'
+        ? config.themeSettings
+        : {};
+    const normalizedThemeSettings = {};
+
+    for (const [themeId, values] of Object.entries(rawThemeSettings)) {
+        const themeDefinition = getTheme(themeId, { fallback: false });
+        if (!themeDefinition) {
+            continue;
+        }
+
+        normalizedThemeSettings[themeDefinition.id] = sanitizeThemeSettings(themeDefinition, values);
+    }
+
     return {
         ...config,
-        theme: normalizeTheme(config?.theme)
+        theme,
+        themeSettings: normalizedThemeSettings
     };
 }
 

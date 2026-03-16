@@ -1,0 +1,22 @@
+#info-drawer .panel {
+    background: rgba(24, 15, 33, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 18px 48px rgba(11, 10, 23, 0.38);
+}
+
+#info-drawer .tab {
+    color: #ffdcbf;
+}
+
+#info-drawer .tab.active {
+    background: color-mix(in srgb, var(--themesetting-accent-color, #ff8a3d) 18%, transparent);
+    color: #fff7ef;
+}
+
+#info-drawer .section h3 {
+    color: color-mix(in srgb, var(--themesetting-accent-color, #ff8a3d) 70%, #ffd27a 30%);
+}
+
+#info-drawer .kv {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}

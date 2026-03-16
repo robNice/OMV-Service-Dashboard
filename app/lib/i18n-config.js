@@ -13,8 +13,9 @@
 const fs = require('fs');
 const i18n = require('i18n');
 const path = require('path');
-const {APP_DATA, CONFIG_DIR} = require('./paths');
+const {APP_DATA, APP_DEFAULT_DATA, CONFIG_DIR} = require('./paths');
 const EFFECTIVE_I18N_DIR = '/tmp/omv-service-dashboard-i18n';
+const FALLBACK_APP_DATA = path.join(__dirname, '../default-data');
 
 let configured = false;
 
@@ -174,13 +175,18 @@ function deepMerge(base, overlay) {
 function loadMergedLanguage(locale) {
     const fileName = `${locale}.json`;
 
-    const coreFile = path.join(APP_DATA, 'i18n', fileName);
+    const coreCandidates = [
+        path.join(APP_DEFAULT_DATA, 'i18n', fileName),
+        path.join(FALLBACK_APP_DATA, 'i18n', fileName),
+        path.join(APP_DATA, 'i18n', fileName)
+    ];
     const configFile = path.join(CONFIG_DIR, 'i18n', fileName);
 
     let base = {};
     let overlay = {};
 
-    if (fs.existsSync(coreFile)) {
+    const coreFile = coreCandidates.find(file => fs.existsSync(file));
+    if (coreFile) {
         base = JSON.parse(fs.readFileSync(coreFile, 'utf8'));
     }
 

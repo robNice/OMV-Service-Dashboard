@@ -66,7 +66,7 @@
       "title": "Edit Sections and Services",
       "desc": "Edit sections, services and links shown on the dashboard",
       "addSection": "Add section",
-      "cardimage" : "Card image"
+      "cardimage": "Card image"
     },
     "theme": {
       "title": "Select theme",
@@ -76,7 +76,14 @@
       "loading": "Loading themes...",
       "current": "Current",
       "version": "Version",
-      "empty": "No themes found"
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": "",
+        "count": "settings"
+      }
     },
     "config": {
       "title": "Edit configuration",
@@ -96,8 +103,8 @@
       }
     },
     "image": {
-      "resetToDefault" : "reset to default image",
-      "deleteCustomImage" : "delete custom image",
+      "resetToDefault": "reset to default image",
+      "deleteCustomImage": "delete custom image",
       "uploadError": "Upload failed",
       "sourceCustom": "custom",
       "sourceAuto": "auto",
@@ -110,7 +117,7 @@
       "delete": "Delete section",
       "addService": "Add service",
       "backgroundimage": "Background image",
-      "cardimage" : "Card image"
+      "cardimage": "Card image"
     },
     "service": {
       "id": "Service ID",

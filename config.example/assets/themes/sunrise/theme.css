@@ -1,0 +1,94 @@
+:root {
+    --sunrise-accent: #ff8a3d;
+    --sunrise-accent-soft: rgba(255, 138, 61, 0.18);
+    --sunrise-surface: rgba(29, 19, 40, 0.72);
+    --sunrise-border: rgba(255, 255, 255, 0.16);
+    --sunrise-text: #fff7ef;
+}
+
+body {
+    --sunrise-accent: var(--themesetting-accent-color, #ff8a3d);
+    --sunrise-accent-soft: color-mix(in srgb, var(--sunrise-accent) 18%, transparent);
+    color: var(--sunrise-text);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255, 214, 153, 0.34), transparent 24%),
+        radial-gradient(circle at 82% 22%, rgba(255, 138, 61, 0.2), transparent 28%),
+        linear-gradient(180deg, rgba(14, 15, 34, 0.1), rgba(14, 15, 34, 0.5));
+    z-index: 0;
+}
+
+.page-header,
+.section-nav,
+.service,
+#info-drawer .panel,
+#info-drawer .tab {
+    position: relative;
+    z-index: 1;
+}
+
+.page-header {
+    border-bottom: 1px solid var(--sunrise-border);
+}
+
+.page-title {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.section-nav {
+    background: rgba(14, 15, 34, 0.34);
+    border: 1px solid var(--sunrise-border);
+    border-radius: 999px;
+    backdrop-filter: blur(10px);
+}
+
+.section-nav-item.active {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--sunrise-accent) 92%, white 8%), color-mix(in srgb, var(--sunrise-accent) 72%, #ffd27a 28%));
+    color: #2d1606;
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--sunrise-accent) 22%, transparent);
+}
+
+.service {
+    background: var(--sunrise-surface);
+    border: 1px solid var(--sunrise-border);
+    box-shadow: 0 18px 40px rgba(11, 10, 23, 0.28);
+    backdrop-filter: blur(14px);
+}
+
+.service:hover {
+    border-color: color-mix(in srgb, var(--sunrise-accent) 40%, white 12%);
+    box-shadow: 0 22px 46px rgba(11, 10, 23, 0.34);
+}
+
+.service-title {
+    color: var(--sunrise-text);
+}
+
+.service-badge,
+.service-status {
+    background: var(--sunrise-accent-soft);
+    color: #ffdcbf;
+}
+
+#sunrise-theme-note {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 2;
+    padding: 8px 12px;
+    border: 1px solid var(--sunrise-border);
+    border-radius: 999px;
+    background: rgba(14, 15, 34, 0.76);
+    color: #ffdcbf;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+}
