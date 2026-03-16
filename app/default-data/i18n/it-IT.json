@@ -1,149 +1,149 @@
 {
-    "html":  {
-                 "lang":  "it"
-             },
-    "label":  {
-                  "back":  "Indietro",
-                  "liveStats":  "Statistiche live",
-                  "close":  "Chiudi",
-                  "info":  "Info",
-                  "days":  "Giorni",
-                  "hours_short":  "Ore",
-                  "storage":  "Archiviazione (HDDs)",
-                  "temps":  "Temperature",
-                  "versions":  "Versioni",
-                  "system":  "Sistema",
-                  "docker":  "Container Docker",
-                  "host":  "Host",
-                  "os":  "OS",
-                  "kernel":  "Kernel",
-                  "cpu":  "CPU",
-                  "gpu":  "GPU",
-                  "uptime":  "Tempo di attivitÃ ",
-                  "hddAvg":  "HDD Ã˜",
-                  "chassis":  "Chassis",
-                  "cpuLoad":  "Carico",
-                  "plugins":  "Estensioni",
-                  "ram":  "RAM",
-                  "ramSlot":  "Slot RAM",
-                  "used":  "Usato",
-                  "gb":  "GB"
-              },
-    "status":  {
-                   "updatedAt":  "Ultimo aggiornamento",
-                   "now":  "ora"
-               },
-    "tooltip":  {
-                    "infodrawer":  "Apri/chiudi informazioni di sistema",
-                    "systemLoad":  "Media del carico di sistema: ultimo minuto / ultimi 5 minuti / ultimi 15 minuti"
-                },
-    "docker":  {
-                   "status":  {
-                                  "up":  "In esecuzione",
-                                  "created":  "Creato"
-                              }
-               },
-    "errors":  {
-                   "missingKey":  "Traduzione mancante: {key}",
-                   "noDisksFound":  "Nessuna unitÃ  rilevata"
-               },
-    "log":  {
-                "listening":  "Service Dashboard in esecuzione sulla porta"
-            },
-    "units":  {
-                  "byte":  "B",
-                  "kilobyte":  "KB",
-                  "megabyte":  "MB",
-                  "gigabyte":  "GB",
-                  "terabyte":  "TB",
-                  "petabyte":  "PB"
-              },
-    "admin":  {
-                  "logout":  "Disconnetti",
-                  "title":  "Admin",
-                  "subtitle":  "Gestione della configurazione",
-                  "services":  {
-                                   "title":  "Gestisci sezioni e servizi",
-                                   "desc":  "Gestisci sezioni, servizi e link sulla dashboard",
-                                   "addSection":  "Aggiungi sezione",
-                                   "cardimage":  "Immagine card"
-                               },
-                  "theme":  {
-                                "title":  "Select theme",
-                                "desc":  "Choose the layout theme for the public dashboard",
-                                "available":  "Available themes",
-                                "hint":  "Themes affect the public dashboard only, not the admin area.",
-                                "loading":  "Loading themes...",
-                                "current":  "Current",
-                                "version":  "Version",
-                                "empty":  "No themes found",
-                                "settings":  {
-                                                 "title":  "Theme settings",
-                                                 "empty":  "This theme has no configurable settings.",
-                                                 "reset":  "Load defaults",
-                                                 "noDescription":  ""
-                                             }
-                            },
-                  "config":  {
-                                 "title":  "Modifica configurazione",
-                                 "desc":  "Gestisci le impostazioni principali della dashboard e le opzioni di runtime",
-                                 "sectionTitle":  "Configurazione generale",
-                                 "hint":  "Questi valori influenzano il comportamento globale della dashboard. Le modifiche alla porta diventano effettive solo dopo un riavvio.",
-                                 "useDefaultRpcPath":  "Usa il percorso RPC predefinito",
-                                 "portHint":  "Modifica la porta solo se sai esattamente cosa stai facendo. Una porta errata puÃ² rendere la dashboard irraggiungibile dopo il riavvio e potrebbe richiedere anche modifiche a reverse proxy, Docker o firewall.",
-                                 "portConfirmTitle":  "Conferma modifica porta",
-                                 "portConfirmBody":  "Hai modificato la porta della dashboard. Questa modifica sarÃ  applicata dopo un riavvio. Se la nuova porta Ã¨ errata o non Ã¨ esposta, la dashboard potrebbe non essere piÃ¹ raggiungibile. Vuoi continuare comunque?",
-                                 "fields":  {
-                                                "title":  "Titolo dashboard",
-                                                "defaultLang":  "Lingua di fallback",
-                                                "infoDrawerRefreshInterval":  "Intervallo di aggiornamento del pannello informazioni (secondi)",
-                                                "omvRpcPath":  "Percorso OMV RPC",
-                                                "port":  "Porta"
-                                            }
-                             },
-                  "image":  {
-                                "resetToDefault":  "Ripristina immagine predefinita",
-                                "deleteCustomImage":  "Elimina immagine personalizzata",
-                                "uploadError":  "Caricamento non riuscito",
-                                "sourceCustom":  "personalizzata",
-                                "sourceAuto":  "automatica",
-                                "sourceDefault":  "predefinita"
-                            },
-                  "section":  {
-                                  "toggle":  "Espandi o comprimi",
-                                  "id":  "ID sezione",
-                                  "title":  "Nome sezione",
-                                  "delete":  "Elimina sezione",
-                                  "addService":  "Aggiungi servizio",
-                                  "backgroundimage":  "Immagine di sfondo",
-                                  "cardimage":  "Immagine card"
-                              },
-                  "service":  {
-                                  "id":  "ID servizio",
-                                  "title":  "Nome servizio",
-                                  "url":  "URL servizio",
-                                  "cardimage":  "Immagine card",
-                                  "delete":  "Elimina servizio"
-                              },
-                  "save":  {
-                               "label":  "Salva",
-                               "saving":  "salvataggioâ€¦",
-                               "saved":  "salvato",
-                               "error":  "Salvataggio non riuscito"
-                           },
-                  "password":  {
-                                   "title":  "Cambia password",
-                                   "desc":  "Cambia qui la password amministratore.",
-                                   "new":  "Nuova password",
-                                   "repeat":  "Ripeti password",
-                                   "tooShort":  "La password deve contenere almeno 8 caratteri.",
-                                   "mismatch":  "Le password non corrispondono."
-                               },
-                  "login":  {
-                                "title":  "Accesso amministratore",
-                                "passwordPlaceholder":  "Password",
-                                "submit":  "Accedi",
-                                "invalid":  "Password non corretta."
-                            }
-              }
+  "html": {
+    "lang": "it"
+  },
+  "label": {
+    "back": "Indietro",
+    "liveStats": "Statistiche live",
+    "close": "Chiudi",
+    "info": "Info",
+    "days": "Giorni",
+    "hours_short": "Ore",
+    "storage": "Archiviazione (HDDs)",
+    "temps": "Temperature",
+    "versions": "Versioni",
+    "system": "Sistema",
+    "docker": "Container Docker",
+    "host": "Host",
+    "os": "OS",
+    "kernel": "Kernel",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Tempo di attività",
+    "hddAvg": "HDD Ø",
+    "chassis": "Chassis",
+    "cpuLoad": "Carico",
+    "plugins": "Estensioni",
+    "ram": "RAM",
+    "ramSlot": "Slot RAM",
+    "used": "Usato",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Ultimo aggiornamento",
+    "now": "ora"
+  },
+  "tooltip": {
+    "infodrawer": "Apri/chiudi informazioni di sistema",
+    "systemLoad": "Media del carico di sistema: ultimo minuto / ultimi 5 minuti / ultimi 15 minuti"
+  },
+  "docker": {
+    "status": {
+      "up": "In esecuzione",
+      "created": "Creato"
+    }
+  },
+  "errors": {
+    "missingKey": "Traduzione mancante: {key}",
+    "noDisksFound": "Nessuna unità rilevata"
+  },
+  "log": {
+    "listening": "Service Dashboard in esecuzione sulla porta"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  },
+  "admin": {
+    "logout": "Disconnetti",
+    "title": "Admin",
+    "subtitle": "Gestione della configurazione",
+    "services": {
+      "title": "Gestisci sezioni e servizi",
+      "desc": "Gestisci sezioni, servizi e link sulla dashboard",
+      "addSection": "Aggiungi sezione",
+      "cardimage": "Immagine card"
+    },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": ""
+      }
+    },
+    "config": {
+      "title": "Modifica configurazione",
+      "desc": "Gestisci le impostazioni principali della dashboard e le opzioni di runtime",
+      "sectionTitle": "Configurazione generale",
+      "hint": "Questi valori influenzano il comportamento globale della dashboard. Le modifiche alla porta diventano effettive solo dopo un riavvio.",
+      "useDefaultRpcPath": "Usa il percorso RPC predefinito",
+      "portHint": "Modifica la porta solo se sai esattamente cosa stai facendo. Una porta errata può rendere la dashboard irraggiungibile dopo il riavvio e potrebbe richiedere anche modifiche a reverse proxy, Docker o firewall.",
+      "portConfirmTitle": "Conferma modifica porta",
+      "portConfirmBody": "Hai modificato la porta della dashboard. Questa modifica sar� applicata dopo un riavvio. Se la nuova porta � errata o non � esposta, la dashboard potrebbe non essere pi� raggiungibile. Vuoi continuare comunque?",
+      "fields": {
+        "title": "Titolo dashboard",
+        "defaultLang": "Lingua di fallback",
+        "infoDrawerRefreshInterval": "Intervallo di aggiornamento del pannello informazioni (secondi)",
+        "omvRpcPath": "Percorso OMV RPC",
+        "port": "Porta"
+      }
+    },
+    "image": {
+      "resetToDefault": "Ripristina immagine predefinita",
+      "deleteCustomImage": "Elimina immagine personalizzata",
+      "uploadError": "Caricamento non riuscito",
+      "sourceCustom": "personalizzata",
+      "sourceAuto": "automatica",
+      "sourceDefault": "predefinita"
+    },
+    "section": {
+      "toggle": "Espandi o comprimi",
+      "id": "ID sezione",
+      "title": "Nome sezione",
+      "delete": "Elimina sezione",
+      "addService": "Aggiungi servizio",
+      "backgroundimage": "Immagine di sfondo",
+      "cardimage": "Immagine card"
+    },
+    "service": {
+      "id": "ID servizio",
+      "title": "Nome servizio",
+      "url": "URL servizio",
+      "cardimage": "Immagine card",
+      "delete": "Elimina servizio"
+    },
+    "save": {
+      "label": "Salva",
+      "saving": "salvataggio…",
+      "saved": "salvato",
+      "error": "Salvataggio non riuscito"
+    },
+    "password": {
+      "title": "Cambia password",
+      "desc": "Cambia qui la password amministratore.",
+      "new": "Nuova password",
+      "repeat": "Ripeti password",
+      "tooShort": "La password deve contenere almeno 8 caratteri.",
+      "mismatch": "Le password non corrispondono."
+    },
+    "login": {
+      "title": "Accesso amministratore",
+      "passwordPlaceholder": "Password",
+      "submit": "Accedi",
+      "invalid": "Password non corretta."
+    }
+  }
 }

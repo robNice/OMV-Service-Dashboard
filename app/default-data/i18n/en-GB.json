@@ -1,149 +1,149 @@
 {
-    "html":  {
-                 "lang":  "en"
-             },
-    "label":  {
-                  "back":  "Back",
-                  "liveStats":  "Live stats",
-                  "close":  "Close",
-                  "info":  "Info",
-                  "days":  "days",
-                  "hours_short":  "hrs",
-                  "storage":  "Storage (HDDs)",
-                  "temps":  "Temperatures",
-                  "versions":  "Versions",
-                  "system":  "System",
-                  "docker":  "Docker containers",
-                  "host":  "Host",
-                  "os":  "OS",
-                  "kernel":  "Kernel",
-                  "cpu":  "CPU",
-                  "gpu":  "GPU",
-                  "uptime":  "Uptime",
-                  "hddAvg":  "HDD avg",
-                  "chassis":  "Chassis",
-                  "cpuLoad":  "Load",
-                  "plugins":  "Extensions",
-                  "ram":  "RAM",
-                  "ramSlot":  "RAM slot",
-                  "used":  "Used",
-                  "gb":  "GB"
-              },
-    "status":  {
-                   "updatedAt":  "Last update",
-                   "now":  "now"
-               },
-    "tooltip":  {
-                    "infodrawer":  "open/close system information",
-                    "systemLoad":  "Average system load: last minute / last 5 minutes / last 15 minutes"
-                },
-    "docker":  {
-                   "status":  {
-                                  "up":  "Up",
-                                  "created":  "Created"
-                              }
-               },
-    "errors":  {
-                   "missingKey":  "Missing translation: {key}",
-                   "noDisksFound":  "No disks detected"
-               },
-    "log":  {
-                "listening":  "Service Dashboard listening on port"
-            },
-    "units":  {
-                  "byte":  "B",
-                  "kilobyte":  "KB",
-                  "megabyte":  "MB",
-                  "gigabyte":  "GB",
-                  "terabyte":  "TB",
-                  "petabyte":  "PB"
-              },
-    "admin":  {
-                  "logout":  "Logout",
-                  "title":  "Admin",
-                  "subtitle":  "Configuration management",
-                  "services":  {
-                                   "title":  "Edit Sections and Services",
-                                   "desc":  "Edit sections, services and links shown on the dashboard",
-                                   "addSection":  "Add section",
-                                   "cardimage":  "Card image"
-                               },
-                  "theme":  {
-                                "title":  "Select theme",
-                                "desc":  "Choose the layout theme for the public dashboard",
-                                "available":  "Available themes",
-                                "hint":  "Themes affect the public dashboard only, not the admin area.",
-                                "loading":  "Loading themes...",
-                                "current":  "Current",
-                                "version":  "Version",
-                                "empty":  "No themes found",
-                                "settings":  {
-                                                 "title":  "Theme settings",
-                                                 "empty":  "This theme has no configurable settings.",
-                                                 "reset":  "Load defaults",
-                                                 "noDescription":  ""
-                                             }
-                            },
-                  "config":  {
-                                 "title":  "Edit configuration",
-                                 "desc":  "Manage core dashboard settings and runtime-related options",
-                                 "sectionTitle":  "General configuration",
-                                 "hint":  "These values affect global dashboard behavior. Port changes only take effect after a restart.",
-                                 "useDefaultRpcPath":  "Use default RPC path",
-                                 "portHint":  "Change the port only if you know exactly what you are doing. A wrong port can make the dashboard unreachable after restart and may also require adjusting reverse proxy, Docker, or firewall settings.",
-                                 "portConfirmTitle":  "Confirm port change",
-                                 "portConfirmBody":  "You changed the dashboard port. This change applies after restart. If the new port is wrong or not exposed, the dashboard may no longer be reachable. Continue anyway?",
-                                 "fields":  {
-                                                "title":  "Dashboard title",
-                                                "defaultLang":  "Fallback language",
-                                                "infoDrawerRefreshInterval":  "Info drawer refresh interval (seconds)",
-                                                "omvRpcPath":  "OMV RPC path",
-                                                "port":  "Port"
-                                            }
-                             },
-                  "image":  {
-                                "resetToDefault":  "reset to default image",
-                                "deleteCustomImage":  "delete custom image",
-                                "uploadError":  "Upload failed",
-                                "sourceCustom":  "custom",
-                                "sourceAuto":  "auto",
-                                "sourceDefault":  "default"
-                            },
-                  "section":  {
-                                  "toggle":  "Toggle",
-                                  "id":  "Section ID",
-                                  "title":  "Section title",
-                                  "delete":  "Delete section",
-                                  "addService":  "Add service",
-                                  "backgroundimage":  "Background image",
-                                  "cardimage":  "Card image"
-                              },
-                  "service":  {
-                                  "id":  "Service ID",
-                                  "title":  "Service title",
-                                  "url":  "Service URL",
-                                  "cardimage":  "Card image",
-                                  "delete":  "Delete service"
-                              },
-                  "save":  {
-                               "label":  "Save",
-                               "saving":  "Savingâ€¦",
-                               "saved":  "Saved",
-                               "error":  "Save failed"
-                           },
-                  "password":  {
-                                   "title":  "Change password",
-                                   "desc":  "Update the administrator password",
-                                   "new":  "New password",
-                                   "repeat":  "Repeat password",
-                                   "tooShort":  "Password must be at least 8 characters",
-                                   "mismatch":  "Passwords do not match"
-                               },
-                  "login":  {
-                                "title":  "Admin Login",
-                                "passwordPlaceholder":  "Password",
-                                "submit":  "Login",
-                                "invalid":  "Invalid password"
-                            }
-              }
+  "html": {
+    "lang": "en"
+  },
+  "label": {
+    "back": "Back",
+    "liveStats": "Live stats",
+    "close": "Close",
+    "info": "Info",
+    "days": "days",
+    "hours_short": "hrs",
+    "storage": "Storage (HDDs)",
+    "temps": "Temperatures",
+    "versions": "Versions",
+    "system": "System",
+    "docker": "Docker containers",
+    "host": "Host",
+    "os": "OS",
+    "kernel": "Kernel",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Uptime",
+    "hddAvg": "HDD avg",
+    "chassis": "Chassis",
+    "cpuLoad": "Load",
+    "plugins": "Extensions",
+    "ram": "RAM",
+    "ramSlot": "RAM slot",
+    "used": "Used",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Last update",
+    "now": "now"
+  },
+  "tooltip": {
+    "infodrawer": "open/close system information",
+    "systemLoad": "Average system load: last minute / last 5 minutes / last 15 minutes"
+  },
+  "docker": {
+    "status": {
+      "up": "Up",
+      "created": "Created"
+    }
+  },
+  "errors": {
+    "missingKey": "Missing translation: {key}",
+    "noDisksFound": "No disks detected"
+  },
+  "log": {
+    "listening": "Service Dashboard listening on port"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  },
+  "admin": {
+    "logout": "Logout",
+    "title": "Admin",
+    "subtitle": "Configuration management",
+    "services": {
+      "title": "Edit Sections and Services",
+      "desc": "Edit sections, services and links shown on the dashboard",
+      "addSection": "Add section",
+      "cardimage": "Card image"
+    },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": ""
+      }
+    },
+    "config": {
+      "title": "Edit configuration",
+      "desc": "Manage core dashboard settings and runtime-related options",
+      "sectionTitle": "General configuration",
+      "hint": "These values affect global dashboard behavior. Port changes only take effect after a restart.",
+      "useDefaultRpcPath": "Use default RPC path",
+      "portHint": "Change the port only if you know exactly what you are doing. A wrong port can make the dashboard unreachable after restart and may also require adjusting reverse proxy, Docker, or firewall settings.",
+      "portConfirmTitle": "Confirm port change",
+      "portConfirmBody": "You changed the dashboard port. This change applies after restart. If the new port is wrong or not exposed, the dashboard may no longer be reachable. Continue anyway?",
+      "fields": {
+        "title": "Dashboard title",
+        "defaultLang": "Fallback language",
+        "infoDrawerRefreshInterval": "Info drawer refresh interval (seconds)",
+        "omvRpcPath": "OMV RPC path",
+        "port": "Port"
+      }
+    },
+    "image": {
+      "resetToDefault": "reset to default image",
+      "deleteCustomImage": "delete custom image",
+      "uploadError": "Upload failed",
+      "sourceCustom": "custom",
+      "sourceAuto": "auto",
+      "sourceDefault": "default"
+    },
+    "section": {
+      "toggle": "Toggle",
+      "id": "Section ID",
+      "title": "Section title",
+      "delete": "Delete section",
+      "addService": "Add service",
+      "backgroundimage": "Background image",
+      "cardimage": "Card image"
+    },
+    "service": {
+      "id": "Service ID",
+      "title": "Service title",
+      "url": "Service URL",
+      "cardimage": "Card image",
+      "delete": "Delete service"
+    },
+    "save": {
+      "label": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "error": "Save failed"
+    },
+    "password": {
+      "title": "Change password",
+      "desc": "Update the administrator password",
+      "new": "New password",
+      "repeat": "Repeat password",
+      "tooShort": "Password must be at least 8 characters",
+      "mismatch": "Passwords do not match"
+    },
+    "login": {
+      "title": "Admin Login",
+      "passwordPlaceholder": "Password",
+      "submit": "Login",
+      "invalid": "Invalid password"
+    }
+  }
 }

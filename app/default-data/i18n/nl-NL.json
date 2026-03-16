@@ -1,149 +1,149 @@
 {
-    "html":  {
-                 "lang":  "nl"
-             },
-    "label":  {
-                  "back":  "Terug",
-                  "liveStats":  "Live-statistieken",
-                  "close":  "Sluiten",
-                  "info":  "Info",
-                  "days":  "Dagen",
-                  "hours_short":  "u",
-                  "storage":  "Opslag (HDDâ€™s)",
-                  "temps":  "Temperaturen",
-                  "versions":  "Versies",
-                  "system":  "Systeem",
-                  "docker":  "Docker-containers",
-                  "host":  "Host",
-                  "os":  "OS",
-                  "kernel":  "Kernel",
-                  "cpu":  "CPU",
-                  "gpu":  "GPU",
-                  "uptime":  "Uptime",
-                  "hddAvg":  "HDD Ã˜",
-                  "chassis":  "Chassis",
-                  "cpuLoad":  "Belasting",
-                  "plugins":  "Extensies",
-                  "ram":  "RAM",
-                  "ramSlot":  "RAM-slot",
-                  "used":  "Gebruikt",
-                  "gb":  "GB"
-              },
-    "status":  {
-                   "updatedAt":  "Laatst bijgewerkt",
-                   "now":  "nu"
-               },
-    "tooltip":  {
-                    "infodrawer":  "Systeeminformatie openen/sluiten",
-                    "systemLoad":  "Gemiddelde systeembelasting: laatste minuut / laatste 5 minuten / laatste 15 minuten"
-                },
-    "docker":  {
-                   "status":  {
-                                  "up":  "Actief",
-                                  "created":  "Aangemaakt"
-                              }
-               },
-    "errors":  {
-                   "missingKey":  "Ontbrekende vertaling: {key}",
-                   "noDisksFound":  "Geen schijven gevonden"
-               },
-    "log":  {
-                "listening":  "Service Dashboard draait op poort"
-            },
-    "units":  {
-                  "byte":  "B",
-                  "kilobyte":  "KB",
-                  "megabyte":  "MB",
-                  "gigabyte":  "GB",
-                  "terabyte":  "TB",
-                  "petabyte":  "PB"
-              },
-    "admin":  {
-                  "logout":  "Uitloggen",
-                  "title":  "Admin",
-                  "subtitle":  "Configuratiebeheer",
-                  "services":  {
-                                   "title":  "Secties en services beheren",
-                                   "desc":  "Beheer secties, services en links op het dashboard",
-                                   "addSection":  "Sectie toevoegen",
-                                   "cardimage":  "Kaartafbeelding"
-                               },
-                  "theme":  {
-                                "title":  "Select theme",
-                                "desc":  "Choose the layout theme for the public dashboard",
-                                "available":  "Available themes",
-                                "hint":  "Themes affect the public dashboard only, not the admin area.",
-                                "loading":  "Loading themes...",
-                                "current":  "Current",
-                                "version":  "Version",
-                                "empty":  "No themes found",
-                                "settings":  {
-                                                 "title":  "Theme settings",
-                                                 "empty":  "This theme has no configurable settings.",
-                                                 "reset":  "Load defaults",
-                                                 "noDescription":  ""
-                                             }
-                            },
-                  "config":  {
-                                 "title":  "Configuratie bewerken",
-                                 "desc":  "Beheer de kerninstellingen van het dashboard en runtime-opties",
-                                 "sectionTitle":  "Algemene configuratie",
-                                 "hint":  "Deze waarden beÃ¯nvloeden het algemene gedrag van het dashboard. Poortwijzigingen worden pas na een herstart actief.",
-                                 "useDefaultRpcPath":  "Standaard RPC-pad gebruiken",
-                                 "portHint":  "Wijzig de poort alleen als je precies weet wat je doet. Een verkeerde poort kan ervoor zorgen dat het dashboard na een herstart niet meer bereikbaar is en kan ook aanpassingen aan reverse proxy, Docker of firewall vereisen.",
-                                 "portConfirmTitle":  "Poortwijziging bevestigen",
-                                 "portConfirmBody":  "Je hebt de dashboardpoort gewijzigd. Deze wijziging wordt pas na een herstart actief. Als de nieuwe poort onjuist is of niet is vrijgegeven, is het dashboard mogelijk niet meer bereikbaar. Toch doorgaan?",
-                                 "fields":  {
-                                                "title":  "Dashboardtitel",
-                                                "defaultLang":  "Terugvaltaal",
-                                                "infoDrawerRefreshInterval":  "Verversingsinterval infolade (seconden)",
-                                                "omvRpcPath":  "OMV RPC-pad",
-                                                "port":  "Poort"
-                                            }
-                             },
-                  "image":  {
-                                "resetToDefault":  "Terugzetten naar standaardafbeelding",
-                                "deleteCustomImage":  "Aangepaste afbeelding verwijderen",
-                                "uploadError":  "Uploaden mislukt",
-                                "sourceCustom":  "aangepast",
-                                "sourceAuto":  "automatisch",
-                                "sourceDefault":  "standaard"
-                            },
-                  "section":  {
-                                  "toggle":  "In- of uitklappen",
-                                  "id":  "Sectie-ID",
-                                  "title":  "Sectienaam",
-                                  "delete":  "Sectie verwijderen",
-                                  "addService":  "Service toevoegen",
-                                  "backgroundimage":  "Achtergrondafbeelding",
-                                  "cardimage":  "Kaartafbeelding"
-                              },
-                  "service":  {
-                                  "id":  "Service-ID",
-                                  "title":  "Servicenaam",
-                                  "url":  "Service-URL",
-                                  "cardimage":  "Kaartafbeelding",
-                                  "delete":  "Service verwijderen"
-                              },
-                  "save":  {
-                               "label":  "Opslaan",
-                               "saving":  "opslaanâ€¦",
-                               "saved":  "opgeslagen",
-                               "error":  "Opslaan mislukt"
-                           },
-                  "password":  {
-                                   "title":  "Wachtwoord wijzigen",
-                                   "desc":  "Wijzig hier je admin-wachtwoord.",
-                                   "new":  "Nieuw wachtwoord",
-                                   "repeat":  "Wachtwoord herhalen",
-                                   "tooShort":  "Het wachtwoord moet minimaal 8 tekens lang zijn.",
-                                   "mismatch":  "Wachtwoorden komen niet overeen."
-                               },
-                  "login":  {
-                                "title":  "Admin-aanmelding",
-                                "passwordPlaceholder":  "Wachtwoord",
-                                "submit":  "Inloggen",
-                                "invalid":  "Onjuist wachtwoord."
-                            }
-              }
+  "html": {
+    "lang": "nl"
+  },
+  "label": {
+    "back": "Terug",
+    "liveStats": "Live-statistieken",
+    "close": "Sluiten",
+    "info": "Info",
+    "days": "Dagen",
+    "hours_short": "u",
+    "storage": "Opslag (HDD’s)",
+    "temps": "Temperaturen",
+    "versions": "Versies",
+    "system": "Systeem",
+    "docker": "Docker-containers",
+    "host": "Host",
+    "os": "OS",
+    "kernel": "Kernel",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Uptime",
+    "hddAvg": "HDD Ø",
+    "chassis": "Chassis",
+    "cpuLoad": "Belasting",
+    "plugins": "Extensies",
+    "ram": "RAM",
+    "ramSlot": "RAM-slot",
+    "used": "Gebruikt",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Laatst bijgewerkt",
+    "now": "nu"
+  },
+  "tooltip": {
+    "infodrawer": "Systeeminformatie openen/sluiten",
+    "systemLoad": "Gemiddelde systeembelasting: laatste minuut / laatste 5 minuten / laatste 15 minuten"
+  },
+  "docker": {
+    "status": {
+      "up": "Actief",
+      "created": "Aangemaakt"
+    }
+  },
+  "errors": {
+    "missingKey": "Ontbrekende vertaling: {key}",
+    "noDisksFound": "Geen schijven gevonden"
+  },
+  "log": {
+    "listening": "Service Dashboard draait op poort"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  },
+  "admin": {
+    "logout": "Uitloggen",
+    "title": "Admin",
+    "subtitle": "Configuratiebeheer",
+    "services": {
+      "title": "Secties en services beheren",
+      "desc": "Beheer secties, services en links op het dashboard",
+      "addSection": "Sectie toevoegen",
+      "cardimage": "Kaartafbeelding"
+    },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": ""
+      }
+    },
+    "config": {
+      "title": "Configuratie bewerken",
+      "desc": "Beheer de kerninstellingen van het dashboard en runtime-opties",
+      "sectionTitle": "Algemene configuratie",
+      "hint": "Deze waarden beïnvloeden het algemene gedrag van het dashboard. Poortwijzigingen worden pas na een herstart actief.",
+      "useDefaultRpcPath": "Standaard RPC-pad gebruiken",
+      "portHint": "Wijzig de poort alleen als je precies weet wat je doet. Een verkeerde poort kan ervoor zorgen dat het dashboard na een herstart niet meer bereikbaar is en kan ook aanpassingen aan reverse proxy, Docker of firewall vereisen.",
+      "portConfirmTitle": "Poortwijziging bevestigen",
+      "portConfirmBody": "Je hebt de dashboardpoort gewijzigd. Deze wijziging wordt pas na een herstart actief. Als de nieuwe poort onjuist is of niet is vrijgegeven, is het dashboard mogelijk niet meer bereikbaar. Toch doorgaan?",
+      "fields": {
+        "title": "Dashboardtitel",
+        "defaultLang": "Terugvaltaal",
+        "infoDrawerRefreshInterval": "Verversingsinterval infolade (seconden)",
+        "omvRpcPath": "OMV RPC-pad",
+        "port": "Poort"
+      }
+    },
+    "image": {
+      "resetToDefault": "Terugzetten naar standaardafbeelding",
+      "deleteCustomImage": "Aangepaste afbeelding verwijderen",
+      "uploadError": "Uploaden mislukt",
+      "sourceCustom": "aangepast",
+      "sourceAuto": "automatisch",
+      "sourceDefault": "standaard"
+    },
+    "section": {
+      "toggle": "In- of uitklappen",
+      "id": "Sectie-ID",
+      "title": "Sectienaam",
+      "delete": "Sectie verwijderen",
+      "addService": "Service toevoegen",
+      "backgroundimage": "Achtergrondafbeelding",
+      "cardimage": "Kaartafbeelding"
+    },
+    "service": {
+      "id": "Service-ID",
+      "title": "Servicenaam",
+      "url": "Service-URL",
+      "cardimage": "Kaartafbeelding",
+      "delete": "Service verwijderen"
+    },
+    "save": {
+      "label": "Opslaan",
+      "saving": "opslaan…",
+      "saved": "opgeslagen",
+      "error": "Opslaan mislukt"
+    },
+    "password": {
+      "title": "Wachtwoord wijzigen",
+      "desc": "Wijzig hier je admin-wachtwoord.",
+      "new": "Nieuw wachtwoord",
+      "repeat": "Wachtwoord herhalen",
+      "tooShort": "Het wachtwoord moet minimaal 8 tekens lang zijn.",
+      "mismatch": "Wachtwoorden komen niet overeen."
+    },
+    "login": {
+      "title": "Admin-aanmelding",
+      "passwordPlaceholder": "Wachtwoord",
+      "submit": "Inloggen",
+      "invalid": "Onjuist wachtwoord."
+    }
+  }
 }

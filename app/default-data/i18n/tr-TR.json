@@ -1,149 +1,149 @@
 {
-    "html":  {
-                 "lang":  "tr"
-             },
-    "label":  {
-                  "back":  "Geri",
-                  "liveStats":  "CanlÄ± istatistikler",
-                  "close":  "Kapat",
-                  "info":  "Bilgi",
-                  "days":  "GÃ¼n",
-                  "hours_short":  "Saat",
-                  "storage":  "Depolama (HDDs)",
-                  "temps":  "SÄ±caklÄ±klar",
-                  "versions":  "SÃ¼rÃ¼mler",
-                  "system":  "Sistem",
-                  "docker":  "Docker konteynerleri",
-                  "host":  "Host",
-                  "os":  "Ä°S",
-                  "kernel":  "Kernel",
-                  "cpu":  "CPU",
-                  "gpu":  "GPU",
-                  "uptime":  "Ã‡alÄ±ÅŸma sÃ¼resi",
-                  "hddAvg":  "HDD Ort.",
-                  "chassis":  "Åžasi",
-                  "cpuLoad":  "YÃ¼k",
-                  "plugins":  "Eklentiler",
-                  "ram":  "RAM",
-                  "ramSlot":  "RAM yuvasÄ±",
-                  "used":  "KullanÄ±lan",
-                  "gb":  "GB"
-              },
-    "status":  {
-                   "updatedAt":  "Son gÃ¼ncelleme",
-                   "now":  "ÅŸimdi"
-               },
-    "tooltip":  {
-                    "infodrawer":  "Sistem bilgilerini aÃ§/kapat",
-                    "systemLoad":  "Sistem yÃ¼kÃ¼ ortalamasÄ±: son 1 dakika / son 5 dakika / son 15 dakika"
-                },
-    "docker":  {
-                   "status":  {
-                                  "up":  "Ã‡alÄ±ÅŸÄ±yor",
-                                  "created":  "OluÅŸturuldu"
-                              }
-               },
-    "errors":  {
-                   "missingKey":  "Eksik Ã§eviri: {key}",
-                   "noDisksFound":  "SÃ¼rÃ¼cÃ¼ bulunamadÄ±"
-               },
-    "log":  {
-                "listening":  "Service Dashboard ÅŸu portta Ã§alÄ±ÅŸÄ±yor"
-            },
-    "units":  {
-                  "byte":  "B",
-                  "kilobyte":  "KB",
-                  "megabyte":  "MB",
-                  "gigabyte":  "GB",
-                  "terabyte":  "TB",
-                  "petabyte":  "PB"
-              },
-    "admin":  {
-                  "logout":  "Ã‡Ä±kÄ±ÅŸ yap",
-                  "title":  "Admin",
-                  "subtitle":  "YapÄ±landÄ±rma yÃ¶netimi",
-                  "services":  {
-                                   "title":  "BÃ¶lÃ¼mleri ve servisleri yÃ¶net",
-                                   "desc":  "Dashboard Ã¼zerindeki bÃ¶lÃ¼mleri, servisleri ve baÄŸlantÄ±larÄ± yÃ¶netin",
-                                   "addSection":  "BÃ¶lÃ¼m ekle",
-                                   "cardimage":  "Kart gÃ¶rseli"
-                               },
-                  "theme":  {
-                                "title":  "Select theme",
-                                "desc":  "Choose the layout theme for the public dashboard",
-                                "available":  "Available themes",
-                                "hint":  "Themes affect the public dashboard only, not the admin area.",
-                                "loading":  "Loading themes...",
-                                "current":  "Current",
-                                "version":  "Version",
-                                "empty":  "No themes found",
-                                "settings":  {
-                                                 "title":  "Theme settings",
-                                                 "empty":  "This theme has no configurable settings.",
-                                                 "reset":  "Load defaults",
-                                                 "noDescription":  ""
-                                             }
-                            },
-                  "config":  {
-                                 "title":  "YapÄ±landÄ±rmayÄ± dÃ¼zenle",
-                                 "desc":  "GÃ¶sterge panelinin temel ayarlarÄ±nÄ± ve Ã§alÄ±ÅŸma zamanÄ± seÃ§eneklerini yÃ¶netin",
-                                 "sectionTitle":  "Genel yapÄ±landÄ±rma",
-                                 "hint":  "Bu deÄŸerler gÃ¶sterge panelinin genel davranÄ±ÅŸÄ±nÄ± etkiler. Port deÄŸiÅŸiklikleri ancak yeniden baÅŸlatmadan sonra geÃ§erli olur.",
-                                 "useDefaultRpcPath":  "VarsayÄ±lan RPC yolunu kullan",
-                                 "portHint":  "Portu yalnÄ±zca tam olarak ne yaptÄ±ÄŸÄ±nÄ±zÄ± biliyorsanÄ±z deÄŸiÅŸtirin. YanlÄ±ÅŸ bir port, yeniden baÅŸlatmadan sonra gÃ¶sterge panelinin eriÅŸilemez olmasÄ±na neden olabilir ve ters proxy, Docker veya gÃ¼venlik duvarÄ± ayarlarÄ±nda deÄŸiÅŸiklik gerektirebilir.",
-                                 "portConfirmTitle":  "Port deÄŸiÅŸikliÄŸini onayla",
-                                 "portConfirmBody":  "GÃ¶sterge paneli portunu deÄŸiÅŸtirdiniz. Bu deÄŸiÅŸiklik yeniden baÅŸlatmadan sonra uygulanacaktÄ±r. Yeni port yanlÄ±ÅŸsa veya dÄ±ÅŸarÄ± aÃ§Ä±lmadÄ±ysa gÃ¶sterge paneline artÄ±k eriÅŸilemeyebilir. Yine de devam edilsin mi?",
-                                 "fields":  {
-                                                "title":  "GÃ¶sterge paneli baÅŸlÄ±ÄŸÄ±",
-                                                "defaultLang":  "Yedek dil",
-                                                "infoDrawerRefreshInterval":  "Bilgi Ã§ekmecesi yenileme aralÄ±ÄŸÄ± (saniye)",
-                                                "omvRpcPath":  "OMV RPC yolu",
-                                                "port":  "Port"
-                                            }
-                             },
-                  "image":  {
-                                "resetToDefault":  "VarsayÄ±lan gÃ¶rsele sÄ±fÄ±rla",
-                                "deleteCustomImage":  "Ã–zel gÃ¶rseli sil",
-                                "uploadError":  "YÃ¼kleme baÅŸarÄ±sÄ±z oldu",
-                                "sourceCustom":  "Ã¶zel",
-                                "sourceAuto":  "otomatik",
-                                "sourceDefault":  "varsayÄ±lan"
-                            },
-                  "section":  {
-                                  "toggle":  "GeniÅŸlet veya daralt",
-                                  "id":  "BÃ¶lÃ¼m ID",
-                                  "title":  "BÃ¶lÃ¼m adÄ±",
-                                  "delete":  "BÃ¶lÃ¼mÃ¼ sil",
-                                  "addService":  "Servis ekle",
-                                  "backgroundimage":  "Arka plan gÃ¶rseli",
-                                  "cardimage":  "Kart gÃ¶rseli"
-                              },
-                  "service":  {
-                                  "id":  "Servis ID",
-                                  "title":  "Servis adÄ±",
-                                  "url":  "Servis URL",
-                                  "cardimage":  "Kart gÃ¶rseli",
-                                  "delete":  "Servisi sil"
-                              },
-                  "save":  {
-                               "label":  "Kaydet",
-                               "saving":  "kaydediliyorâ€¦",
-                               "saved":  "kaydedildi",
-                               "error":  "Kaydetme baÅŸarÄ±sÄ±z"
-                           },
-                  "password":  {
-                                   "title":  "Parola deÄŸiÅŸtir",
-                                   "desc":  "YÃ¶netici parolanÄ±zÄ± buradan deÄŸiÅŸtirin.",
-                                   "new":  "Yeni parola",
-                                   "repeat":  "ParolayÄ± tekrar et",
-                                   "tooShort":  "Parola en az 8 karakter olmalÄ±dÄ±r.",
-                                   "mismatch":  "Parolalar eÅŸleÅŸmiyor."
-                               },
-                  "login":  {
-                                "title":  "YÃ¶netici giriÅŸi",
-                                "passwordPlaceholder":  "Parola",
-                                "submit":  "GiriÅŸ yap",
-                                "invalid":  "HatalÄ± parola."
-                            }
-              }
+  "html": {
+    "lang": "tr"
+  },
+  "label": {
+    "back": "Geri",
+    "liveStats": "Canl1 istatistikler",
+    "close": "Kapat",
+    "info": "Bilgi",
+    "days": "Gün",
+    "hours_short": "Saat",
+    "storage": "Depolama (HDDs)",
+    "temps": "S1cakl1klar",
+    "versions": "Sürümler",
+    "system": "Sistem",
+    "docker": "Docker konteynerleri",
+    "host": "Host",
+    "os": "0S",
+    "kernel": "Kernel",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Çalışma süresi",
+    "hddAvg": "HDD Ort.",
+    "chassis": "Şasi",
+    "cpuLoad": "Yük",
+    "plugins": "Eklentiler",
+    "ram": "RAM",
+    "ramSlot": "RAM yuvas1",
+    "used": "Kullan1lan",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Son güncelleme",
+    "now": "şimdi"
+  },
+  "tooltip": {
+    "infodrawer": "Sistem bilgilerini aç/kapat",
+    "systemLoad": "Sistem yükü ortalaması: son 1 dakika / son 5 dakika / son 15 dakika"
+  },
+  "docker": {
+    "status": {
+      "up": "Çalışıyor",
+      "created": "Oluşturuldu"
+    }
+  },
+  "errors": {
+    "missingKey": "Eksik çeviri: {key}",
+    "noDisksFound": "Sürücü bulunamadı"
+  },
+  "log": {
+    "listening": "Service Dashboard şu portta çalışıyor"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  },
+  "admin": {
+    "logout": "Çıkış yap",
+    "title": "Admin",
+    "subtitle": "Yapılandırma yönetimi",
+    "services": {
+      "title": "Bölümleri ve servisleri yönet",
+      "desc": "Dashboard üzerindeki bölümleri, servisleri ve bağlantıları yönetin",
+      "addSection": "Bölüm ekle",
+      "cardimage": "Kart görseli"
+    },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": ""
+      }
+    },
+    "config": {
+      "title": "Yapılandırmayı düzenle",
+      "desc": "Gösterge panelinin temel ayarlarını ve çalışma zamanı seçeneklerini yönetin",
+      "sectionTitle": "Genel yap1land1rma",
+      "hint": "Bu değerler gösterge panelinin genel davranışını etkiler. Port değişiklikleri ancak yeniden başlatmadan sonra geçerli olur.",
+      "useDefaultRpcPath": "Varsay1lan RPC yolunu kullan",
+      "portHint": "Portu yalnızca tam olarak ne yaptığınızı biliyorsanız değiştirin. Yanlış bir port, yeniden başlatmadan sonra gösterge panelinin erişilemez olmasına neden olabilir ve ters proxy, Docker veya güvenlik duvarı ayarlarında değişiklik gerektirebilir.",
+      "portConfirmTitle": "Port değişikliğini onayla",
+      "portConfirmBody": "G�sterge paneli portunu de�xi�xtirdiniz. Bu de�xi�xiklik yeniden ba�xlatmadan sonra uygulanacakt1r. Yeni port yanl1�xsa veya d1�xar1 a�1lmad1ysa g�sterge paneline art1k eri�xilemeyebilir. Yine de devam edilsin mi?",
+      "fields": {
+        "title": "Gösterge paneli başlığı",
+        "defaultLang": "Yedek dil",
+        "infoDrawerRefreshInterval": "Bilgi çekmecesi yenileme aralığı (saniye)",
+        "omvRpcPath": "OMV RPC yolu",
+        "port": "Port"
+      }
+    },
+    "image": {
+      "resetToDefault": "Varsayılan görsele sıfırla",
+      "deleteCustomImage": "Özel görseli sil",
+      "uploadError": "Yükleme başarısız oldu",
+      "sourceCustom": "özel",
+      "sourceAuto": "otomatik",
+      "sourceDefault": "varsay1lan"
+    },
+    "section": {
+      "toggle": "Genişlet veya daralt",
+      "id": "Bölüm ID",
+      "title": "Bölüm adı",
+      "delete": "Bölümü sil",
+      "addService": "Servis ekle",
+      "backgroundimage": "Arka plan görseli",
+      "cardimage": "Kart görseli"
+    },
+    "service": {
+      "id": "Servis ID",
+      "title": "Servis ad1",
+      "url": "Servis URL",
+      "cardimage": "Kart görseli",
+      "delete": "Servisi sil"
+    },
+    "save": {
+      "label": "Kaydet",
+      "saving": "kaydediliyor…",
+      "saved": "kaydedildi",
+      "error": "Kaydetme başarısız"
+    },
+    "password": {
+      "title": "Parola değiştir",
+      "desc": "Yönetici parolanızı buradan değiştirin.",
+      "new": "Yeni parola",
+      "repeat": "Parolay1 tekrar et",
+      "tooShort": "Parola en az 8 karakter olmal1d1r.",
+      "mismatch": "Parolalar eşleşmiyor."
+    },
+    "login": {
+      "title": "Yönetici girişi",
+      "passwordPlaceholder": "Parola",
+      "submit": "Giriş yap",
+      "invalid": "Hatal1 parola."
+    }
+  }
 }

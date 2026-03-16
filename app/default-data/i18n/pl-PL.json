@@ -1,149 +1,149 @@
 {
-    "html":  {
-                 "lang":  "pl"
-             },
-    "label":  {
-                  "back":  "Wstecz",
-                  "liveStats":  "Statystyki na Å¼ywo",
-                  "close":  "Zamknij",
-                  "info":  "Info",
-                  "days":  "Dni",
-                  "hours_short":  "godz.",
-                  "storage":  "PamiÄ™Ä‡ masowa (HDDs)",
-                  "temps":  "Temperatury",
-                  "versions":  "Wersje",
-                  "system":  "System",
-                  "docker":  "Kontenery Docker",
-                  "host":  "Host",
-                  "os":  "OS",
-                  "kernel":  "JÄ…dro",
-                  "cpu":  "CPU",
-                  "gpu":  "GPU",
-                  "uptime":  "Czas dziaÅ‚ania",
-                  "hddAvg":  "HDD Ã˜",
-                  "chassis":  "Obudowa",
-                  "cpuLoad":  "ObciÄ…Å¼enie",
-                  "plugins":  "Rozszerzenia",
-                  "ram":  "RAM",
-                  "ramSlot":  "Gniazdo RAM",
-                  "used":  "UÅ¼yte",
-                  "gb":  "GB"
-              },
-    "status":  {
-                   "updatedAt":  "Ostatnia aktualizacja",
-                   "now":  "teraz"
-               },
-    "tooltip":  {
-                    "infodrawer":  "OtwÃ³rz/zamknij informacje systemowe",
-                    "systemLoad":  "Åšrednie obciÄ…Å¼enie systemu: ostatnia minuta / ostatnie 5 minut / ostatnie 15 minut"
-                },
-    "docker":  {
-                   "status":  {
-                                  "up":  "Uruchomiony",
-                                  "created":  "Utworzony"
-                              }
-               },
-    "errors":  {
-                   "missingKey":  "Brak tÅ‚umaczenia: {key}",
-                   "noDisksFound":  "Nie wykryto dyskÃ³w"
-               },
-    "log":  {
-                "listening":  "Service Dashboard dziaÅ‚a na porcie"
-            },
-    "units":  {
-                  "byte":  "B",
-                  "kilobyte":  "KB",
-                  "megabyte":  "MB",
-                  "gigabyte":  "GB",
-                  "terabyte":  "TB",
-                  "petabyte":  "PB"
-              },
-    "admin":  {
-                  "logout":  "Wyloguj",
-                  "title":  "Admin",
-                  "subtitle":  "ZarzÄ…dzanie konfiguracjÄ…",
-                  "services":  {
-                                   "title":  "ZarzÄ…dzanie sekcjami i usÅ‚ugami",
-                                   "desc":  "ZarzÄ…dzaj sekcjami, usÅ‚ugami i linkami na pulpicie",
-                                   "addSection":  "Dodaj sekcjÄ™",
-                                   "cardimage":  "Obraz karty"
-                               },
-                  "theme":  {
-                                "title":  "Select theme",
-                                "desc":  "Choose the layout theme for the public dashboard",
-                                "available":  "Available themes",
-                                "hint":  "Themes affect the public dashboard only, not the admin area.",
-                                "loading":  "Loading themes...",
-                                "current":  "Current",
-                                "version":  "Version",
-                                "empty":  "No themes found",
-                                "settings":  {
-                                                 "title":  "Theme settings",
-                                                 "empty":  "This theme has no configurable settings.",
-                                                 "reset":  "Load defaults",
-                                                 "noDescription":  ""
-                                             }
-                            },
-                  "config":  {
-                                 "title":  "Edytuj konfiguracjÄ™",
-                                 "desc":  "ZarzÄ…dzaj gÅ‚Ã³wnymi ustawieniami dashboardu i opcjami Å›rodowiska uruchomieniowego",
-                                 "sectionTitle":  "Konfiguracja ogÃ³lna",
-                                 "hint":  "Te wartoÅ›ci wpÅ‚ywajÄ… na globalne dziaÅ‚anie dashboardu. Zmiany portu zacznÄ… dziaÅ‚aÄ‡ dopiero po restarcie.",
-                                 "useDefaultRpcPath":  "UÅ¼yj domyÅ›lnej Å›cieÅ¼ki RPC",
-                                 "portHint":  "Zmieniaj port tylko wtedy, gdy dokÅ‚adnie wiesz, co robisz. BÅ‚Ä™dny port moÅ¼e spowodowaÄ‡, Å¼e po restarcie dashboard przestanie byÄ‡ dostÄ™pny, a takÅ¼e moÅ¼e wymagaÄ‡ zmian w reverse proxy, Dockerze lub zaporze sieciowej.",
-                                 "portConfirmTitle":  "PotwierdÅº zmianÄ™ portu",
-                                 "portConfirmBody":  "Zmieniono port dashboardu. Ta zmiana zacznie obowiÄ…zywaÄ‡ po restarcie. JeÅ›li nowy port jest bÅ‚Ä™dny albo nie zostaÅ‚ udostÄ™pniony, dashboard moÅ¼e przestaÄ‡ byÄ‡ osiÄ…galny. Czy mimo to kontynuowaÄ‡?",
-                                 "fields":  {
-                                                "title":  "TytuÅ‚ dashboardu",
-                                                "defaultLang":  "JÄ™zyk zapasowy",
-                                                "infoDrawerRefreshInterval":  "InterwaÅ‚ odÅ›wieÅ¼ania panelu informacji (sekundy)",
-                                                "omvRpcPath":  "ÅšcieÅ¼ka OMV RPC",
-                                                "port":  "Port"
-                                            }
-                             },
-                  "image":  {
-                                "resetToDefault":  "PrzywrÃ³Ä‡ obraz domyÅ›lny",
-                                "deleteCustomImage":  "UsuÅ„ niestandardowy obraz",
-                                "uploadError":  "PrzesyÅ‚anie nie powiodÅ‚o siÄ™",
-                                "sourceCustom":  "niestandardowy",
-                                "sourceAuto":  "automatyczny",
-                                "sourceDefault":  "domyÅ›lny"
-                            },
-                  "section":  {
-                                  "toggle":  "RozwiÅ„ lub zwiÅ„",
-                                  "id":  "ID sekcji",
-                                  "title":  "Nazwa sekcji",
-                                  "delete":  "UsuÅ„ sekcjÄ™",
-                                  "addService":  "Dodaj usÅ‚ugÄ™",
-                                  "backgroundimage":  "Obraz tÅ‚a",
-                                  "cardimage":  "Obraz karty"
-                              },
-                  "service":  {
-                                  "id":  "ID usÅ‚ugi",
-                                  "title":  "Nazwa usÅ‚ugi",
-                                  "url":  "URL usÅ‚ugi",
-                                  "cardimage":  "Obraz karty",
-                                  "delete":  "UsuÅ„ usÅ‚ugÄ™"
-                              },
-                  "save":  {
-                               "label":  "Zapisz",
-                               "saving":  "zapisywanieâ€¦",
-                               "saved":  "zapisano",
-                               "error":  "BÅ‚Ä…d zapisu"
-                           },
-                  "password":  {
-                                   "title":  "ZmieÅ„ hasÅ‚o",
-                                   "desc":  "ZmieÅ„ tutaj hasÅ‚o administratora.",
-                                   "new":  "Nowe hasÅ‚o",
-                                   "repeat":  "PowtÃ³rz hasÅ‚o",
-                                   "tooShort":  "HasÅ‚o musi mieÄ‡ co najmniej 8 znakÃ³w.",
-                                   "mismatch":  "HasÅ‚a nie sÄ… zgodne."
-                               },
-                  "login":  {
-                                "title":  "Logowanie administratora",
-                                "passwordPlaceholder":  "HasÅ‚o",
-                                "submit":  "Zaloguj",
-                                "invalid":  "NieprawidÅ‚owe hasÅ‚o."
-                            }
-              }
+  "html": {
+    "lang": "pl"
+  },
+  "label": {
+    "back": "Wstecz",
+    "liveStats": "Statystyki na |ywo",
+    "close": "Zamknij",
+    "info": "Info",
+    "days": "Dni",
+    "hours_short": "godz.",
+    "storage": "Pamięć masowa (HDDs)",
+    "temps": "Temperatury",
+    "versions": "Wersje",
+    "system": "System",
+    "docker": "Kontenery Docker",
+    "host": "Host",
+    "os": "OS",
+    "kernel": "Jądro",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Czas działania",
+    "hddAvg": "HDD Ø",
+    "chassis": "Obudowa",
+    "cpuLoad": "Obciążenie",
+    "plugins": "Rozszerzenia",
+    "ram": "RAM",
+    "ramSlot": "Gniazdo RAM",
+    "used": "U|yte",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Ostatnia aktualizacja",
+    "now": "teraz"
+  },
+  "tooltip": {
+    "infodrawer": "Otwórz/zamknij informacje systemowe",
+    "systemLoad": "Średnie obciążenie systemu: ostatnia minuta / ostatnie 5 minut / ostatnie 15 minut"
+  },
+  "docker": {
+    "status": {
+      "up": "Uruchomiony",
+      "created": "Utworzony"
+    }
+  },
+  "errors": {
+    "missingKey": "Brak tłumaczenia: {key}",
+    "noDisksFound": "Nie wykryto dysków"
+  },
+  "log": {
+    "listening": "Service Dashboard działa na porcie"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  },
+  "admin": {
+    "logout": "Wyloguj",
+    "title": "Admin",
+    "subtitle": "Zarządzanie konfiguracją",
+    "services": {
+      "title": "Zarządzanie sekcjami i usługami",
+      "desc": "Zarządzaj sekcjami, usługami i linkami na pulpicie",
+      "addSection": "Dodaj sekcję",
+      "cardimage": "Obraz karty"
+    },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": ""
+      }
+    },
+    "config": {
+      "title": "Edytuj konfigurację",
+      "desc": "Zarządzaj głównymi ustawieniami dashboardu i opcjami środowiska uruchomieniowego",
+      "sectionTitle": "Konfiguracja ogólna",
+      "hint": "Te wartości wpływają na globalne działanie dashboardu. Zmiany portu zaczną działać dopiero po restarcie.",
+      "useDefaultRpcPath": "Użyj domyślnej ścieżki RPC",
+      "portHint": "Zmieniaj port tylko wtedy, gdy dokładnie wiesz, co robisz. Błędny port może spowodować, że po restarcie dashboard przestanie być dostępny, a także może wymagać zmian w reverse proxy, Dockerze lub zaporze sieciowej.",
+      "portConfirmTitle": "Potwierdź zmianę portu",
+      "portConfirmBody": "Zmieniono port dashboardu. Ta zmiana zacznie obowi�&zywa�! po restarcie. Je�:li nowy port jest b�\u001a�\"dny albo nie zosta�\u001a udost�\"pniony, dashboard mo|e przesta�! by�! osi�&galny. Czy mimo to kontynuowa�!?",
+      "fields": {
+        "title": "Tytuł dashboardu",
+        "defaultLang": "Język zapasowy",
+        "infoDrawerRefreshInterval": "Interwał odświeżania panelu informacji (sekundy)",
+        "omvRpcPath": "Ścieżka OMV RPC",
+        "port": "Port"
+      }
+    },
+    "image": {
+      "resetToDefault": "Przywróć obraz domyślny",
+      "deleteCustomImage": "Usuń niestandardowy obraz",
+      "uploadError": "Przesyłanie nie powiodło się",
+      "sourceCustom": "niestandardowy",
+      "sourceAuto": "automatyczny",
+      "sourceDefault": "domyślny"
+    },
+    "section": {
+      "toggle": "Rozwiń lub zwiń",
+      "id": "ID sekcji",
+      "title": "Nazwa sekcji",
+      "delete": "Usuń sekcję",
+      "addService": "Dodaj usługę",
+      "backgroundimage": "Obraz tła",
+      "cardimage": "Obraz karty"
+    },
+    "service": {
+      "id": "ID usługi",
+      "title": "Nazwa usługi",
+      "url": "URL usługi",
+      "cardimage": "Obraz karty",
+      "delete": "Usuń usługę"
+    },
+    "save": {
+      "label": "Zapisz",
+      "saving": "zapisywanie…",
+      "saved": "zapisano",
+      "error": "Błąd zapisu"
+    },
+    "password": {
+      "title": "Zmień hasło",
+      "desc": "Zmień tutaj hasło administratora.",
+      "new": "Nowe hasło",
+      "repeat": "Powtórz hasło",
+      "tooShort": "Hasło musi mieć co najmniej 8 znaków.",
+      "mismatch": "Hasła nie są zgodne."
+    },
+    "login": {
+      "title": "Logowanie administratora",
+      "passwordPlaceholder": "Hasło",
+      "submit": "Zaloguj",
+      "invalid": "Nieprawidłowe hasło."
+    }
+  }
 }
