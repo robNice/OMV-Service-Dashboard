@@ -81,7 +81,8 @@
         "title": "Theme-Einstellungen",
         "empty": "F?r dieses Theme gibt es keine konfigurierbaren Einstellungen.",
         "reset": "Standardwerte laden",
-        "noDescription": ""
+        "noDescription": "",
+        "count": "Einstellungen"
       }
     },
     "config": {

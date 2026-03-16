@@ -273,6 +273,8 @@ body {
 .theme-card-badge-row {
     display: flex;
     justify-content: flex-end;
+    gap: 0.5rem;
+    flex-wrap: wrap;
     min-height: 1.75rem;
 }
 
@@ -310,6 +312,12 @@ body {
     color: #86efac;
     font-size: 0.75rem;
     white-space: nowrap;
+}
+
+.theme-badge-secondary {
+    background: rgba(37, 99, 235, 0.14);
+    border-color: rgba(96, 165, 250, 0.32);
+    color: #93c5fd;
 }
 
 .admin-tile {

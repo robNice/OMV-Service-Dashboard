@@ -81,7 +81,8 @@
         "title": "Theme settings",
         "empty": "This theme has no configurable settings.",
         "reset": "Load defaults",
-        "noDescription": ""
+        "noDescription": "",
+        "count": "settings"
       }
     },
     "config": {

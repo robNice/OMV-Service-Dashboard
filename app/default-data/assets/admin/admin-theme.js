@@ -101,6 +101,10 @@ function renderThemes() {
         const current = theme.id === currentTheme
             ? `<span class="theme-badge">${root.dataset.currentLabel}</span>`
             : "";
+        const settingsCount = Array.isArray(theme.settings) ? theme.settings.length : 0;
+        const settingsBadge = settingsCount
+            ? `<span class="theme-badge theme-badge-secondary">${settingsCount} ${escapeHtml(root.dataset.settingsCountLabel)}</span>`
+            : "";
         const version = theme.version
             ? `<div class="theme-version">${root.dataset.versionLabel}: ${escapeHtml(theme.version)}</div>`
             : "";
@@ -112,6 +116,7 @@ function renderThemes() {
                     <div class="theme-card-top">
                         <div class="theme-card-badge-row">
                             ${current}
+                            ${settingsBadge}
                         </div>
                         <div class="theme-card-heading">
                             <h3>${escapeHtml(theme.label)}</h3>
@@ -228,7 +233,7 @@ function renderSettings() {
 
     if (!settings.length) {
         configFormEl.innerHTML = "";
-        configEmptyEl.textContent = root.dataset.configEmpty;
+        configEmptyEl.textContent = `${theme?.label || selectedTheme}: ${root.dataset.configEmpty}`;
         configEmptyEl.classList.remove("hidden");
         resetBtn.classList.add("hidden");
         setSaving(false);
