@@ -87,15 +87,11 @@
             let onKeyUp = null;
 
             if (grid) {
-                const keyWidth = commands.reduce((max, command) => Math.max(max, command.key.length), 1);
-                const commandLines = commands
-                    .map((command) => `${command.key.padEnd(keyWidth, " ")} : ${command.label}`)
-                    .join("\n");
                 prompt = document.createElement("div");
                 prompt.className = "console-prompt";
                 prompt.innerHTML = `
                     <span class="console-prompt-line">possible commands:</span>
-                    <pre class="console-prompt-list">${commandLines}</pre>
+                    <div class="console-prompt-list"></div>
                     <span class="console-prompt-line">choose: <span class="console-prompt-input"></span><span class="console-prompt-cursor">_</span></span>
                     <span class="console-prompt-error" aria-live="polite"></span>
                 `;
@@ -103,7 +99,15 @@
 
                 const inputEl = prompt.querySelector(".console-prompt-input");
                 const errorEl = prompt.querySelector(".console-prompt-error");
+                const listEl = prompt.querySelector(".console-prompt-list");
                 let currentInput = "";
+
+                commands.forEach((command) => {
+                    const item = document.createElement("span");
+                    item.className = "console-prompt-command";
+                    item.textContent = `${command.key} : ${command.label}`;
+                    listEl?.appendChild(item);
+                });
 
                 const updatePrompt = () => {
                     if (inputEl) {

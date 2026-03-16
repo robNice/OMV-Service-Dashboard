@@ -18,6 +18,12 @@
 }
 
 body {
+    --console-amber: var(--themesetting-console-accent-color, #ffbf5f);
+    --console-amber-soft: var(--themesetting-console-text-color, #ffd899);
+    --console-amber-dim: var(--themesetting-console-muted-text-color, #c6a172);
+    --console-amber-faint: color-mix(in srgb, var(--console-amber) 16%, transparent);
+    --console-border: color-mix(in srgb, var(--console-amber) 34%, transparent);
+    --text-color: var(--console-amber-soft);
     margin: 0;
     padding: 2rem 2rem 2.5rem;
     font-family: var(--console-font);
@@ -235,11 +241,20 @@ body:has(.section-nav) .page-header::before {
 }
 
 .console-prompt-list {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.2rem 1rem;
     margin: 0.15rem 0 0.55rem;
     color: var(--console-amber-soft);
     font: inherit;
     letter-spacing: 0.08em;
-    white-space: pre-wrap;
+}
+
+.console-prompt-command {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .console-prompt-input {
@@ -400,5 +415,10 @@ body:not(:has(.section-nav)) .service::before {
 
     .service-title {
         font-size: 0.92rem;
+    }
+
+    .console-prompt-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.18rem 0.75rem;
     }
 }
