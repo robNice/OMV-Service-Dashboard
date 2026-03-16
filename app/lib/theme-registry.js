@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { APP_ASSETS, USER_ASSETS } = require('./paths');
+const { APP_ASSETS, APP_DEFAULT_ASSETS, USER_ASSETS } = require('./paths');
 
 const THEMES_DIR = 'themes';
 const DEFAULT_THEME = 'classic';
@@ -130,11 +130,7 @@ function collectThemesFrom(baseDir) {
 
 function listThemes() {
     const merged = new Map();
-    const appAssetRoots = [APP_ASSETS];
-
-    if (!fs.existsSync(APP_ASSETS)) {
-        appAssetRoots.push(FALLBACK_APP_ASSETS);
-    }
+    const appAssetRoots = [APP_DEFAULT_ASSETS, FALLBACK_APP_ASSETS, APP_ASSETS];
 
     for (const root of appAssetRoots) {
         for (const theme of collectThemesFrom(root)) {

@@ -617,6 +617,7 @@ app.get("/admin/api/service-card-images", requireAdmin, (req, res) => {
 
 app.get("/admin/api/themes", requireAdmin, (req, res) => {
     const config = loadConfiguration();
+    res.set("Cache-Control", "no-store");
     res.json({
         currentTheme: normalizeTheme(config.theme),
         themeSettings: config.themeSettings || {},
@@ -898,6 +899,13 @@ app.get('/assets/*', (req, res) => {
     }
 
     if (file.startsWith(CONFIG_DIR + path.sep)) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        return sendAsset(res, file);
+    }
+
+    if (relPath.startsWith('admin/')) {
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');

@@ -2,7 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { APP_DATA, CONFIG_DIR } = require('./paths');
+const { APP_DATA, APP_DEFAULT_ASSETS, CONFIG_DIR } = require('./paths');
+const FALLBACK_APP_ASSETS = path.join(__dirname, '../default-data/assets');
 const OVERLAY_PATHS = [
     'backgrounds/',
     'cards/',
@@ -17,6 +18,11 @@ function resolveAssetPath(relativePath) {
     if (isOverlayAllowed(relativePath)) {
         const fromConfig = path.join(CONFIG_DIR, 'assets', relativePath);
         if (fs.existsSync(fromConfig)) return fromConfig;
+    }
+
+    for (const root of [APP_DEFAULT_ASSETS, FALLBACK_APP_ASSETS]) {
+        const candidate = path.join(root, relativePath);
+        if (fs.existsSync(candidate)) return candidate;
     }
 
     const fromData = path.join(APP_DATA, 'assets', relativePath);
