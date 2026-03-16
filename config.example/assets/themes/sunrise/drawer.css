@@ -9,12 +9,12 @@
 }
 
 #info-drawer .tab.active {
-    background: rgba(255, 138, 61, 0.18);
+    background: color-mix(in srgb, var(--themesetting-accent-color, #ff8a3d) 18%, transparent);
     color: #fff7ef;
 }
 
 #info-drawer .section h3 {
-    color: #ffb85c;
+    color: color-mix(in srgb, var(--themesetting-accent-color, #ff8a3d) 70%, #ffd27a 30%);
 }
 
 #info-drawer .kv {

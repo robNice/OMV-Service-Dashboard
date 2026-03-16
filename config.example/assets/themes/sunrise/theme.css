@@ -7,6 +7,8 @@
 }
 
 body {
+    --sunrise-accent: var(--themesetting-accent-color, #ff8a3d);
+    --sunrise-accent-soft: color-mix(in srgb, var(--sunrise-accent) 18%, transparent);
     color: var(--sunrise-text);
 }
 
@@ -48,9 +50,9 @@ body::before {
 }
 
 .section-nav-item.active {
-    background: linear-gradient(135deg, rgba(255, 138, 61, 0.92), rgba(255, 184, 92, 0.9));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--sunrise-accent) 92%, white 8%), color-mix(in srgb, var(--sunrise-accent) 72%, #ffd27a 28%));
     color: #2d1606;
-    box-shadow: 0 10px 24px rgba(255, 138, 61, 0.22);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--sunrise-accent) 22%, transparent);
 }
 
 .service {
@@ -61,7 +63,7 @@ body::before {
 }
 
 .service:hover {
-    border-color: rgba(255, 184, 92, 0.52);
+    border-color: color-mix(in srgb, var(--sunrise-accent) 40%, white 12%);
     box-shadow: 0 22px 46px rgba(11, 10, 23, 0.34);
 }
 
