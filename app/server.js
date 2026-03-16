@@ -269,7 +269,10 @@ function buildThemeSettingMarkup(themeId, config) {
         settings,
         bodyAttrs: attrs.join(' '),
         bodyStyle: cssVars.join('; '),
-        serializedSettings: escapeHtml(JSON.stringify(settings))
+        serializedSettings: JSON.stringify(settings)
+            .replace(/</g, '\\u003c')
+            .replace(/>/g, '\\u003e')
+            .replace(/&/g, '\\u0026')
     };
 }
 
