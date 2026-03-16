@@ -51,6 +51,7 @@ body {
     --drawer-tab-bg: var(--themesetting-drawer-tab-bg, #111a4f);
     --drawer-tab-hover-bg: var(--themesetting-drawer-tab-hover-bg, #fff27a);
     --drawer-tab-text: var(--themesetting-drawer-tab-text-color, #d7e2ff);
+    --drawer-tab-height: max(24px, calc(var(--themesetting-drawer-tab-height, 36) * 1px));
     --status-good-bg: var(--themesetting-status-good-bg, #10333f);
     --status-good-border: color-mix(in srgb, var(--themesetting-status-good-text, #9ef3ff) 34%, transparent);
     --status-good-text: var(--themesetting-status-good-text, #9ef3ff);
@@ -150,6 +151,8 @@ body {
     letter-spacing: 0.22em;
     text-shadow: 1px 0 0 rgba(255, 95, 193, 0.28);
     border-radius: 0;
+    padding: 0 calc(var(--drawer-tab-height) * 0.45);
+    min-height: var(--drawer-tab-height);
     box-shadow:
         0 0 0 1px rgba(255, 95, 193, 0.16) inset,
         0 6px 20px rgba(0, 0, 0, 0.35);

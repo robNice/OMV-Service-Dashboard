@@ -53,6 +53,14 @@
       "default": "#d7e2ff"
     },
     {
+      "id": "drawer-tab-height",
+      "group": "Drawer Tab",
+      "label": "Tab height",
+      "description": "Vertical size of the closed info drawer tab.",
+      "type": "number",
+      "default": 36
+    },
+    {
       "id": "status-good-bg",
       "group": "Status Chips",
       "label": "Status good background",
