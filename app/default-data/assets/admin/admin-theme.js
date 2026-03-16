@@ -246,11 +246,13 @@ function renderSettings(themeId) {
         configFormEl.innerHTML = "";
         configEmptyEl.textContent = `${theme?.label || themeId}: ${root.dataset.configEmpty}`;
         configEmptyEl.classList.remove("hidden");
+        setSaving(false);
         return;
     }
 
     configEmptyEl.classList.add("hidden");
     configFormEl.innerHTML = settings.map((setting) => renderField(setting, values[setting.id])).join("");
+    setSaving(false);
 }
 
 async function loadThemes() {
