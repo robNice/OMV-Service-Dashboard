@@ -47,6 +47,11 @@
      * @returns {string}
      */
     function usageColor(p) {
+        const themed = getComputedStyle(document.body).getPropertyValue("--themesetting-progress-bar-color").trim();
+        if (themed) {
+            return themed;
+        }
+
         if (p >= 85) return "linear-gradient(to right,#ef4444,#b91c1c)";
         if (p >= 70) return "linear-gradient(to right,#f97316,#ea580c)";
         if (p >= 50) return "linear-gradient(to right,#eab308,#ca8a04)";

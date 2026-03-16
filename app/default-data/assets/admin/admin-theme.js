@@ -232,6 +232,24 @@ function renderField(setting, value) {
     `;
 }
 
+function groupSettings(settings) {
+    const groups = [];
+    const seen = new Map();
+
+    for (const setting of settings) {
+        const groupName = setting.group || "General";
+        if (!seen.has(groupName)) {
+            const bucket = { name: groupName, settings: [] };
+            seen.set(groupName, bucket);
+            groups.push(bucket);
+        }
+
+        seen.get(groupName).settings.push(setting);
+    }
+
+    return groups;
+}
+
 function renderSettings(themeId) {
     const theme = getThemeById(themeId);
     const settings = theme?.settings || [];
@@ -251,7 +269,14 @@ function renderSettings(themeId) {
     }
 
     configEmptyEl.classList.add("hidden");
-    configFormEl.innerHTML = settings.map((setting) => renderField(setting, values[setting.id])).join("");
+    configFormEl.innerHTML = groupSettings(settings).map((group) => `
+        <section class="theme-setting-group">
+            <h3 class="theme-setting-group-title">${escapeHtml(group.name)}</h3>
+            <div class="theme-setting-group-grid">
+                ${group.settings.map((setting) => renderField(setting, values[setting.id])).join("")}
+            </div>
+        </section>
+    `).join("");
     setSaving(false);
 }
 

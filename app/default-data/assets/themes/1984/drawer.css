@@ -46,6 +46,29 @@
 
 body {
     --drawer-bg: color-mix(in srgb, var(--themesetting-info-drawer-bg, #0a1030) 94%, transparent);
+    --text: var(--themesetting-drawer-text-color, #d7e2ff);
+    --muted: var(--themesetting-drawer-muted-text-color, #92a3d8);
+    --drawer-tab-bg: var(--themesetting-drawer-tab-bg, #111a4f);
+    --drawer-tab-hover-bg: var(--themesetting-drawer-tab-hover-bg, #fff27a);
+    --drawer-tab-text: var(--themesetting-drawer-tab-text-color, #d7e2ff);
+    --status-good-bg: var(--themesetting-status-good-bg, #10333f);
+    --status-good-border: color-mix(in srgb, var(--themesetting-status-good-text, #9ef3ff) 34%, transparent);
+    --status-good-text: var(--themesetting-status-good-text, #9ef3ff);
+    --status-warn-bg: var(--themesetting-status-warn-bg, #3d3511);
+    --status-warn-border: color-mix(in srgb, var(--themesetting-status-warn-text, #fff6aa) 34%, transparent);
+    --status-warn-text: var(--themesetting-status-warn-text, #fff6aa);
+    --status-bad-bg: var(--themesetting-status-bad-bg, #3a122c);
+    --status-bad-border: color-mix(in srgb, var(--themesetting-status-bad-text, #ffc1eb) 34%, transparent);
+    --status-bad-text: var(--themesetting-status-bad-text, #ffc1eb);
+    --status-neutral-bg: var(--themesetting-status-neutral-bg, #212949);
+    --status-neutral-border: color-mix(in srgb, var(--themesetting-status-neutral-text, #dce6ff) 28%, transparent);
+    --status-neutral-text: var(--themesetting-status-neutral-text, #dce6ff);
+    --status-up-bg: var(--themesetting-status-up-bg, #10333f);
+    --status-up-border: color-mix(in srgb, var(--themesetting-status-up-text, #9ef3ff) 34%, transparent);
+    --status-up-text: var(--themesetting-status-up-text, #9ef3ff);
+    --status-down-bg: var(--themesetting-status-down-bg, #3a122c);
+    --status-down-border: color-mix(in srgb, var(--themesetting-status-down-text, #ffc1eb) 34%, transparent);
+    --status-down-text: var(--themesetting-status-down-text, #ffc1eb);
 }
 
 #info-drawer .panel {
@@ -121,9 +144,9 @@ body {
     font-family: "GianaLocal", var(--font-h1), system-ui, sans-serif;
     background:
         linear-gradient(90deg, rgba(94, 232, 255, 0.2), rgba(255, 95, 193, 0.18)),
-        #111a4f;
+        var(--drawer-tab-bg);
     border-color: rgba(110, 225, 255, 0.28);
-    color: #d7e2ff;
+    color: var(--drawer-tab-text);
     letter-spacing: 0.22em;
     text-shadow: 1px 0 0 rgba(255, 95, 193, 0.28);
     border-radius: 0;
@@ -135,6 +158,13 @@ body {
         calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
         100% 100%, 0 100%
     );
+}
+
+#info-drawer .tab:hover {
+    background:
+        linear-gradient(90deg, rgba(94, 232, 255, 0.18), rgba(255, 95, 193, 0.16)),
+        var(--drawer-tab-hover-bg);
+    color: var(--drawer-tab-text);
 }
 
 #info-drawer .chip {

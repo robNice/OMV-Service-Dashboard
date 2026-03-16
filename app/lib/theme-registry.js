@@ -64,6 +64,7 @@ function sanitizeThemeSettingsSchema(settings) {
                 id,
                 label: String(setting?.label || id).trim(),
                 description: String(setting?.description || '').trim(),
+                group: String(setting?.group || 'General').trim() || 'General',
                 type,
                 default: options.length && !options.some(option => option.value === String(defaultValue))
                     ? options[0].value

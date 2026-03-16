@@ -199,7 +199,8 @@ body::after {
 }
 
 .service-title {
-    color: #eef4ff;
+    color: var(--themesetting-card-label-text-color, #eef4ff);
+    background: var(--themesetting-card-label-bg-color, #141943);
     text-shadow: 1px 0 0 rgba(255, 95, 193, 0.25);
     font-size: 1.16rem;
 }
