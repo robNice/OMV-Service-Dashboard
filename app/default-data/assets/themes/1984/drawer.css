@@ -19,7 +19,6 @@
     --drawer-tab-transform: translateY(0) rotate(-90deg);
     --drawer-scrollbar-thumb: rgba(110, 225, 255, 0.28);
     --drawer-scrollbar-thumb-hover: rgba(255, 95, 193, 0.36);
-    --drawer-bg: color-mix(in srgb, var(--themesetting-info-drawer-bg, #0a1030) 94%, transparent);
     --drawer-border: rgba(110, 225, 255, 0.22);
     --chip-bg: rgba(94, 232, 255, 0.1);
     --text: #d7e2ff;
@@ -43,6 +42,10 @@
     --status-down-bg: rgba(255, 95, 193, 0.14);
     --status-down-border: rgba(255, 95, 193, 0.34);
     --status-down-text: #ffc1eb;
+}
+
+body {
+    --drawer-bg: color-mix(in srgb, var(--themesetting-info-drawer-bg, #0a1030) 94%, transparent);
 }
 
 #info-drawer .panel {

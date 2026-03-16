@@ -183,6 +183,30 @@ body {
     resize: vertical;
 }
 
+.theme-setting input[type="color"] {
+    width: 100%;
+    min-height: 2.8rem;
+    padding: 0.25rem;
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.theme-setting input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.theme-setting input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 5px;
+}
+
+.theme-setting input[type="color"]::-moz-color-swatch {
+    border: none;
+    border-radius: 5px;
+}
+
 .theme-setting-toggle {
     display: grid;
     gap: 0.65rem;
