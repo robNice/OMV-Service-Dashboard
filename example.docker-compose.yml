@@ -16,11 +16,10 @@ services:
       DPKG_ROOT: /host/var/lib/dpkg
     working_dir: /app
     volumes:
+      - /path/to/your/configuration-directory:/config ### CHANGE THIS ###
       - ./data:/data
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /var/lib/dpkg:/host/var/lib/dpkg:ro
       - /:/hostroot:ro,rslave
-      - /mnt/store1/config/omv-landingpage:/config
-
