@@ -137,3 +137,4 @@ dist
 /.forgejo/workflows/deploy.yml
 /tmp/
 AGENTS.md
+/package-lock.json
