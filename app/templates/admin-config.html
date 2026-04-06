@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="/assets/admin/admin.css?v={{VERSION}}">
 </head>
 <body>
+<div id="save-bar" class="admin-save-bar">
+    <button id="config-save" class="primary" disabled>
+        <span class="label">{{__.admin.save.label}}</span>
+        <span class="spinner hidden"></span>
+    </button>
+    <span id="config-status" class="save-status"></span>
+</div>
 <div class="admin-page">
 
     <header class="admin-header">
@@ -89,15 +96,9 @@
                 <h2>{{__.admin.config.sectionTitle}}</h2>
                 <p class="admin-panel-copy">{{__.admin.config.hint}}</p>
             </div>
-            <button id="config-save" class="primary" disabled>
-                <span class="label">{{__.admin.save.label}}</span>
-                <span class="spinner hidden"></span>
-            </button>
         </div>
 
-        <div id="config-status" class="hint"></div>
-
-        <div class="admin-form-grid">
+        <div class="admin-form-grid admin-form-grid-single">
             <div class="field">
                 <label for="config-title">{{__.admin.config.fields.title}}</label>
                 <input id="config-title" type="text" autocomplete="off">

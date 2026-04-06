@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="/assets/admin/admin.css?v={{VERSION}}">
 </head>
 <body>
+<div id="save-bar" class="admin-save-bar">
+    <button id="theme-save" class="primary" disabled>
+        <span class="label">{{__.admin.save.label}}</span>
+        <span class="spinner hidden"></span>
+    </button>
+    <span id="theme-status" class="save-status"></span>
+</div>
 <div class="admin-page">
 
     <header class="admin-header">
@@ -98,13 +105,7 @@
                 <h2>{{__.admin.theme.available}}</h2>
                 <p class="admin-panel-copy">{{__.admin.theme.hint}}</p>
             </div>
-            <button id="theme-save" class="primary" disabled>
-                <span class="label">{{__.admin.save.label}}</span>
-                <span class="spinner hidden"></span>
-            </button>
         </div>
-
-        <div id="theme-status" class="hint"></div>
         <div id="theme-list" class="theme-grid"></div>
     </section>
 

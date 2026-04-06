@@ -51,7 +51,11 @@ function validate() {
 
 function setStatus(text, type = "hint") {
     status.textContent = text;
-    status.className = type;
+    const tone = type === "error" ? "error" : (text ? "success" : "");
+    status.className = tone ? `save-status ${tone}` : "save-status";
+    status.dataset.tone = tone;
+    status.classList.toggle("is-visible", Boolean(text));
+    status.classList.remove("is-fading");
 }
 
 /* ================= Input ================= */

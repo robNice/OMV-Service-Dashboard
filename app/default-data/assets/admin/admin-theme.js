@@ -28,7 +28,10 @@ function escapeHtml(value) {
 
 function setStatus(message, tone = "") {
     statusEl.textContent = message || "";
-    statusEl.className = tone ? `hint ${tone}` : "hint";
+    statusEl.className = tone ? `save-status ${tone}` : "save-status";
+    statusEl.dataset.tone = tone || "";
+    statusEl.classList.toggle("is-visible", Boolean(message));
+    statusEl.classList.remove("is-fading");
 }
 
 function getThemeById(themeId) {
