@@ -81,12 +81,42 @@ function parseSmartTemperature(info) {
 }
 
 function parseSmartStatus(info) {
+    const ataAttributes = Array.isArray(info?.ata_smart_attributes?.table)
+        ? info.ata_smart_attributes.table
+        : [];
+
+    const getAtaRawValue = (ids = [], names = []) => {
+        for (const attr of ataAttributes) {
+            const attrId = Number(attr?.id);
+            const attrName = String(attr?.name || "").trim().toUpperCase();
+            if ((ids.length && ids.includes(attrId)) || (names.length && names.includes(attrName))) {
+                const raw = Number(attr?.raw?.value);
+                if (Number.isFinite(raw)) {
+                    return raw;
+                }
+            }
+        }
+        return 0;
+    };
+
+    const hasBadSectorSignals =
+        getAtaRawValue([5], ["REALLOCATED_SECTOR_CT"]) > 0 ||
+        getAtaRawValue([183], ["RUNTIME_BAD_BLOCK"]) > 0 ||
+        getAtaRawValue([187], ["REPORTED_UNCORRECT"]) > 0 ||
+        getAtaRawValue([196], ["REALLOCATED_EVENT_COUNT"]) > 0 ||
+        getAtaRawValue([197], ["CURRENT_PENDING_SECTOR"]) > 0 ||
+        getAtaRawValue([198], ["OFFLINE_UNCORRECTABLE"]) > 0;
+
+    if (hasBadSectorSignals) {
+        return "BAD SECTOR";
+    }
+
     if (typeof info?.smart_status?.passed === "boolean") {
-        return info.smart_status.passed ? "PASSED" : "FAILED";
+        return info.smart_status.passed ? "GOOD" : "FAILED";
     }
 
     if (typeof info?.scsi_smart_health_status?.passed === "boolean") {
-        return info.scsi_smart_health_status.passed ? "PASSED" : "FAILED";
+        return info.scsi_smart_health_status.passed ? "GOOD" : "FAILED";
     }
 
     const text = String(
@@ -98,7 +128,7 @@ function parseSmartStatus(info) {
 
     if (!text) return "UNKNOWN";
 
-    if (/passed|ok|healthy/i.test(text)) return "PASSED";
+    if (/passed|ok|healthy/i.test(text)) return "GOOD";
     if (/fail|bad|critical|error/i.test(text)) return "FAILED";
     if (/warn|prefail|degraded/i.test(text)) return "WARN";
 
