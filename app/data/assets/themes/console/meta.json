@@ -1,0 +1,32 @@
+{
+  "id": "console",
+  "label": "Console",
+  "description": "Amber terminal shell with ASCII boxes, monospace console styling, and keyboard navigation.",
+  "version": "1.1.0",
+  "settings": [
+    {
+      "id": "console-text-color",
+      "group": "Colors",
+      "label": "Primary text color",
+      "description": "Main text color used across the console theme.",
+      "type": "color",
+      "default": "#ffd899"
+    },
+    {
+      "id": "console-accent-color",
+      "group": "Colors",
+      "label": "Accent text color",
+      "description": "Accent color used for prompts, headings and highlights.",
+      "type": "color",
+      "default": "#ffbf5f"
+    },
+    {
+      "id": "console-muted-text-color",
+      "group": "Colors",
+      "label": "Muted text color",
+      "description": "Secondary text color for labels and decorative terminal copy.",
+      "type": "color",
+      "default": "#c6a172"
+    }
+  ]
+}

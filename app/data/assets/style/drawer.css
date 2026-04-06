@@ -1,0 +1,316 @@
+:root {
+    --drawer-w: 360px;
+    --drawer-bg: rgba(17, 24, 39, 0.92);
+    --drawer-border: rgba(255, 255, 255, .08);
+    --chip-bg: rgba(255, 255, 255, .08);
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --accent: #60a5fa;
+    --drawer-transition: transform .28s ease;
+    --drawer-tab-top: 50%;
+    --drawer-tab-right: -19px;
+    --drawer-tab-transform: translateY(-50%) rotate(-90deg);
+    --drawer-panel-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    --drawer-panel-backdrop: blur(6px);
+    --drawer-panel-radius: 0;
+    --drawer-header-bg: transparent;
+    --drawer-footer-bg: transparent;
+    --drawer-content-pad: .9rem 1rem 1rem;
+    --drawer-header-pad: .9rem 1rem;
+    --drawer-footer-pad: .7rem 1rem;
+    --drawer-section-gap: 1rem;
+    --drawer-heading-size: .85rem;
+    --drawer-heading-spacing: .08em;
+    --drawer-kv-size: .95rem;
+    --drawer-kv-pad: .35rem .45rem;
+    --drawer-kv-radius: .5rem;
+    --drawer-kv-hover-bg: rgba(255, 255, 255, .03);
+    --drawer-chip-pad: .25rem .5rem;
+    --drawer-chip-radius: .6rem;
+    --drawer-chip-size: .8rem;
+    --drawer-bar-height: 8px;
+    --drawer-bar-radius: 9999px;
+    --drawer-scrollbar-thumb: rgba(255, 255, 255, .38);
+    --drawer-scrollbar-thumb-hover: rgba(255, 255, 255, .52);
+
+    --bar-green: linear-gradient(to right, #22c55e, #15803d);
+    --bar-yellow: linear-gradient(to right, #eab308, #ca8a04);
+    --bar-orange: linear-gradient(to right, #f97316, #ea580c);
+    --bar-red: linear-gradient(to right, #ef4444, #b91c1c);
+
+    --status-good-bg: rgba(34,197,94,.2);
+    --status-good-border: rgba(34,197,94,.35);
+    --status-good-text: #86efac;
+    --status-warn-bg: rgba(234,179,8,.18);
+    --status-warn-border: rgba(234,179,8,.38);
+    --status-warn-text: #fde68a;
+    --status-bad-bg: rgba(239,68,68,.2);
+    --status-bad-border: rgba(239,68,68,.35);
+    --status-bad-text: #fecaca;
+    --status-neutral-bg: rgba(255,255,255,.08);
+    --status-neutral-border: rgba(255,255,255,.12);
+    --status-neutral-text: #e5e7eb;
+    --status-up-bg: rgba(34,197,94,.18);
+    --status-up-border: rgba(34,197,94,.35);
+    --status-up-text: #bbf7d0;
+    --status-down-bg: rgba(239,68,68,.2);
+    --status-down-border: rgba(239,68,68,.35);
+    --status-down-text: #fecaca;
+}
+
+#info-drawer,
+#info-drawer * {
+    box-sizing: border-box;
+}
+
+#info-drawer {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--drawer-w);
+    transform: translateX(calc(-1 * (var(--drawer-w) - 0px)));
+    transition: var(--drawer-transition);
+    z-index: 1100;
+}
+
+#info-drawer.open {
+    transform: translateX(0);
+}
+
+
+#info-drawer hr {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px dashed #0f0;
+    margin-bottom: 25px;
+}
+
+#info-drawer .panel {
+    height: 100%;
+    background: var(--drawer-bg);
+    border-right: 1px solid var(--drawer-border);
+    backdrop-filter: var(--drawer-panel-backdrop);
+    color: var(--text);
+    box-shadow: var(--drawer-panel-shadow);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    border-radius: var(--drawer-panel-radius);
+}
+
+#info-drawer .diskpart {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 10px 0;
+}
+
+#info-drawer header {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: var(--drawer-header-pad);
+    border-bottom: 1px solid var(--drawer-border);
+    font-weight: 600;
+    letter-spacing: .2px;
+    background: var(--drawer-header-bg);
+}
+
+#info-drawer footer {
+    padding: var(--drawer-footer-pad);
+    border-top: 1px solid var(--drawer-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .85rem;
+    color: var(--muted);
+    background: var(--drawer-footer-bg);
+}
+
+#info-drawer .content {
+    overflow: auto;
+    padding: var(--drawer-content-pad);
+    scrollbar-width: thin;
+    scrollbar-color: var(--drawer-scrollbar-thumb) transparent;
+}
+
+#info-drawer .content.loading > :not(#drawer-loading) {
+    display: none;
+}
+
+#info-drawer .drawer-loading {
+    margin-bottom: 1rem;
+}
+
+#info-drawer .drawer-loading.hidden {
+    display: none;
+}
+
+#info-drawer .drawer-loading-card {
+    display: grid;
+    gap: .45rem;
+    padding: .8rem .9rem;
+    border: 1px solid rgba(96, 165, 250, .25);
+    border-radius: .7rem;
+    background: linear-gradient(180deg, rgba(96, 165, 250, .12), rgba(255, 255, 255, .04));
+}
+
+#info-drawer .drawer-loading-card strong {
+    font-size: .9rem;
+    color: var(--text);
+}
+
+#info-drawer .drawer-loading-card span {
+    font-size: .82rem;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+#info-drawer .drawer-loading-bar {
+    position: relative;
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, .08);
+}
+
+#info-drawer .drawer-loading-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 35%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgba(96, 165, 250, .15), rgba(96, 165, 250, .95), rgba(191, 219, 254, .35));
+    animation: drawer-loading-slide 1.2s ease-in-out infinite;
+}
+
+#info-drawer .content::-webkit-scrollbar {
+    width: 6px;
+}
+
+#info-drawer .content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#info-drawer .content::-webkit-scrollbar-thumb {
+    background: var(--drawer-scrollbar-thumb);
+    border-radius: 999px;
+}
+
+#info-drawer .content::-webkit-scrollbar-thumb:hover {
+    background: var(--drawer-scrollbar-thumb-hover);
+}
+
+#info-drawer .section {
+    margin-bottom: var(--drawer-section-gap);
+}
+
+#info-drawer .section h3 {
+    font-size: var(--drawer-heading-size);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: var(--drawer-heading-spacing);
+    margin: .2rem 0 .5rem;
+}
+
+#info-drawer .kv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    font-size: var(--drawer-kv-size);
+    padding: var(--drawer-kv-pad);
+    background: transparent;
+    border-radius: var(--drawer-kv-radius);
+}
+
+#info-drawer .kv:hover {
+    background: var(--drawer-kv-hover-bg);
+}
+
+#info-drawer .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: var(--drawer-chip-pad);
+    border-radius: var(--drawer-chip-radius);
+    background: var(--chip-bg);
+    font-size: var(--drawer-chip-size);
+    color: var(--text);
+}
+
+#info-drawer #drawer-plugins {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+#info-drawer .plugin-item {
+    padding-right: 0;
+}
+
+#info-drawer .bar {
+    width: 100%;
+    height: var(--drawer-bar-height);
+    border-radius: var(--drawer-bar-radius);
+    background: rgba(255, 255, 255, .08);
+    overflow: hidden;
+    margin-top: .35rem;
+}
+
+#info-drawer .bar > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--bar-green);
+    border-radius: inherit;
+    transition: width .6s ease, background .6s ease;
+    box-shadow: 0 0 6px rgba(255, 255, 255, .15);
+}
+
+#info-drawer .tab {
+    position: absolute;
+    top: var(--drawer-tab-top);
+    right: var(--drawer-tab-right);
+    transform: var(--drawer-tab-transform);
+    transform-origin: right center;
+    background: #111827;
+    color: var(--text);
+    border: 1px solid var(--drawer-border);
+    border-top: none;
+    border-radius: 0 0 .6rem .6rem;
+    padding: .45rem .8rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+    transition: background .25s ease, color .25s ease;
+}
+
+#info-drawer .tab:hover {
+    background: var(--accent);
+    color: #fff;
+}
+
+@keyframes drawer-loading-slide {
+    0% {
+        transform: translateX(-120%);
+    }
+    100% {
+        transform: translateX(320%);
+    }
+}
+
+@media (max-width: 720px) {
+    :root {
+        --drawer-w: 86vw;
+    }
+
+    #info-drawer {
+        transform: translateX(calc(-1 * (var(--drawer-w) - 0px)));
+    }
+
+    #info-drawer .tab {
+        right: var(--drawer-tab-right);
+    }
+}

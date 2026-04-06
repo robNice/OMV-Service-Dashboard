@@ -18,7 +18,7 @@
   - [Installation: Docker (recommended)](#installation-docker-recommended)
     - [Requirements](#requirements)
     - [Quick Start](#quick-start)
-  - [Installation: Standalone (advanced / untested)](#installation-standalone-advanced--untested)
+  - [Installation: Standalone](#installation-standalone)
     - [Requirements](#requirements-1)
     - [Steps (overview)](#steps-overview)
 - [Notes](#notes)
@@ -263,7 +263,7 @@ See [`example.docker-compose.yml`](./example.docker-compose.yml).
 
 The image can be found here: 
 
-`ghcr.io/robnice/omv-service-dashboard:latest`
+`ghcr.io/robnice/nas-portal:latest`
 
 
 1. If you want to prepare a custom configuration before first start, copy the example configuration:
@@ -296,7 +296,7 @@ Updates and rebuilds are safe at any time. Everything inside `/config` remains i
 
 ---
 
-### Installation: Standalone (advanced)
+### Installation: Standalone
 
 #### Requirements
 

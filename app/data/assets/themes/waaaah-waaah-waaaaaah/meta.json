@@ -1,0 +1,56 @@
+{
+  "id": "waaaah-waaah-waaaaaah",
+  "label": "Waaaah Waaah Waaaaaah",
+  "description": "Weathered wood panels, torn edges and dusty saloon styling with bullet-hole accents.",
+  "version": "1.2.0",
+  "settings": [
+    {
+      "id": "bullet-hole-count-min",
+      "group": "Bullet Holes",
+      "label": "Bullet hole count from",
+      "description": "Minimum number of bullet hole attempts per service card.",
+      "type": "number",
+      "default": 3
+    },
+    {
+      "id": "bullet-hole-count-max",
+      "group": "Bullet Holes",
+      "label": "Bullet hole count to",
+      "description": "Maximum number of bullet hole attempts per service card.",
+      "type": "number",
+      "default": 6
+    },
+    {
+      "id": "bullet-hole-chance-min",
+      "group": "Bullet Holes",
+      "label": "Bullet hole chance from",
+      "description": "Minimum chance in percent that a service card gets bullet holes.",
+      "type": "number",
+      "default": 100
+    },
+    {
+      "id": "bullet-hole-chance-max",
+      "group": "Bullet Holes",
+      "label": "Bullet hole chance to",
+      "description": "Maximum chance in percent that a service card gets bullet holes.",
+      "type": "number",
+      "default": 100
+    },
+    {
+      "id": "bullet-hole-size-min",
+      "group": "Bullet Holes",
+      "label": "Bullet hole size from",
+      "description": "Minimum bullet hole size in pixels.",
+      "type": "number",
+      "default": 4.8
+    },
+    {
+      "id": "bullet-hole-size-max",
+      "group": "Bullet Holes",
+      "label": "Bullet hole size to",
+      "description": "Maximum bullet hole size in pixels.",
+      "type": "number",
+      "default": 8.6
+    }
+  ]
+}

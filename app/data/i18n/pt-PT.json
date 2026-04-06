@@ -1,0 +1,149 @@
+{
+  "html": {
+    "lang": "pt-pt"
+  },
+  "label": {
+    "back": "Voltar",
+    "liveStats": "Estatísticas em tempo real",
+    "close": "Fechar",
+    "info": "Info",
+    "days": "Dias",
+    "hours_short": "h",
+    "storage": "Armazenamento (Discos)",
+    "temps": "Temperaturas",
+    "versions": "Versões",
+    "system": "Sistema",
+    "docker": "Contentores Docker",
+    "host": "Host",
+    "os": "SO",
+    "nas": "NAS",
+    "kernel": "Kernel",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "Tempo de funcionamento",
+    "hddAvg": "HDD Ø",
+    "chassis": "Chassis",
+    "cpuLoad": "Carga",
+    "plugins": "Extensões",
+    "ram": "RAM",
+    "ramSlot": "Ranhura de RAM",
+    "used": "Utilizado",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "Última atualização",
+    "now": "agora"
+  },
+  "tooltip": {
+    "infodrawer": "Abrir/fechar informações do sistema",
+    "systemLoad": "Média da carga do sistema: último minuto / últimos 5 minutos / últimos 15 minutos"
+  },
+  "docker": {
+    "status": {
+      "up": "Em funcionamento",
+      "created": "Criado"
+    }
+  },
+  "errors": {
+    "missingKey": "Tradução em falta: {key}",
+    "noDisksFound": "Nenhuma unidade detetada"
+  },
+  "log": {
+    "listening": "Service Dashboard a correr na porta"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  },
+  "admin": {
+    "logout": "Terminar sessão",
+    "title": "Admin",
+    "subtitle": "Gestão de configuração",
+    "services": {
+      "title": "Gerir secções e serviços",
+      "desc": "Gira secções, serviços e ligações no dashboard",
+      "addSection": "Adicionar secção",
+      "cardimage": "Imagem do cartão"
+    },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": "",
+        "count": "settings"
+      }
+    },
+    "config": {
+      "title": "Editar configuração",
+      "desc": "Gere as definições principais do dashboard e as opções de execução",
+      "sectionTitle": "Configuração geral",
+      "hint": "Estes valores afetam o comportamento global do dashboard. As alterações de porta só produzem efeito após reiniciar.",
+      "portHint": "Altere a porta apenas se souber exatamente o que está a fazer. Uma porta incorreta pode tornar o dashboard inacessível após o reinício e também pode exigir ajustes no proxy reverso, Docker ou firewall.",
+      "portConfirmTitle": "Confirmar alteração de porta",
+      "portConfirmBody": "Alterou a porta do dashboard. Esta altera��o s� ser� aplicada ap�s reiniciar. Se a nova porta estiver incorreta ou n�o estiver exposta, o dashboard pode deixar de estar acess�vel. Pretende continuar mesmo assim?",
+      "fields": {
+        "title": "Título do dashboard",
+        "defaultLang": "Idioma de fallback",
+        "infoDrawerRefreshInterval": "Intervalo de atualização do painel de informação (segundos)",
+        "port": "Porta"
+      }
+    },
+    "image": {
+      "resetToDefault": "Repor imagem padrão",
+      "deleteCustomImage": "Eliminar imagem personalizada",
+      "uploadError": "Falha no carregamento",
+      "sourceCustom": "personalizada",
+      "sourceAuto": "automática",
+      "sourceDefault": "predefinida"
+    },
+    "section": {
+      "toggle": "Expandir ou recolher",
+      "id": "ID da secção",
+      "title": "Nome da secção",
+      "delete": "Eliminar secção",
+      "addService": "Adicionar serviço",
+      "backgroundimage": "Imagem de fundo",
+      "cardimage": "Imagem do cartão"
+    },
+    "service": {
+      "id": "ID do serviço",
+      "title": "Nome do serviço",
+      "url": "URL do serviço",
+      "cardimage": "Imagem do cartão",
+      "delete": "Eliminar serviço"
+    },
+    "save": {
+      "label": "Guardar",
+      "saving": "a guardar…",
+      "saved": "guardado",
+      "error": "Falha ao guardar"
+    },
+    "password": {
+      "title": "Alterar palavra-passe",
+      "desc": "Altere aqui a sua palavra-passe de administrador.",
+      "new": "Nova palavra-passe",
+      "repeat": "Repetir palavra-passe",
+      "tooShort": "A palavra-passe deve ter pelo menos 8 caracteres.",
+      "mismatch": "As palavras-passe não coincidem."
+    },
+    "login": {
+      "title": "Início de sessão de administrador",
+      "passwordPlaceholder": "Palavra-passe",
+      "submit": "Entrar",
+      "invalid": "Palavra-passe incorreta."
+    }
+  }
+}

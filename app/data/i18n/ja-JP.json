@@ -1,0 +1,149 @@
+{
+  "html": {
+    "lang": "ja"
+  },
+  "label": {
+    "back": "戻る",
+    "liveStats": "ライブ統計",
+    "close": "閉じる",
+    "info": "情報",
+    "days": "日",
+    "hours_short": "時間",
+    "storage": "ストレージ（HDDs）",
+    "temps": "温度",
+    "versions": "バージョン",
+    "system": "システム",
+    "docker": "Docker コンテナ",
+    "host": "ホスト",
+    "os": "OS",
+    "nas": "NAS",
+    "kernel": "カーネル",
+    "cpu": "CPU",
+    "gpu": "GPU",
+    "uptime": "稼働時間",
+    "hddAvg": "HDD 平均",
+    "chassis": "シャーシ",
+    "cpuLoad": "負荷",
+    "plugins": "拡張機能",
+    "ram": "RAM",
+    "ramSlot": "RAM スロット",
+    "used": "使用中",
+    "gb": "GB"
+  },
+  "status": {
+    "updatedAt": "最終更新",
+    "now": "現在"
+  },
+  "tooltip": {
+    "infodrawer": "システム情報を開く／閉じる",
+    "systemLoad": "システム負荷の平均：直近1分／直近5分／直近15分"
+  },
+  "docker": {
+    "status": {
+      "up": "稼咍中",
+      "created": "作成済み"
+    }
+  },
+  "errors": {
+    "missingKey": "翻訳が見つかりません: {key}",
+    "noDisksFound": "ドライブが検出されませんでした"
+  },
+  "log": {
+    "listening": "Service Dashboard は次のポートで実行中"
+  },
+  "units": {
+    "byte": "B",
+    "kilobyte": "KB",
+    "megabyte": "MB",
+    "gigabyte": "GB",
+    "terabyte": "TB",
+    "petabyte": "PB"
+  },
+  "admin": {
+    "logout": "ログアウト",
+    "title": "管理",
+    "subtitle": "設定管理",
+    "services": {
+      "title": "セクションとサービスの管理",
+      "desc": "ダッシュボード上のセクション、サービス、リンクを管理します",
+      "addSection": "セクションを追加",
+      "cardimage": "カード画像"
+    },
+    "theme": {
+      "title": "Select theme",
+      "desc": "Choose the layout theme for the public dashboard",
+      "available": "Available themes",
+      "hint": "Themes affect the public dashboard only, not the admin area.",
+      "loading": "Loading themes...",
+      "current": "Current",
+      "version": "Version",
+      "empty": "No themes found",
+      "settings": {
+        "title": "Theme settings",
+        "empty": "This theme has no configurable settings.",
+        "reset": "Load defaults",
+        "noDescription": "",
+        "count": "settings"
+      }
+    },
+    "config": {
+      "title": "設定を編集",
+      "desc": "ダッシュボードの主要設定と実行時オプションを管理します",
+      "sectionTitle": "一般設定",
+      "hint": "これらの値はダッシュボード全体の動作に影響します。ポート変更は再起動後にのみ反映されます。",
+      "portHint": "ポートの変更は内容を正確に理解している場合にのみ行ってください。誤ったポートを設定すると、再起動後にダッシュボードへアクセスできなくなり、リバースプロキシ、Docker、またはファイアウォールの設定変更が必要になる場合があります。",
+      "portConfirmTitle": "ポート変更の確認",
+      "portConfirmBody": "ダッシュボードのポートを変更しました。この変更は再起動後に反映されます。新しいポートが誤っている、または公開されていない場合、ダッシュボードにアクセスできなくなる可能性があります。それでも続行しますか？",
+      "fields": {
+        "title": "ダッシュボードのタイトル",
+        "defaultLang": "フォールバック言語",
+        "infoDrawerRefreshInterval": "情報ドロワー更新間隔（秒）",
+        "port": "ポート"
+      }
+    },
+    "image": {
+      "resetToDefault": "標準画像に戻す",
+      "deleteCustomImage": "カスタム画像を削除",
+      "uploadError": "アップロードに失敗しました",
+      "sourceCustom": "カスタム",
+      "sourceAuto": "自動",
+      "sourceDefault": "既定"
+    },
+    "section": {
+      "toggle": "開閉",
+      "id": "セクションID",
+      "title": "セクション名",
+      "delete": "セクションを削除",
+      "addService": "サービスを追加",
+      "backgroundimage": "背景画像",
+      "cardimage": "カード画像"
+    },
+    "service": {
+      "id": "サービスID",
+      "title": "サービス名",
+      "url": "サービスURL",
+      "cardimage": "カード画像",
+      "delete": "サービスを削除"
+    },
+    "save": {
+      "label": "保存",
+      "saving": "保存中…",
+      "saved": "保存しました",
+      "error": "保存に失敗しました"
+    },
+    "password": {
+      "title": "パスワード変更",
+      "desc": "管理者パスワードを変更します。",
+      "new": "新しいパスワード",
+      "repeat": "パスワードを再入力",
+      "tooShort": "パスワードは8文字以上である必要があります。",
+      "mismatch": "パスワードが一致しません。"
+    },
+    "login": {
+      "title": "管理者ログイン",
+      "passwordPlaceholder": "パスワード",
+      "submit": "ログイン",
+      "invalid": "パスワードが正しくありません。"
+    }
+  }
+}
