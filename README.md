@@ -54,9 +54,11 @@ This themeable dashboard is also well suited as a permanently visible interface 
 > 
 > Throughout this document, categories are referred to as "sections" and the configured entries within them as "services".
 > 
-> Whenever `/config` is mentioned here, it refers to your personal configuration directory for this application. It is either mounted in `docker-compose.yml` or defined via the `OMV_SERVICE_DASHBOARD_CONFIG` environment variable.
+> All persistent changes made in the admin area are written to the user config directory.
 > 
-> The `/config` directory contains optional user overrides for the NAS Portal.
+> In Docker, this directory is `/config` inside the container and should usually be backed by a host volume mount.
+> 
+> In standalone mode, you should usually pass the config directory explicitly via `--config-dir`. `OMV_SERVICE_DASHBOARD_CONFIG` is only the fallback if no CLI parameter is provided.
 
 ---
 
@@ -269,7 +271,11 @@ cp -r config.example path-to-your-config-directory
 
 You do not have to copy the config file, because it is created automatically on first start if it does not exist.
 
-2. Map your config directory to `/config` in the compose file.
+2. Mount your host config directory to `/config` in the compose file.
+
+All persistent admin changes are written there.
+
+You normally do not need to set `OMV_SERVICE_DASHBOARD_CONFIG` in Docker, because `/config` is already the default config path inside the container.
 
 3. Start the container:
 
@@ -333,7 +339,8 @@ If neither CLI parameter nor environment variable is provided, the server starts
 
 - Runtime data is stored in `app/data` by default.
 - User configuration is stored in `app/config` by default.
-- Docker mode can still use `/config` as before via volume mounts and environment variables.
+- All persistent admin changes are written to the selected config directory.
+- `OMV_SERVICE_DASHBOARD_CONFIG` is mainly useful for scripted or environment-based standalone setups.
 
 ---
 

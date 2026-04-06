@@ -1,4 +1,4 @@
-# NAS Portal
+# Robs NAS Portal
 
 ---
 
@@ -44,17 +44,24 @@
 
 ## Einfuehrung
 
-Wer kennt es nicht. Du hast deine NAS erfolgreich aufgebaut und sie um etliche extra Services ergänzt. Gleichzeitig liegen in deinem Netzwerk vielleicht noch weitere Dienste vor, die du allesamt über ein Webfrontend öffnen und verwalten kannst, und sie sind natürlich alle mit ihrer eigenen URL konfiguriert. Dieses Dashboard soll dir helfen, alle Dienste zu sammeln und kategorisiert aufzulisten.
+Wer kennt es nicht? Du hast deine NAS erfolgreich aufgebaut und sie um etliche extra Services ergänzt. Gleichzeitig liegen in deinem Netzwerk vielleicht noch weitere Dienste vor, die du allesamt über ein Webfrontend öffnen und verwalten kannst, und sie sind natürlich alle mit ihrer eigenen URL konfiguriert. Dieses Dashboard soll dir helfen, alle Dienste zu sammeln und kategorisiert aufzulisten.
 
 Zusätzlich bietet dir der integrierte Info-Drawer eine schnelle Übersicht über den Gesamtzustand deiner OMV-NAS.
 
 Dieses themebare Dashboard eignet sich auch sehr gut als dauerhaft sichtbares Interface auf Bildschirmen, wie es im Smart-Home-Umfeld häufig eingesetzt wird.
 
+Dieses Projekt wurde ursprünglich für meine mit [OpenMediaVault](https://www.openmediavault.org/) betriebene NAS entwickelt, bezog die Daten für den Info-Drawer über die zentrale API von OMV und trug damals noch den sperrigen Namen "OMV-Service-Dashboard".
+Mittlerweile greift der Service für System-, Speicher-, Temperatur- und Plattforminformationen nicht mehr auf die OMV-API zurück, sondern liest diese Daten direkt über Systemdateien und Standardwerkzeuge wie `lsblk`, `smartctl`, `dmidecode`, `docker` und weitere Host-Abfragen aus. Dadurch ist das Portal nicht mehr auf OMV beschränkt und läuft grundsätzlich auch auf anderen NAS- oder Linux-Plattformen, sofern die benötigten Systemwerkzeuge dort verfügbar sind.
+
 > **Hinweise**
 >
 > Die Kategorien werden hier nachfolgend als "Sektionen" und die darin konfigurierten Dienste als "Services" bezeichnet.
 >
-> Wenn hier `/config` erwähnt wird, ist damit dein persönliches Konfigurationsverzeichnis für diese Anwendung gemeint. Es wird entweder in der `docker-compose.yml` gemountet oder über die Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG` definiert.
+> Alle dauerhaft gespeicherten Änderungen aus dem Admin-Bereich werden in das Benutzer-Config-Verzeichnis geschrieben.
+>
+> Im Docker-Betrieb ist das innerhalb des Containers standardmäßig `/config` und sollte in der Regel per Host-Volume gemountet werden.
+>
+> Im Standalone-Betrieb solltest du das Config-Verzeichnis normalerweise explizit per `--config-dir` übergeben. `OMV_SERVICE_DASHBOARD_CONFIG` dient dort nur als Fallback, wenn kein CLI-Parameter gesetzt ist.
 
 
 
@@ -272,7 +279,11 @@ cp -r config.example path-to-your-config-directory
 
 Du musst die Konfigurationsdatei nicht zwingend kopieren, da sie beim ersten Start automatisch erstellt wird, falls sie noch nicht existiert.
 
-2. Mappe dein Config-Verzeichnis im Compose-File nach `/config`.
+2. Mappe dein Host-Config-Verzeichnis im Compose-File nach `/config`.
+
+Alle dauerhaft gespeicherten Änderungen aus dem Admin-Bereich landen dort.
+
+`OMV_SERVICE_DASHBOARD_CONFIG` musst du im Docker-Betrieb normalerweise nicht setzen, weil `/config` im Container bereits der Standardpfad ist.
 
 3. Starte den Container:
 
@@ -340,7 +351,8 @@ Wenn weder CLI-Parameter noch Umgebungsvariable gesetzt sind, startet der Server
 
 - Laufzeitdaten landen standardmäßig in `app/data`.
 - Benutzerkonfigurationen landen standardmäßig in `app/config`.
-- Im Docker-Betrieb kann wie bisher `/config` per Volume-Mount oder Umgebungsvariable genutzt werden.
+- Alle dauerhaft gespeicherten Änderungen aus dem Admin-Bereich werden in das gewählte Config-Verzeichnis geschrieben.
+- `OMV_SERVICE_DASHBOARD_CONFIG` ist vor allem für skriptgesteuerte oder umgebungsbasierte Standalone-Setups sinnvoll.
 
 ---
 
