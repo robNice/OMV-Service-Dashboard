@@ -76,5 +76,3 @@ jobs:
           tags: |
             ${{ steps.image.outputs.primary_name }}:${{ steps.version.outputs.version }}
             ${{ steps.version.outputs.is_prerelease == 'false' && format('{0}:latest', steps.image.outputs.primary_name) || '' }}
-            # ${{ steps.image.outputs.secondary_name }}:${{ steps.version.outputs.version }}
-            # ${{ steps.version.outputs.is_prerelease == 'false' && format('{0}:latest', steps.image.outputs.secondary_name) || '' }}
