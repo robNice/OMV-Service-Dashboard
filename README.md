@@ -1,4 +1,4 @@
-# OMV Service Dashboard
+# NAS Portal
 
 ---
 
@@ -56,7 +56,7 @@ This themeable dashboard is also well suited as a permanently visible interface 
 > 
 > Whenever `/config` is mentioned here, it refers to your personal configuration directory for this application. It is either mounted in `docker-compose.yml` or defined via the `OMV_SERVICE_DASHBOARD_CONFIG` environment variable.
 > 
-> The `/config` directory contains optional user overrides for the OMV Service Dashboard.
+> The `/config` directory contains optional user overrides for the NAS Portal.
 
 ---
 

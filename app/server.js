@@ -33,7 +33,7 @@ const fs = require("fs");
 const path = require("path");
 const pkg = require('./package.json');
 const APP_VERSION = pkg.version;
-const PROJECT_NAME = pkg.name || 'OMV-Service-Dashboard';
+const PROJECT_NAME = 'NAS Portal';
 const PROJECT_URL = 'https://github.com/robNice/OMV-Service-Dashboard';
 
 function initDefaultData() {

@@ -41,7 +41,7 @@
 
 Wann immer hier von `/config` die Rede ist, ist damit dein persönliches Konfigurationsverzeichnis für diese Anwendung gemeint. Es wird entweder in `docker-compose.yml` gemountet oder über die Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG` definiert.
 
-Das `/config`-Verzeichnis enthält optionale Benutzer-Overrides für das OMV Service Dashboard.
+Das `/config`-Verzeichnis enthält optionale Benutzer-Overrides für das NAS Portal.
 
 Die meisten Änderungen kannst du bequem über den Admin-Bereich der Anwendung vornehmen. Diese README ist vor allem dann relevant, wenn du Konfigurationen manuell bearbeiten, Übersetzungen ergänzen oder eigene Themes und Assets hinterlegen möchtest.
 
@@ -57,7 +57,7 @@ Dieses Verzeichnis ist für Konfiguration, Inhalte und unterstützte Frontend-Ov
 
 ## TL;DR fuer Docker-Nutzer
 
-Wenn du das OMV Service Dashboard über Docker betreibst, mounte dein persönliches Konfigurationsverzeichnis so:
+Wenn du das NAS Portal über Docker betreibst, mounte dein persönliches Konfigurationsverzeichnis so:
 
 ```yaml
 services:
@@ -115,7 +115,7 @@ Beispiel:
 
 ```json
 {
-  "title": "OMV Service Dashboard",
+  "title": "NAS Portal",
   "defaultLang": "en-GB",
   "theme": "classic",
   "infoDrawerRefreshInterval": 30,
