@@ -32,7 +32,9 @@
   },
   "status": {
     "updatedAt": "Letztes Update",
-    "now": "jetzt"
+    "now": "jetzt",
+    "loadingTitle": "Systemdaten werden geladen",
+    "loadingBody": "Der Info-Drawer füllt sich automatisch, sobald die erste Live-Status-Abfrage abgeschlossen ist."
   },
   "tooltip": {
     "infodrawer": "Systeminformationen öffnen/schließen",

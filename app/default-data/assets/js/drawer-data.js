@@ -2,6 +2,17 @@
     const $ = (sel) => document.querySelector(sel);
     const host = "/api/stats";
     let POLL_MS = 30000;
+    let hasLoadedOnce = false;
+
+    /**
+     * Toggle the initial loading hint for the drawer.
+     * @param visible
+     */
+    function setDrawerLoadingVisible(visible) {
+        const el = document.getElementById("drawer-loading");
+        if (!el) return;
+        el.classList.toggle("hidden", !visible);
+    }
 
     /**
      * Human readable file size.
@@ -241,6 +252,10 @@
         const res = await fetch(host, {cache: "no-store"});
         if (!res.ok) throw new Error(res.statusText);
         const s = await res.json();
+        if (!hasLoadedOnce) {
+            hasLoadedOnce = true;
+            setDrawerLoadingVisible(false);
+        }
         if( s.pollInterval && s.pollInterval > 0 ) {
             POLL_MS = s.pollInterval;
         }
