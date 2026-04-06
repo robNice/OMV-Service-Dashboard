@@ -96,6 +96,8 @@ const mime = require('mime-types');
 
 if (CONFIG_DIR_SOURCE === 'default') {
     console.log(`[startup] No config directory provided; using default: ${CONFIG_DIR}`);
+} else if (CONFIG_DIR_SOURCE === 'docker-default') {
+    console.log(`[startup] No config directory provided; using Docker default: ${CONFIG_DIR}`);
 } else if (CONFIG_DIR_SOURCE === 'cli') {
     console.log(`[startup] Using config directory from --config-dir: ${CONFIG_DIR}`);
 } else {

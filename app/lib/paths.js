@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 
 function readCliOption(name) {
@@ -15,24 +16,33 @@ function readCliOption(name) {
 }
 
 const cliConfigDir = readCliOption('--config-dir');
+const HAS_DOCKER_ENV = fs.existsSync('/.dockerenv');
+const DEFAULT_APP_DATA = HAS_DOCKER_ENV || fs.existsSync('/data')
+    ? '/data'
+    : path.join(path.resolve(__dirname, '..'), 'data');
+const DEFAULT_CONFIG_DIR = HAS_DOCKER_ENV || fs.existsSync('/config')
+    ? '/config'
+    : path.join(path.resolve(__dirname, '..'), 'config');
 const APP_CODE = process.env.OMV_SERVICE_DASHBOARD_APP
     ? path.resolve(process.env.OMV_SERVICE_DASHBOARD_APP)
     : path.resolve(__dirname, '..');
 const APP_DATA = process.env.OMV_SERVICE_DASHBOARD_DATA
     ? path.resolve(process.env.OMV_SERVICE_DASHBOARD_DATA)
-    : path.join(APP_CODE, 'data');
+    : DEFAULT_APP_DATA;
 const APP_DEFAULT_DATA = path.join(APP_CODE, 'default-data');
 const envConfigDir = process.env.OMV_SERVICE_DASHBOARD_CONFIG || null;
 const CONFIG_DIR = cliConfigDir
     ? path.resolve(cliConfigDir)
     : envConfigDir
         ? path.resolve(envConfigDir)
-        : path.join(APP_CODE, 'config');
+        : DEFAULT_CONFIG_DIR;
 const CONFIG_DIR_SOURCE = cliConfigDir
     ? 'cli'
     : envConfigDir
         ? 'env'
-        : 'default';
+        : DEFAULT_CONFIG_DIR === '/config'
+            ? 'docker-default'
+            : 'default';
 
 
 const USER_ASSETS = path.join(CONFIG_DIR, 'assets');
