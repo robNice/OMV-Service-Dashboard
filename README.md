@@ -50,6 +50,9 @@ In addition, the integrated info drawer gives you a quick overview of the overal
 
 This themeable dashboard is also well suited as a permanently visible interface on displays, as is often used in smart home environments.
 
+This project was originally built for my [OpenMediaVault](https://www.openmediavault.org/)-based NAS, pulled its info drawer data from the central OMV API, and used the more cumbersome name "OMV-Service-Dashboard".
+Today, the service no longer depends on the OMV API for system, storage, temperature, or platform information. Instead, it reads those details directly from system files and common host tools such as `lsblk`, `smartctl`, `dmidecode`, `docker`, and similar runtime probes. Because of that, the portal is no longer tied to OMV and can also run on other NAS or Linux platforms, as long as the required host tools are available.
+
 > **Notes**
 > 
 > Throughout this document, categories are referred to as "sections" and the configured entries within them as "services".
