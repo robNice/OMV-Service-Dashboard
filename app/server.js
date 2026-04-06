@@ -17,8 +17,8 @@ const express = require("express");
 const crypto = require("crypto");
 const SESSION_SECRET = crypto.randomBytes(32).toString("hex");
 const sessions = new Map();
-const {getServiceCardImages} = require("./lib/service-card-images");
 const {
+    getServiceCardImages,
     resolveSectionCardImage,
     resolveSectionBackgroundImage,
     resolveServiceCardImage,
@@ -59,7 +59,7 @@ const {getStats} = require("./server/stats");
 const {normalizeRamModules} = require('./lib/ramsize-util');
 const {initI18n} = require('./lib/i18n-config');
 initI18n({app});
-const {loadServices} = require("./lib/load-services");
+const {loadServices, saveServices} = require("./lib/services-store");
 const {getTheme, listThemes, normalizeTheme, sanitizeThemeSettings} = require('./lib/theme-registry');
 const {loadConfiguration, saveConfiguration} = require('./lib/load-config');
 const {getFreshStatsCache, writeStatsCache} = require('./lib/stats-cache');
@@ -91,20 +91,10 @@ const PORT =
 
 
 const mime = require('mime-types');
-const {saveServices} = require("./lib/save-services");
 
 function sendAsset(res, file) {
     res.type(mime.lookup(file) || 'application/octet-stream');
     fs.createReadStream(file).pipe(res);
-}
-
-/**
- * Load all data from disk and return it as a single object.
- * @returns {any}
- */
-function loadData() {
-    // const { loadServices } = require('./lib/load-services');
-    return loadServices();
 }
 
 function sessionMiddleware(req, res, next) {
@@ -191,15 +181,6 @@ function slugify(str) {
 function buildEtag(stat) {
     return `"${stat.size}-${stat.mtimeMs}"`;
 }
-
-/**
- * Load the configuration from disk and return it as a single object.
- * @returns {any}
- */
-// function loadConfig() {
-//     const { loadServices } = require('./lib/load-config');
-//     return loadConfiguration();
-// }
 
 /**
  *

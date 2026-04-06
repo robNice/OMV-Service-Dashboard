@@ -4,7 +4,7 @@ const {promisify} = require("util");
 const sh = promisify(exec);
 
 const {EXE_OPTS, hostCmd} = require("./host-runtime");
-const {readOMV} = require("./platform-info");
+const {readOMV} = require("./omv-info");
 
 function parseIniValue(text, key) {
     const match = String(text || "").match(new RegExp(`^${key}\\s*=\\s*(.+)$`, "mi"));

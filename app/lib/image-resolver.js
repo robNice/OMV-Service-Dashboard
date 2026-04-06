@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const {USER_ASSETS, APP_ASSETS} = require('./paths');
+const {USER_ASSETS, APP_ASSETS, CONFIG_DIR} = require('./paths');
 const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
 
 function fileExists(p) {
@@ -131,6 +131,33 @@ function resolveAppServiceCardImage(service) {
     });
 }
 
+function readDirSafe(dir) {
+    if (!fs.existsSync(dir)) return [];
+    return fs.readdirSync(dir)
+        .filter(file => {
+            const ext = file.split('.').pop().toLowerCase();
+            return IMAGE_EXTS.includes(ext);
+        });
+}
+
+function getServiceCardImages() {
+    const userDir = path.join(CONFIG_DIR, 'assets/cards/services');
+    const appDir = path.join(__dirname, '../data/assets/cards/services');
+    const userImages = readDirSafe(userDir);
+    const appImages = readDirSafe(appDir);
+    const images = new Map();
+
+    for (const image of appImages) {
+        images.set(image, image);
+    }
+
+    for (const image of userImages) {
+        images.set(image, image);
+    }
+
+    return Array.from(images.values()).sort();
+}
+
 
 module.exports = {
     resolveSectionCardImage,
@@ -140,6 +167,6 @@ module.exports = {
     resolveAppImage,
     resolveAppSectionCardImage,
     resolveAppSectionBackgroundImage,
-    resolveAppServiceCardImage
+    resolveAppServiceCardImage,
+    getServiceCardImages
 };
-
