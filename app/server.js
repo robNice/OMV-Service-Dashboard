@@ -764,7 +764,7 @@ app.get(
 
 
 app.get("/", (req, res) => {
-    const data = loadData();
+    const data = loadServices();
     const config = loadConfiguration();
     const initialStats = getFreshStatsCache(config.infoDrawerRefreshInterval);
 
@@ -790,7 +790,7 @@ app.get("/", (req, res) => {
 
 
 app.get("/section/:id", (req, res) => {
-    const data = loadData();
+    const data = loadServices();
     const config = loadConfiguration()
     const initialStats = getFreshStatsCache(config.infoDrawerRefreshInterval);
     const sections = data.sections.map(item => ({
