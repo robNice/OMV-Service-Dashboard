@@ -188,6 +188,12 @@ function buildEtag(stat) {
     return `"${stat.size}-${stat.mtimeMs}"`;
 }
 
+function isMutableImageAsset(relPath) {
+    return relPath.startsWith('backgrounds/')
+        || relPath.startsWith('cards/sections/')
+        || relPath.startsWith('cards/services/');
+}
+
 /**
  *
  * @param service
@@ -257,7 +263,9 @@ app.get('/assets/*', (req, res) => {
     }
     res.setHeader('ETag', etag);
 
-    if (file === CONFIG_DIR || file.startsWith(CONFIG_DIR + path.sep)) {
+    if (isMutableImageAsset(relPath)) {
+        res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    } else if (file === CONFIG_DIR || file.startsWith(CONFIG_DIR + path.sep)) {
         res.setHeader('Cache-Control', 'no-cache');
     } else {
         res.setHeader('Cache-Control', 'public, max-age=3600');
