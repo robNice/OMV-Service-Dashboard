@@ -35,7 +35,6 @@ const pkg = require('./package.json');
 const APP_VERSION = pkg.version;
 const PROJECT_NAME = pkg.name || 'OMV-Service-Dashboard';
 const PROJECT_URL = 'https://github.com/robNice/OMV-Service-Dashboard';
-const DEFAULT_OMV_RPC_PATH = "/usr/sbin/omv-rpc";
 
 function initDefaultData() {
     const source = '/app/default-data';
@@ -654,8 +653,6 @@ app.get("/admin/api/config", requireAdmin, (req, res) => {
         defaultLang: String(config.defaultLang || ""),
         availableLanguages,
         infoDrawerRefreshInterval: Number(config.infoDrawerRefreshInterval) || 0,
-        omvRpcPath: String(config.omvRpcPath || DEFAULT_OMV_RPC_PATH),
-        defaultOmvRpcPath: DEFAULT_OMV_RPC_PATH,
         port: Number(config.port) || PORT
     });
 });
@@ -664,7 +661,6 @@ app.post("/admin/api/config", requireAdmin, express.json(), (req, res) => {
     const payload = req.body || {};
     const nextTitle = String(payload.title || "").trim();
     const nextDefaultLang = normalizeTag(String(payload.defaultLang || "").trim());
-    const nextOmvRpcPath = String(payload.omvRpcPath || "").trim() || DEFAULT_OMV_RPC_PATH;
     const nextRefreshInterval = Number.parseInt(payload.infoDrawerRefreshInterval, 10);
     const nextPort = Number.parseInt(payload.port, 10);
     const availableLanguages = new Set(listAvailableAdminLocales());
@@ -691,7 +687,6 @@ app.post("/admin/api/config", requireAdmin, express.json(), (req, res) => {
     config.title = nextTitle;
     config.defaultLang = nextDefaultLang;
     config.infoDrawerRefreshInterval = nextRefreshInterval;
-    config.omvRpcPath = nextOmvRpcPath;
     config.port = nextPort;
     saveConfiguration(config);
 
@@ -702,7 +697,6 @@ app.post("/admin/api/config", requireAdmin, express.json(), (req, res) => {
             title: config.title,
             defaultLang: config.defaultLang,
             infoDrawerRefreshInterval: config.infoDrawerRefreshInterval,
-            omvRpcPath: config.omvRpcPath,
             port: config.port
         }
     });

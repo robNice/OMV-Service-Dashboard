@@ -90,7 +90,6 @@
       "desc": "Zarządzaj głównymi ustawieniami dashboardu i opcjami środowiska uruchomieniowego",
       "sectionTitle": "Konfiguracja ogólna",
       "hint": "Te wartości wpływają na globalne działanie dashboardu. Zmiany portu zaczną działać dopiero po restarcie.",
-      "useDefaultRpcPath": "Użyj domyślnej ścieżki RPC",
       "portHint": "Zmieniaj port tylko wtedy, gdy dokładnie wiesz, co robisz. Błędny port może spowodować, że po restarcie dashboard przestanie być dostępny, a także może wymagać zmian w reverse proxy, Dockerze lub zaporze sieciowej.",
       "portConfirmTitle": "Potwierdź zmianę portu",
       "portConfirmBody": "Zmieniono port dashboardu. Ta zmiana zacznie obowi�&zywa�! po restarcie. Je�:li nowy port jest b�\u001a�\"dny albo nie zosta�\u001a udost�\"pniony, dashboard mo|e przesta�! by�! osi�&galny. Czy mimo to kontynuowa�!?",
@@ -98,7 +97,6 @@
         "title": "Tytuł dashboardu",
         "defaultLang": "Język zapasowy",
         "infoDrawerRefreshInterval": "Interwał odświeżania panelu informacji (sekundy)",
-        "omvRpcPath": "Ścieżka OMV RPC",
         "port": "Port"
       }
     },

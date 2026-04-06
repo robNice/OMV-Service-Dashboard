@@ -90,7 +90,6 @@
       "desc": "Beheer de kerninstellingen van het dashboard en runtime-opties",
       "sectionTitle": "Algemene configuratie",
       "hint": "Deze waarden beïnvloeden het algemene gedrag van het dashboard. Poortwijzigingen worden pas na een herstart actief.",
-      "useDefaultRpcPath": "Standaard RPC-pad gebruiken",
       "portHint": "Wijzig de poort alleen als je precies weet wat je doet. Een verkeerde poort kan ervoor zorgen dat het dashboard na een herstart niet meer bereikbaar is en kan ook aanpassingen aan reverse proxy, Docker of firewall vereisen.",
       "portConfirmTitle": "Poortwijziging bevestigen",
       "portConfirmBody": "Je hebt de dashboardpoort gewijzigd. Deze wijziging wordt pas na een herstart actief. Als de nieuwe poort onjuist is of niet is vrijgegeven, is het dashboard mogelijk niet meer bereikbaar. Toch doorgaan?",
@@ -98,7 +97,6 @@
         "title": "Dashboardtitel",
         "defaultLang": "Terugvaltaal",
         "infoDrawerRefreshInterval": "Verversingsinterval infolade (seconden)",
-        "omvRpcPath": "OMV RPC-pad",
         "port": "Poort"
       }
     },

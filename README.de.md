@@ -140,7 +140,6 @@ Hier können die wichtigsten Konfigurationswerte bearbeitet werden, zum Beispiel
 - `Fallback-Sprache`: Standardsprache, wenn keine passende Locale gefunden wird
 - `Info-Drawer-Refresh-Intervall`: Aktualisierungsintervall des Info-Drawers in Sekunden
 - `Port`: Port, auf dem die Anwendung lauscht
-- `OMV-RPC-Pfad`: Pfad zur `omv-rpc`-Binary
 
 ---
 

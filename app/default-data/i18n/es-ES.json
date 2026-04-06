@@ -90,7 +90,6 @@
       "desc": "Gestiona los ajustes principales del dashboard y las opciones de tiempo de ejecución",
       "sectionTitle": "Configuración general",
       "hint": "Estos valores afectan al comportamiento global del dashboard. Los cambios de puerto solo surten efecto después de reiniciar.",
-      "useDefaultRpcPath": "Usar la ruta RPC predeterminada",
       "portHint": "Cambia el puerto solo si sabes exactamente lo que haces. Un puerto incorrecto puede hacer que el dashboard deje de estar accesible después de reiniciar y también puede requerir ajustes en el proxy inverso, Docker o el firewall.",
       "portConfirmTitle": "Confirmar cambio de puerto",
       "portConfirmBody": "Has cambiado el puerto del dashboard. Este cambio se aplicar� despu�s de reiniciar. Si el nuevo puerto es incorrecto o no est� expuesto, es posible que el dashboard deje de ser accesible. �Quieres continuar?",
@@ -98,7 +97,6 @@
         "title": "Título del dashboard",
         "defaultLang": "Idioma de reserva",
         "infoDrawerRefreshInterval": "Intervalo de actualización del panel de información (segundos)",
-        "omvRpcPath": "Ruta de OMV RPC",
         "port": "Puerto"
       }
     },

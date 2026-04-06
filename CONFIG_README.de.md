@@ -120,7 +120,6 @@ Beispiel:
   "theme": "classic",
   "infoDrawerRefreshInterval": 30,
   "port": 3000,
-  "omvRpcPath": "/usr/sbin/omv-rpc",
   "admin": {
     "passwordHash": "3a33aaf60a0f71503b9c399e414e6ab8:e472941cd72ddc6807c2e5cb1291250ecec8664c5d9f1b9453196d410e900f7d",
     "passwordInitialized": true
@@ -133,7 +132,6 @@ Beispiel:
 - `theme`: Aktives Theme für das öffentliche Dashboard
 - `infoDrawerRefreshInterval`: Aktualisierungsintervall des Info-Drawers in Sekunden
 - `port`: Port, auf dem die Anwendung lauscht
-- `omvRpcPath`: Pfad zur `omv-rpc`-Binary
 - `admin`: Admin-Passwortblock; wenn er wie im Beispiel gesetzt wird, wird das Admin-Passwort auf `dashboard` zurückgesetzt
 
 Wenn du das Admin-Passwort vergessen hast, kannst du den `admin`-Block in der `config.json` löschen und den Dienst anschließend neu starten. Beim nächsten Start wird das Admin-Passwort dann erneut auf das Default-Passwort `dashboard` gesetzt.

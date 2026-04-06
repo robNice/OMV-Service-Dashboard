@@ -119,7 +119,6 @@ Example:
   "theme": "classic",
   "infoDrawerRefreshInterval": 30,
   "port": 3000,
-  "omvRpcPath": "/usr/sbin/omv-rpc",
   "admin": {
     "passwordHash": "3a33aaf60a0f71503b9c399e414e6ab8:e472941cd72ddc6807c2e5cb1291250ecec8664c5d9f1b9453196d410e900f7d",
     "passwordInitialized": true
@@ -132,7 +131,6 @@ Example:
 - `theme`: Active public dashboard theme
 - `infoDrawerRefreshInterval`: Info drawer refresh interval in seconds
 - `port`: Port the application listens on
-- `omvRpcPath`: Path to the `omv-rpc` binary
 - `admin`: Admin password block; setting it to the default example resets the admin password to `dashboard`
 
 If you forgot the admin password, you can delete the `admin` block from `config.json` and then restart the service. On the next start, the admin password will be set back to the default password `dashboard`.
