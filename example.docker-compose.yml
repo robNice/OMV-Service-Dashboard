@@ -1,7 +1,7 @@
 services:
   dashboard:
-    image: ghcr.io/robnice/omv-service-dashboard:latest
-    container_name: omv-service-dashboard
+    image: ghcr.io/robnice/nas-portal:latest
+    container_name: nas-portal
     restart: unless-stopped
     pid: "host"
     privileged: true
