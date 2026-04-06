@@ -26,6 +26,8 @@ const {
     resolveAppSectionBackgroundImage,
     resolveAppServiceCardImage
 } = require('./lib/image-resolver');
+const {createAdminPagesRouter} = require("./routes/admin-pages");
+const {createAdminApiRouter} = require("./routes/admin-api");
 const TMP_DIR = "/data/tmp/assets/";
 // const TMP_SECTION_BG_DIR = TMP_DIR+"/data/tmp/assets/backgrounds/";
 
@@ -216,426 +218,6 @@ app.get("/api/stats", async (req, res) => {
     }
 });
 
-app.get("/admin/login", (req, res) => {
-    if (req.session?.isAdmin) {
-        return res.redirect("/admin");
-    }
-
-    const tpl = fs.readFileSync(
-        "/app/templates/admin-login.html",
-        "utf8"
-    );
-
-    const html = renderAdminTemplate(
-        req,
-        tpl.replace("{{MESSAGE}}", ""),
-        {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL}
-    );
-
-    res.send(html);
-});
-app.post(
-    "/admin/login",
-    express.urlencoded({extended: false}),
-    (req, res) => {
-
-        const {password} = req.body;
-        const config = loadConfiguration();
-
-        if (!verifyPassword(password, config.admin.passwordHash)) {
-            const tpl = fs.readFileSync(
-                "/app/templates/admin-login.html",
-                "utf8"
-            );
-
-            const html = renderAdminTemplate(
-                req,
-                tpl.replace(
-                    "{{MESSAGE}}",
-                    '<div class="error">{{__.admin.login.invalid}}</div>'
-                ),
-                {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL}
-            );
-
-            return res.status(401).send(html);
-        }
-
-        const sid = crypto.randomBytes(16).toString("hex");
-        sessions.set(sid, {isAdmin: true});
-
-        res.setHeader(
-            "Set-Cookie",
-            `omv_session=${sid}; HttpOnly; SameSite=Lax`
-        );
-
-        res.redirect("/admin");
-    }
-);
-
-
-app.get("/admin/logout", (req, res) => {
-    const cookie = req.headers.cookie
-        ?.split("; ")
-        .find(c => c.startsWith("omv_session="));
-
-    if (cookie) {
-        const sid = cookie.split("=")[1];
-        sessions.delete(sid);
-    }
-
-    res.setHeader(
-        "Set-Cookie",
-        "omv_session=; Max-Age=0"
-    );
-
-    res.redirect("/admin/login");
-});
-
-
-app.get("/admin", requireAdmin, (req, res) => {
-    const tpl = fs.readFileSync(
-        "/app/templates/admin-index.html",
-        "utf8"
-    );
-
-    const html = renderAdminTemplate(req, tpl, {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
-
-    res.send(html);
-});
-
-
-app.get("/admin/setpassword", requireAdmin, (req, res) => {
-    const tpl = fs.readFileSync(
-        "/app/templates/admin-setpassword.html",
-        "utf8"
-    );
-
-    const html = renderAdminTemplate(req, tpl, {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
-
-    res.send(html);
-});
-
-app.get("/admin/theme", requireAdmin, (req, res) => {
-    const tpl = fs.readFileSync(
-        "/app/templates/admin-theme.html",
-        "utf8"
-    );
-
-    const config = loadConfiguration();
-    const html = renderThemeAdminTemplate(req, tpl, normalizeTheme(config.theme), {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
-
-    res.send(html);
-});
-
-app.get("/admin/config", requireAdmin, (req, res) => {
-    const tpl = fs.readFileSync(
-        "/app/templates/admin-config.html",
-        "utf8"
-    );
-
-    const html = renderAdminTemplate(req, tpl, {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
-
-    res.send(html);
-});
-
-
-app.post("/admin/setpassword", requireAdmin, express.urlencoded({extended: false}), (req, res) => {
-    const {password, passwordRepeat} = req.body;
-
-    if (password !== passwordRepeat || password.length < 8) {
-        return res.status(400).json({error: "invalid_password"});
-    }
-
-    const config = loadConfiguration();
-    config.admin.passwordHash = hashPassword(password);
-    config.admin.passwordInitialized = false;
-    saveConfiguration(config);
-
-    res.redirect("/admin");
-});
-
-app.get("/admin/services", requireAdmin, (req, res) => {
-    const tpl = fs.readFileSync(
-        "/app/templates/admin-services.html",
-        "utf8"
-    );
-
-    const html = renderAdminTemplate(req, tpl, {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
-
-    res.send(html);
-});
-
-app.get("/admin/api/service-card-images", requireAdmin, (req, res) => {
-    res.json({
-        images: getServiceCardImages()
-    });
-});
-
-app.get("/admin/api/themes", requireAdmin, (req, res) => {
-    const config = loadConfiguration();
-    res.set("Cache-Control", "no-store");
-    res.json({
-        currentTheme: normalizeTheme(config.theme),
-        themeSettings: config.themeSettings || {},
-        themes: listThemes()
-    });
-});
-
-app.post("/admin/api/theme", requireAdmin, express.json(), (req, res) => {
-    const theme = normalizeTheme(req.body?.theme);
-    const config = loadConfiguration();
-    const themeDefinition = getTheme(theme);
-
-    config.theme = theme;
-    config.themeSettings = {
-        ...(config.themeSettings || {}),
-        [theme]: sanitizeThemeSettings(themeDefinition, req.body?.settings)
-    };
-    saveConfiguration(config);
-    res.json({
-        ok: true,
-        theme,
-        settings: config.themeSettings[theme]
-    });
-});
-
-app.get("/admin/api/config", requireAdmin, (req, res) => {
-    const config = loadConfiguration();
-    const availableLanguages = listAvailableAdminLocales();
-    res.json({
-        title: String(config.title || ""),
-        defaultLang: String(config.defaultLang || ""),
-        availableLanguages,
-        infoDrawerRefreshInterval: Number(config.infoDrawerRefreshInterval) || 0,
-        port: Number(config.port) || PORT
-    });
-});
-
-app.post("/admin/api/config", requireAdmin, express.json(), (req, res) => {
-    const payload = req.body || {};
-    const nextTitle = String(payload.title || "").trim();
-    const nextDefaultLang = normalizeTag(String(payload.defaultLang || "").trim());
-    const nextRefreshInterval = Number.parseInt(payload.infoDrawerRefreshInterval, 10);
-    const nextPort = Number.parseInt(payload.port, 10);
-    const availableLanguages = new Set(listAvailableAdminLocales());
-
-    if (!nextTitle) {
-        return res.status(400).json({ error: "invalid_title" });
-    }
-
-    if (!nextDefaultLang || !availableLanguages.has(nextDefaultLang)) {
-        return res.status(400).json({ error: "invalid_default_lang" });
-    }
-
-    if (!Number.isFinite(nextRefreshInterval) || nextRefreshInterval <= 0) {
-        return res.status(400).json({ error: "invalid_info_drawer_refresh_interval" });
-    }
-
-    if (!Number.isFinite(nextPort) || nextPort < 1 || nextPort > 65535) {
-        return res.status(400).json({ error: "invalid_port" });
-    }
-
-    const config = loadConfiguration();
-    const previousPort = Number(config.port) || PORT;
-
-    config.title = nextTitle;
-    config.defaultLang = nextDefaultLang;
-    config.infoDrawerRefreshInterval = nextRefreshInterval;
-    config.port = nextPort;
-    saveConfiguration(config);
-
-    res.json({
-        ok: true,
-        portChanged: previousPort !== nextPort,
-        config: {
-            title: config.title,
-            defaultLang: config.defaultLang,
-            infoDrawerRefreshInterval: config.infoDrawerRefreshInterval,
-            port: config.port
-        }
-    });
-});
-
-app.get("/admin/api/services", requireAdmin, (req, res) => {
-    const data = loadServices();
-    let needsMigration = false;
-    const enriched = {
-        sections: data.sections.map(section => {
-
-            const card = resolveSectionCardImage(section);
-            const cardAbsPath = path.join(CONFIG_DIR, 'assets/cards/sections', card.resolvedFile);
-            const appDefault = resolveAppSectionCardImage(section);
-
-            const bg = resolveSectionBackgroundImage(section);
-            const bgAbsPath = path.join(CONFIG_DIR, 'assets/backgrounds', bg.resolvedFile);
-            const bgAppDefault = resolveAppSectionBackgroundImage(section);
-
-            return {
-                ...section,
-                cardImage: withVersion(card, cardAbsPath),
-                cardImageDefault: appDefault.src,
-                backgroundImage: withVersion(bg, bgAbsPath),
-                backgroundImageDefault: bgAppDefault.src,
-
-
-                services: Object.fromEntries(
-                    Object.entries(section.services || {}).map(([id, service]) => {
-                        if (service.logo) {
-                            needsMigration = true;
-                        }
-                        const svcCard = resolveServiceCardImage({...service, id});
-                        const svcAbsPath = svcCard.resolvedFile
-                            ? path.join(CONFIG_DIR, 'assets/cards/services', svcCard.resolvedFile)
-                            : null;
-                        const svcAppDefault = resolveAppServiceCardImage({id});
-                        return [
-                            id,
-                            {
-                                ...service,
-                                id,
-                                cardImage: withVersion(svcCard, svcAbsPath),
-                                serviceCardImageDefault: svcAppDefault.src
-                            }
-                        ];
-                    })
-                )
-            };
-        })
-    };
-
-    // res.json(enriched);
-    res.json({
-        sections: enriched.sections,
-        needsMigration
-    });
-});
-
-
-app.post(
-    "/admin/api/services",
-    requireAdmin,
-    express.json(),
-    (req, res) => {
-        const data = req.body;
-
-        if (!data || !Array.isArray(data.sections)) {
-            return res.status(400).json({error: "invalid_format"});
-        }
-
-        for (const section of data.sections) {
-
-            commitImage({
-                image: section.cardImage,
-                uploadDir: path.join(TMP_DIR, "cards/sections"),
-                targetDir: path.join(CONFIG_DIR, "assets/cards/sections"),
-                targetBaseName: section.id
-            });
-
-            commitImage({
-                image: section.backgroundImage,
-                uploadDir: path.join(TMP_DIR, "backgrounds"),
-                targetDir: path.join(CONFIG_DIR, "assets/backgrounds"),
-                targetBaseName: section.id
-            });
-        }
-
-        const normalized = {
-            sections: data.sections.map(sec => {
-
-                const services = {};
-                const serviceOrder = [];
-
-                for (const serviceId of sec.serviceOrder || []) {
-                    const svc = sec.services?.[serviceId];
-                    if (!svc) continue;
-
-                    let finalId = serviceId;
-
-                    if (svc.logo && !serviceId.startsWith("tmp-")) {
-                        finalId = slugify(
-                            path.basename(svc.logo, path.extname(svc.logo))
-                        );
-                    }
-
-                    if (serviceId.startsWith("tmp-")) {
-                        finalId = slugify(svc.title);
-
-                        let i = 1;
-                        const base = finalId;
-                        while (services[finalId]) {
-                            finalId = `${base}-${i++}`;
-                        }
-                    }
-
-                    services[finalId] = {
-                        title: String(svc.title || "").trim(),
-                        url: String(svc.url || "").trim(),
-                        cardImage: svc.cardImage || null
-                    };
-
-                    serviceOrder.push(finalId);
-                }
-
-                return {
-                    id: String(sec.id || "").trim(),
-                    title: String(sec.title || "").trim(),
-                    services,
-                    serviceOrder
-                };
-            })
-        };
-
-
-        const oldData = loadServices();
-        cleanupDeletedEntityImages({
-            oldSections: oldData.sections,
-            newSections: normalized.sections,
-            getIds: sec => Object.keys(sec.services || {}),
-            imageDir: path.join(CONFIG_DIR, "assets/cards/services")
-        });
-
-        cleanupDeletedEntityImages({
-            oldSections: oldData.sections,
-            newSections: normalized.sections,
-            getIds: sec => [sec.id],
-            imageDir: path.join(CONFIG_DIR, "assets/cards/sections")
-        });
-
-        cleanupDeletedEntityImages({
-            oldSections: oldData.sections,
-            newSections: normalized.sections,
-            getIds: sec => [sec.id],
-            imageDir: path.join(CONFIG_DIR, "assets/backgrounds")
-        });
-
-
-        for (const section of normalized.sections) {
-            for (const serviceId of section.serviceOrder || []) {
-                const svc = section.services[serviceId];
-                // if (!svc?.cardImage) continue;
-
-                commitImage({
-                    image: svc.cardImage,
-                    uploadDir: path.join(TMP_DIR, "cards/services"),
-                    targetDir: path.join(CONFIG_DIR, "assets/cards/services"),
-                    targetBaseName: serviceId
-                });
-            }
-        }
-
-
-        for (const section of normalized.sections) {
-            for (const svc of Object.values(section.services)) {
-                delete svc.cardImage;
-            }
-        }
-        saveServices(normalized);
-
-        res.json({ok: true});
-    }
-);
-
-
 app.get('/assets/*', (req, res) => {
 
     const relPath = req.params[0];
@@ -680,87 +262,54 @@ app.get('/assets/*', (req, res) => {
 });
 
 
-app.post(
-    "/admin/api/upload/:kind",
+app.use("/admin", createAdminPagesRouter({
+    sessions,
     requireAdmin,
-    (req, res) => {
+    verifyPassword,
+    hashPassword,
+    loadConfiguration,
+    saveConfiguration,
+    renderAdminTemplate,
+    renderThemeAdminTemplate,
+    normalizeTheme,
+    loadTemplate,
+    projectName: PROJECT_NAME,
+    projectUrl: PROJECT_URL,
+    appVersion: APP_VERSION,
+    crypto
+}));
 
-        const kind = req.params.kind;
-        const cfg = UPLOAD_MAP[kind];
-
-        if (!cfg) {
-            return res.status(400).json({error: "invalid_upload_type"});
-        }
-
-        ensureTmpDirs(TMP_DIR, UPLOAD_MAP);
-
-        if (!req.headers["content-type"]?.startsWith("multipart/form-data")) {
-            return res.status(400).json({error: "invalid_content_type"});
-        }
-
-        let buffer = Buffer.alloc(0);
-
-        req.on("data", chunk => {
-            buffer = Buffer.concat([buffer, chunk]);
-        });
-
-        req.on("end", () => {
-            const match = buffer.toString("binary").match(/filename="([^"]+)"/);
-            if (!match) {
-                return res.status(400).json({error: "no_file"});
-            }
-
-            const filename = match[1];
-            if (!isImage(filename)) {
-                return res.status(400).json({error: "invalid_filetype"});
-            }
-
-            const ext = path.extname(filename);
-            const uploadId = cfg.prefix + crypto.randomBytes(6).toString("hex");
-
-            const target = path.join(
-                TMP_DIR,
-                cfg.tmpSubDir,
-                uploadId + ext
-            );
-
-            const fileStart = buffer.indexOf("\r\n\r\n") + 4;
-            const fileEnd = buffer.lastIndexOf("\r\n------");
-
-            fs.writeFileSync(target, buffer.slice(fileStart, fileEnd));
-
-            res.json({
-                uploadId,
-                filename,
-                previewUrl: `/admin/api/tmp/${kind}/${uploadId}${ext}`
-            });
-        });
-    }
-);
-
-
-app.get(
-    "/admin/api/tmp/:kind/:file",
+app.use("/admin/api", createAdminApiRouter({
     requireAdmin,
-    (req, res) => {
-
-        const {kind, file} = req.params;
-        const cfg = UPLOAD_MAP[kind];
-
-        if (!cfg) {
-            return res.status(400).end();
-        }
-
-        const p = path.join(TMP_DIR, cfg.tmpSubDir, file);
-
-        if (!fs.existsSync(p)) {
-            return res.status(404).end();
-        }
-
-        res.setHeader("Cache-Control", "no-store");
-        sendAsset(res, p);
-    }
-);
+    loadConfiguration,
+    saveConfiguration,
+    listAvailableAdminLocales,
+    normalizeTag,
+    normalizeTheme,
+    sanitizeThemeSettings,
+    getTheme,
+    listThemes,
+    getServiceCardImages,
+    loadServices,
+    saveServices,
+    resolveSectionCardImage,
+    resolveSectionBackgroundImage,
+    resolveServiceCardImage,
+    resolveAppSectionCardImage,
+    resolveAppSectionBackgroundImage,
+    resolveAppServiceCardImage,
+    withVersion,
+    ensureTmpDirs,
+    isImage,
+    cleanupDeletedEntityImages,
+    commitImage,
+    uploadMap: UPLOAD_MAP,
+    tmpDir: TMP_DIR,
+    configDir: CONFIG_DIR,
+    slugify,
+    crypto,
+    port: PORT
+}));
 
 
 app.get("/", (req, res) => {
