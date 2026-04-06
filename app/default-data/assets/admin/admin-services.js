@@ -43,6 +43,7 @@ function applyImagePreview(previewEl, image) {
         const LABELS = {
             explicit: I18N.imageSourceCustom || 'custom',
             id:       I18N.imageSourceAuto || 'auto',
+            app:      I18N.imageSourceDefault || 'default',
             default:  I18N.imageSourceDefault || 'default'
         };
 

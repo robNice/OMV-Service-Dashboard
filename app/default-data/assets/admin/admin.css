@@ -567,44 +567,57 @@ header.admin-header h1 {
 
 .section {
     margin-bottom: 2rem;
-    padding: 1.25rem;
-    background: linear-gradient(180deg, #020617, #020617cc);
-    border-radius: 10px;
-    border: 1px solid #1e293b;
+    padding: 1.3rem;
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.97));
+    border-radius: 14px;
+    border: 1px solid rgba(71, 85, 105, 0.85);
+    box-shadow: inset 0 1px 0 rgba(148, 163, 184, 0.06);
 }
 
 
 .section-header {
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #1e293b;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.32);
     display: grid;
-    grid-template-columns: auto 1fr 1fr auto;
-    grid-auto-rows: auto;
-    gap: 0.75rem 1rem;
+    grid-template-columns: auto minmax(180px, 0.95fr) minmax(220px, 1.2fr) minmax(360px, 1.4fr) auto;
+    gap: 0.9rem 1rem;
     align-items: start;
 }
 
-.section-header > .image-field {
-    margin-top: 0.5rem;
-    grid-column: 2 / span 2;
+.section-field {
+    min-width: 0;
+}
+
+.section-media-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.section-delete {
+    width: auto;
+    min-width: 7.5rem;
+    align-self: stretch;
 }
 
 .section-services {
-    margin-top: 1rem;
-    margin-left: 1.25rem;
-    padding: 10px 0 10px 1rem;
-    border-left: 2px dashed #1e293b;
+    margin-top: 0.5rem;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px dashed rgba(96, 165, 250, 0.26);
+    background: rgba(2, 6, 23, 0.55);
 }
 .image-field {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 6px 10px;
     align-items: center;
-    background: rgba(2,6,23,0.4);
-    padding: 0.5rem;
+    background: rgba(2, 6, 23, 0.58);
+    padding: 0.65rem;
     border-radius: 8px;
-    border: 1px solid #1e293b;
+    border: 1px solid rgba(51, 65, 85, 0.95);
 }
 .image-field input[type="file"] {
     font-size: 0.75rem;
@@ -685,19 +698,28 @@ header.admin-header h1 {
 
 .service {
     display: grid;
-    grid-template-columns: 1fr 1.5fr 1fr auto;
-    gap: 0.75rem;
-    align-items: end;
-    padding: 0.75rem;
+    grid-template-columns: minmax(180px, 1fr) minmax(260px, 1.7fr) minmax(240px, 1.1fr) auto;
+    gap: 0.85rem;
+    align-items: start;
+    padding: 0.9rem;
     margin-bottom: 0.75rem;
-    background: #020617;
-    border: 1px solid #1e293b;
-    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.88);
+    border: 1px solid rgba(51, 65, 85, 0.9);
+    border-radius: 10px;
 }
 
-.service > .image-field {
-    margin-top: 0.5rem;
-    grid-column: 1 / -2;
+.service-field {
+    min-width: 0;
+}
+
+.service-image-field {
+    margin-top: 0;
+}
+
+.service-delete {
+    width: auto;
+    min-width: 6.5rem;
+    align-self: stretch;
 }
 .service:last-child {
     margin-bottom: 0;
@@ -933,6 +955,23 @@ button.primary:disabled {
 
     .theme-settings-head {
         flex-direction: column;
+    }
+
+    .section-header {
+        grid-template-columns: 1fr;
+    }
+
+    .section-media-row {
+        grid-template-columns: 1fr;
+    }
+
+    .service {
+        grid-template-columns: 1fr;
+    }
+
+    .section-delete,
+    .service-delete {
+        width: 100%;
     }
 }
 .image-badge {
