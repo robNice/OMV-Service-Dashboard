@@ -1,8 +1,0 @@
-{
-  "title": "NAS Portal",
-  "defaultLang": "en-gb",
-  "theme": "classic",
-  "themeSettings": {},
-  "infoDrawerRefreshInterval": 30,
-  "port"      : 3000
-}
