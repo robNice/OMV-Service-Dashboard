@@ -16,6 +16,7 @@
     "docker": "Docker コンテナ",
     "host": "ホスト",
     "os": "OS",
+    "nas": "NAS",
     "kernel": "カーネル",
     "cpu": "CPU",
     "gpu": "GPU",

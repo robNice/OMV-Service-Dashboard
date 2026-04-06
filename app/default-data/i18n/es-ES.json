@@ -16,6 +16,7 @@
     "docker": "Contenedores Docker",
     "host": "Host",
     "os": "SO",
+    "nas": "NAS",
     "kernel": "Kernel",
     "cpu": "CPU",
     "gpu": "GPU",
