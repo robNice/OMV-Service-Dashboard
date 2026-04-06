@@ -3,6 +3,8 @@
     <head>
         <script>
             window.OMV_VERSION = "{{VERSION}}";
+            window.OMV_INITIAL_STATS = {{INITIAL_STATS_JSON}};
+            window.OMV_HAS_INITIAL_STATS = {{HAS_INITIAL_STATS}};
             window.I18N_UNITS = {
                 B: "{{__.units.byte}}",
                 KB: "{{__.units.kilobyte}}",
@@ -52,12 +54,16 @@
                     <span class="chip" style="margin-left:auto">{{__.label.uptime}}: <span data-uptime>–</span></span>
                 </header>
 
-                <div class="content">
-                    <div id="drawer-loading" class="drawer-loading" aria-live="polite">
+                <div class="content loading" data-drawer-content>
+                    <div id="drawer-loading" class="drawer-loading" aria-live="polite"
+                         data-loading-title="{{__.status.loadingTitle}}"
+                         data-loading-body="{{__.status.loadingBody}}"
+                         data-refreshing-title="{{__.status.refreshingTitle}}"
+                         data-refreshing-body="{{__.status.refreshingBody}}">
                         <div class="drawer-loading-card">
                             <div class="drawer-loading-bar" aria-hidden="true"></div>
-                            <strong>{{__.status.loadingTitle}}</strong>
-                            <span>{{__.status.loadingBody}}</span>
+                            <strong data-loading-title-text>{{__.status.loadingTitle}}</strong>
+                            <span data-loading-body-text>{{__.status.loadingBody}}</span>
                         </div>
                     </div>
 

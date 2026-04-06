@@ -64,6 +64,7 @@ const {translateTextI18n} = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
 const {getTheme, listThemes, normalizeTheme, sanitizeThemeSettings} = require('./lib/theme-registry');
 const {loadConfiguration, saveConfiguration} = require('./lib/load-config');
+const {getFreshStatsCache, writeStatsCache} = require('./lib/stats-cache');
 const config = loadConfiguration();
 (async () => {
     await initAdminPassword(config);
@@ -286,7 +287,14 @@ function buildThemeSettingMarkup(themeId, config) {
  * @param cards
  * @returns {*}
  */
-function setTemplate(req, template, backlink, version, title, cards, sectionNav = "", theme = "classic", config = {}) {
+function serializeForInlineScript(value) {
+    return JSON.stringify(value)
+        .replace(/</g, '\\u003c')
+        .replace(/>/g, '\\u003e')
+        .replace(/&/g, '\\u0026');
+}
+
+function setTemplate(req, template, backlink, version, title, cards, sectionNav = "", theme = "classic", config = {}, initialStats = null) {
     const themeMarkup = buildThemeSettingMarkup(theme, config);
 
     return translateTextI18n(
@@ -300,6 +308,8 @@ function setTemplate(req, template, backlink, version, title, cards, sectionNav 
             .replace(/{{THEME_SETTINGS_BODY_ATTRS}}/g, themeMarkup.bodyAttrs)
             .replace(/{{THEME_SETTINGS_BODY_STYLE}}/g, themeMarkup.bodyStyle)
             .replace(/{{THEME_SETTINGS_JSON}}/g, themeMarkup.serializedSettings)
+            .replace(/{{INITIAL_STATS_JSON}}/g, serializeForInlineScript(initialStats))
+            .replace(/{{HAS_INITIAL_STATS}}/g, initialStats ? 'true' : 'false')
             .replace(/{{SECTIONS_SERVICES}}/g, cards),
         {locale: req.getLocale()}
     );
@@ -452,6 +462,7 @@ app.get("/api/stats", async (req, res) => {
     try {
 
         const data = await getStats();
+        writeStatsCache(data);
         const locale = req.getLocale ? req.getLocale() : 'en-GB';
         if (data.system && Array.isArray(data.system.ram)) {
             data.system.ram = normalizeRamModules(data.system.ram, {locale});
@@ -1012,6 +1023,7 @@ app.get(
 app.get("/", (req, res) => {
     const data = loadData();
     const config = loadConfiguration();
+    const initialStats = getFreshStatsCache(config.infoDrawerRefreshInterval);
 
     const sections = data.sections.map(section => ({
         ...section,
@@ -1028,7 +1040,8 @@ app.get("/", (req, res) => {
         sections,
         '',
         config.theme,
-        config
+        config,
+        initialStats
     );
 
     res.send(html);
@@ -1038,6 +1051,7 @@ app.get("/", (req, res) => {
 app.get("/section/:id", (req, res) => {
     const data = loadData();
     const config = loadConfiguration()
+    const initialStats = getFreshStatsCache(config.infoDrawerRefreshInterval);
     const sections = data.sections.map(item => ({
         ...item,
         cardImage: resolveSectionCardImage(item),
@@ -1067,7 +1081,8 @@ app.get("/section/:id", (req, res) => {
         services,
         sectionNav,
         config.theme,
-        config
+        config,
+        initialStats
     );
     res.send(html);
 });

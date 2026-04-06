@@ -3,15 +3,34 @@
     const host = "/api/stats";
     let POLL_MS = 30000;
     let hasLoadedOnce = false;
+    const initialStats = window.OMV_HAS_INITIAL_STATS ? window.OMV_INITIAL_STATS : null;
 
     /**
      * Toggle the initial loading hint for the drawer.
      * @param visible
+     * @param mode
      */
-    function setDrawerLoadingVisible(visible) {
+    function setDrawerLoadingVisible(visible, mode = "loading") {
         const el = document.getElementById("drawer-loading");
         if (!el) return;
         el.classList.toggle("hidden", !visible);
+
+        const title = el.querySelector("[data-loading-title-text]");
+        const body = el.querySelector("[data-loading-body-text]");
+        const titleKey = mode === "refreshing" ? "refreshingTitle" : "loadingTitle";
+        const bodyKey = mode === "refreshing" ? "refreshingBody" : "loadingBody";
+
+        if (title) {
+            title.textContent = el.dataset[titleKey] || "";
+        }
+        if (body) {
+            body.textContent = el.dataset[bodyKey] || "";
+        }
+
+        const content = document.querySelector("[data-drawer-content]");
+        if (content) {
+            content.classList.toggle("loading", visible && mode !== "refreshing");
+        }
     }
 
     /**
@@ -245,17 +264,10 @@
     }
 
     /**
-     * Fetch and update the stats from the server.
-     * @returns {Promise<void>}
+     * Apply a stats payload to the drawer UI.
+     * @param s
      */
-    async function loadStats() {
-        const res = await fetch(host, {cache: "no-store"});
-        if (!res.ok) throw new Error(res.statusText);
-        const s = await res.json();
-        if (!hasLoadedOnce) {
-            hasLoadedOnce = true;
-            setDrawerLoadingVisible(false);
-        }
+    function applyStats(s) {
         if( s.pollInterval && s.pollInterval > 0 ) {
             POLL_MS = s.pollInterval;
         }
@@ -298,8 +310,7 @@
         if (s.uptime) setText("[data-uptime]", `${s.uptime.days} ` + window.I18N_LABELS.DAYS + ` ${s.uptime.hours} ` + window.I18N_LABELS.HOURS_SHORT);
         if (s.load) setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
 
-        if (s.system) setSystem(s.system)
-
+        if (s.system) setSystem(s.system);
 
         if (s.container) {
             setText("[data-omv-version]", s.container.omv || "–");
@@ -324,6 +335,21 @@
     }
 
     /**
+     * Fetch and update the stats from the server.
+     * @returns {Promise<void>}
+     */
+    async function loadStats() {
+        const res = await fetch(host, {cache: "no-store"});
+        if (!res.ok) throw new Error(res.statusText);
+        const s = await res.json();
+        if (!hasLoadedOnce) {
+            hasLoadedOnce = true;
+            setDrawerLoadingVisible(false);
+        }
+        applyStats(s);
+    }
+
+    /**
      * Start the stats fetch loop.
      * @returns {Promise<void>}
      */
@@ -334,6 +360,14 @@
             console.warn("stats fetch error", e);
         }
         setTimeout(loop, POLL_MS);
+    }
+
+    if (initialStats) {
+        applyStats(initialStats);
+        hasLoadedOnce = true;
+        setDrawerLoadingVisible(false);
+    } else {
+        setDrawerLoadingVisible(true, "loading");
     }
 
     loop();

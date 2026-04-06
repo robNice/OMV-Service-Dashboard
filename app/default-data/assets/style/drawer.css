@@ -130,6 +130,10 @@
     scrollbar-color: var(--drawer-scrollbar-thumb) transparent;
 }
 
+#info-drawer .content.loading > :not(#drawer-loading) {
+    display: none;
+}
+
 #info-drawer .drawer-loading {
     margin-bottom: 1rem;
 }

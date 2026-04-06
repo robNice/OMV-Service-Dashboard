@@ -34,7 +34,9 @@
     "updatedAt": "Letztes Update",
     "now": "jetzt",
     "loadingTitle": "Systemdaten werden geladen",
-    "loadingBody": "Der Info-Drawer füllt sich automatisch, sobald die erste Live-Status-Abfrage abgeschlossen ist."
+    "loadingBody": "Der Info-Drawer füllt sich automatisch, sobald die erste Live-Status-Abfrage abgeschlossen ist.",
+    "refreshingTitle": "Zwischengespeicherte Systemdaten werden angezeigt",
+    "refreshingBody": "Die angezeigten Werte stammen aus dem letzten serverseitigen Snapshot. Live-Daten werden im Hintergrund aktualisiert."
   },
   "tooltip": {
     "infodrawer": "Systeminformationen öffnen/schließen",

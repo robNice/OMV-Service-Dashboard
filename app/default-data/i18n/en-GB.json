@@ -34,7 +34,9 @@
     "updatedAt": "Last update",
     "now": "now",
     "loadingTitle": "System data is loading",
-    "loadingBody": "The info drawer will populate automatically as soon as the first live status request has completed."
+    "loadingBody": "The info drawer will populate automatically as soon as the first live status request has completed.",
+    "refreshingTitle": "Cached system data is shown",
+    "refreshingBody": "The displayed values come from the last server-side snapshot. Live data is being refreshed in the background."
   },
   "tooltip": {
     "infodrawer": "open/close system information",
