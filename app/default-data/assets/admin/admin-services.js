@@ -34,8 +34,7 @@ function applyImagePreview(previewEl, image) {
             : { source: 'default' };
     } else {
         if (img && image.src) {
-            const v = image.v ? `?v=${image.v}` : '';
-            img.src = image.src + v;
+            img.src = image.v ? `${image.src}?v=${image.v}` : image.src;
             img.title = image.resolvedFile || '';
         }
     }
@@ -130,7 +129,9 @@ function renderSection(section, sectionIndex) {
     if (cardPreview) {
         const img = cardPreview.querySelector('img');
         if (img) {
-            img.dataset.defaultimg = section.cardImageDefault || '';
+            img.dataset.defaultimg = section.cardImageDefault?.v
+                ? `${section.cardImageDefault.src}?v=${section.cardImageDefault.v}`
+                : (section.cardImageDefault?.src || '');
         }
     }
 
@@ -141,7 +142,9 @@ function renderSection(section, sectionIndex) {
     if (bgPreview) {
         const img = bgPreview.querySelector('img');
         if (img) {
-            img.dataset.defaultimg = section.backgroundImageDefault || '';
+            img.dataset.defaultimg = section.backgroundImageDefault?.v
+                ? `${section.backgroundImageDefault.src}?v=${section.backgroundImageDefault.v}`
+                : (section.backgroundImageDefault?.src || '');
         }
     }
 
@@ -330,7 +333,9 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
     if (preview) {
         const img = preview.querySelector('img');
         if (img) {
-            img.dataset.defaultimg = service.serviceCardImageDefault || '';
+            img.dataset.defaultimg = service.serviceCardImageDefault?.v
+                ? `${service.serviceCardImageDefault.src}?v=${service.serviceCardImageDefault.v}`
+                : (service.serviceCardImageDefault?.src || '');
         }
     }
     applyImagePreview(preview, service.cardImage);

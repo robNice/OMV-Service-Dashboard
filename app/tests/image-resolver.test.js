@@ -111,9 +111,10 @@ describe('image-resolver – entity images', () => {
 
         const result = resolver({ id: 'test-id' });
 
-        expect(result).toEqual({
+        expect(result).toMatchObject({
             src: `/assets/${baseDir}/_default`,
             resolvedFile: '_default.png',
+            resolvedPath: `/mock/app-assets/${baseDir}/_default.png`,
             source: 'default',
             isCustom: false
         });
@@ -153,9 +154,10 @@ describe('image-resolver – app images', () => {
             baseDir
         });
 
-        expect(result).toEqual({
+        expect(result).toMatchObject({
             src: `/assets/${baseDir}/test-id`,
             resolvedFile: 'test-id.png',
+            resolvedPath: `/mock/app-assets/${baseDir}/test-id.png`,
             source: 'app'
         });
     });
@@ -173,9 +175,10 @@ describe('image-resolver – app images', () => {
             baseDir
         });
 
-        expect(result).toEqual({
+        expect(result).toMatchObject({
             src: `/assets/${baseDir}/_default`,
             resolvedFile: '_default.png',
+            resolvedPath: `/mock/app-assets/${baseDir}/_default.png`,
             source: 'app'
         });
     });

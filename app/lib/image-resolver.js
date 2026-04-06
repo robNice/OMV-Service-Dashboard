@@ -40,6 +40,7 @@ function resolveEntityImage({
                 return {
                     src: buildAssetUrl(baseDir, file),
                     resolvedFile: file,
+                    resolvedPath: userPath,
                     source: 'id',
                     isCustom: true
                 };
@@ -53,6 +54,7 @@ function resolveEntityImage({
                 return {
                     src: buildAssetUrl(baseDir, file),
                     resolvedFile: file,
+                    resolvedPath: appPath,
                     source: 'app',
                     isCustom: false
                 };
@@ -60,9 +62,11 @@ function resolveEntityImage({
         }
     }
 
+    const defaultPath = path.join(APP_ASSETS, baseDir, defaultFile);
     return {
         src: buildAssetUrl(baseDir, defaultFile),
         resolvedFile: defaultFile,
+        resolvedPath: defaultPath,
         source: 'default',
         isCustom: false
     };
@@ -104,14 +108,17 @@ function resolveAppImage({id, baseDir, defaultFile = '_default.png'}) {
             return {
                 src: buildAssetUrl(baseDir, file),
                 resolvedFile: file,
+                resolvedPath: appPath,
                 source: 'app'
             };
         }
     }
 
+    const defaultPath = path.join(APP_ASSETS, baseDir, defaultFile);
     return {
         src: buildAssetUrl(baseDir, defaultFile),
         resolvedFile: defaultFile,
+        resolvedPath: defaultPath,
         source: 'app'
     };
 }

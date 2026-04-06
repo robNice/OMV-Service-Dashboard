@@ -114,7 +114,8 @@ function sessionMiddleware(req, res, next) {
     next();
 }
 
-function withVersion(image, absPath) {
+function withVersion(image) {
+    const absPath = image?.resolvedPath;
     if (!image || !absPath || !fs.existsSync(absPath)) return image;
 
     const stat = fs.statSync(absPath);
@@ -328,11 +329,12 @@ app.get("/", (req, res) => {
     const data = loadServices();
     const config = loadConfiguration();
     const initialStats = getFreshStatsCache(config.infoDrawerRefreshInterval);
+    const homeBackground = withVersion(resolveSectionBackgroundImage({id: '_home'}));
 
     const sections = data.sections.map(section => ({
         ...section,
-        cardImage: resolveSectionCardImage(section),
-        backgroundImage: resolveSectionBackgroundImage(section)
+        cardImage: withVersion(resolveSectionCardImage(section)),
+        backgroundImage: withVersion(resolveSectionBackgroundImage(section))
     })).map(renderSection).join("\n");
 
     const html = setTemplate(req, loadTemplate(), {
@@ -343,7 +345,8 @@ app.get("/", (req, res) => {
         sectionNav: '',
         theme: config.theme,
         config,
-        initialStats
+        initialStats,
+        backgroundUrl: homeBackground?.src ? `${homeBackground.src}?v=${homeBackground.v || 0}` : ''
     });
 
     res.send(html);
@@ -356,8 +359,8 @@ app.get("/section/:id", (req, res) => {
     const initialStats = getFreshStatsCache(config.infoDrawerRefreshInterval);
     const sections = data.sections.map(item => ({
         ...item,
-        cardImage: resolveSectionCardImage(item),
-        backgroundImage: resolveSectionBackgroundImage(item)
+        cardImage: withVersion(resolveSectionCardImage(item)),
+        backgroundImage: withVersion(resolveSectionBackgroundImage(item))
     }));
     const section = sections.find(s => s.id === req.params.id);
     if (!section) {
@@ -365,7 +368,11 @@ app.get("/section/:id", (req, res) => {
     }
     const services = Object.entries(section.services || {})
         .map(([id, service]) =>
-            renderService({...service, id})
+            renderService({
+                ...service,
+                id,
+                cardImage: withVersion(resolveServiceCardImage({...service, id}))
+            })
         )
         .join("\n");
     const sectionNav = `
@@ -382,7 +389,8 @@ app.get("/section/:id", (req, res) => {
         sectionNav,
         theme: config.theme,
         config,
-        initialStats
+        initialStats,
+        backgroundUrl: section.backgroundImage?.src ? `${section.backgroundImage.src}?v=${section.backgroundImage.v || 0}` : ''
     });
     res.send(html);
 });

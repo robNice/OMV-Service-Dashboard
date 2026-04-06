@@ -132,36 +132,31 @@ function createAdminApiRouter({
         const enriched = {
             sections: data.sections.map(section => {
                 const card = resolveSectionCardImage(section);
-                const cardAbsPath = path.join(configDir, 'assets/cards/sections', card.resolvedFile);
                 const appDefault = resolveAppSectionCardImage(section);
 
                 const bg = resolveSectionBackgroundImage(section);
-                const bgAbsPath = path.join(configDir, 'assets/backgrounds', bg.resolvedFile);
                 const bgAppDefault = resolveAppSectionBackgroundImage(section);
 
                 return {
                     ...section,
-                    cardImage: withVersion(card, cardAbsPath),
-                    cardImageDefault: appDefault.src,
-                    backgroundImage: withVersion(bg, bgAbsPath),
-                    backgroundImageDefault: bgAppDefault.src,
+                    cardImage: withVersion(card),
+                    cardImageDefault: withVersion(appDefault),
+                    backgroundImage: withVersion(bg),
+                    backgroundImageDefault: withVersion(bgAppDefault),
                     services: Object.fromEntries(
                         Object.entries(section.services || {}).map(([id, service]) => {
                             if (service.logo) {
                                 needsMigration = true;
                             }
                             const svcCard = resolveServiceCardImage({...service, id});
-                            const svcAbsPath = svcCard.resolvedFile
-                                ? path.join(configDir, 'assets/cards/services', svcCard.resolvedFile)
-                                : null;
                             const svcAppDefault = resolveAppServiceCardImage({id});
                             return [
                                 id,
                                 {
                                     ...service,
                                     id,
-                                    cardImage: withVersion(svcCard, svcAbsPath),
-                                    serviceCardImageDefault: svcAppDefault.src
+                                    cardImage: withVersion(svcCard),
+                                    serviceCardImageDefault: withVersion(svcAppDefault)
                                 }
                             ];
                         })

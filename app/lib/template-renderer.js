@@ -10,12 +10,17 @@ const {
     resolveServiceCardImage
 } = require("./image-resolver");
 
+function imageSrc(image) {
+    if (!image?.src) return '';
+    return image.v ? `${image.src}?v=${image.v}` : image.src;
+}
+
 function renderService(service) {
-    const card = resolveServiceCardImage(service);
+    const card = service.cardImage || resolveServiceCardImage(service);
     return `
     <div class="service">
       <a href="${service.url}" target="_blank">
-      <img src="${card.src}" alt="${service.title}" />
+      <img src="${imageSrc(card)}" alt="${service.title}" />
         <div class="service-title">${service.title}</div>
       </a>
     </div>`;
@@ -25,7 +30,7 @@ function renderSection(section) {
     return `
     <div class="service">
       <a href="/section/${encodeURIComponent(section.id)}">
-        <img src="${section.cardImage.src}" alt="${section.title}" />
+        <img src="${imageSrc(section.cardImage)}" alt="${section.title}" />
         <div class="service-title">${section.title}</div>
       </a>
     </div>`;
@@ -39,7 +44,7 @@ function renderSectionNavItem(section, isActive = false) {
       title="${section.title}"
       aria-label="${section.title}"
     >
-      <img src="${section.cardImage.src}" alt="${section.title}" />
+      <img src="${imageSrc(section.cardImage)}" alt="${section.title}" />
     </a>`;
 }
 
@@ -94,7 +99,8 @@ function setTemplate(req, template, {
     sectionNav = "",
     theme = "classic",
     config = {},
-    initialStats = null
+    initialStats = null,
+    backgroundUrl = ""
 }) {
     const themeMarkup = buildThemeSettingMarkup(theme, config);
 
@@ -109,6 +115,7 @@ function setTemplate(req, template, {
             .replace(/{{THEME_SETTINGS_BODY_ATTRS}}/g, themeMarkup.bodyAttrs)
             .replace(/{{THEME_SETTINGS_BODY_STYLE}}/g, themeMarkup.bodyStyle)
             .replace(/{{THEME_SETTINGS_JSON}}/g, themeMarkup.serializedSettings)
+            .replace(/{{BACKGROUND_URL}}/g, backgroundUrl)
             .replace(/{{INITIAL_STATS_JSON}}/g, serializeForInlineScript(initialStats))
             .replace(/{{HAS_INITIAL_STATS}}/g, initialStats ? "true" : "false")
             .replace(/{{SECTIONS_SERVICES}}/g, cards),
