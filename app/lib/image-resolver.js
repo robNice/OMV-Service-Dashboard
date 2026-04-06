@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const {USER_ASSETS, APP_ASSETS, CONFIG_DIR} = require('./paths');
-const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+const {IMAGE_EXTS} = require('./image-extensions');
 
 function fileExists(p) {
     try {
@@ -9,6 +9,12 @@ function fileExists(p) {
     } catch {
         return false;
     }
+}
+
+function buildAssetUrl(baseDir, file) {
+    const ext = path.extname(file);
+    const fileBase = ext ? path.basename(file, ext) : file;
+    return `/assets/${baseDir}/${fileBase}`;
 }
 
 function resolveEntityImage({
@@ -32,7 +38,7 @@ function resolveEntityImage({
             const userPath = path.join(USER_ASSETS, baseDir, file);
             if (fs.existsSync(userPath)) {
                 return {
-                    src: `/assets/${baseDir}/${file}`,
+                    src: buildAssetUrl(baseDir, file),
                     resolvedFile: file,
                     source: 'id',
                     isCustom: true
@@ -45,7 +51,7 @@ function resolveEntityImage({
             const appPath = path.join(APP_ASSETS, baseDir, file);
             if (fs.existsSync(appPath)) {
                 return {
-                    src: `/assets/${baseDir}/${file}`,
+                    src: buildAssetUrl(baseDir, file),
                     resolvedFile: file,
                     source: 'app',
                     isCustom: false
@@ -55,7 +61,7 @@ function resolveEntityImage({
     }
 
     return {
-        src: `/assets/${baseDir}/${defaultFile}`,
+        src: buildAssetUrl(baseDir, defaultFile),
         resolvedFile: defaultFile,
         source: 'default',
         isCustom: false
@@ -96,7 +102,7 @@ function resolveAppImage({id, baseDir, defaultFile = '_default.png'}) {
 
         if (fs.existsSync(appPath)) {
             return {
-                src: `/assets/${baseDir}/${file}`,
+                src: buildAssetUrl(baseDir, file),
                 resolvedFile: file,
                 source: 'app'
             };
@@ -104,7 +110,7 @@ function resolveAppImage({id, baseDir, defaultFile = '_default.png'}) {
     }
 
     return {
-        src: `/assets/${baseDir}/${defaultFile}`,
+        src: buildAssetUrl(baseDir, defaultFile),
         resolvedFile: defaultFile,
         source: 'app'
     };
