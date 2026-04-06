@@ -32,7 +32,9 @@
   },
   "status": {
     "updatedAt": "Last update",
-    "now": "now"
+    "now": "now",
+    "loadingTitle": "System data is loading",
+    "loadingBody": "The info drawer will populate automatically as soon as the first live status request has completed."
   },
   "tooltip": {
     "infodrawer": "open/close system information",
