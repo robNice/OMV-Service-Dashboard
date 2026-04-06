@@ -1,6 +1,6 @@
 {
   "name": "nas-portal",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "description": "NAS Portal for your NAS and adjacent LAN services. Shows links to home and homelab services, plus live system information. Built with Node.js and Express.js.",
   "main": "server.js",
   "license": "MIT",
