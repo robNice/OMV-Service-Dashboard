@@ -50,8 +50,7 @@ function initDefaultData() {
 
 initDefaultData();
 // initDataDir();
-const {APP_DATA, CONFIG_DIR} = require('./lib/paths');
-const { _internals: { normalizeTag } } = require('./lib/i18n-config');
+const {CONFIG_DIR} = require('./lib/paths');
 const {resolveAssetPath} = require('./lib/asset-resolver');
 const app = express();
 
@@ -60,11 +59,27 @@ const {getStats} = require("./server/stats");
 const {normalizeRamModules} = require('./lib/ramsize-util');
 const {initI18n} = require('./lib/i18n-config');
 initI18n({app});
-const {translateTextI18n} = require('./lib/i18n-util');
 const {loadServices} = require("./lib/load-services");
 const {getTheme, listThemes, normalizeTheme, sanitizeThemeSettings} = require('./lib/theme-registry');
 const {loadConfiguration, saveConfiguration} = require('./lib/load-config');
 const {getFreshStatsCache, writeStatsCache} = require('./lib/stats-cache');
+const {
+    renderService,
+    renderSection,
+    renderSectionNavItem,
+    setTemplate,
+    renderAdminTemplate,
+    renderThemeAdminTemplate,
+    listAvailableAdminLocales,
+    loadTemplate
+} = require('./lib/template-renderer');
+const {
+    ensureTmpDirs,
+    isImage,
+    cleanupDeletedEntityImages,
+    commitImage
+} = require('./lib/upload-utils');
+const { _internals: { normalizeTag } } = require('./lib/i18n-config');
 const config = loadConfiguration();
 (async () => {
     await initAdminPassword(config);
@@ -118,17 +133,6 @@ function withVersion(image, absPath) {
 }
 
 app.use(sessionMiddleware);
-
-function ensureTmpDirs() {
-    for (const cfg of Object.values(UPLOAD_MAP)) {
-        fs.mkdirSync(path.join(TMP_DIR, cfg.tmpSubDir), {recursive: true});
-    }
-}
-
-function isImage(filename) {
-    return /\.(png|jpe?g|gif|webp)$/i.test(filename);
-}
-
 
 function hashPassword(password) {
     const salt = crypto.randomBytes(16).toString("hex");
@@ -202,250 +206,6 @@ function buildEtag(stat) {
  * @param service
  * @returns {string}
  */
-function renderService(service) {
-    const card = resolveServiceCardImage(service);
-    return `
-    <div class="service">
-      <a href="${service.url}" target="_blank">
-      <img src="${card.src}" alt="${service.title}" />
-        <div class="service-title">${service.title}</div>
-      </a>
-    </div>`;
-}
-
-/**
- *
- * @param section
- * @returns {string}
- */
-function renderSection(section) {
-    return `
-    <div class="service">
-      <a href="/section/${encodeURIComponent(section.id)}">
-        <img src="${section.cardImage.src}" alt="${section.title}" />
-        <div class="service-title">${section.title}</div>
-      </a>
-    </div>`;
-}
-
-function renderSectionNavItem(section, isActive = false) {
-    return `
-    <a
-      class="section-nav-item${isActive ? " active" : ""}"
-      href="/section/${encodeURIComponent(section.id)}"
-      title="${section.title}"
-      aria-label="${section.title}"
-    >
-      <img src="${section.cardImage.src}" alt="${section.title}" />
-    </a>`;
-}
-
-function escapeHtml(value) {
-    return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
-function buildThemeSettings(themeId, config) {
-    const theme = getTheme(themeId);
-    return sanitizeThemeSettings(theme, config?.themeSettings?.[theme?.id]);
-}
-
-function buildThemeSettingMarkup(themeId, config) {
-    const settings = buildThemeSettings(themeId, config);
-    const attrs = [];
-    const cssVars = [];
-
-    for (const [id, value] of Object.entries(settings)) {
-        const attrValue = typeof value === 'boolean' ? String(value) : String(value);
-        attrs.push(`data-themesetting-${id}="${escapeHtml(attrValue)}"`);
-        cssVars.push(`--themesetting-${id}:${String(value)}`);
-    }
-
-    return {
-        settings,
-        bodyAttrs: attrs.join(' '),
-        bodyStyle: cssVars.join('; '),
-        serializedSettings: JSON.stringify(settings)
-            .replace(/</g, '\\u003c')
-            .replace(/>/g, '\\u003e')
-            .replace(/&/g, '\\u0026')
-    };
-}
-
-
-/**
- *
- * @param req
- * @param template
- * @param backlink
- * @param version
- * @param title
- * @param cards
- * @returns {*}
- */
-function serializeForInlineScript(value) {
-    return JSON.stringify(value)
-        .replace(/</g, '\\u003c')
-        .replace(/>/g, '\\u003e')
-        .replace(/&/g, '\\u0026');
-}
-
-function setTemplate(req, template, backlink, version, title, cards, sectionNav = "", theme = "classic", config = {}, initialStats = null) {
-    const themeMarkup = buildThemeSettingMarkup(theme, config);
-
-    return translateTextI18n(
-        template
-            .replace(/{{BACKLINK}}/g, backlink)
-            .replace(/{{VERSION}}/g, version)
-            .replace(/{{TITLE}}/g, title)
-            .replace(/{{SECTION_NAME}}/g, title)
-            .replace(/{{SECTION_NAV}}/g, sectionNav)
-            .replace(/{{THEME}}/g, theme)
-            .replace(/{{THEME_SETTINGS_BODY_ATTRS}}/g, themeMarkup.bodyAttrs)
-            .replace(/{{THEME_SETTINGS_BODY_STYLE}}/g, themeMarkup.bodyStyle)
-            .replace(/{{THEME_SETTINGS_JSON}}/g, themeMarkup.serializedSettings)
-            .replace(/{{INITIAL_STATS_JSON}}/g, serializeForInlineScript(initialStats))
-            .replace(/{{HAS_INITIAL_STATS}}/g, initialStats ? 'true' : 'false')
-            .replace(/{{SECTIONS_SERVICES}}/g, cards),
-        {locale: req.getLocale()}
-    );
-}
-
-function renderThemeAdminTemplate(req, template, theme) {
-    return renderAdminTemplate(
-        req,
-        template.replace(/{{THEME_ID}}/g, theme)
-    );
-}
-
-function buildAdminMetaFooter() {
-    return `
-<footer class="admin-meta-footer">
-    <span class="admin-meta-item">${PROJECT_NAME}</span>
-    <a class="admin-meta-item admin-meta-link" href="${PROJECT_URL}" target="_blank" rel="noopener noreferrer">${PROJECT_URL}</a>
-    <span class="admin-meta-item">v${APP_VERSION}</span>
-</footer>`;
-}
-
-function renderAdminTemplate(req, template) {
-    return translateTextI18n(
-        template
-            .replace(/{{VERSION}}/g, APP_VERSION)
-            .replace(/{{ADMIN_META_FOOTER}}/g, buildAdminMetaFooter()),
-        {locale: req.getLocale()}
-    );
-}
-
-function listAvailableAdminLocales() {
-    const dirs = [
-        path.join(APP_DATA, 'i18n'),
-        path.join(CONFIG_DIR, 'i18n')
-    ];
-    const locales = new Set();
-
-    for (const dir of dirs) {
-        if (!fs.existsSync(dir)) continue;
-
-        for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
-            if (!entry.isFile() || path.extname(entry.name).toLowerCase() !== '.json') {
-                continue;
-            }
-
-            const locale = normalizeTag(path.basename(entry.name, '.json'));
-            if (locale) {
-                locales.add(locale);
-            }
-        }
-    }
-
-    return Array.from(locales).sort((a, b) => a.localeCompare(b));
-}
-
-/**
- *
- * @returns {string}
- */
-function loadTemplate() {
-    return fs.readFileSync("/app/templates/index.html", "utf-8");
-}
-
-function findTmpUpload(dir, uploadId) {
-    if (!fs.existsSync(dir)) return null;
-
-    const files = fs.readdirSync(dir);
-    return files.find(f => f.startsWith(uploadId)) || null;
-}
-
-function deleteUserImage(dir, baseName) {
-    if (!fs.existsSync(dir)) return;
-
-    const files = fs.readdirSync(dir);
-    for (const f of files) {
-        if (f.startsWith(baseName + ".")) {
-            fs.unlinkSync(path.join(dir, f));
-        }
-    }
-}
-
-function cleanupDeletedEntityImages({
-                                        oldSections,
-                                        newSections,
-                                        getIds,
-                                        imageDir
-                                    }) {
-    const oldIds = new Set();
-    oldSections.forEach(sec => {
-        getIds(sec).forEach(id => oldIds.add(id));
-    });
-
-    const newIds = new Set();
-    newSections.forEach(sec => {
-        getIds(sec).forEach(id => newIds.add(id));
-    });
-
-    for (const id of oldIds) {
-        if (!newIds.has(id)) {
-            deleteUserImage(imageDir, id);
-        }
-    }
-}
-
-function commitImage({
-                         image,
-                         uploadDir,
-                         targetDir,
-                         targetBaseName
-                     }) {
-    if (image && image._delete === true) {
-        deleteUserImage(targetDir, targetBaseName);
-        return;
-    }
-
-    if (!image.uploadId) {
-        return;
-    }
-
-    const tmpFile = findTmpUpload(uploadDir, image.uploadId);
-    if (!tmpFile) return;
-
-    fs.mkdirSync(targetDir, {recursive: true});
-
-    deleteUserImage(targetDir, targetBaseName);
-
-    const ext = path.extname(tmpFile);
-    const target = path.join(targetDir, targetBaseName + ext);
-    const src = path.join(uploadDir, tmpFile);
-
-    fs.copyFileSync(src, target);
-    fs.unlinkSync(src);
-    return target;
-}
-
-
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
     res.set("Cache-Control", "public, max-age=31536000, immutable");
@@ -487,7 +247,8 @@ app.get("/admin/login", (req, res) => {
 
     const html = renderAdminTemplate(
         req,
-        tpl.replace("{{MESSAGE}}", "")
+        tpl.replace("{{MESSAGE}}", ""),
+        {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL}
     );
 
     res.send(html);
@@ -511,7 +272,8 @@ app.post(
                 tpl.replace(
                     "{{MESSAGE}}",
                     '<div class="error">{{__.admin.login.invalid}}</div>'
-                )
+                ),
+                {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL}
             );
 
             return res.status(401).send(html);
@@ -555,7 +317,7 @@ app.get("/admin", requireAdmin, (req, res) => {
         "utf8"
     );
 
-    const html = renderAdminTemplate(req, tpl);
+    const html = renderAdminTemplate(req, tpl, {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
 
     res.send(html);
 });
@@ -567,7 +329,7 @@ app.get("/admin/setpassword", requireAdmin, (req, res) => {
         "utf8"
     );
 
-    const html = renderAdminTemplate(req, tpl);
+    const html = renderAdminTemplate(req, tpl, {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
 
     res.send(html);
 });
@@ -579,7 +341,7 @@ app.get("/admin/theme", requireAdmin, (req, res) => {
     );
 
     const config = loadConfiguration();
-    const html = renderThemeAdminTemplate(req, tpl, normalizeTheme(config.theme));
+    const html = renderThemeAdminTemplate(req, tpl, normalizeTheme(config.theme), {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
 
     res.send(html);
 });
@@ -590,7 +352,7 @@ app.get("/admin/config", requireAdmin, (req, res) => {
         "utf8"
     );
 
-    const html = renderAdminTemplate(req, tpl);
+    const html = renderAdminTemplate(req, tpl, {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
 
     res.send(html);
 });
@@ -617,7 +379,7 @@ app.get("/admin/services", requireAdmin, (req, res) => {
         "utf8"
     );
 
-    const html = renderAdminTemplate(req, tpl);
+    const html = renderAdminTemplate(req, tpl, {version: APP_VERSION, projectName: PROJECT_NAME, projectUrl: PROJECT_URL});
 
     res.send(html);
 });
@@ -949,7 +711,7 @@ app.post(
             return res.status(400).json({error: "invalid_upload_type"});
         }
 
-        ensureTmpDirs();
+        ensureTmpDirs(TMP_DIR, UPLOAD_MAP);
 
         if (!req.headers["content-type"]?.startsWith("multipart/form-data")) {
             return res.status(400).json({error: "invalid_content_type"});
@@ -1031,18 +793,16 @@ app.get("/", (req, res) => {
         backgroundImage: resolveSectionBackgroundImage(section)
     })).map(renderSection).join("\n");
 
-    const html = setTemplate(
-        req,
-        loadTemplate(),
-        '',
-        APP_VERSION,
-        config.title,
-        sections,
-        '',
-        config.theme,
+    const html = setTemplate(req, loadTemplate(), {
+        backlink: '',
+        version: APP_VERSION,
+        title: config.title,
+        cards: sections,
+        sectionNav: '',
+        theme: config.theme,
         config,
         initialStats
-    );
+    });
 
     res.send(html);
 });
@@ -1072,18 +832,16 @@ app.get("/section/:id", (req, res) => {
         </div>
     `;
 
-    const html = setTemplate(
-        req,
-        loadTemplate(),
-        '<a class="back-link" href="/">' + __('label.back') + '</a>',
-        APP_VERSION,
-        config.title + ' - ' + section.title,
-        services,
+    const html = setTemplate(req, loadTemplate(), {
+        backlink: '<a class="back-link" href="/">' + __('label.back') + '</a>',
+        version: APP_VERSION,
+        title: config.title + ' - ' + section.title,
+        cards: services,
         sectionNav,
-        config.theme,
+        theme: config.theme,
         config,
         initialStats
-    );
+    });
     res.send(html);
 });
 
