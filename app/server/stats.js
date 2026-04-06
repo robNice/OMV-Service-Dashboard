@@ -33,6 +33,14 @@ async function getStats() {
         readPollInterval()
     ]);
 
+    const resolvedNasPlatform = nasPlatform || (container?.omv
+        ? {
+            id: "omv",
+            name: "OpenMediaVault",
+            version: container.omv
+        }
+        : null);
+
     return {
         ts: Date.now(),
         ram,
@@ -44,7 +52,7 @@ async function getStats() {
         disks: drives,
         system: {
             ...system,
-            nas: nasPlatform
+            nas: resolvedNasPlatform
         },
         pollInterval
     };
