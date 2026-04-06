@@ -66,6 +66,17 @@ function parseSmartTemperature(info) {
         return Math.round(scsiTemp);
     }
 
+    const ataTable = Array.isArray(info?.ata_smart_attributes?.table)
+        ? info.ata_smart_attributes.table
+        : [];
+    for (const attr of ataTable) {
+        const id = Number(attr?.id);
+        const raw = Number(attr?.raw?.value);
+        if ((id === 190 || id === 194) && Number.isFinite(raw)) {
+            return Math.round(raw);
+        }
+    }
+
     return null;
 }
 
@@ -116,7 +127,7 @@ async function runSmartctlJson(blockDevice) {
     let lastError = null;
 
     for (const [currentDevice, deviceType] of candidates) {
-        const args = ["-Aj"];
+        const args = ["-x", "-j"];
         if (deviceType) {
             args.push("-d", deviceType);
         }
