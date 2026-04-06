@@ -148,6 +148,10 @@ function verifyPassword(password, stored) {
 
 function requireAdmin(req, res, next) {
     if (!req.session?.isAdmin) {
+        if (req.get("X-Admin-Request") === "1") {
+            res.set("X-Admin-Redirect", "/admin/login");
+            return res.status(401).json({error: "admin_auth_required", redirect: "/admin/login"});
+        }
         return res.redirect("/admin/login");
     }
     next();

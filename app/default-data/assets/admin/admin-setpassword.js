@@ -74,7 +74,7 @@ btn.addEventListener("click", async () => {
     setStatus("");
 
     try {
-        const res = await fetch("/admin/setpassword", {
+        const res = await adminFetch("/admin/setpassword", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({

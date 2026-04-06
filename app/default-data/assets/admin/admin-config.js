@@ -108,7 +108,7 @@ function applyConfig(config) {
 
 async function loadConfig() {
     setStatus("");
-    const response = await fetch("/admin/api/config");
+    const response = await adminFetch("/admin/api/config");
     if (!response.ok) {
         throw new Error("load_failed");
     }
@@ -145,7 +145,7 @@ saveBtn.addEventListener("click", async () => {
         setSaving(true);
         setStatus("");
 
-        const response = await fetch("/admin/api/config", {
+        const response = await adminFetch("/admin/api/config", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

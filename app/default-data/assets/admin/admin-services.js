@@ -106,7 +106,7 @@ async function uploadImage(kind, file) {
     const fd = new FormData();
     fd.append("file", file);
 
-    const res = await fetch(`/admin/api/upload/${kind}`, {
+    const res = await adminFetch(`/admin/api/upload/${kind}`, {
         method: "POST",
         body: fd
     });
@@ -605,7 +605,7 @@ function bindSaveButton() {
 
         try {
 
-            const res = await fetch("/admin/api/services", {
+            const res = await adminFetch("/admin/api/services", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(state)
@@ -638,7 +638,7 @@ document.getElementById("add-section").addEventListener("click", () => {
 });
 
 async function loadInitialData() {
-    const res = await fetch("/admin/api/services");
+    const res = await adminFetch("/admin/api/services");
     const data = await res.json();
     console.log("RAW backend data:", data.sections);
     data.sections.forEach(section => {
