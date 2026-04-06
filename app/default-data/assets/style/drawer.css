@@ -185,6 +185,18 @@
     color: var(--text);
 }
 
+#info-drawer #drawer-plugins {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+#info-drawer .plugin-item {
+    padding-right: 0;
+}
+
 #info-drawer .bar {
     width: 100%;
     height: var(--drawer-bar-height);

@@ -133,6 +133,17 @@
     }
 
     /**
+     * Render a plugin item.
+     * @param plugin
+     * @returns {string}
+     */
+    function renderPluginItem(plugin) {
+        const name = plugin?.name || "";
+        const version = plugin?.version || "–";
+        return `<div class="kv plugin-item"><span>${name}</span><span class="chip">${version}</span></div>`;
+    }
+
+    /**
      * Render a disk item.
      * @param raw
      * @returns {string}
@@ -277,8 +288,13 @@
 
         if (s.container) {
             setText("[data-omv-version]", s.container.omv || "–");
-            const plugins = Array.isArray(s.container.plugins) ? s.container.plugins.slice(0, 5).map(p => `${p.name} ${p.version}`).join(" · ") : "–";
-            setText("[data-plugins]", plugins);
+            const pluginsCont = document.getElementById("drawer-plugins");
+            if (pluginsCont) {
+                const plugins = Array.isArray(s.container.plugins) ? s.container.plugins : [];
+                pluginsCont.innerHTML = plugins.length
+                    ? plugins.map(renderPluginItem).join("\n")
+                    : `<div class="kv plugin-item"><span>–</span></div>`;
+            }
         }
         const contDocker = document.getElementById("drawer-docker");
         if (contDocker) {
