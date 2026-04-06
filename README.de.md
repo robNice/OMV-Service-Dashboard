@@ -269,7 +269,7 @@ Siehe [`example.docker-compose.yml`](./example.docker-compose.yml).
 
 Das Image liegt hier: 
 
-`ghcr.io/robnice/nas-portal:latest`
+`ghcr.io/robnice/omv-service-dashboard:latest`
 
 1. Wenn du vor dem ersten Start bereits eine eigene Konfiguration vorbereiten möchtest, kopiere die Beispielkonfiguration:
 
