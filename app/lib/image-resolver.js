@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const {USER_ASSETS, APP_ASSETS} = require('./paths');
-const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+const {IMAGE_EXTS} = require('./image-extensions');
 
 function fileExists(p) {
     try {
@@ -9,6 +9,12 @@ function fileExists(p) {
     } catch {
         return false;
     }
+}
+
+function buildAssetUrl(baseDir, file) {
+    const ext = path.extname(file);
+    const fileBase = ext ? path.basename(file, ext) : file;
+    return `/assets/${baseDir}/${fileBase}`;
 }
 
 function resolveEntityImage({
@@ -32,8 +38,9 @@ function resolveEntityImage({
             const userPath = path.join(USER_ASSETS, baseDir, file);
             if (fs.existsSync(userPath)) {
                 return {
-                    src: `/assets/${baseDir}/${file}`,
+                    src: buildAssetUrl(baseDir, file),
                     resolvedFile: file,
+                    resolvedPath: userPath,
                     source: 'id',
                     isCustom: true
                 };
@@ -45,8 +52,9 @@ function resolveEntityImage({
             const appPath = path.join(APP_ASSETS, baseDir, file);
             if (fs.existsSync(appPath)) {
                 return {
-                    src: `/assets/${baseDir}/${file}`,
+                    src: buildAssetUrl(baseDir, file),
                     resolvedFile: file,
+                    resolvedPath: appPath,
                     source: 'app',
                     isCustom: false
                 };
@@ -54,9 +62,11 @@ function resolveEntityImage({
         }
     }
 
+    const defaultPath = path.join(APP_ASSETS, baseDir, defaultFile);
     return {
-        src: `/assets/${baseDir}/${defaultFile}`,
+        src: buildAssetUrl(baseDir, defaultFile),
         resolvedFile: defaultFile,
+        resolvedPath: defaultPath,
         source: 'default',
         isCustom: false
     };
@@ -96,16 +106,19 @@ function resolveAppImage({id, baseDir, defaultFile = '_default.png'}) {
 
         if (fs.existsSync(appPath)) {
             return {
-                src: `/assets/${baseDir}/${file}`,
+                src: buildAssetUrl(baseDir, file),
                 resolvedFile: file,
+                resolvedPath: appPath,
                 source: 'app'
             };
         }
     }
 
+    const defaultPath = path.join(APP_ASSETS, baseDir, defaultFile);
     return {
-        src: `/assets/${baseDir}/${defaultFile}`,
+        src: buildAssetUrl(baseDir, defaultFile),
         resolvedFile: defaultFile,
+        resolvedPath: defaultPath,
         source: 'app'
     };
 }
@@ -131,6 +144,33 @@ function resolveAppServiceCardImage(service) {
     });
 }
 
+function readDirSafe(dir) {
+    if (!fs.existsSync(dir)) return [];
+    return fs.readdirSync(dir)
+        .filter(file => {
+            const ext = file.split('.').pop().toLowerCase();
+            return IMAGE_EXTS.includes(ext);
+        });
+}
+
+function getServiceCardImages() {
+    const userDir = path.join(USER_ASSETS, 'cards/services');
+    const appDir = path.join(APP_ASSETS, 'cards/services');
+    const userImages = readDirSafe(userDir);
+    const appImages = readDirSafe(appDir);
+    const images = new Map();
+
+    for (const image of appImages) {
+        images.set(image, image);
+    }
+
+    for (const image of userImages) {
+        images.set(image, image);
+    }
+
+    return Array.from(images.values()).sort();
+}
+
 
 module.exports = {
     resolveSectionCardImage,
@@ -140,6 +180,6 @@ module.exports = {
     resolveAppImage,
     resolveAppSectionCardImage,
     resolveAppSectionBackgroundImage,
-    resolveAppServiceCardImage
+    resolveAppServiceCardImage,
+    getServiceCardImages
 };
-

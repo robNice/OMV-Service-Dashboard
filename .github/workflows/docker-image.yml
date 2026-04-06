@@ -56,8 +56,10 @@ jobs:
       - name: Prepare image name
         id: image
         run: |
-          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}"
-          echo "name=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          PRIMARY_IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}"
+          SECONDARY_IMAGE_NAME="ghcr.io/robnice/nas-portal"
+          echo "primary_name=$PRIMARY_IMAGE_NAME" >> $GITHUB_OUTPUT
+          echo "secondary_name=$SECONDARY_IMAGE_NAME" >> $GITHUB_OUTPUT
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -72,5 +74,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ steps.image.outputs.name }}:${{ steps.version.outputs.version }}
-            ${{ steps.version.outputs.is_prerelease == 'false' && format('{0}:latest', steps.image.outputs.name) || '' }}
+            ${{ steps.image.outputs.primary_name }}:${{ steps.version.outputs.version }}
+            ${{ steps.image.outputs.secondary_name }}:${{ steps.version.outputs.version }}
+            ${{ steps.version.outputs.is_prerelease == 'false' && format('{0}:latest', steps.image.outputs.primary_name) || '' }}
+            ${{ steps.version.outputs.is_prerelease == 'false' && format('{0}:latest', steps.image.outputs.secondary_name) || '' }}

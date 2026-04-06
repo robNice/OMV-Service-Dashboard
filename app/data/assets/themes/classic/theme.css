@@ -1,0 +1,68 @@
+:root {
+    --page-header-text: #ffffff;
+    --page-header-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+}
+
+.page-header {
+    position: relative;
+    padding: 0.35rem 1.25rem 0.4rem;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(7, 10, 18, 0.74) 0%,
+            rgba(7, 10, 18, 0.54) 50%,
+            rgba(7, 10, 18, 0.18) 100%
+        );
+    pointer-events: none;
+    z-index: 0;
+}
+
+.page-header > * {
+    position: relative;
+    z-index: 1;
+}
+
+.page-header > a,
+.page-header h1 {
+    color: var(--page-header-text);
+    text-shadow: var(--page-header-shadow);
+}
+
+.page-header > .back-link::before {
+    content: "← ";
+}
+
+.page-header h1 {
+    margin-bottom: 0.8rem;
+}
+
+.page-header:not(:has(.section-nav)) h1 {
+    margin-bottom: 0.25rem;
+}
+
+.section-nav {
+    padding: 0 0.25rem 0.05rem;
+}
+
+.section-nav-item {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 640px) {
+    .page-header {
+        padding: 0.3rem 0.65rem 0.35rem;
+        border-radius: 18px;
+    }
+
+    .page-header h1 {
+        margin-bottom: 0.65rem;
+    }
+}

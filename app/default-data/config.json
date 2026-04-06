@@ -1,9 +1,8 @@
 {
-  "title": "OMV Service Dashboard",
+  "title": "NAS Portal",
   "defaultLang": "en-gb",
   "theme": "classic",
   "themeSettings": {},
   "infoDrawerRefreshInterval": 30,
-  "omvRpcPath": "/usr/sbin/omv-rpc",
   "port"      : 3000
 }

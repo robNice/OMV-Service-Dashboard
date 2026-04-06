@@ -1,0 +1,425 @@
+:root {
+    --console-bg: #0d0a08;
+    --console-bg-soft: #17110d;
+    --console-panel: rgba(39, 24, 12, 0.96);
+    --console-amber: #ffbf5f;
+    --console-amber-soft: #ffd899;
+    --console-amber-dim: rgba(255, 191, 95, 0.7);
+    --console-amber-faint: rgba(255, 191, 95, 0.16);
+    --console-border: rgba(255, 191, 95, 0.34);
+    --console-font: "Cascadia Mono", "Consolas", "Lucida Console", "Courier New", monospace;
+    --bg-color: var(--console-bg);
+    --text-color: var(--console-amber-soft);
+    --tile-bg: transparent;
+    --font-h1: var(--console-font);
+    --font-card: var(--console-font);
+    --h1-weight: 700;
+    --card-weight: 400;
+}
+
+body {
+    --console-amber: var(--themesetting-console-accent-color, #ffbf5f);
+    --console-amber-soft: var(--themesetting-console-text-color, #ffd899);
+    --console-amber-dim: var(--themesetting-console-muted-text-color, #c6a172);
+    --console-amber-bright: color-mix(in srgb, var(--console-amber-soft) 88%, white 12%);
+    --console-amber-faint: color-mix(in srgb, var(--console-amber) 16%, transparent);
+    --console-border: color-mix(in srgb, var(--console-amber) 34%, transparent);
+    --text-color: var(--console-amber-soft);
+    margin: 0;
+    padding: 2rem 2rem 2.5rem;
+    font-family: var(--console-font);
+    background:
+        radial-gradient(circle at 16% 8%, rgba(255, 191, 95, 0.08), transparent 24%),
+        repeating-linear-gradient(
+            180deg,
+            rgba(255, 191, 95, 0.016) 0 1px,
+            rgba(0, 0, 0, 0) 1px 3px
+        ),
+        linear-gradient(180deg, #16100c, #080605 76%);
+    color: var(--console-amber-soft);
+    font-size: 14px;
+    text-shadow: 0 0 6px rgba(255, 191, 95, 0.12);
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body::before {
+    inset: 1rem;
+    border: 1px solid var(--console-border);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 191, 95, 0.06),
+        0 0 28px rgba(255, 191, 95, 0.08);
+    background:
+        linear-gradient(180deg, rgba(255, 191, 95, 0.03), transparent 14%),
+        linear-gradient(90deg, rgba(255, 191, 95, 0.025), transparent 16%);
+}
+
+body::after {
+    inset: 1rem;
+    background:
+        radial-gradient(circle at top, rgba(255, 217, 153, 0.05), transparent 34%),
+        linear-gradient(180deg, rgba(255, 191, 95, 0.025), transparent 16%);
+    opacity: 0.9;
+}
+
+.page-header,
+.grid {
+    position: relative;
+    z-index: 1;
+    /*max-width: 1280px;*/
+    max-width: 100%;
+    margin-inline: auto;
+}
+
+.page-header {
+    padding: 1rem 1rem 0.75rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+}
+
+.page-header::before {
+    content: "$ ./displaySections";
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--console-amber);
+    white-space: nowrap;
+    overflow: hidden;
+    letter-spacing: 0.04em;
+}
+
+body:has(.section-nav) .page-header::before {
+    content: "$ ./displayServices --section:" attr(data-console-section-id);
+}
+
+.page-header::after {
+    content: "+------------------------------------------------------------------------------+";
+    display: block;
+    margin-top: 0.9rem;
+    color: var(--console-amber-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    letter-spacing: 0.02em;
+}
+
+.page-header > a,
+.page-header h1 {
+    color: var(--console-amber-soft);
+}
+
+.page-header > a {
+    display: inline-block;
+    margin: 0.8rem 0 0.9rem;
+    text-decoration: none;
+    font-size: 0;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: transparent;
+}
+
+.page-header > .back-link::before {
+    content: "Show Sections [S]";
+    color: var(--console-amber-dim);
+    font-size: 0.92rem;
+}
+
+.page-header h1 {
+    margin: 0;
+    text-align: left;
+    font-size: clamp(2.1rem, 5vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.page-header h1::before {
+    content:
+        "+------------------------------------------------------------------------------+\A"
+        "THEME: AMBER_CONSOLE_MODE";
+    display: block;
+    margin-bottom: 0.6rem;
+    color: var(--console-amber-dim);
+    font-size: 0.86rem;
+    letter-spacing: 0.18em;
+    white-space: pre;
+}
+
+.page-header h1::after {
+    content: "> ASCII_RENDERER: ACTIVE";
+    display: block;
+    margin-top: 0.7rem;
+    color: var(--console-amber-dim);
+    font-size: 0.82rem;
+    letter-spacing: 0.14em;
+}
+
+.section-nav {
+    justify-content: flex-start;
+    gap: 0.4rem;
+    margin: 0.8rem 0 0;
+    padding: 0;
+    max-width: none;
+}
+
+.section-nav::before {
+    content: "$ ls /sections";
+    display: block;
+    width: 100%;
+    margin-bottom: 0.35rem;
+    color: var(--console-amber-dim);
+    letter-spacing: 0.08em;
+}
+
+.section-nav-item {
+    position: relative;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+    opacity: 0.82;
+}
+
+.section-nav-item img {
+    display: none;
+}
+
+.section-nav-item::before {
+    content: "[ ";
+    color: var(--console-amber);
+}
+
+.section-nav-item::after {
+    content: attr(aria-label) " ] [" attr(data-console-index) "]";
+    color: var(--console-amber-soft);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.section-nav-item:hover,
+.section-nav-item.active {
+    transform: none;
+    opacity: 1;
+}
+
+.section-nav-item.active::after {
+    color: var(--console-amber-bright);
+}
+
+.grid {
+    gap: 0.9rem;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.grid {
+    position: relative;
+}
+
+.console-prompt {
+    width: 100%;
+    margin-top: 0.45rem;
+    color: var(--console-amber);
+    letter-spacing: 0.08em;
+    line-height: 1.65;
+}
+
+.console-prompt-line {
+    display: block;
+}
+
+.console-prompt-list {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.2rem 1rem;
+    margin: 0.15rem 0 0.55rem;
+    color: var(--console-amber-soft);
+    font: inherit;
+    letter-spacing: 0.08em;
+}
+
+.console-prompt-command {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.console-prompt-input {
+    display: inline;
+}
+
+.console-prompt-cursor {
+    display: inline-block;
+    margin-left: 0.08em;
+    animation: console-cursor-blink 1s steps(1, end) infinite;
+}
+
+.console-prompt-error {
+    display: block;
+    margin-top: 0.15rem;
+    color: #ff7d6b;
+}
+
+.service {
+    position: relative;
+    width: 306px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow:
+        inset 1px 0 0 var(--console-border),
+        inset -1px 0 0 var(--console-border);
+    overflow: visible;
+}
+
+.service::before {
+    content: "+-------------[ SERVICE ]-------------+";
+    display: block;
+    padding: 0 0.9rem;
+    color: var(--console-amber-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+.service::after {
+    content: "+-------------------------------------+";
+    display: block;
+    padding: 0 0.9rem;
+    color: var(--console-amber-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+.service:hover {
+    transform: none;
+}
+
+.service a {
+    display: block;
+    min-height: 92px;
+    padding: 0.45rem 0.9rem 0.45rem;
+    color: inherit;
+    text-decoration: none;
+    background: transparent;
+}
+
+.service img {
+    display: none;
+}
+
+.service-title {
+    display: block;
+    min-height: 0;
+    padding: 0.55rem 0 0;
+    text-align: left;
+    font-family: var(--console-font);
+    font-size: 1.08rem;
+    font-weight: 700;
+    line-height: 1.34;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--console-amber-bright);
+}
+
+.service-title::after {
+    content: " [" attr(data-console-index) "]";
+    color: var(--console-amber-dim);
+    font-weight: 400;
+}
+
+.service a span {
+    padding-left: 0;
+}
+
+body:not(:has(.section-nav)) .service::before {
+    content: "+-------------[ SECTION ]-------------+";
+}
+
+@keyframes console-cursor-blink {
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 1rem 1rem 1.5rem;
+        font-size: 13px;
+    }
+
+    body::before,
+    body::after {
+        inset: 0.55rem;
+    }
+
+    .page-header {
+        padding: 0.75rem 0.75rem 0.55rem;
+    }
+
+    .page-header::before,
+    .page-header::after,
+    .service::before,
+    .service::after {
+        font-size: 0.64rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .page-header h1::before,
+    .page-header h1::after,
+    .section-nav::before {
+        font-size: 0.72rem;
+    }
+
+    .section-nav {
+        gap: 0.32rem;
+    }
+
+    .section-nav-item::after {
+        font-size: 0.67rem;
+    }
+
+    .service {
+        width: min(100%, 340px);
+    }
+
+    .service a {
+        min-height: 84px;
+        padding-inline: 0.75rem;
+    }
+
+    .service-title {
+        font-size: 0.92rem;
+    }
+
+    .console-prompt-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.18rem 0.75rem;
+    }
+}

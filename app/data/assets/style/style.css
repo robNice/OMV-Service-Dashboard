@@ -1,0 +1,202 @@
+/* Outfit + Inter — self-hosted (TTF-ready) */
+
+/* Outfit Bold (headline) */
+@font-face {
+    font-family: "OutfitLocal";
+    src:
+            url("/assets/fonts/Outfit/Outfit-Bold.woff2") format("woff2"),
+            url("/assets/fonts/Outfit/Outfit-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Inter SemiBold (card titles) */
+@font-face {
+    font-family: "InterLocal";
+    src:
+            url("/assets/fonts/Inter/Inter_24pt-SemiBold.woff2") format("woff2"),
+            url("/assets/fonts/Inter/Inter_24pt-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+:root {
+    --bg-color: #f2f2f2;
+    --text-color: #111;
+    --tile-bg: #fff;
+    --font-h1: "OutfitLocal", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-card: "InterLocal", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+    --h1-weight: 700;
+    --card-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --text-color: #eee;
+        --tile-bg: #1e1e1e;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 2rem;
+    font-family: system-ui, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.page-header {
+    max-width: 1000px;
+    margin: 0 auto 1.5rem;
+}
+
+.page-header > a {
+    color: #FFF;
+    text-decoration: none;
+    font-family: var(--font-h1), system-ui, sans-serif;
+    font-weight: var(--h1-weight);
+    font-size: 1.1rem;
+    display: inline-block;
+    margin: 0 0 1rem;
+}
+
+.page-header h1 {
+    text-align: center;
+    margin: 0 0 2rem;
+    font-family: var(--font-h1), system-ui, sans-serif;
+    font-weight: var(--h1-weight);
+    letter-spacing: .2px;
+    line-height: 1.1;
+}
+
+.section-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: -0.75rem auto 0;
+    max-width: 1000px;
+}
+
+.section-nav-item {
+    width: 96px;
+    height: 62px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: block;
+    background-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    border: 2px solid transparent;
+    opacity: 0.68;
+    transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.section-nav-item:hover {
+    transform: translateY(-2px);
+    opacity: 1;
+}
+
+.section-nav-item.active {
+    opacity: 1;
+    border-color: rgba(255, 255, 255, 0.92);
+}
+
+.section-nav-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.service {
+    background-color: var(--tile-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+}
+
+.service:hover {
+    transform: scale(1.02);
+}
+
+.service img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.service-title {
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: var(--font-card), system-ui, sans-serif;
+    font-weight: var(--card-weight);
+    letter-spacing: .15px;
+    line-height: 1.2;
+}
+
+
+.service a {
+    color: inherit;
+    text-decoration: none;
+    padding-bottom: 10px;
+}
+
+.service a span {
+    padding-left: 10px;
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 1.25rem;
+    }
+
+    .page-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .page-header h1 {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-nav {
+        gap: 0.5rem;
+        margin: -0.35rem auto 0;
+    }
+
+    .section-nav-item {
+        width: 72px;
+        height: 48px;
+        border-radius: 10px;
+    }
+
+    .page-header > a {
+        font-size: 1.05rem;
+    }
+
+    .service-title {
+        font-size: 1.08rem;
+    }
+
+}
+	

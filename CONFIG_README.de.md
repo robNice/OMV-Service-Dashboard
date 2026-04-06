@@ -15,6 +15,7 @@
   - [Uebersetzungen (`/config/i18n`)](#uebersetzungen-configi18n)
     - [Wie Uebersetzungen funktionieren](#wie-uebersetzungen-funktionieren)
     - [Beispiel: `i18n/fr-FR.json`](#beispiel-i18nfr-frjson)
+  - [Bild-Overrides (`/config/assets`)](#bild-overrides-configassets)
   - [Themes (`/config/assets/themes`)](#themes-configassetsthemes)
     - [Theme-Verzeichnisstruktur](#theme-verzeichnisstruktur)
     - [`meta.json`](#metajson)
@@ -39,9 +40,14 @@
 
 ## Einfuehrung
 
-Wann immer hier von `/config` die Rede ist, ist damit dein persönliches Konfigurationsverzeichnis für diese Anwendung gemeint. Es wird entweder in `docker-compose.yml` gemountet oder über die Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG` definiert.
 
-Das `/config`-Verzeichnis enthält optionale Benutzer-Overrides für das OMV Service Dashboard.
+Wann immer hier von `/config` die Rede ist, ist damit das Benutzer-Config-Verzeichnis des NAS Portals gemeint.
+
+Alle dauerhaft gespeicherten Änderungen aus dem Admin-Bereich werden dort abgelegt.
+
+Im Docker-Betrieb wird dieses Verzeichnis normalerweise nach `/config` im Container gemountet.
+
+Im Standalone-Betrieb sollte es in der Regel explizit per `--config-dir` übergeben werden. `OMV_SERVICE_DASHBOARD_CONFIG` dient nur als Fallback, wenn kein CLI-Parameter gesetzt ist.
 
 Die meisten Änderungen kannst du bequem über den Admin-Bereich der Anwendung vornehmen. Diese README ist vor allem dann relevant, wenn du Konfigurationen manuell bearbeiten, Übersetzungen ergänzen oder eigene Themes und Assets hinterlegen möchtest.
 
@@ -49,7 +55,7 @@ Um den Einstieg zu erleichtern, kannst du das Verzeichnis `config.example` in de
 
 Alle Dateien in `/config` werden zur Laufzeit eingelesen und überschreiben dort, wo es vorgesehen ist, die integrierten Standardwerte. Fehlende Dateien fallen automatisch auf die internen Defaults zurück.
 
-Die `config.json` wird beim ersten Start angelegt, falls sie noch nicht existiert. Die `services.json` entsteht nach dem ersten Speichern im Admin-Bereich.
+Die `config.json` wird beim ersten Start angelegt, falls sie noch nicht existiert. Die `services.json` entsteht nach dem ersten Speichern im Admin-Bereich. Hochgeladene Sektions-Hintergründe, Sektions-Karten und Service-Karten werden ebenfalls in diesem Verzeichnis abgelegt.
 
 Dieses Verzeichnis ist für Konfiguration, Inhalte und unterstützte Frontend-Overrides wie Themes gedacht. Beliebige Core-Dateien der Anwendung sollten hier nicht abgelegt werden.
 
@@ -57,7 +63,7 @@ Dieses Verzeichnis ist für Konfiguration, Inhalte und unterstützte Frontend-Ov
 
 ## TL;DR fuer Docker-Nutzer
 
-Wenn du das OMV Service Dashboard über Docker betreibst, mounte dein persönliches Konfigurationsverzeichnis so:
+Wenn du das NAS Portal über Docker betreibst, mounte dein persönliches Konfigurationsverzeichnis so:
 
 ```yaml
 services:
@@ -67,6 +73,10 @@ services:
       - /pfad/zu/deinem/konfigurationsverzeichnis:/config
 ```
 
+Alle dauerhaft gespeicherten Änderungen aus dem Admin-Bereich werden in dieses gemountete Verzeichnis geschrieben.
+
+`OMV_SERVICE_DASHBOARD_CONFIG` musst du im Docker-Betrieb normalerweise nicht setzen, weil `/config` im Container bereits der Standardpfad ist.
+
 ---
 
 ## Grundlegende Hinweise
@@ -75,6 +85,7 @@ services:
 - Du kannst den Container jederzeit sicher aktualisieren oder neu erstellen
 - Deine Konfiguration, Übersetzungen, Bilder und Themes bleiben dabei erhalten
 - Existiert eine Datei nicht in `/config`, werden automatisch die integrierten Standardwerte verwendet
+- Sektions-Hintergründe, Sektions-Karten und Service-Karten können über `/config/assets` überschrieben werden
 
 Dateien innerhalb des Containers sollten nicht manuell verändert werden.
 
@@ -115,26 +126,22 @@ Beispiel:
 
 ```json
 {
-  "title": "OMV Service Dashboard",
-  "defaultLang": "en-GB",
+  "title": "NAS Portal",
+  "defaultLang": "en-gb",
   "theme": "classic",
+  "themeSettings": {},
   "infoDrawerRefreshInterval": 30,
-  "port": 3000,
-  "omvRpcPath": "/usr/sbin/omv-rpc",
-  "admin": {
-    "passwordHash": "3a33aaf60a0f71503b9c399e414e6ab8:e472941cd72ddc6807c2e5cb1291250ecec8664c5d9f1b9453196d410e900f7d",
-    "passwordInitialized": true
-  }
+  "port": 3000
 }
 ```
 
 - `title`: Wird als Basistitel und Seitenüberschrift verwendet
 - `defaultLang`: Fallback-Sprache, falls keine passende Locale gefunden wird
 - `theme`: Aktives Theme für das öffentliche Dashboard
+- `themeSettings`: Gespeicherte Werte für Theme-spezifische Einstellungen aus dem Admin-Bereich
 - `infoDrawerRefreshInterval`: Aktualisierungsintervall des Info-Drawers in Sekunden
 - `port`: Port, auf dem die Anwendung lauscht
-- `omvRpcPath`: Pfad zur `omv-rpc`-Binary
-- `admin`: Admin-Passwortblock; wenn er wie im Beispiel gesetzt wird, wird das Admin-Passwort auf `dashboard` zurückgesetzt
+- `admin`: Admin-Passwortblock; er wird nach dem ersten Start oder nach einer Passwortänderung im Admin-Bereich automatisch ergänzt
 
 Wenn du das Admin-Passwort vergessen hast, kannst du den `admin`-Block in der `config.json` löschen und den Dienst anschließend neu starten. Beim nächsten Start wird das Admin-Passwort dann erneut auf das Default-Passwort `dashboard` gesetzt.
 
@@ -145,6 +152,8 @@ Wenn du das Admin-Passwort vergessen hast, kannst du den `admin`-Block in der `c
 Definiert die im Dashboard angezeigten Sektionen und Dienste.
 
 Seit es den Admin-Bereich gibt, ist die manuelle Bearbeitung dieser Datei normalerweise nicht mehr notwendig.
+
+Die Datei wird automatisch geschrieben, wenn du Sektionen und Dienste im Admin-Bereich speicherst.
 
 ---
 
@@ -222,6 +231,26 @@ Das Theme des öffentlichen Dashboards kann im Backend umgeschaltet werden und w
 Das Backend ermittelt verfügbare Themes aus den integrierten Theme-Verzeichnissen der Anwendung und aus `/config/assets/themes/<theme-id>/meta.json`.
 
 Themes aus `/config` ergänzen dabei die eingebauten Themes und können sie bei gleicher `id` auch überlagern.
+
+### Bild-Overrides (`/config/assets`)
+
+Der Admin-Bereich kann benutzerdefinierte Bilder nach `/config/assets` hochladen. Diese Dateien überlagern die eingebauten Standardbilder für dasselbe logische Ziel.
+
+Relevante Verzeichnisse:
+
+```text
+/config/assets/backgrounds
+/config/assets/cards/sections
+/config/assets/cards/services
+```
+
+Typische Beispiele:
+
+- `/config/assets/backgrounds/_home.*` für den Home-Hintergrund
+- `/config/assets/cards/sections/media.*` für die Sektions-Karte von `media`
+- `/config/assets/cards/services/jellyfin.*` für die Service-Karte von `jellyfin`
+
+Die konkrete Dateiendung ist für das Frontend nicht wichtig. Der Server löst das passende Bild automatisch auf.
 
 ---
 

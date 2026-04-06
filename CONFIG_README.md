@@ -15,6 +15,7 @@
   - [Translations (`/config/i18n`)](#translations-configi18n)
     - [How translations work](#how-translations-work)
     - [Example: `i18n/fr-FR.json`](#example-i18nfr-frjson)
+  - [Image overrides (`/config/assets`)](#image-overrides-configassets)
   - [Themes (`/config/assets/themes`)](#themes-configassetsthemes)
     - [Theme directory structure](#theme-directory-structure)
     - [`meta.json`](#metajson)
@@ -39,9 +40,13 @@
 
 ## Introduction
 
-Whenever `/config` is mentioned here, it refers to your personal configuration directory for this application. It is either mounted in `docker-compose.yml` or defined via the `OMV_SERVICE_DASHBOARD_CONFIG` environment variable.
+Whenever `/config` is mentioned here, it refers to the user config directory of the NAS Portal.
 
-The `/config` directory contains optional user overrides for the OMV Service Dashboard.
+All persistent changes made in the admin area are written there.
+
+In Docker, this directory is usually mounted to `/config` inside the container.
+
+In standalone mode, it should usually be passed explicitly via `--config-dir`. `OMV_SERVICE_DASHBOARD_CONFIG` is only the fallback if no CLI parameter is provided.
 
 Most changes can be managed conveniently through the application's admin area. This README is mainly relevant if you want to edit configuration files manually, add translations, or provide your own themes and assets.
 
@@ -49,7 +54,7 @@ To get started more easily, copy the `config.example` directory into your own `/
 
 All files in `/config` are read at runtime and override the integrated defaults where supported. Missing files automatically fall back to the internal defaults.
 
-The `config.json` file is created on first start if it does not yet exist. The `services.json` file is created after the first save in the admin area.
+The `config.json` file is created on first start if it does not yet exist. The `services.json` file is created after the first save in the admin area. Uploaded section backgrounds, section cards, and service cards are also stored in this directory.
 
 This directory is intended for configuration, content, and supported frontend overrides such as themes. Arbitrary core application files should not be placed here.
 
@@ -57,7 +62,7 @@ This directory is intended for configuration, content, and supported frontend ov
 
 ## TL;DR for Docker users
 
-If you run the OMV Service Dashboard via Docker, mount your personal configuration directory like this:
+If you run the NAS Portal via Docker, mount your personal configuration directory like this:
 
 ```yaml
 services:
@@ -67,6 +72,10 @@ services:
       - /path/to/your/configuration-directory:/config
 ```
 
+All persistent admin changes are written to that mounted directory.
+
+You normally do not need to set `OMV_SERVICE_DASHBOARD_CONFIG` in Docker, because `/config` is already the default config path inside the container.
+
 ---
 
 ## Basic Notes
@@ -75,6 +84,7 @@ services:
 - You can safely update or recreate the container at any time
 - Your configuration, translations, images, and themes remain untouched
 - If a file does not exist in `/config`, the integrated defaults are used automatically
+- Section backgrounds, section cards, and service cards can be overridden from `/config/assets`
 
 You should never modify files inside the container.
 
@@ -114,26 +124,22 @@ Example:
 
 ```json
 {
-  "title": "OMV Service Dashboard",
-  "defaultLang": "en-GB",
+  "title": "NAS Portal",
+  "defaultLang": "en-gb",
   "theme": "classic",
+  "themeSettings": {},
   "infoDrawerRefreshInterval": 30,
-  "port": 3000,
-  "omvRpcPath": "/usr/sbin/omv-rpc",
-  "admin": {
-    "passwordHash": "3a33aaf60a0f71503b9c399e414e6ab8:e472941cd72ddc6807c2e5cb1291250ecec8664c5d9f1b9453196d410e900f7d",
-    "passwordInitialized": true
-  }
+  "port": 3000
 }
 ```
 
 - `title`: Used as the base title and page heading
 - `defaultLang`: Fallback language if no matching locale is found
 - `theme`: Active public dashboard theme
+- `themeSettings`: Stored values for theme-specific settings from the admin area
 - `infoDrawerRefreshInterval`: Info drawer refresh interval in seconds
 - `port`: Port the application listens on
-- `omvRpcPath`: Path to the `omv-rpc` binary
-- `admin`: Admin password block; setting it to the default example resets the admin password to `dashboard`
+- `admin`: Admin password block; it is added automatically after first start or after changing the password in the admin area
 
 If you forgot the admin password, you can delete the `admin` block from `config.json` and then restart the service. On the next start, the admin password will be set back to the default password `dashboard`.
 
@@ -142,6 +148,8 @@ If you forgot the admin password, you can delete the `admin` block from `config.
 Defines the sections and services shown in the dashboard.
 
 Since the admin area exists, manual editing of this file is usually no longer necessary.
+
+The file is written automatically when you save sections and services in the admin area.
 
 ### `i18n-settings.json`
 
@@ -209,6 +217,26 @@ The public dashboard theme can be switched in the backend and is stored in `conf
 The backend discovers available themes from the application's built-in theme directories and from `/config/assets/themes/<theme-id>/meta.json`.
 
 Themes from `/config` extend the built-in themes and may also override them when they use the same `id`.
+
+### Image overrides (`/config/assets`)
+
+The admin area can upload custom images into `/config/assets`. These files override the built-in defaults with the same logical target.
+
+Relevant directories:
+
+```text
+/config/assets/backgrounds
+/config/assets/cards/sections
+/config/assets/cards/services
+```
+
+Typical examples:
+
+- `/config/assets/backgrounds/_home.*` for the home background
+- `/config/assets/cards/sections/media.*` for the section card of `media`
+- `/config/assets/cards/services/jellyfin.*` for the service card of `jellyfin`
+
+The exact file extension is not important to the frontend. The server resolves the matching image automatically.
 
 #### Theme directory structure
 

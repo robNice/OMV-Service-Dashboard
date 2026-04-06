@@ -1,4 +1,4 @@
-# OMV Service Dashboard
+# NAS Portal
 
 ---
 
@@ -18,7 +18,7 @@
   - [Installation: Docker (recommended)](#installation-docker-recommended)
     - [Requirements](#requirements)
     - [Quick Start](#quick-start)
-  - [Installation: Standalone (advanced / untested)](#installation-standalone-advanced--untested)
+  - [Installation: Standalone](#installation-standalone)
     - [Requirements](#requirements-1)
     - [Steps (overview)](#steps-overview)
 - [Notes](#notes)
@@ -50,13 +50,18 @@ In addition, the integrated info drawer gives you a quick overview of the overal
 
 This themeable dashboard is also well suited as a permanently visible interface on displays, as is often used in smart home environments.
 
+This project was originally built for my [OpenMediaVault](https://www.openmediavault.org/)-based NAS, pulled its info drawer data from the central OMV API, and used the more cumbersome name "OMV-Service-Dashboard".
+Today, the service no longer depends on the OMV API for system, storage, temperature, or platform information. Instead, it reads those details directly from system files and common host tools such as `lsblk`, `smartctl`, `dmidecode`, `docker`, and similar runtime probes. Because of that, the portal is no longer tied to OMV and can also run on other NAS or Linux platforms, as long as the required host tools are available.
+
 > **Notes**
 > 
 > Throughout this document, categories are referred to as "sections" and the configured entries within them as "services".
 > 
-> Whenever `/config` is mentioned here, it refers to your personal configuration directory for this application. It is either mounted in `docker-compose.yml` or defined via the `OMV_SERVICE_DASHBOARD_CONFIG` environment variable.
+> All persistent changes made in the admin area are written to the user config directory.
 > 
-> The `/config` directory contains optional user overrides for the OMV Service Dashboard.
+> In Docker, this directory is `/config` inside the container and should usually be backed by a host volume mount.
+> 
+> In standalone mode, you should usually pass the config directory explicitly via `--config-dir`. `OMV_SERVICE_DASHBOARD_CONFIG` is only the fallback if no CLI parameter is provided.
 
 ---
 
@@ -140,7 +145,6 @@ Here you can edit the most important configuration values, for example:
 - `Fallback Language`: default language if no matching locale is found
 - `Info Drawer Refresh Interval`: refresh interval of the info drawer in seconds
 - `Port`: port the application listens on
-- `OMV RPC Path`: path to the `omv-rpc` binary
 
 ---
 
@@ -259,7 +263,7 @@ See [`example.docker-compose.yml`](./example.docker-compose.yml).
 
 The image can be found here: 
 
-`ghcr.io/robnice/omv-service-dashboard:latest`
+`ghcr.io/robnice/nas-portal:latest`
 
 
 1. If you want to prepare a custom configuration before first start, copy the example configuration:
@@ -270,7 +274,11 @@ cp -r config.example path-to-your-config-directory
 
 You do not have to copy the config file, because it is created automatically on first start if it does not exist.
 
-2. Map your config directory to `/config` in the compose file.
+2. Mount your host config directory to `/config` in the compose file.
+
+All persistent admin changes are written there.
+
+You normally do not need to set `OMV_SERVICE_DASHBOARD_CONFIG` in Docker, because `/config` is already the default config path inside the container.
 
 3. Start the container:
 
@@ -288,9 +296,7 @@ Updates and rebuilds are safe at any time. Everything inside `/config` remains i
 
 ---
 
-### Installation: Standalone (advanced / untested)
-
-This mode is currently not actively tested and mainly exists for completeness.
+### Installation: Standalone
 
 #### Requirements
 
@@ -298,12 +304,46 @@ This mode is currently not actively tested and mainly exists for completeness.
 - npm
 - OpenMediaVault host
 
-#### Steps (overview)
+#### Steps
 
 1. Clone the repository.
-2. Install dependencies.
-3. Copy `config.example/` to `config/`.
-4. Start the server with `node server.js`.
+2. Install dependencies:
+
+```bash
+cd app
+npm install
+```
+
+3. Prepare a config directory. You can either copy the example files or start with an empty directory:
+
+```bash
+cp -r ../config.example /path/to/nas-portal-config
+```
+
+4. Start the server from the `app/` directory and pass the config directory explicitly:
+
+```bash
+node server.js --config-dir /path/to/nas-portal-config
+```
+
+`--config-dir` is the preferred standalone setup.
+
+#### Config directory priority
+
+The application resolves the user config directory in this order:
+
+1. `--config-dir /path/to/config`
+2. `OMV_SERVICE_DASHBOARD_CONFIG=/path/to/config`
+3. default path: `app/config`
+
+If neither CLI parameter nor environment variable is provided, the server starts with the default path and logs a startup hint.
+
+#### Notes for standalone mode
+
+- Runtime data is stored in `app/data` by default.
+- User configuration is stored in `app/config` by default.
+- All persistent admin changes are written to the selected config directory.
+- `OMV_SERVICE_DASHBOARD_CONFIG` is mainly useful for scripted or environment-based standalone setups.
 
 ---
 

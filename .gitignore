@@ -138,3 +138,7 @@ dist
 /tmp/
 AGENTS.md
 /package-lock.json
+/Todo.md
+/app/data/stats-cache.json
+/app/data/tmp
+/app/config
