@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const {APP_DATA, CONFIG_DIR} = require("./paths");
+const {APP_DATA, CONFIG_DIR, APP_CODE} = require("./paths");
 const {translateTextI18n} = require("./i18n-util");
 const {getTheme, sanitizeThemeSettings} = require("./theme-registry");
 const { _internals: { normalizeTag } } = require("./i18n-config");
@@ -266,7 +266,7 @@ function listAvailableAdminLocales() {
 }
 
 function loadTemplate() {
-    return fs.readFileSync("/app/templates/index.html", "utf-8");
+    return fs.readFileSync(path.join(APP_CODE, "templates/index.html"), "utf-8");
 }
 
 module.exports = {

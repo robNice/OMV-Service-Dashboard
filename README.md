@@ -287,9 +287,7 @@ Updates and rebuilds are safe at any time. Everything inside `/config` remains i
 
 ---
 
-### Installation: Standalone (advanced / untested)
-
-This mode is currently not actively tested and mainly exists for completeness.
+### Installation: Standalone (advanced)
 
 #### Requirements
 
@@ -297,12 +295,45 @@ This mode is currently not actively tested and mainly exists for completeness.
 - npm
 - OpenMediaVault host
 
-#### Steps (overview)
+#### Steps
 
 1. Clone the repository.
-2. Install dependencies.
-3. Copy `config.example/` to `config/`.
-4. Start the server with `node server.js`.
+2. Install dependencies:
+
+```bash
+cd app
+npm install
+```
+
+3. Prepare a config directory. You can either copy the example files or start with an empty directory:
+
+```bash
+cp -r ../config.example /path/to/nas-portal-config
+```
+
+4. Start the server from the `app/` directory and pass the config directory explicitly:
+
+```bash
+node server.js --config-dir /path/to/nas-portal-config
+```
+
+`--config-dir` is the preferred standalone setup.
+
+#### Config directory priority
+
+The application resolves the user config directory in this order:
+
+1. `--config-dir /path/to/config`
+2. `OMV_SERVICE_DASHBOARD_CONFIG=/path/to/config`
+3. default path: `app/config`
+
+If neither CLI parameter nor environment variable is provided, the server starts with the default path and logs a startup hint.
+
+#### Notes for standalone mode
+
+- Runtime data is stored in `app/data` by default.
+- User configuration is stored in `app/config` by default.
+- Docker mode can still use `/config` as before via volume mounts and environment variables.
 
 ---
 

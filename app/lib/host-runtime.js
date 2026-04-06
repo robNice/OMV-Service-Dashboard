@@ -1,18 +1,18 @@
 const fs = require("fs/promises");
 const fsSync = require("fs");
 
-const PROC = process.env.PROC_ROOT || "/host/proc";
-const SYS = process.env.SYS_ROOT || "/host/sys";
-const HOST = process.env.HOST_ROOT || "/hostroot";
-const DPKG = process.env.DPKG_ROOT || "/host/var/lib/dpkg";
+const IS_CONTAINER = fsSync.existsSync("/.dockerenv");
+
+const PROC = process.env.PROC_ROOT || (IS_CONTAINER ? "/host/proc" : "/proc");
+const SYS = process.env.SYS_ROOT || (IS_CONTAINER ? "/host/sys" : "/sys");
+const HOST = process.env.HOST_ROOT || (IS_CONTAINER ? "/hostroot" : "/");
+const DPKG = process.env.DPKG_ROOT || (IS_CONTAINER ? "/host/var/lib/dpkg" : "/var/lib/dpkg");
 
 const EXE_OPTS = {
     timeout: 15000,
     env: {LC_ALL: "C", LANG: "C"},
     maxBuffer: 50 * 1024 * 1024
 };
-
-const IS_CONTAINER = fsSync.existsSync("/.dockerenv");
 
 function hostCmd(cmd) {
     return IS_CONTAINER

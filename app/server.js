@@ -28,7 +28,6 @@ const {
 } = require('./lib/image-resolver');
 const {createAdminPagesRouter} = require("./routes/admin-pages");
 const {createAdminApiRouter} = require("./routes/admin-api");
-const TMP_DIR = "/data/tmp/assets/";
 // const TMP_SECTION_BG_DIR = TMP_DIR+"/data/tmp/assets/backgrounds/";
 
 const fs = require("fs");
@@ -37,10 +36,12 @@ const pkg = require('./package.json');
 const APP_VERSION = pkg.version;
 const PROJECT_NAME = 'NAS Portal';
 const PROJECT_URL = 'https://github.com/robNice/OMV-Service-Dashboard';
+const {APP_DATA, APP_DEFAULT_DATA, CONFIG_DIR, CONFIG_DIR_SOURCE} = require('./lib/paths');
+const TMP_DIR = path.join(APP_DATA, "tmp/assets");
 
 function initDefaultData() {
-    const source = '/app/default-data';
-    const target = '/data';
+    const source = APP_DEFAULT_DATA;
+    const target = APP_DATA;
     const targetThemes = path.join(target, 'assets', 'themes');
     fs.mkdirSync(target, {recursive: true});
 
@@ -52,7 +53,6 @@ function initDefaultData() {
 
 initDefaultData();
 // initDataDir();
-const {CONFIG_DIR} = require('./lib/paths');
 const {resolveAssetPath} = require('./lib/asset-resolver');
 const app = express();
 
@@ -93,6 +93,15 @@ const PORT =
 
 
 const mime = require('mime-types');
+
+if (CONFIG_DIR_SOURCE === 'default') {
+    console.log(`[startup] No config directory provided; using default: ${CONFIG_DIR}`);
+} else if (CONFIG_DIR_SOURCE === 'cli') {
+    console.log(`[startup] Using config directory from --config-dir: ${CONFIG_DIR}`);
+} else {
+    console.log(`[startup] Using config directory from OMV_SERVICE_DASHBOARD_CONFIG: ${CONFIG_DIR}`);
+}
+console.log(`[startup] App data directory: ${APP_DATA}`);
 
 function sendAsset(res, file) {
     res.type(mime.lookup(file) || 'application/octet-stream');
@@ -203,7 +212,7 @@ function isMutableImageAsset(relPath) {
 app.get("/favicon.ico", (req, res) => {
     res.type("image/x-icon");
     res.set("Cache-Control", "public, max-age=31536000, immutable");
-    res.sendFile("favicon.ico", {root: "/data/assets"}, (err) => {
+    res.sendFile("favicon.ico", {root: path.join(APP_DATA, "assets")}, (err) => {
         if (err) {
             res.status(404).end();
         }

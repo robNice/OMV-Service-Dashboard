@@ -290,9 +290,7 @@ Updates und Neuaufsetzen des Containers sind jederzeit möglich. Alles innerhalb
 
 ---
 
-### Installation: Standalone (fortgeschritten / ungetestet)
-
-Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsächlich der Vollständigkeit halber vorhanden.
+### Installation: Standalone (fortgeschritten)
 
 ---
 
@@ -304,12 +302,45 @@ Dieser Modus wird aktuell nicht aktiv getestet und ist hauptsächlich der Vollst
 
 ---
 
-#### Schritte (Uebersicht)
+#### Schritte
 
 1. Repository klonen.
-2. Abhängigkeiten installieren.
-3. `config.example/` nach `config/` kopieren.
-4. Server mit `node server.js` starten.
+2. Abhängigkeiten installieren:
+
+```bash
+cd app
+npm install
+```
+
+3. Ein Konfigurationsverzeichnis vorbereiten. Du kannst entweder die Beispielkonfiguration kopieren oder mit einem leeren Verzeichnis starten:
+
+```bash
+cp -r ../config.example /pfad/zu/deinem-nas-portal-config
+```
+
+4. Den Server aus dem Verzeichnis `app/` starten und das Config-Verzeichnis explizit übergeben:
+
+```bash
+node server.js --config-dir /pfad/zu/deinem-nas-portal-config
+```
+
+`--config-dir` ist für den Standalone-Betrieb die bevorzugte Variante.
+
+#### Priorität für das Config-Verzeichnis
+
+Die Anwendung ermittelt das Benutzer-Config-Verzeichnis in dieser Reihenfolge:
+
+1. `--config-dir /pfad/zum/config-verzeichnis`
+2. `OMV_SERVICE_DASHBOARD_CONFIG=/pfad/zum/config-verzeichnis`
+3. Standardpfad: `app/config`
+
+Wenn weder CLI-Parameter noch Umgebungsvariable gesetzt sind, startet der Server mit dem Standardpfad und gibt beim Start einen Hinweis aus.
+
+#### Hinweise für den Standalone-Betrieb
+
+- Laufzeitdaten landen standardmäßig in `app/data`.
+- Benutzerkonfigurationen landen standardmäßig in `app/config`.
+- Im Docker-Betrieb kann wie bisher `/config` per Volume-Mount oder Umgebungsvariable genutzt werden.
 
 ---
 

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const {USER_ASSETS, APP_ASSETS, CONFIG_DIR} = require('./paths');
+const {USER_ASSETS, APP_ASSETS} = require('./paths');
 const {IMAGE_EXTS} = require('./image-extensions');
 
 function fileExists(p) {
@@ -154,8 +154,8 @@ function readDirSafe(dir) {
 }
 
 function getServiceCardImages() {
-    const userDir = path.join(CONFIG_DIR, 'assets/cards/services');
-    const appDir = path.join(__dirname, '../data/assets/cards/services');
+    const userDir = path.join(USER_ASSETS, 'cards/services');
+    const appDir = path.join(APP_ASSETS, 'cards/services');
     const userImages = readDirSafe(userDir);
     const appImages = readDirSafe(appDir);
     const images = new Map();

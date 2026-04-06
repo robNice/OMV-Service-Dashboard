@@ -1,5 +1,7 @@
 const express = require("express");
 const fs = require("fs");
+const path = require("path");
+const {APP_CODE} = require("../lib/paths");
 
 function createAdminPagesRouter({
     sessions,
@@ -25,7 +27,7 @@ function createAdminPagesRouter({
         }
 
         const tpl = fs.readFileSync(
-            "/app/templates/admin-login.html",
+            path.join(APP_CODE, "templates/admin-login.html"),
             "utf8"
         );
 
@@ -47,7 +49,7 @@ function createAdminPagesRouter({
 
             if (!verifyPassword(password, config.admin.passwordHash)) {
                 const tpl = fs.readFileSync(
-                    "/app/templates/admin-login.html",
+                    path.join(APP_CODE, "templates/admin-login.html"),
                     "utf8"
                 );
 
@@ -95,7 +97,7 @@ function createAdminPagesRouter({
 
     router.get("/", requireAdmin, (req, res) => {
         const tpl = fs.readFileSync(
-            "/app/templates/admin-index.html",
+            path.join(APP_CODE, "templates/admin-index.html"),
             "utf8"
         );
 
@@ -110,7 +112,7 @@ function createAdminPagesRouter({
 
     router.get("/setpassword", requireAdmin, (req, res) => {
         const tpl = fs.readFileSync(
-            "/app/templates/admin-setpassword.html",
+            path.join(APP_CODE, "templates/admin-setpassword.html"),
             "utf8"
         );
 
@@ -125,7 +127,7 @@ function createAdminPagesRouter({
 
     router.get("/theme", requireAdmin, (req, res) => {
         const tpl = fs.readFileSync(
-            "/app/templates/admin-theme.html",
+            path.join(APP_CODE, "templates/admin-theme.html"),
             "utf8"
         );
 
@@ -142,7 +144,7 @@ function createAdminPagesRouter({
 
     router.get("/config", requireAdmin, (req, res) => {
         const tpl = fs.readFileSync(
-            "/app/templates/admin-config.html",
+            path.join(APP_CODE, "templates/admin-config.html"),
             "utf8"
         );
 
@@ -177,7 +179,7 @@ function createAdminPagesRouter({
 
     router.get("/services", requireAdmin, (req, res) => {
         const tpl = fs.readFileSync(
-            "/app/templates/admin-services.html",
+            path.join(APP_CODE, "templates/admin-services.html"),
             "utf8"
         );
 
