@@ -31,8 +31,11 @@
     "gb": "GB"
   },
   "status": {
-    "updatedAt": "Last update",
+    "updatedAt": "System data age",
     "now": "now",
+    "secondsShort": "sec",
+    "minutesShort": "min",
+    "hoursShort": "hrs",
     "loadingTitle": "System data is loading",
     "loadingBody": "The info drawer will populate automatically as soon as the first live status request has completed.",
     "refreshingTitle": "Cached system data is shown",

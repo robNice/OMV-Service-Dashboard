@@ -31,8 +31,11 @@
     "gb": "GB"
   },
   "status": {
-    "updatedAt": "Letztes Update",
+    "updatedAt": "Alter der Systemdaten",
     "now": "jetzt",
+    "secondsShort": "Sek",
+    "minutesShort": "Min",
+    "hoursShort": "Std",
     "loadingTitle": "Systemdaten werden geladen",
     "loadingBody": "Der Info-Drawer füllt sich automatisch, sobald die erste Live-Status-Abfrage abgeschlossen ist.",
     "refreshingTitle": "Zwischengespeicherte Systemdaten werden angezeigt",

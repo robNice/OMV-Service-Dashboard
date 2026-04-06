@@ -20,6 +20,11 @@
             window.I18N_ERRORS = {
                 NO_DISKS_FOUND: "{{__.errors.noDisksFound}}",
             }
+            window.I18N_STATUS = {
+                SECONDS_SHORT: "{{__.status.secondsShort}}",
+                MINUTES_SHORT: "{{__.status.minutesShort}}",
+                HOURS_SHORT: "{{__.status.hoursShort}}"
+            }
         </script>
         <script id="omv-theme-settings" type="application/json">{{THEME_SETTINGS_JSON}}</script>
         <meta charset="UTF-8">
@@ -130,7 +135,7 @@
 
 
                 <footer>
-                    <span>{{__.status.updatedAt}}: <span class="chip">{{__.status.now}}</span></span>
+                    <span>{{__.status.updatedAt}}: <span class="chip" data-stats-age>{{__.status.now}}</span></span>
                     <button data-i18n="label.close" data-close class="chip" style="cursor:pointer">{{__.label.close}}</button>
                 </footer>
             </div>

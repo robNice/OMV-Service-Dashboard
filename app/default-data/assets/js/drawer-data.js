@@ -4,6 +4,43 @@
     let POLL_MS = 30000;
     let hasLoadedOnce = false;
     const initialStats = window.OMV_HAS_INITIAL_STATS ? window.OMV_INITIAL_STATS : null;
+    let lastStatsTs = null;
+
+    /**
+     * Format the age of the latest stats snapshot.
+     * @param ts
+     * @returns {string}
+     */
+    function formatStatsAge(ts) {
+        const deltaSeconds = Math.max(0, Math.floor((Date.now() - Number(ts || Date.now())) / 1000));
+        const secLabel = window.I18N_STATUS?.SECONDS_SHORT || "s";
+        const minLabel = window.I18N_STATUS?.MINUTES_SHORT || "min";
+        const hourLabel = window.I18N_STATUS?.HOURS_SHORT || "h";
+
+        if (deltaSeconds < 60) {
+            return `${deltaSeconds} ${secLabel}`;
+        }
+
+        if (deltaSeconds < 3600) {
+            const minutes = Math.floor(deltaSeconds / 60);
+            const seconds = deltaSeconds % 60;
+            return `${minutes} ${minLabel} ${seconds} ${secLabel}`;
+        }
+
+        const hours = Math.floor(deltaSeconds / 3600);
+        const minutes = Math.floor((deltaSeconds % 3600) / 60);
+        const seconds = deltaSeconds % 60;
+        return `${hours} ${hourLabel} ${minutes} ${minLabel} ${seconds} ${secLabel}`;
+    }
+
+    /**
+     * Update the footer chip with the age of the current stats.
+     */
+    function updateStatsAgeDisplay() {
+        const chip = document.querySelector("[data-stats-age]");
+        if (!chip || !lastStatsTs) return;
+        chip.textContent = formatStatsAge(lastStatsTs);
+    }
 
     /**
      * Toggle the initial loading hint for the drawer.
@@ -268,6 +305,7 @@
      * @param s
      */
     function applyStats(s) {
+        lastStatsTs = s.ts || Date.now();
         if( s.pollInterval && s.pollInterval > 0 ) {
             POLL_MS = s.pollInterval;
         }
@@ -328,10 +366,7 @@
             contDocker.innerHTML = items.map(renderContainerItem).join("\n");
         }
 
-        const date = new Date(s.ts || Date.now());
-        const t = date.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", second: "2-digit"});
-        const chip = document.querySelector("#info-drawer footer .chip");
-        if (chip) chip.textContent = t;
+        updateStatsAgeDisplay();
     }
 
     /**
@@ -371,4 +406,5 @@
     }
 
     loop();
+    setInterval(updateStatsAgeDisplay, 1000);
 })();
