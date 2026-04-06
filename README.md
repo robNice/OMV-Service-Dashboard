@@ -140,7 +140,6 @@ Here you can edit the most important configuration values, for example:
 - `Fallback Language`: default language if no matching locale is found
 - `Info Drawer Refresh Interval`: refresh interval of the info drawer in seconds
 - `Port`: port the application listens on
-- `OMV RPC Path`: path to the `omv-rpc` binary
 
 ---
 

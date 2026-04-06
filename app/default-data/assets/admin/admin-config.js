@@ -8,11 +8,8 @@ const fields = {
     title: document.getElementById("config-title"),
     defaultLang: document.getElementById("config-default-lang"),
     infoDrawerRefreshInterval: document.getElementById("config-refresh-interval"),
-    omvRpcPath: document.getElementById("config-omv-rpc-path"),
     port: document.getElementById("config-port")
 };
-
-const resetRpcBtn = document.getElementById("config-omv-rpc-reset");
 
 const TXT = {
     saveLabel: root.dataset.saveLabel,
@@ -24,7 +21,6 @@ const TXT = {
 };
 
 let initialConfig = null;
-let defaultOmvRpcPath = "/usr/sbin/omv-rpc";
 let availableLanguages = [];
 
 function syncLanguageOptions(selectedValue = "") {
@@ -53,7 +49,6 @@ function normalizedFormValue() {
         title: fields.title.value.trim(),
         defaultLang: fields.defaultLang.value.trim(),
         infoDrawerRefreshInterval: Number.parseInt(fields.infoDrawerRefreshInterval.value, 10) || 0,
-        omvRpcPath: fields.omvRpcPath.value.trim() || defaultOmvRpcPath,
         port: Number.parseInt(fields.port.value, 10) || 0
     };
 }
@@ -62,7 +57,6 @@ function configsEqual(a, b) {
     return a.title === b.title
         && a.defaultLang === b.defaultLang
         && a.infoDrawerRefreshInterval === b.infoDrawerRefreshInterval
-        && a.omvRpcPath === b.omvRpcPath
         && a.port === b.port;
 }
 
@@ -77,7 +71,6 @@ function isValid() {
         && Boolean(data.defaultLang)
         && Number.isFinite(data.infoDrawerRefreshInterval)
         && data.infoDrawerRefreshInterval > 0
-        && Boolean(data.omvRpcPath)
         && Number.isFinite(data.port)
         && data.port >= 1
         && data.port <= 65535;
@@ -103,14 +96,12 @@ function applyConfig(config) {
         title: String(config.title || ""),
         defaultLang: String(config.defaultLang || ""),
         infoDrawerRefreshInterval: Number(config.infoDrawerRefreshInterval) || 0,
-        omvRpcPath: String(config.omvRpcPath || defaultOmvRpcPath),
         port: Number(config.port) || 0
     };
 
     fields.title.value = initialConfig.title;
     syncLanguageOptions(initialConfig.defaultLang);
     fields.infoDrawerRefreshInterval.value = String(initialConfig.infoDrawerRefreshInterval);
-    fields.omvRpcPath.value = initialConfig.omvRpcPath;
     fields.port.value = String(initialConfig.port);
     syncSaveState();
 }
@@ -123,7 +114,6 @@ async function loadConfig() {
     }
 
     const data = await response.json();
-    defaultOmvRpcPath = String(data.defaultOmvRpcPath || defaultOmvRpcPath);
     availableLanguages = Array.isArray(data.availableLanguages) ? data.availableLanguages.map(String) : [];
     applyConfig(data);
 }
@@ -136,12 +126,6 @@ Object.values(fields).forEach((field) => {
 
     field.addEventListener("input", onChange);
     field.addEventListener("change", onChange);
-});
-
-resetRpcBtn.addEventListener("click", () => {
-    fields.omvRpcPath.value = defaultOmvRpcPath;
-    setStatus("");
-    syncSaveState();
 });
 
 saveBtn.addEventListener("click", async () => {

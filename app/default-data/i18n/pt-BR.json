@@ -90,7 +90,6 @@
       "desc": "Gerencie as configurações principais do dashboard e as opções de execução",
       "sectionTitle": "Configuração geral",
       "hint": "Esses valores afetam o comportamento global do dashboard. Alterações de porta só entram em vigor após reiniciar.",
-      "useDefaultRpcPath": "Usar caminho RPC padrão",
       "portHint": "Altere a porta apenas se você souber exatamente o que está fazendo. Uma porta incorreta pode fazer com que o dashboard fique inacessível após a reinicialização e também pode exigir ajustes no proxy reverso, Docker ou firewall.",
       "portConfirmTitle": "Confirmar alteração de porta",
       "portConfirmBody": "Voc� alterou a porta do dashboard. Essa mudan�a ser� aplicada ap�s a reinicializa��o. Se a nova porta estiver incorreta ou n�o estiver exposta, o dashboard poder� deixar de estar acess�vel. Deseja continuar mesmo assim?",
@@ -98,7 +97,6 @@
         "title": "Título do dashboard",
         "defaultLang": "Idioma de fallback",
         "infoDrawerRefreshInterval": "Intervalo de atualização do painel de informações (segundos)",
-        "omvRpcPath": "Caminho OMV RPC",
         "port": "Porta"
       }
     },
