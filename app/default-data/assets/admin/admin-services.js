@@ -42,7 +42,7 @@ function applyImagePreview(previewEl, image) {
     if (status) {
         const LABELS = {
             explicit: I18N.imageSourceCustom || 'custom',
-            id:       I18N.imageSourceAuto || 'auto',
+            id:       I18N.imageSourceCustom || 'custom',
             app:      I18N.imageSourceDefault || 'default',
             default:  I18N.imageSourceDefault || 'default'
         };
@@ -88,9 +88,27 @@ function isCustom(image) {
         (
             image.isCustom === true ||
             image.uploadId ||
-            image.source === 'explicit'
+            image.source === 'explicit' ||
+            image.source === 'id'
         )
     );
+}
+
+function bindImagePicker(previewEl, inputEl) {
+    if (!previewEl || !inputEl) return;
+
+    previewEl.tabIndex = 0;
+    previewEl.setAttribute('role', 'button');
+
+    const triggerInput = () => inputEl.click();
+
+    previewEl.addEventListener('click', () => triggerInput());
+    previewEl.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            triggerInput();
+        }
+    });
 }
 
 /* ================= Render ================= */
@@ -165,6 +183,7 @@ function renderSection(section, sectionIndex) {
 
 
     const bgInput = el.querySelector('[data-upload="section-bg"]');
+    bindImagePicker(bgPreview, bgInput);
     if (bgInput) {
         bgInput.addEventListener("change", async () => {
             const file = bgInput.files[0];
@@ -218,6 +237,7 @@ function renderSection(section, sectionIndex) {
     const servicesEl = el.querySelector('.section-services');
 
     const cardInput = el.querySelector('[data-upload="section-card"]');
+    bindImagePicker(cardPreview, cardInput);
     if (cardInput) {
         cardInput.addEventListener("change", async () => {
             const file = cardInput.files[0];
@@ -327,6 +347,7 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
     });
 
     const preview = el.querySelector('.image-preview');
+    bindImagePicker(preview, cardInput);
     const resetBtn = el.querySelector('[data-action="reset-service-card"]');
     if (resetBtn) {
         resetBtn.style.display = isCustom(service.cardImage) ? '' : 'none';

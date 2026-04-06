@@ -105,30 +105,34 @@
         <div class="section-header">
             <button data-action="toggle-section" class="collapse-toggle" title="{{__.admin.section.toggle}}">▼</button>
 
-            <div class="section-field section-field-id">
-                <label>{{__.admin.section.id}}</label>
-                <input type="text" data-field="section-id">
+            <div class="section-meta">
+                <div class="section-field section-field-id">
+                    <label>{{__.admin.section.id}}</label>
+                    <input type="text" data-field="section-id">
+                </div>
+
+                <div class="section-field section-field-title">
+                    <label>{{__.admin.section.title}}</label>
+                    <input type="text" data-field="section-title">
+                </div>
             </div>
 
-            <div class="section-field section-field-title">
-                <label>{{__.admin.section.title}}</label>
-                <input type="text" data-field="section-title">
-            </div>
             <div class="section-media-row">
                 <div class="image-field">
                     <label>{{__.admin.section.cardimage}}</label>
 
                     <div class="image-preview">
                         <img
-                                data-preview="section-card"
-                                alt=""
-                                src=""
-                                data-defaultimg=""
+                            data-preview="section-card"
+                            alt=""
+                            src=""
+                            data-defaultimg=""
                         >
                         <span class="image-status" data-status="section-card"></span>
                     </div>
 
                     <input type="file"
+                           class="image-input"
                            accept="image/*"
                            data-upload="section-card">
 
@@ -148,6 +152,7 @@
                     </div>
 
                     <input type="file"
+                           class="image-input"
                            accept="image/*"
                            data-upload="section-bg">
 
@@ -160,8 +165,14 @@
             </div>
 
 
-            <button class="danger section-delete" data-action="delete-section">
-                {{__.admin.section.delete}}
+            <button class="danger icon-button section-delete" data-action="delete-section" title="{{__.admin.section.delete}}" aria-label="{{__.admin.section.delete}}">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 7H20"></path>
+                    <path d="M9 7V5H15V7"></path>
+                    <path d="M7 7L8 19H16L17 7"></path>
+                    <path d="M10 11V16"></path>
+                    <path d="M14 11V16"></path>
+                </svg>
             </button>
         </div>
 
@@ -195,6 +206,7 @@
             </div>
 
             <input type="file"
+                   class="image-input"
                    accept="image/*"
                    data-upload="service-card">
 
@@ -206,8 +218,14 @@
         </div>
 
 
-        <button class="danger service-delete" data-action="delete-service">
-            {{__.admin.service.delete}}
+        <button class="danger icon-button service-delete" data-action="delete-service" title="{{__.admin.service.delete}}" aria-label="{{__.admin.service.delete}}">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7H20"></path>
+                <path d="M9 7V5H15V7"></path>
+                <path d="M7 7L8 19H16L17 7"></path>
+                <path d="M10 11V16"></path>
+                <path d="M14 11V16"></path>
+            </svg>
         </button>
     </div>
 </template>

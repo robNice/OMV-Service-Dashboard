@@ -580,12 +580,18 @@ header.admin-header h1 {
     padding-bottom: 1rem;
     border-bottom: 1px solid rgba(100, 116, 139, 0.32);
     display: grid;
-    grid-template-columns: auto minmax(180px, 0.95fr) minmax(220px, 1.2fr) minmax(360px, 1.4fr) auto;
+    grid-template-columns: auto minmax(260px, 1fr) minmax(420px, 1.45fr) auto;
     gap: 0.9rem 1rem;
     align-items: start;
 }
 
 .section-field {
+    min-width: 0;
+}
+
+.section-meta {
+    display: grid;
+    gap: 0.85rem;
     min-width: 0;
 }
 
@@ -611,29 +617,26 @@ header.admin-header h1 {
 }
 .image-field {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 6px 10px;
-    align-items: center;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    align-items: start;
     background: rgba(2, 6, 23, 0.58);
     padding: 0.65rem;
     border-radius: 8px;
     border: 1px solid rgba(51, 65, 85, 0.95);
 }
-.image-field input[type="file"] {
-    font-size: 0.75rem;
-    padding: 0.35rem 0.5rem;
-    opacity: 0.85;
+
+.image-input {
+    display: none;
 }
 
-.image-field input[type="file"]::-webkit-file-upload-button {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.75rem;
-}
 .image-field button.secondary.small {
-    margin-top: 4px;
+    margin-top: 0;
     font-size: 0.7rem;
     padding: 4px 8px;
     opacity: 0.7;
+    width: auto;
+    justify-self: start;
 }
 
 .image-field button.secondary.small:hover {
@@ -646,34 +649,32 @@ header.admin-header h1 {
 }
 
 .image-preview {
-    position: relative;
-    width: 42px;
-    height: 42px;
-    border-radius: 6px;
-    overflow: hidden;
+    display: inline-grid;
+    gap: 0.4rem;
+    justify-items: start;
+    cursor: pointer;
+    outline: none;
+}
+.image-preview img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 8px;
     border: 1px solid #1e293b;
     background: #020617;
 }
-.image-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
 .image-status {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-
-    font-size: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.25rem;
+    font-size: 0.68rem;
     line-height: 1;
-    padding: 2px 4px;
-
-    border-radius: 3px;
+    padding: 0.22rem 0.45rem;
+    border-radius: 999px;
     background: rgba(0,0,0,0.65);
     color: #fff;
-
     pointer-events: none;
-    z-index: 2;
+    white-space: nowrap;
 }
 
 .image-status[data-source="explicit"] {
@@ -682,8 +683,8 @@ header.admin-header h1 {
 }
 
 .image-status[data-source="id"] {
-    background: #3498db;
-    color: #021f33;
+    background: #2ecc71;
+    color: #062e12;
 }
 
 .image-status[data-source="default"] {
@@ -718,8 +719,31 @@ header.admin-header h1 {
 
 .service-delete {
     width: auto;
-    min-width: 6.5rem;
-    align-self: stretch;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    align-self: center;
+}
+
+.icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.icon-button svg {
+    width: 1rem;
+    height: 1rem;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.section-delete {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    align-self: start;
 }
 .service:last-child {
     margin-bottom: 0;
