@@ -32,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Última actualización",
-    "now": "ahora"
+    "now": "ahora",
+    "secondsShort": "s",
+    "minutesShort": "min",
+    "hoursShort": "h",
+    "loadingTitle": "Cargando datos del sistema",
+    "loadingBody": "El panel de informaci?n se completar? autom?ticamente en cuanto finalice la primera solicitud de estado en vivo.",
+    "refreshingTitle": "Se muestran datos del sistema en cach?",
+    "refreshingBody": "Los valores mostrados provienen de la ?ltima instant?nea del servidor. Los datos en vivo se est?n actualizando en segundo plano."
   },
   "tooltip": {
     "infodrawer": "Abrir/cerrar información del sistema",

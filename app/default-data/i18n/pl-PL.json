@@ -32,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Ostatnia aktualizacja",
-    "now": "teraz"
+    "now": "teraz",
+    "secondsShort": "s",
+    "minutesShort": "min",
+    "hoursShort": "godz.",
+    "loadingTitle": "?adowanie danych systemowych",
+    "loadingBody": "Panel informacji uzupe?ni si? automatycznie, gdy tylko zako?czy si? pierwsze ??danie statusu na ?ywo.",
+    "refreshingTitle": "Wy?wietlane s? dane systemowe z pami?ci podr?cznej",
+    "refreshingBody": "Wy?wietlane warto?ci pochodz? z ostatniej migawki po stronie serwera. Dane na ?ywo s? od?wie?ane w tle."
   },
   "tooltip": {
     "infodrawer": "Otwórz/zamknij informacje systemowe",

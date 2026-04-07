@@ -32,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Ultimo aggiornamento",
-    "now": "ora"
+    "now": "ora",
+    "secondsShort": "s",
+    "minutesShort": "min",
+    "hoursShort": "h",
+    "loadingTitle": "Caricamento dei dati di sistema",
+    "loadingBody": "Il pannello informazioni si popoler? automaticamente non appena sar? completata la prima richiesta di stato in tempo reale.",
+    "refreshingTitle": "Sono visualizzati dati di sistema memorizzati nella cache",
+    "refreshingBody": "I valori mostrati provengono dall'ultima istantanea lato server. I dati in tempo reale vengono aggiornati in background."
   },
   "tooltip": {
     "infodrawer": "Apri/chiudi informazioni di sistema",
