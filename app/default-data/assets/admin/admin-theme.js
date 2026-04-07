@@ -197,7 +197,9 @@ function renderField(setting, value) {
                     value="${escapeHtml(option.value)}"
                     data-setting-id="${escapeHtml(setting.id)}"
                     ${option.value === String(value) ? "checked" : ""}>
-                <span class="theme-setting-choice-label">${escapeHtml(option.label)}</span>
+                <span class="theme-setting-choice-chip-surface">
+                    <span class="theme-setting-choice-label">${escapeHtml(option.label)}</span>
+                </span>
             </label>
         `).join("");
 

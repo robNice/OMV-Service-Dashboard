@@ -249,6 +249,31 @@ body {
     margin-bottom: 0;
 }
 
+.theme-setting-choice-control {
+    display: inline-block;
+    flex: 0 0 auto;
+    position: relative;
+    width: 2.75rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    background: #d4d4d8;
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.16);
+    transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.theme-setting-choice-control::after {
+    content: "";
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.32);
+    transition: transform 0.18s ease;
+}
+
 .theme-setting-toggle input[type="checkbox"]:checked + .theme-setting-choice-control {
     background: #dc2626;
 }
@@ -305,27 +330,39 @@ body {
     pointer-events: none;
 }
 
+.theme-setting-choice-chip-surface {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.4rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid #334155;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.72);
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
 .theme-setting-choice-label {
     color: #e2e8f0;
     line-height: 1.4;
 }
 
-.theme-setting-choice-chip:hover {
+.theme-setting-choice-chip:hover .theme-setting-choice-chip-surface {
     border-color: #475569;
     background: rgba(30, 41, 59, 0.88);
 }
 
-.theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-label {
-    color: #ffffff;
-}
-
-.theme-setting-choice-chip:has(input[type="radio"]:checked) {
+.theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-chip-surface {
     border-color: #dc2626;
     background: rgba(220, 38, 38, 0.16);
     box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.24);
 }
 
-.theme-setting-choice-chip:has(input[type="radio"]:focus-visible) {
+.theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-chip-surface .theme-setting-choice-label {
+    color: #ffffff;
+}
+
+.theme-setting-choice-chip input[type="radio"]:focus-visible + .theme-setting-choice-chip-surface {
     outline: 2px solid #60a5fa;
     outline-offset: 2px;
 }
