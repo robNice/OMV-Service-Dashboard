@@ -2,8 +2,16 @@
   "id": "hippies",
   "label": "Hippies",
   "description": "Round shapes, flower-power accents and a colorful VW-Bus inspired festival vibe.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "settings": [
+    {
+      "id": "show-section-thumbnails",
+      "group": "Layout",
+      "label": "Show section thumbnails in header",
+      "description": "Show or hide section thumbnails in the header navigation.",
+      "type": "boolean",
+      "default": true
+    },
     {
       "id": "cards-per-row-desktop",
       "group": "Layout",

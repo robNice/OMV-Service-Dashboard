@@ -2,8 +2,16 @@
   "id": "bubbles",
   "label": "Bubbles",
   "description": "Bubble-inspired dashboard theme with floating bubbles, passing fish and circular service islands.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "settings": [
+    {
+      "id": "show-section-thumbnails",
+      "group": "Layout",
+      "label": "Show section thumbnails in header",
+      "description": "Show or hide section thumbnails in the header navigation.",
+      "type": "boolean",
+      "default": true
+    },
     {
       "id": "cards-per-row-desktop",
       "group": "Layout",
