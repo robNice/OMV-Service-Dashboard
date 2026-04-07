@@ -1,4 +1,5 @@
 :root {
+    --omv-service-card-width: 308px;
     --bg-color: #fff5d6;
     --text-color: #3a1f1b;
     --tile-bg: rgba(255, 248, 229, 0.88);
@@ -164,7 +165,7 @@ body::after {
 
 .service {
     position: relative;
-    width: 308px;
+    width: 100%;
     border-radius: 36px 36px 24px 24px;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 248, 229, 0.08)),
@@ -337,7 +338,6 @@ body::after {
     }
 
     .service {
-        width: min(100%, 330px);
         border-radius: 28px 28px 20px 20px;
     }
 

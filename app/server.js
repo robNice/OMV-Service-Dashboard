@@ -254,10 +254,24 @@ function buildThemeSettings(themeId, config) {
     return sanitizeThemeSettings(theme, config?.themeSettings?.[theme?.id]);
 }
 
+function buildServiceGridTemplate(value) {
+    const columns = Number(value);
+
+    if (!Number.isFinite(columns) || columns <= 0) {
+        return 'repeat(auto-fit, minmax(min(100%, var(--omv-service-card-width, 300px)), 1fr))';
+    }
+
+    return `repeat(${Math.max(1, Math.floor(columns))}, minmax(0, 1fr))`;
+}
+
 function buildThemeSettingMarkup(themeId, config) {
     const settings = buildThemeSettings(themeId, config);
     const attrs = [];
-    const cssVars = [];
+    const cssVars = [
+        `--omv-grid-template-desktop:${buildServiceGridTemplate(settings['cards-per-row-desktop'])}`,
+        `--omv-grid-template-tablet:${buildServiceGridTemplate(settings['cards-per-row-tablet'])}`,
+        `--omv-grid-template-mobile:${buildServiceGridTemplate(settings['cards-per-row-mobile'])}`
+    ];
 
     for (const [id, value] of Object.entries(settings)) {
         const attrValue = typeof value === 'boolean' ? String(value) : String(value);

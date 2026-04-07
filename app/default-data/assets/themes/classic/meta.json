@@ -2,5 +2,31 @@
   "id": "classic",
   "label": "Classic",
   "description": "Current dashboard layout with the existing card grid.",
-  "version": "1.0.0"
+  "version": "1.1.0",
+  "settings": [
+    {
+      "id": "cards-per-row-desktop",
+      "group": "Layout",
+      "label": "Cards per row on desktop",
+      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible.",
+      "type": "number",
+      "default": 0
+    },
+    {
+      "id": "cards-per-row-tablet",
+      "group": "Layout",
+      "label": "Cards per row on tablet",
+      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible.",
+      "type": "number",
+      "default": 0
+    },
+    {
+      "id": "cards-per-row-mobile",
+      "group": "Layout",
+      "label": "Cards per row on mobile",
+      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible.",
+      "type": "number",
+      "default": 0
+    }
+  ]
 }

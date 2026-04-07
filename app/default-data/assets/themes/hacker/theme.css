@@ -15,6 +15,7 @@
 }
 
 :root {
+    --omv-service-card-width: 300px;
     --bg-opacity: 0.34;
 }
 
