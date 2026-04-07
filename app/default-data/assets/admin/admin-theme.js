@@ -187,14 +187,15 @@ function renderField(setting, value) {
 
     if (setting.type === "radio") {
         const options = (setting.options || []).map((option) => `
-            <label class="theme-setting-choice">
+            <label class="theme-setting-choice theme-setting-choice-switch">
                 <input
                     type="radio"
                     name="${escapeHtml(fieldId)}"
                     value="${escapeHtml(option.value)}"
                     data-setting-id="${escapeHtml(setting.id)}"
                     ${option.value === String(value) ? "checked" : ""}>
-                <span>${escapeHtml(option.label)}</span>
+                <span class="theme-setting-choice-control" aria-hidden="true"></span>
+                <span class="theme-setting-choice-label">${escapeHtml(option.label)}</span>
             </label>
         `).join("");
 
