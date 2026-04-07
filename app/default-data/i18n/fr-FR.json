@@ -16,6 +16,7 @@
     "docker": "Conteneurs Docker",
     "host": "Hôte",
     "os": "Système",
+    "nas": "NAS",
     "kernel": "Noyau",
     "cpu": "Processeur",
     "gpu": "Carte graphique",
@@ -90,7 +91,6 @@
       "desc": "Gérez les paramètres principaux du tableau de bord et les options liées à l'exécution",
       "sectionTitle": "Configuration générale",
       "hint": "Ces valeurs influencent le comportement global du tableau de bord. Les changements de port ne prennent effet qu'après un redémarrage.",
-      "useDefaultRpcPath": "Utiliser le chemin RPC par défaut",
       "portHint": "Ne modifiez le port que si vous savez exactement ce que vous faites. Un port incorrect peut rendre le tableau de bord inaccessible après un redémarrage et nécessiter aussi des ajustements du reverse proxy, de Docker ou du pare-feu.",
       "portConfirmTitle": "Confirmer le changement de port",
       "portConfirmBody": "Vous avez modifi� le port du tableau de bord. Ce changement prendra effet apr�s un red�marrage. Si le nouveau port est incorrect ou non expos�, le tableau de bord risque de ne plus �tre accessible. Voulez-vous continuer ?",
@@ -98,7 +98,6 @@
         "title": "Titre du tableau de bord",
         "defaultLang": "Langue de secours",
         "infoDrawerRefreshInterval": "Intervalle d'actualisation du panneau d'information (secondes)",
-        "omvRpcPath": "Chemin OMV RPC",
         "port": "Port"
       }
     },

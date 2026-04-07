@@ -1,9 +1,9 @@
-name: Build and publish DEV Docker image
+name: Build and publish REFACTOR Docker image
 
 on:
   push:
     branches:
-      - dev
+      - refactor
 
 permissions:
   contents: read
@@ -29,10 +29,10 @@ jobs:
           # IMAGE_NAME="ghcr.io/robnice/nas-portal"
           echo "name=$IMAGE_NAME" >> $GITHUB_OUTPUT
 
-      - name: Build and push DEV Docker image
+      - name: Build and push REFACTOR Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: |
-            ${{ steps.image.outputs.name }}:dev
+            ${{ steps.image.outputs.name }}:refactor

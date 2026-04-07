@@ -16,6 +16,7 @@
     "docker": "Contentores Docker",
     "host": "Host",
     "os": "SO",
+    "nas": "NAS",
     "kernel": "Kernel",
     "cpu": "CPU",
     "gpu": "GPU",
@@ -90,7 +91,6 @@
       "desc": "Gere as definições principais do dashboard e as opções de execução",
       "sectionTitle": "Configuração geral",
       "hint": "Estes valores afetam o comportamento global do dashboard. As alterações de porta só produzem efeito após reiniciar.",
-      "useDefaultRpcPath": "Usar caminho RPC predefinido",
       "portHint": "Altere a porta apenas se souber exatamente o que está a fazer. Uma porta incorreta pode tornar o dashboard inacessível após o reinício e também pode exigir ajustes no proxy reverso, Docker ou firewall.",
       "portConfirmTitle": "Confirmar alteração de porta",
       "portConfirmBody": "Alterou a porta do dashboard. Esta altera��o s� ser� aplicada ap�s reiniciar. Se a nova porta estiver incorreta ou n�o estiver exposta, o dashboard pode deixar de estar acess�vel. Pretende continuar mesmo assim?",
@@ -98,7 +98,6 @@
         "title": "Título do dashboard",
         "defaultLang": "Idioma de fallback",
         "infoDrawerRefreshInterval": "Intervalo de atualização do painel de informação (segundos)",
-        "omvRpcPath": "Caminho OMV RPC",
         "port": "Porta"
       }
     },

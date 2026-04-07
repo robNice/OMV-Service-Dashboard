@@ -28,7 +28,10 @@ function escapeHtml(value) {
 
 function setStatus(message, tone = "") {
     statusEl.textContent = message || "";
-    statusEl.className = tone ? `hint ${tone}` : "hint";
+    statusEl.className = tone ? `save-status ${tone}` : "save-status";
+    statusEl.dataset.tone = tone || "";
+    statusEl.classList.toggle("is-visible", Boolean(message));
+    statusEl.classList.remove("is-fading");
 }
 
 function getThemeById(themeId) {
@@ -282,7 +285,7 @@ function renderSettings(themeId) {
 
 async function loadThemes() {
     setStatus(root.dataset.loading);
-    const response = await fetch("/admin/api/themes");
+    const response = await adminFetch("/admin/api/themes");
     if (!response.ok) {
         throw new Error("load_failed");
     }
@@ -403,7 +406,7 @@ saveBtn.addEventListener("click", async () => {
         setSaving(true);
         setStatus("");
 
-        const response = await fetch("/admin/api/theme", {
+        const response = await adminFetch("/admin/api/theme", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

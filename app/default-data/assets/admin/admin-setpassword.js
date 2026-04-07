@@ -51,7 +51,11 @@ function validate() {
 
 function setStatus(text, type = "hint") {
     status.textContent = text;
-    status.className = type;
+    const tone = type === "error" ? "error" : (text ? "success" : "");
+    status.className = tone ? `save-status ${tone}` : "save-status";
+    status.dataset.tone = tone;
+    status.classList.toggle("is-visible", Boolean(text));
+    status.classList.remove("is-fading");
 }
 
 /* ================= Input ================= */
@@ -74,7 +78,7 @@ btn.addEventListener("click", async () => {
     setStatus("");
 
     try {
-        const res = await fetch("/admin/setpassword", {
+        const res = await adminFetch("/admin/setpassword", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({

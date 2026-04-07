@@ -34,8 +34,7 @@ function applyImagePreview(previewEl, image) {
             : { source: 'default' };
     } else {
         if (img && image.src) {
-            const v = image.v ? `?v=${image.v}` : '';
-            img.src = image.src + v;
+            img.src = image.v ? `${image.src}?v=${image.v}` : image.src;
             img.title = image.resolvedFile || '';
         }
     }
@@ -43,7 +42,8 @@ function applyImagePreview(previewEl, image) {
     if (status) {
         const LABELS = {
             explicit: I18N.imageSourceCustom || 'custom',
-            id:       I18N.imageSourceAuto || 'auto',
+            id:       I18N.imageSourceCustom || 'custom',
+            app:      I18N.imageSourceDefault || 'default',
             default:  I18N.imageSourceDefault || 'default'
         };
 
@@ -88,9 +88,27 @@ function isCustom(image) {
         (
             image.isCustom === true ||
             image.uploadId ||
-            image.source === 'explicit'
+            image.source === 'explicit' ||
+            image.source === 'id'
         )
     );
+}
+
+function bindImagePicker(previewEl, inputEl) {
+    if (!previewEl || !inputEl) return;
+
+    previewEl.tabIndex = 0;
+    previewEl.setAttribute('role', 'button');
+
+    const triggerInput = () => inputEl.click();
+
+    previewEl.addEventListener('click', () => triggerInput());
+    previewEl.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            triggerInput();
+        }
+    });
 }
 
 /* ================= Render ================= */
@@ -106,7 +124,7 @@ async function uploadImage(kind, file) {
     const fd = new FormData();
     fd.append("file", file);
 
-    const res = await fetch(`/admin/api/upload/${kind}`, {
+    const res = await adminFetch(`/admin/api/upload/${kind}`, {
         method: "POST",
         body: fd
     });
@@ -130,7 +148,9 @@ function renderSection(section, sectionIndex) {
     if (cardPreview) {
         const img = cardPreview.querySelector('img');
         if (img) {
-            img.dataset.defaultimg = section.cardImageDefault || '';
+            img.dataset.defaultimg = section.cardImageDefault?.v
+                ? `${section.cardImageDefault.src}?v=${section.cardImageDefault.v}`
+                : (section.cardImageDefault?.src || '');
         }
     }
 
@@ -141,7 +161,9 @@ function renderSection(section, sectionIndex) {
     if (bgPreview) {
         const img = bgPreview.querySelector('img');
         if (img) {
-            img.dataset.defaultimg = section.backgroundImageDefault || '';
+            img.dataset.defaultimg = section.backgroundImageDefault?.v
+                ? `${section.backgroundImageDefault.src}?v=${section.backgroundImageDefault.v}`
+                : (section.backgroundImageDefault?.src || '');
         }
     }
 
@@ -161,6 +183,7 @@ function renderSection(section, sectionIndex) {
 
 
     const bgInput = el.querySelector('[data-upload="section-bg"]');
+    bindImagePicker(bgPreview, bgInput);
     if (bgInput) {
         bgInput.addEventListener("change", async () => {
             const file = bgInput.files[0];
@@ -214,6 +237,7 @@ function renderSection(section, sectionIndex) {
     const servicesEl = el.querySelector('.section-services');
 
     const cardInput = el.querySelector('[data-upload="section-card"]');
+    bindImagePicker(cardPreview, cardInput);
     if (cardInput) {
         cardInput.addEventListener("change", async () => {
             const file = cardInput.files[0];
@@ -323,6 +347,7 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
     });
 
     const preview = el.querySelector('.image-preview');
+    bindImagePicker(preview, cardInput);
     const resetBtn = el.querySelector('[data-action="reset-service-card"]');
     if (resetBtn) {
         resetBtn.style.display = isCustom(service.cardImage) ? '' : 'none';
@@ -330,7 +355,9 @@ function renderService(serviceId, service, sectionIndex, orderIndex) {
     if (preview) {
         const img = preview.querySelector('img');
         if (img) {
-            img.dataset.defaultimg = service.serviceCardImageDefault || '';
+            img.dataset.defaultimg = service.serviceCardImageDefault?.v
+                ? `${service.serviceCardImageDefault.src}?v=${service.serviceCardImageDefault.v}`
+                : (service.serviceCardImageDefault?.src || '');
         }
     }
     applyImagePreview(preview, service.cardImage);
@@ -605,7 +632,7 @@ function bindSaveButton() {
 
         try {
 
-            const res = await fetch("/admin/api/services", {
+            const res = await adminFetch("/admin/api/services", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(state)
@@ -638,7 +665,7 @@ document.getElementById("add-section").addEventListener("click", () => {
 });
 
 async function loadInitialData() {
-    const res = await fetch("/admin/api/services");
+    const res = await adminFetch("/admin/api/services");
     const data = await res.json();
     console.log("RAW backend data:", data.sections);
     data.sections.forEach(section => {
