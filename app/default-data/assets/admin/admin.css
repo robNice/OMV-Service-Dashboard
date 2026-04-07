@@ -275,7 +275,7 @@ body {
 }
 
 .theme-setting-toggle input[type="checkbox"]:checked + .theme-setting-choice-control {
-    background: #dc2626;
+    background: #16a34a;
 }
 
 .theme-setting-toggle input[type="checkbox"]:checked + .theme-setting-choice-control::after {
@@ -353,9 +353,9 @@ body {
 }
 
 .theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-chip-surface {
-    border-color: #dc2626;
-    background: rgba(220, 38, 38, 0.16);
-    box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.24);
+    border-color: #16a34a;
+    background: rgba(22, 163, 74, 0.16);
+    box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.24);
 }
 
 .theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-chip-surface .theme-setting-choice-label {
