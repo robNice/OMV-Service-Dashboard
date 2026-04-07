@@ -5,6 +5,11 @@ const { DEFAULT_THEME, getTheme, normalizeTheme, sanitizeThemeSettings } = requi
 
 const CONFIG_FILE   = path.join(CONFIG_DIR, 'config.json');
 const FALLBACK_FILE = path.join(APP_DATA, 'config.json');
+const DEFAULT_SERVICE_LINK_TARGET = 'new-tab';
+
+function normalizeServiceLinkTarget(value) {
+    return value === 'same-tab' ? 'same-tab' : DEFAULT_SERVICE_LINK_TARGET;
+}
 
 function normalizeConfiguration(config) {
     const theme = normalizeTheme(config?.theme);
@@ -25,7 +30,8 @@ function normalizeConfiguration(config) {
     return {
         ...config,
         theme,
-        themeSettings: normalizedThemeSettings
+        themeSettings: normalizedThemeSettings,
+        serviceLinkTarget: normalizeServiceLinkTarget(config?.serviceLinkTarget)
     };
 }
 
@@ -54,5 +60,7 @@ function saveConfiguration(config) {
 module.exports = {
     loadConfiguration,
     saveConfiguration,
-    normalizeTheme
+    normalizeTheme,
+    normalizeServiceLinkTarget,
+    DEFAULT_SERVICE_LINK_TARGET
 };

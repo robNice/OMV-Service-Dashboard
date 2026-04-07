@@ -105,7 +105,15 @@
         "title": "Título del dashboard",
         "defaultLang": "Idioma de reserva",
         "infoDrawerRefreshInterval": "Intervalo de actualización del panel de información (segundos)",
-        "port": "Puerto"
+        "port": "Puerto",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

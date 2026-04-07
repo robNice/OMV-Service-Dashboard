@@ -105,7 +105,15 @@
         "title": "Título do dashboard",
         "defaultLang": "Idioma de fallback",
         "infoDrawerRefreshInterval": "Intervalo de atualização do painel de informações (segundos)",
-        "port": "Porta"
+        "port": "Porta",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

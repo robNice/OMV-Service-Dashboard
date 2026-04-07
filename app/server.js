@@ -382,6 +382,7 @@ app.get("/section/:id", (req, res) => {
             renderService({
                 ...service,
                 id,
+                serviceLinkTarget: config.serviceLinkTarget,
                 cardImage: withVersion(resolveServiceCardImage({...service, id}))
             })
         )

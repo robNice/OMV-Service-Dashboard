@@ -105,7 +105,15 @@
         "title": "ダッシュボードのタイトル",
         "defaultLang": "フォールバック言語",
         "infoDrawerRefreshInterval": "情報ドロワー更新間隔（秒）",
-        "port": "ポート"
+        "port": "ポート",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

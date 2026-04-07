@@ -33,7 +33,6 @@
             const match = href.match(/\/section\/([^/?#]+)/);
             const commands = [];
             const commandTargets = new Map();
-            const cardOpensInNewTab = navItems.length > 0;
             const usedKeys = new Set();
 
             if (match) {
@@ -66,8 +65,9 @@
                 const title = card.querySelector(".service-title");
                 const link = card.querySelector("a");
                 const hrefValue = link?.getAttribute("href") || "";
+                const opensInNewTab = link?.getAttribute("target") === "_blank";
                 const sectionMatch = hrefValue.match(/\/section\/([^/?#]+)/);
-                const sourceId = !cardOpensInNewTab && sectionMatch
+                const sourceId = !opensInNewTab && sectionMatch
                     ? decodeURIComponent(sectionMatch[1])
                     : (title?.textContent || hrefValue);
                 const key = allocateKey(makeBaseKey(sourceId), usedKeys);
@@ -77,7 +77,7 @@
                     label: title?.textContent?.trim() || key
                 });
                 if (link?.href) {
-                    commandTargets.set(key.toUpperCase(), { href: link.href, newTab: cardOpensInNewTab });
+                    commandTargets.set(key.toUpperCase(), { href: link.href, newTab: opensInNewTab });
                 }
             });
 

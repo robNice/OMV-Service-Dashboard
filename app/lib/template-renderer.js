@@ -16,10 +16,12 @@ function imageSrc(image) {
 }
 
 function renderService(service) {
+    const opensInNewTab = service.serviceLinkTarget !== "same-tab";
+    const targetAttrs = opensInNewTab ? ' target="_blank" rel="noopener noreferrer"' : "";
     const card = service.cardImage || resolveServiceCardImage(service);
     return `
     <div class="service">
-      <a href="${service.url}" target="_blank">
+      <a href="${service.url}"${targetAttrs}>
       <img src="${imageSrc(card)}" alt="${service.title}" />
         <div class="service-title">${service.title}</div>
       </a>

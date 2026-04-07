@@ -105,7 +105,15 @@
         "title": "Dashboardtitel",
         "defaultLang": "Terugvaltaal",
         "infoDrawerRefreshInterval": "Verversingsinterval infolade (seconden)",
-        "port": "Poort"
+        "port": "Poort",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {
