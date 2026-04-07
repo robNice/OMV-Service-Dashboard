@@ -1,7 +1,7 @@
 {
   "id": "classic",
   "label": "Classic",
-  "description": "Current dashboard layout with the existing card grid.",
+  "description": "Default dashboard layout with the existing card grid.",
   "version": "1.1.0",
   "settings": [
     {
