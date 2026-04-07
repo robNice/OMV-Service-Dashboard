@@ -152,9 +152,12 @@ function renderField(setting, value) {
     if (setting.type === "boolean") {
         return `
             <label class="theme-setting theme-setting-toggle" for="${fieldId}">
-                <span class="theme-setting-title">${escapeHtml(setting.label)}</span>
+                <span class="theme-setting-toggle-header">
+                    <input id="${fieldId}" type="checkbox" data-setting-id="${escapeHtml(setting.id)}" ${value ? "checked" : ""}>
+                    <span class="theme-setting-choice-control" aria-hidden="true"></span>
+                    <span class="theme-setting-title">${escapeHtml(setting.label)}</span>
+                </span>
                 ${description}
-                <input id="${fieldId}" type="checkbox" data-setting-id="${escapeHtml(setting.id)}" ${value ? "checked" : ""}>
             </label>
         `;
     }
@@ -187,14 +190,13 @@ function renderField(setting, value) {
 
     if (setting.type === "radio") {
         const options = (setting.options || []).map((option) => `
-            <label class="theme-setting-choice theme-setting-choice-switch">
+            <label class="theme-setting-choice theme-setting-choice-chip">
                 <input
                     type="radio"
                     name="${escapeHtml(fieldId)}"
                     value="${escapeHtml(option.value)}"
                     data-setting-id="${escapeHtml(setting.id)}"
                     ${option.value === String(value) ? "checked" : ""}>
-                <span class="theme-setting-choice-control" aria-hidden="true"></span>
                 <span class="theme-setting-choice-label">${escapeHtml(option.label)}</span>
             </label>
         `).join("");

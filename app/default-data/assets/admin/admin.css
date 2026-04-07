@@ -230,9 +230,36 @@ body {
     gap: 0.65rem;
 }
 
+.theme-setting-toggle-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
 .theme-setting-toggle input[type="checkbox"] {
-    width: auto;
-    justify-self: start;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.theme-setting-toggle .theme-setting-title {
+    margin-bottom: 0;
+}
+
+.theme-setting-toggle input[type="checkbox"]:checked + .theme-setting-choice-control {
+    background: #dc2626;
+}
+
+.theme-setting-toggle input[type="checkbox"]:checked + .theme-setting-choice-control::after {
+    transform: translateX(1.25rem);
+}
+
+.theme-setting-toggle input[type="checkbox"]:focus-visible + .theme-setting-choice-control {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
 }
 
 .theme-setting-options {
@@ -241,7 +268,8 @@ body {
 }
 
 .theme-setting-choice-group {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.65rem;
 }
 
@@ -257,42 +285,24 @@ body {
     margin: 0;
 }
 
-.theme-setting-choice-switch {
+.theme-setting-choice-chip {
     position: relative;
-    display: grid;
-    grid-template-columns: auto 1fr;
+    display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: center;
+    min-height: 2.4rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid #334155;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.72);
     cursor: pointer;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 }
 
-.theme-setting-choice-switch input[type="radio"] {
+.theme-setting-choice-chip input[type="radio"] {
     position: absolute;
     opacity: 0;
     pointer-events: none;
-}
-
-.theme-setting-choice-control {
-    position: relative;
-    width: 2.75rem;
-    height: 1.5rem;
-    border-radius: 999px;
-    background: #d4d4d8;
-    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.16);
-    transition: background-color 0.18s ease, box-shadow 0.18s ease;
-}
-
-.theme-setting-choice-control::after {
-    content: "";
-    position: absolute;
-    top: 0.125rem;
-    left: 0.125rem;
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 50%;
-    background: #ffffff;
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.32);
-    transition: transform 0.18s ease;
 }
 
 .theme-setting-choice-label {
@@ -300,15 +310,22 @@ body {
     line-height: 1.4;
 }
 
-.theme-setting-choice-switch input[type="radio"]:checked + .theme-setting-choice-control {
-    background: #dc2626;
+.theme-setting-choice-chip:hover {
+    border-color: #475569;
+    background: rgba(30, 41, 59, 0.88);
 }
 
-.theme-setting-choice-switch input[type="radio"]:checked + .theme-setting-choice-control::after {
-    transform: translateX(1.25rem);
+.theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-label {
+    color: #ffffff;
 }
 
-.theme-setting-choice-switch input[type="radio"]:focus-visible + .theme-setting-choice-control {
+.theme-setting-choice-chip:has(input[type="radio"]:checked) {
+    border-color: #dc2626;
+    background: rgba(220, 38, 38, 0.16);
+    box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.24);
+}
+
+.theme-setting-choice-chip:has(input[type="radio"]:focus-visible) {
     outline: 2px solid #60a5fa;
     outline-offset: 2px;
 }
