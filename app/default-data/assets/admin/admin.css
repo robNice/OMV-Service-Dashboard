@@ -367,7 +367,6 @@ body {
 .theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-chip-surface {
     border-color: #16a34a;
     background: rgba(22, 163, 74, 0.16);
-    box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.24);
 }
 
 .theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-chip-surface .theme-setting-choice-label {
