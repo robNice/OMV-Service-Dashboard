@@ -3,8 +3,6 @@
     --text-color: #17212b;
     --tile-bg: rgba(255, 255, 255, 0.84);
     --omv-service-card-width: 460px;
-    --omv-compact-surface-bg: var(--themesetting-surface-bg-color, rgba(255, 255, 255, 0.84));
-    --omv-compact-surface-text: var(--themesetting-surface-text-color, #0f172a);
 }
 
 .page-header {
@@ -14,7 +12,7 @@
     border-radius: 20px;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04)),
-        var(--omv-compact-surface-bg);
+        var(--themesetting-surface-bg-color, rgba(255, 255, 255, 0.84));
     box-shadow: 0 14px 30px rgba(22, 32, 43, 0.1);
     backdrop-filter: blur(10px);
 }
@@ -23,7 +21,7 @@
     display: inline-block;
     max-width: 960px;
     margin: 0 0 0.6rem !important;
-    color: var(--omv-compact-surface-text);
+    color: var(--themesetting-surface-text-color, #0f172a);
     font-size: 1.08rem;
 }
 
@@ -36,7 +34,7 @@
     max-width: none;
     margin: 0 0 1rem;
     font-size: clamp(2rem, 4vw, 3.2rem);
-    color: var(--omv-compact-surface-text);
+    color: var(--themesetting-surface-text-color, #0f172a);
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
@@ -92,7 +90,8 @@
     width: 100%;
     max-width: none;
     border-radius: 18px;
-    background: var(--omv-compact-surface-bg);
+    background: var(--themesetting-surface-bg-color, rgba(255, 255, 255, 0.84));
+    color: var(--themesetting-surface-text-color, #0f172a);
     box-shadow: 0 18px 34px rgba(22, 32, 43, 0.12);
     backdrop-filter: blur(8px);
 }
@@ -119,7 +118,7 @@
     text-align: left;
     padding: 1rem 1.25rem;
     font-size: 1.12rem;
-    color: var(--omv-compact-surface-text);
+    color: var(--themesetting-surface-text-color, #0f172a);
 }
 
 @media (max-width: 640px) {
