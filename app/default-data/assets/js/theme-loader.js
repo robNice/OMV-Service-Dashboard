@@ -4,12 +4,17 @@
     const settingsEl = document.getElementById('omv-theme-settings');
     const settings = settingsEl?.textContent ? JSON.parse(settingsEl.textContent) : {};
     const version = window.OMV_VERSION || '';
-    const MOBILE_BREAKPOINT = 640;
-    const TABLET_BREAKPOINT = 960;
+    const MOBILE_QUERY = '(max-width: 640px)';
+    const TABLET_QUERY = '(max-width: 960px)';
 
     if (!body || !theme) {
         return;
     }
+
+    const hasResponsiveCardSettings =
+        Object.prototype.hasOwnProperty.call(settings, 'cards-per-row-desktop')
+        || Object.prototype.hasOwnProperty.call(settings, 'cards-per-row-tablet')
+        || Object.prototype.hasOwnProperty.call(settings, 'cards-per-row-mobile');
 
     function buildGridTemplate(value) {
         const columns = Number(value);
@@ -22,11 +27,11 @@
     }
 
     function getGridTemplateForViewport() {
-        if (window.innerWidth <= MOBILE_BREAKPOINT) {
+        if (window.matchMedia(MOBILE_QUERY).matches) {
             return buildGridTemplate(settings['cards-per-row-mobile']);
         }
 
-        if (window.innerWidth <= TABLET_BREAKPOINT) {
+        if (window.matchMedia(TABLET_QUERY).matches) {
             return buildGridTemplate(settings['cards-per-row-tablet']);
         }
 
@@ -47,16 +52,21 @@
     }
 
     body._omvThemeGridCleanup?.();
-    applyResponsiveCardGrid();
 
-    const onResize = () => {
+    if (hasResponsiveCardSettings) {
         applyResponsiveCardGrid();
-    };
 
-    window.addEventListener('resize', onResize);
-    body._omvThemeGridCleanup = () => {
-        window.removeEventListener('resize', onResize);
-    };
+        const onResize = () => {
+            applyResponsiveCardGrid();
+        };
+
+        window.addEventListener('resize', onResize);
+        body._omvThemeGridCleanup = () => {
+            window.removeEventListener('resize', onResize);
+        };
+    } else {
+        delete body._omvThemeGridCleanup;
+    }
 
     const src = `/assets/themes/${encodeURIComponent(theme)}/theme.js${version ? `?v=${encodeURIComponent(version)}` : ''}`;
     const script = document.createElement('script');

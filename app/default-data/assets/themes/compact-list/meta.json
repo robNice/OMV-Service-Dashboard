@@ -2,31 +2,23 @@
   "id": "compact-list",
   "label": "Compact List",
   "description": "Dense list layout for faster scanning with a lighter drawer treatment.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "settings": [
     {
-      "id": "cards-per-row-desktop",
-      "group": "Layout",
-      "label": "Cards per row on desktop",
-      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible.",
-      "type": "number",
-      "default": 0
+      "id": "surface-bg-color",
+      "group": "Colors",
+      "label": "Card and header background color",
+      "description": "Background color used for cards and the page header.",
+      "type": "color",
+      "default": "#ffffff"
     },
     {
-      "id": "cards-per-row-tablet",
-      "group": "Layout",
-      "label": "Cards per row on tablet",
-      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible.",
-      "type": "number",
-      "default": 0
-    },
-    {
-      "id": "cards-per-row-mobile",
-      "group": "Layout",
-      "label": "Cards per row on mobile",
-      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible.",
-      "type": "number",
-      "default": 0
+      "id": "surface-text-color",
+      "group": "Colors",
+      "label": "Card and header text color",
+      "description": "Text color used for cards and the page header.",
+      "type": "color",
+      "default": "#0f172a"
     }
   ]
 }
