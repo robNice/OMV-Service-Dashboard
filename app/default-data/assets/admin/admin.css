@@ -1243,7 +1243,7 @@ button.primary:disabled {
 
     .admin-save-bar,
     #save-bar {
-        position: sticky;
+        position: fixed;
         top: calc(100svh - 84px - env(safe-area-inset-bottom, 0px));
         left: auto;
         right: auto;
