@@ -819,13 +819,21 @@ header.admin-header h1 {
     line-height: 1;
     padding: 0.22rem 0.45rem;
     border-radius: 999px;
-    background: rgba(0,0,0,0.65);
+    background: rgba(0,0,0,0.78);
+    background-clip: padding-box;
     color: #fff;
-    border: none;
-    box-shadow: none;
-    outline: none;
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    text-shadow: none;
+    filter: none;
     pointer-events: none;
     white-space: nowrap;
+}
+
+.image-status::before,
+.image-status::after {
+    content: none !important;
 }
 
 .image-status[data-source="explicit"] {
