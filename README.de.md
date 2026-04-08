@@ -61,7 +61,7 @@ Mittlerweile greift der Service für System-, Speicher-, Temperatur- und Plattfo
 >
 > Im Docker-Betrieb ist das innerhalb des Containers standardmäßig `/config` und sollte in der Regel per Host-Volume gemountet werden.
 >
-> Im Standalone-Betrieb solltest du das Config-Verzeichnis normalerweise explizit per `--config-dir` übergeben. `OMV_SERVICE_DASHBOARD_CONFIG` dient dort nur als Fallback, wenn kein CLI-Parameter gesetzt ist.
+> Im Standalone-Betrieb solltest du das Config-Verzeichnis normalerweise explizit per `--config-dir` übergeben. Die Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG` dient dort nur als Fallback, wenn kein CLI-Parameter gesetzt ist.
 
 
 
@@ -284,8 +284,6 @@ Du musst die Konfigurationsdatei nicht zwingend kopieren, da sie beim ersten Sta
 
 Alle dauerhaft gespeicherten Änderungen aus dem Admin-Bereich landen dort.
 
-`OMV_SERVICE_DASHBOARD_CONFIG` musst du im Docker-Betrieb normalerweise nicht setzen, weil `/config` im Container bereits der Standardpfad ist.
-
 3. Starte den Container:
 
 ```bash
@@ -343,7 +341,7 @@ node server.js --config-dir /pfad/zu/deinem-nas-portal-config
 Die Anwendung ermittelt das Benutzer-Config-Verzeichnis in dieser Reihenfolge:
 
 1. `--config-dir /pfad/zum/config-verzeichnis`
-2. `OMV_SERVICE_DASHBOARD_CONFIG=/pfad/zum/config-verzeichnis`
+2. Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG=/pfad/zum/config-verzeichnis`
 3. Standardpfad: `app/config`
 
 Wenn weder CLI-Parameter noch Umgebungsvariable gesetzt sind, startet der Server mit dem Standardpfad und gibt beim Start einen Hinweis aus.
@@ -353,7 +351,7 @@ Wenn weder CLI-Parameter noch Umgebungsvariable gesetzt sind, startet der Server
 - Laufzeitdaten landen standardmäßig in `app/data`.
 - Benutzerkonfigurationen landen standardmäßig in `app/config`.
 - Alle dauerhaft gespeicherten Änderungen aus dem Admin-Bereich werden in das gewählte Config-Verzeichnis geschrieben.
-- `OMV_SERVICE_DASHBOARD_CONFIG` ist vor allem für skriptgesteuerte oder umgebungsbasierte Standalone-Setups sinnvoll.
+- Die Umgebungsvariable `OMV_SERVICE_DASHBOARD_CONFIG` ist vor allem für skriptgesteuerte oder umgebungsbasierte Standalone-Setups sinnvoll.
 
 ---
 

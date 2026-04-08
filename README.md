@@ -61,7 +61,7 @@ Today, the service no longer depends on the OMV API for system, storage, tempera
 > 
 > In Docker, this directory is `/config` inside the container and should usually be backed by a host volume mount.
 > 
-> In standalone mode, you should usually pass the config directory explicitly via `--config-dir`. `OMV_SERVICE_DASHBOARD_CONFIG` is only the fallback if no CLI parameter is provided.
+> In standalone mode, you should usually pass the config directory explicitly via `--config-dir`. The environment variable `OMV_SERVICE_DASHBOARD_CONFIG` is only used as a fallback if no CLI parameter is provided.
 
 ---
 
@@ -279,8 +279,6 @@ You do not have to copy the config file, because it is created automatically on 
 
 All persistent admin changes are written there.
 
-You normally do not need to set `OMV_SERVICE_DASHBOARD_CONFIG` in Docker, because `/config` is already the default config path inside the container.
-
 3. Start the container:
 
 ```bash
@@ -334,7 +332,7 @@ node server.js --config-dir /path/to/nas-portal-config
 The application resolves the user config directory in this order:
 
 1. `--config-dir /path/to/config`
-2. `OMV_SERVICE_DASHBOARD_CONFIG=/path/to/config`
+2. environment variable `OMV_SERVICE_DASHBOARD_CONFIG=/path/to/config`
 3. default path: `app/config`
 
 If neither CLI parameter nor environment variable is provided, the server starts with the default path and logs a startup hint.
@@ -344,7 +342,7 @@ If neither CLI parameter nor environment variable is provided, the server starts
 - Runtime data is stored in `app/data` by default.
 - User configuration is stored in `app/config` by default.
 - All persistent admin changes are written to the selected config directory.
-- `OMV_SERVICE_DASHBOARD_CONFIG` is mainly useful for scripted or environment-based standalone setups.
+- The environment variable `OMV_SERVICE_DASHBOARD_CONFIG` is mainly useful for scripted or environment-based standalone setups.
 
 ---
 
