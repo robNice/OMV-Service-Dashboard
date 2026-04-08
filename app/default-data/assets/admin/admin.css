@@ -1117,6 +1117,7 @@ button.primary:disabled {
         display: grid;
         grid-template-columns: 1fr auto;
         align-items: start;
+        margin-bottom: 0;
     }
 
     .admin-nav-toggle {
