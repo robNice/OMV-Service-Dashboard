@@ -1128,8 +1128,6 @@ button.primary:disabled {
         grid-column: 1 / -1;
         width: 100%;
         gap: 0.85rem;
-        margin-top: 0.75rem;
-        padding: 0.9rem;
         border-radius: 14px;
         border: 1px solid rgba(51, 65, 85, 0.9);
         background: rgba(2, 6, 23, 0.9);
@@ -1154,6 +1152,8 @@ button.primary:disabled {
         opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
+        margin-top: 0.75rem;
+        padding: 0.9rem;
     }
 
     .admin-nav-group-end {
