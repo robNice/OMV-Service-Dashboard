@@ -145,6 +145,7 @@ Hier können die wichtigsten Konfigurationswerte bearbeitet werden, zum Beispiel
 
 - `Titel`: Basistitel und Seitenüberschrift des Dashboards
 - `Fallback-Sprache`: Standardsprache, wenn keine passende Locale gefunden wird
+- `Service-Links öffnen`: steuert, wie Service-Links geöffnet werden
 - `Info-Drawer-Refresh-Intervall`: Aktualisierungsintervall des Info-Drawers in Sekunden
 - `Port`: Port, auf dem die Anwendung lauscht
 

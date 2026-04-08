@@ -32,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Laatst bijgewerkt",
-    "now": "nu"
+    "now": "nu",
+    "secondsShort": "s",
+    "minutesShort": "min",
+    "hoursShort": "u",
+    "loadingTitle": "Systeemgegevens worden geladen",
+    "loadingBody": "De infolade wordt automatisch gevuld zodra het eerste live statusverzoek is voltooid.",
+    "refreshingTitle": "Gecachte systeemgegevens worden getoond",
+    "refreshingBody": "De getoonde waarden komen uit de laatste server-side snapshot. Livegegevens worden op de achtergrond vernieuwd."
   },
   "tooltip": {
     "infodrawer": "Systeeminformatie openen/sluiten",
@@ -98,7 +105,15 @@
         "title": "Dashboardtitel",
         "defaultLang": "Terugvaltaal",
         "infoDrawerRefreshInterval": "Verversingsinterval infolade (seconden)",
-        "port": "Poort"
+        "port": "Poort",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

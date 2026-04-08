@@ -8,7 +8,8 @@ const fields = {
     title: document.getElementById("config-title"),
     defaultLang: document.getElementById("config-default-lang"),
     infoDrawerRefreshInterval: document.getElementById("config-refresh-interval"),
-    port: document.getElementById("config-port")
+    port: document.getElementById("config-port"),
+    serviceLinkTarget: Array.from(document.querySelectorAll('input[name="config-service-link-target"]'))
 };
 
 const TXT = {
@@ -45,11 +46,13 @@ function syncLanguageOptions(selectedValue = "") {
 }
 
 function normalizedFormValue() {
+    const selectedServiceLinkTarget = fields.serviceLinkTarget.find((field) => field.checked)?.value || "";
     return {
         title: fields.title.value.trim(),
         defaultLang: fields.defaultLang.value.trim(),
         infoDrawerRefreshInterval: Number.parseInt(fields.infoDrawerRefreshInterval.value, 10) || 0,
-        port: Number.parseInt(fields.port.value, 10) || 0
+        port: Number.parseInt(fields.port.value, 10) || 0,
+        serviceLinkTarget: selectedServiceLinkTarget
     };
 }
 
@@ -57,7 +60,8 @@ function configsEqual(a, b) {
     return a.title === b.title
         && a.defaultLang === b.defaultLang
         && a.infoDrawerRefreshInterval === b.infoDrawerRefreshInterval
-        && a.port === b.port;
+        && a.port === b.port
+        && a.serviceLinkTarget === b.serviceLinkTarget;
 }
 
 function setStatus(message, tone = "") {
@@ -76,7 +80,8 @@ function isValid() {
         && data.infoDrawerRefreshInterval > 0
         && Number.isFinite(data.port)
         && data.port >= 1
-        && data.port <= 65535;
+        && data.port <= 65535
+        && (data.serviceLinkTarget === "new-tab" || data.serviceLinkTarget === "same-tab");
 }
 
 function syncSaveState(isSaving = false) {
@@ -99,13 +104,17 @@ function applyConfig(config) {
         title: String(config.title || ""),
         defaultLang: String(config.defaultLang || ""),
         infoDrawerRefreshInterval: Number(config.infoDrawerRefreshInterval) || 0,
-        port: Number(config.port) || 0
+        port: Number(config.port) || 0,
+        serviceLinkTarget: String(config.serviceLinkTarget || "new-tab")
     };
 
     fields.title.value = initialConfig.title;
     syncLanguageOptions(initialConfig.defaultLang);
     fields.infoDrawerRefreshInterval.value = String(initialConfig.infoDrawerRefreshInterval);
     fields.port.value = String(initialConfig.port);
+    fields.serviceLinkTarget.forEach((field) => {
+        field.checked = field.value === initialConfig.serviceLinkTarget;
+    });
     syncSaveState();
 }
 
@@ -121,7 +130,13 @@ async function loadConfig() {
     applyConfig(data);
 }
 
-Object.values(fields).forEach((field) => {
+[
+    fields.title,
+    fields.defaultLang,
+    fields.infoDrawerRefreshInterval,
+    fields.port,
+    ...fields.serviceLinkTarget
+].forEach((field) => {
     const onChange = () => {
         setStatus("");
         syncSaveState();

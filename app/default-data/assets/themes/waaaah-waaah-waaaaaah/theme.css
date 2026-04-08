@@ -7,6 +7,7 @@
 }
 
 body {
+    --omv-service-card-width: 306px;
     --bg-color: #d4b186;
     --text-color: #2b1408;
     --tile-bg: rgba(104, 58, 28, 0.9);
@@ -220,7 +221,7 @@ body::after {
 
 .service {
     position: relative;
-    width: 306px;
+    width: 100%;
     overflow: visible;
     border: 3px solid rgba(55, 27, 10, 0.82);
     border-radius: 8px 13px 10px 7px;
@@ -309,10 +310,6 @@ ob
     .section-nav-item {
         width: 76px;
         height: 48px;
-    }
-
-    .service {
-        width: min(100%, 330px);
     }
 
     .service img {

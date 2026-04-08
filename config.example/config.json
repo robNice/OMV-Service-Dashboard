@@ -3,6 +3,7 @@
   "defaultLang": "en-gb",
   "theme": "classic",
   "themeSettings": {},
+  "serviceLinkTarget": "new-tab",
   "infoDrawerRefreshInterval": 30,
   "port"      : 3000
 }

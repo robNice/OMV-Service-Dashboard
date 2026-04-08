@@ -143,6 +143,7 @@ Here you can edit the most important configuration values, for example:
 
 - `Title`: base title and page heading of the dashboard
 - `Fallback Language`: default language if no matching locale is found
+- `Service Links Open`: controls how service links are opened
 - `Info Drawer Refresh Interval`: refresh interval of the info drawer in seconds
 - `Port`: port the application listens on
 

@@ -32,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Dernière mise à jour",
-    "now": "maintenant"
+    "now": "maintenant",
+    "secondsShort": "s",
+    "minutesShort": "min",
+    "hoursShort": "h",
+    "loadingTitle": "Chargement des donn?es syst?me",
+    "loadingBody": "Le panneau d'information se remplira automatiquement d?s que la premi?re requ?te d'?tat en direct sera termin?e.",
+    "refreshingTitle": "Les donn?es syst?me en cache sont affich?es",
+    "refreshingBody": "Les valeurs affich?es proviennent du dernier instantan? c?t? serveur. Les donn?es en direct sont actualis?es en arri?re-plan."
   },
   "tooltip": {
     "infodrawer": "Ouvrir/fermer les informations système",
@@ -98,7 +105,15 @@
         "title": "Titre du tableau de bord",
         "defaultLang": "Langue de secours",
         "infoDrawerRefreshInterval": "Intervalle d'actualisation du panneau d'information (secondes)",
-        "port": "Port"
+        "port": "Port",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

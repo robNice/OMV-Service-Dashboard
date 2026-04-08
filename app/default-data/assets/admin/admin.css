@@ -134,6 +134,18 @@ body {
     color: #fbbf24;
 }
 
+.admin-choice-field-label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.admin-choice-field .admin-field-note {
+    margin-top: 0;
+    margin-bottom: 0.9rem;
+}
+
 .theme-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -230,9 +242,61 @@ body {
     gap: 0.65rem;
 }
 
+.theme-setting-toggle-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
 .theme-setting-toggle input[type="checkbox"] {
-    width: auto;
-    justify-self: start;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.theme-setting-toggle .theme-setting-title {
+    margin-bottom: 0;
+}
+
+.theme-setting-choice-control {
+    display: inline-block;
+    flex: 0 0 auto;
+    position: relative;
+    width: 2.75rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    background: #d4d4d8;
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.16);
+    transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.theme-setting-choice-control::after {
+    content: "";
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.32);
+    transition: transform 0.18s ease;
+}
+
+.theme-setting-toggle input[type="checkbox"]:checked + .theme-setting-choice-control {
+    background: #16a34a;
+}
+
+.theme-setting-toggle input[type="checkbox"]:checked + .theme-setting-choice-control::after {
+    transform: translateX(1.25rem);
+}
+
+.theme-setting-toggle input[type="checkbox"]:focus-visible + .theme-setting-choice-control {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
 }
 
 .theme-setting-options {
@@ -241,8 +305,9 @@ body {
 }
 
 .theme-setting-choice-group {
-    display: grid;
-    gap: 0.65rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
 }
 
 .theme-setting-choice {
@@ -255,6 +320,62 @@ body {
 .theme-setting-choice input {
     width: auto;
     margin: 0;
+}
+
+.theme-setting-choice-chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.theme-setting-choice-chip input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.theme-setting-choice-chip-surface {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.4rem;
+    padding: 0.65rem 1.05rem;
+    border: 1px solid #334155;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.72);
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.theme-setting-choice-label {
+    color: #e2e8f0;
+    line-height: 1.4;
+}
+
+.theme-setting-choice-chip:hover .theme-setting-choice-chip-surface {
+    border-color: #475569;
+    background: rgba(30, 41, 59, 0.88);
+}
+
+.theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-chip-surface {
+    border-color: #16a34a;
+    background: rgba(22, 163, 74, 0.16);
+}
+
+.theme-setting-choice-chip input[type="radio"]:checked + .theme-setting-choice-chip-surface .theme-setting-choice-label {
+    color: #ffffff;
+}
+
+.theme-setting-choice-chip input[type="radio"]:focus-visible + .theme-setting-choice-chip-surface {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
 }
 
 .theme-setting-range-row {
@@ -698,24 +819,34 @@ header.admin-header h1 {
     line-height: 1;
     padding: 0.22rem 0.45rem;
     border-radius: 999px;
-    background: rgba(0,0,0,0.65);
+    background: transparent !important;
     color: #fff;
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    text-shadow: none;
+    filter: none;
     pointer-events: none;
     white-space: nowrap;
 }
 
+.image-status::before,
+.image-status::after {
+    content: none !important;
+}
+
 .image-status[data-source="explicit"] {
-    background: #2ecc71;
+    background: transparent !important;
     color: #062e12;
 }
 
 .image-status[data-source="id"] {
-    background: #2ecc71;
+    background: transparent !important;
     color: #062e12;
 }
 
 .image-status[data-source="default"] {
-    background: #f39c12;
+    background: transparent !important;
     color: #3a2500;
 }
 

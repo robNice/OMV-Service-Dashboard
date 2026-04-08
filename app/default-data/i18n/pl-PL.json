@@ -32,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Ostatnia aktualizacja",
-    "now": "teraz"
+    "now": "teraz",
+    "secondsShort": "s",
+    "minutesShort": "min",
+    "hoursShort": "godz.",
+    "loadingTitle": "?adowanie danych systemowych",
+    "loadingBody": "Panel informacji uzupe?ni si? automatycznie, gdy tylko zako?czy si? pierwsze ??danie statusu na ?ywo.",
+    "refreshingTitle": "Wy?wietlane s? dane systemowe z pami?ci podr?cznej",
+    "refreshingBody": "Wy?wietlane warto?ci pochodz? z ostatniej migawki po stronie serwera. Dane na ?ywo s? od?wie?ane w tle."
   },
   "tooltip": {
     "infodrawer": "Otwórz/zamknij informacje systemowe",
@@ -98,7 +105,15 @@
         "title": "Tytuł dashboardu",
         "defaultLang": "Język zapasowy",
         "infoDrawerRefreshInterval": "Interwał odświeżania panelu informacji (sekundy)",
-        "port": "Port"
+        "port": "Port",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

@@ -62,6 +62,25 @@
                 <input id="config-port" type="number" min="1" max="65535" step="1">
                 <p class="admin-field-note">{{__.admin.config.portHint}}</p>
             </div>
+
+            <div class="admin-field-span-2 admin-choice-field">
+                <div class="admin-choice-field-label">{{__.admin.config.fields.serviceLinkTarget}}</div>
+                <p class="admin-field-note">{{__.admin.config.fields.serviceLinkTargetHint}}</p>
+                <div class="theme-setting-choice-group">
+                    <label class="theme-setting-choice theme-setting-choice-chip">
+                        <input id="config-service-link-target-new-tab" type="radio" name="config-service-link-target" value="new-tab">
+                        <span class="theme-setting-choice-chip-surface">
+                            <span class="theme-setting-choice-label">{{__.admin.config.options.serviceLinkTarget.newTab}}</span>
+                        </span>
+                    </label>
+                    <label class="theme-setting-choice theme-setting-choice-chip">
+                        <input id="config-service-link-target-same-tab" type="radio" name="config-service-link-target" value="same-tab">
+                        <span class="theme-setting-choice-chip-surface">
+                            <span class="theme-setting-choice-label">{{__.admin.config.options.serviceLinkTarget.sameTab}}</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
         </div>
     </section>
 

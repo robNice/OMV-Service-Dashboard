@@ -32,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Son güncelleme",
-    "now": "şimdi"
+    "now": "şimdi",
+    "secondsShort": "sn",
+    "minutesShort": "dk",
+    "hoursShort": "sa",
+    "loadingTitle": "Sistem verileri y?kleniyor",
+    "loadingBody": "?lk canl? durum iste?i tamamlan?r tamamlanmaz bilgi ?ekmecesi otomatik olarak doldurulacakt?r.",
+    "refreshingTitle": "?nbelle?e al?nm?? sistem verileri g?steriliyor",
+    "refreshingBody": "G?sterilen de?erler son sunucu anl?k g?r?nt?s?nden geliyor. Canl? veriler arka planda yenileniyor."
   },
   "tooltip": {
     "infodrawer": "Sistem bilgilerini aç/kapat",
@@ -98,7 +105,15 @@
         "title": "Gösterge paneli başlığı",
         "defaultLang": "Yedek dil",
         "infoDrawerRefreshInterval": "Bilgi çekmecesi yenileme aralığı (saniye)",
-        "port": "Port"
+        "port": "Port",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

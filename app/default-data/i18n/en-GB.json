@@ -105,7 +105,15 @@
         "title": "Dashboard title",
         "defaultLang": "Fallback language",
         "infoDrawerRefreshInterval": "Info drawer refresh interval (seconds)",
-        "port": "Port"
+        "port": "Port",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

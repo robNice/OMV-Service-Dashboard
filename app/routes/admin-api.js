@@ -77,7 +77,8 @@ function createAdminApiRouter({
             defaultLang: String(config.defaultLang || ""),
             availableLanguages,
             infoDrawerRefreshInterval: Number(config.infoDrawerRefreshInterval) || 0,
-            port: Number(config.port) || port
+            port: Number(config.port) || port,
+            serviceLinkTarget: String(config.serviceLinkTarget || "new-tab")
         });
     });
 
@@ -87,6 +88,7 @@ function createAdminApiRouter({
         const nextDefaultLang = normalizeTag(String(payload.defaultLang || "").trim());
         const nextRefreshInterval = Number.parseInt(payload.infoDrawerRefreshInterval, 10);
         const nextPort = Number.parseInt(payload.port, 10);
+        const nextServiceLinkTarget = String(payload.serviceLinkTarget || "").trim();
         const availableLanguages = new Set(listAvailableAdminLocales());
 
         if (!nextTitle) {
@@ -105,6 +107,10 @@ function createAdminApiRouter({
             return res.status(400).json({error: "invalid_port"});
         }
 
+        if (nextServiceLinkTarget !== "new-tab" && nextServiceLinkTarget !== "same-tab") {
+            return res.status(400).json({error: "invalid_service_link_target"});
+        }
+
         const config = loadConfiguration();
         const previousPort = Number(config.port) || port;
 
@@ -112,6 +118,7 @@ function createAdminApiRouter({
         config.defaultLang = nextDefaultLang;
         config.infoDrawerRefreshInterval = nextRefreshInterval;
         config.port = nextPort;
+        config.serviceLinkTarget = nextServiceLinkTarget;
         saveConfiguration(config);
 
         res.json({
@@ -121,7 +128,8 @@ function createAdminApiRouter({
                 title: config.title,
                 defaultLang: config.defaultLang,
                 infoDrawerRefreshInterval: config.infoDrawerRefreshInterval,
-                port: config.port
+                port: config.port,
+                serviceLinkTarget: config.serviceLinkTarget
             }
         });
     });
