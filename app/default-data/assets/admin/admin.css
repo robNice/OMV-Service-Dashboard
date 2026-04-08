@@ -408,6 +408,7 @@ body {
 
 .theme-card-body {
     height: 100%;
+    min-width: 0;
     border: 1px solid #334155;
     border-radius: 12px;
     padding: 1rem;
@@ -447,6 +448,7 @@ body {
 .theme-card h3 {
     margin: 0;
     font-size: 1rem;
+    overflow-wrap: anywhere;
 }
 
 .theme-card p {
@@ -454,6 +456,7 @@ body {
     color: #94a3b8;
     font-size: 0.88rem;
     line-height: 1.45;
+    overflow-wrap: anywhere;
 }
 
 .theme-id,
@@ -461,6 +464,7 @@ body {
     margin-top: 0.35rem;
     font-size: 0.78rem;
     color: #94a3b8;
+    overflow-wrap: anywhere;
 }
 
 .theme-badge {
@@ -1181,6 +1185,20 @@ button.primary:disabled {
 
     .theme-settings-head {
         flex-direction: column;
+    }
+
+    .theme-grid,
+    .theme-setting-group-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .theme-card,
+    .theme-card-body,
+    .theme-card-top,
+    .theme-card-heading,
+    .theme-setting-group,
+    .theme-setting {
+        min-width: 0;
     }
 
     .section-header {
