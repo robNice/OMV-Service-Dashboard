@@ -7,6 +7,7 @@ body {
     background: #0f172a;
     color: #e5e7eb;
     margin: 0;
+    --admin-save-bar-offset-bottom: 0px;
 }
 
 .admin-center {
@@ -1209,7 +1210,7 @@ button.primary:disabled {
     #save-bar {
         left: 16px;
         right: 16px;
-        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px) + var(--admin-save-bar-offset-bottom, 0px));
     }
 }
 .image-badge {
@@ -1224,7 +1225,7 @@ button.primary:disabled {
 #save-bar {
     position: fixed;
     left: 24px;
-    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px) + var(--admin-save-bar-offset-bottom, 0px));
     display: flex;
     align-items: center;
     gap: 12px;
