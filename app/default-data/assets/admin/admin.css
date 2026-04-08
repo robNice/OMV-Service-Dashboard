@@ -819,8 +819,7 @@ header.admin-header h1 {
     line-height: 1;
     padding: 0.22rem 0.45rem;
     border-radius: 999px;
-    background: rgba(0,0,0,0.78);
-    background-clip: padding-box;
+    background: transparent !important;
     color: #fff;
     border: 0 !important;
     box-shadow: none !important;
@@ -837,17 +836,17 @@ header.admin-header h1 {
 }
 
 .image-status[data-source="explicit"] {
-    background: #2ecc71;
+    background: transparent !important;
     color: #062e12;
 }
 
 .image-status[data-source="id"] {
-    background: #2ecc71;
+    background: transparent !important;
     color: #062e12;
 }
 
 .image-status[data-source="default"] {
-    background: #f39c12;
+    background: transparent !important;
     color: #3a2500;
 }
 
