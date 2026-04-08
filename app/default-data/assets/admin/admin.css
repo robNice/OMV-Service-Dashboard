@@ -7,7 +7,6 @@ body {
     background: #0f172a;
     color: #e5e7eb;
     margin: 0;
-    --admin-save-bar-offset-bottom: 0px;
 }
 
 .admin-center {
@@ -1210,7 +1209,7 @@ button.primary:disabled {
     #save-bar {
         left: 16px;
         right: 16px;
-        bottom: calc(16px + env(safe-area-inset-bottom, 0px) + var(--admin-save-bar-offset-bottom, 0px));
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     }
 }
 .image-badge {
@@ -1225,7 +1224,7 @@ button.primary:disabled {
 #save-bar {
     position: fixed;
     left: 24px;
-    bottom: calc(24px + env(safe-area-inset-bottom, 0px) + var(--admin-save-bar-offset-bottom, 0px));
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
     display: flex;
     align-items: center;
     gap: 12px;
@@ -1236,6 +1235,23 @@ button.primary:disabled {
     padding: 14px 22px;
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+@media (max-width: 860px) {
+    .admin-page {
+        padding-bottom: 5rem;
+    }
+
+    .admin-save-bar,
+    #save-bar {
+        position: sticky;
+        top: calc(100svh - 84px - env(safe-area-inset-bottom, 0px));
+        left: auto;
+        right: auto;
+        bottom: auto;
+        margin: 0 0 1rem;
+        width: fit-content;
+        max-width: 100%;
+    }
 }
 .save-status,
 #save-status {

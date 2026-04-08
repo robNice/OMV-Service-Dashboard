@@ -1,28 +1,4 @@
 (function () {
-    function syncSaveBarViewportOffset() {
-        if (!document.getElementById("save-bar")) {
-            return;
-        }
-
-        const rootStyle = document.body ? document.body.style : null;
-        if (!rootStyle) {
-            return;
-        }
-
-        const viewport = window.visualViewport;
-        if (!viewport) {
-            rootStyle.setProperty("--admin-save-bar-offset-bottom", "0px");
-            return;
-        }
-
-        const layoutHeight = Math.max(
-            window.innerHeight || 0,
-            document.documentElement ? document.documentElement.clientHeight : 0
-        );
-        const offsetBottom = Math.max(0, layoutHeight - viewport.height - viewport.offsetTop);
-        rootStyle.setProperty("--admin-save-bar-offset-bottom", `${Math.round(offsetBottom)}px`);
-    }
-
     function redirectToAdminLogin() {
         window.location.href = "/admin/login";
     }
@@ -49,18 +25,6 @@
 
         return response;
     }
-
-    syncSaveBarViewportOffset();
-
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", syncSaveBarViewportOffset);
-        window.visualViewport.addEventListener("scroll", syncSaveBarViewportOffset);
-    } else {
-        window.addEventListener("resize", syncSaveBarViewportOffset);
-    }
-
-    window.addEventListener("orientationchange", syncSaveBarViewportOffset);
-    window.addEventListener("pageshow", syncSaveBarViewportOffset);
 
     window.adminFetch = adminFetch;
 })();

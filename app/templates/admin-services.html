@@ -18,20 +18,21 @@
      data-image-source-auto="{{__.admin.image.sourceAuto}}"
      data-image-source-default="{{__.admin.image.sourceDefault}}">
 </div>
-<div id="save-bar">
-    <button id="save-services" class="primary" disabled>
-        <span class="label">{{__.admin.save.label}}</span>
-        <span class="spinner hidden"></span>
-    </button>
-
-    <span id="save-status"></span>
-</div>
 <div class="admin-page">
 
     <header class="admin-header">
         <h1>{{__.admin.services.title}}</h1>
         {{ADMIN_NAV}}
     </header>
+
+    <div id="save-bar">
+        <button id="save-services" class="primary" disabled>
+            <span class="label">{{__.admin.save.label}}</span>
+            <span class="spinner hidden"></span>
+        </button>
+
+        <span id="save-status"></span>
+    </div>
 
     <div id="services-editor"></div>
 
