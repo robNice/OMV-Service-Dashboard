@@ -159,6 +159,10 @@ body {
     align-items: flex-start;
     gap: 1rem;
 }
+.theme-config-title {
+    padding-top: 0;
+    margin-top: 0;
+}
 
 .theme-config-form {
     display: grid;
@@ -515,7 +519,7 @@ body {
     background: linear-gradient(180deg, #020617, #020617f0);
     border: 1px solid #1e293b;
     border-radius: 16px;
-    padding: 1.5rem;
+    padding: 0 1.5rem 1.5rem 1.5rem;
     box-shadow: 0 24px 60px rgba(0,0,0,0.4);
 }
 
@@ -523,8 +527,8 @@ body {
     position: sticky;
     top: 0;
     z-index: 1;
-    margin: -1.5rem -1.5rem 1rem;
-    padding: 1.5rem 1.5rem 1rem;
+    margin: 0 -1.5rem 1.5rem;
+    padding: 0 1.5rem 1.5rem;
     background: linear-gradient(180deg, #020617, #020617f2);
     border-bottom: 1px solid rgba(30, 41, 59, 0.95);
     border-radius: 16px 16px 0 0;
