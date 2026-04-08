@@ -1245,13 +1245,20 @@ button.primary:disabled {
     .admin-save-bar,
     #save-bar {
         position: fixed;
-        top: calc(100svh - 84px - env(safe-area-inset-bottom, 0px));
-        left: auto;
-        right: auto;
-        bottom: auto;
-        margin: 0 0 1rem;
-        width: fit-content;
-        max-width: 100%;
+        left: 16px;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        width: auto;
+        max-width: none;
+        margin: 0;
+    }
+}
+@supports (height: 100dvh) and (height: 100lvh) {
+    @media (max-width: 860px) {
+        .admin-save-bar,
+        #save-bar {
+            bottom: calc(16px + env(safe-area-inset-bottom, 0px) + max(0px, 100lvh - 100dvh));
+        }
     }
 }
 .save-status,
