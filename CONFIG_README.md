@@ -319,6 +319,34 @@ Behavior notes:
 - HTML data attributes look like `data-themesetting-card-style="glass"`
 - theme JavaScript receives validated values via `window.OMVTheme.init({ settings })`
 
+Examples:
+
+```css
+body {
+  --my-accent: var(--themesetting-accent-color, #60a5fa);
+}
+
+.service-status {
+  background: var(--my-accent);
+}
+
+body[data-themesetting-card-style="glass"] .service {
+  backdrop-filter: blur(12px);
+}
+```
+
+```js
+window.OMVTheme = {
+  init({ settings, body }) {
+    body?.style.setProperty('--my-accent-runtime', settings['accent-color'] || '#60a5fa');
+
+    if (settings['card-style'] === 'glass') {
+      body?.setAttribute('data-card-style-runtime', 'glass');
+    }
+  }
+};
+```
+
 ##### Supported field types
 
 The following field types are supported by the backend and admin UI.
@@ -557,16 +585,18 @@ The `context` object currently contains:
 - `body`
 - `document`
 - `drawer`
+- `settings`
 - `version`
 
 Example:
 
 ```js
 window.OMVTheme = {
-  init({ body }) {
+  init({ body, settings }) {
     if (document.getElementById('my-theme-root')) return;
     const el = document.createElement('div');
     el.id = 'my-theme-root';
+    el.textContent = settings['accent-color'] || 'theme active';
     body.appendChild(el);
   },
   destroy() {
