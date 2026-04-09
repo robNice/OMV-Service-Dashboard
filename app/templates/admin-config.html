@@ -7,13 +7,6 @@
     <link rel="stylesheet" href="/assets/admin/admin.css?v={{VERSION}}">
 </head>
 <body>
-<div id="save-bar" class="admin-save-bar">
-    <button id="config-save" class="primary" disabled>
-        <span class="label">{{__.admin.save.label}}</span>
-        <span class="spinner hidden"></span>
-    </button>
-    <span id="config-status" class="save-status"></span>
-</div>
 <div class="admin-page">
 
     <header class="admin-header">
@@ -23,6 +16,14 @@
         </div>
         {{ADMIN_NAV}}
     </header>
+
+    <div id="save-bar" class="admin-save-bar">
+        <button id="config-save" class="primary" disabled>
+            <span class="label">{{__.admin.save.label}}</span>
+            <span class="spinner hidden"></span>
+        </button>
+        <span id="config-status" class="save-status"></span>
+    </div>
 
     <section
         class="admin-panel"

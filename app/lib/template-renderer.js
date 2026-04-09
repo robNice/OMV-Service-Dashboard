@@ -222,9 +222,7 @@ function buildAdminNav(req) {
         </button>
         <nav class="admin-nav" aria-label="Admin">
             <div class="admin-nav-group">${navLinks}
-            </div>
-            <div class="admin-nav-group admin-nav-group-end">
-                <a href="/admin/logout" class="admin-nav-link admin-nav-link-logout">
+            <a href="/admin/logout" class="admin-nav-link admin-nav-link-logout">
                     <span class="admin-nav-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none">
                             <path d="M10 5H6C4.9 5 4 5.9 4 7V17C4 18.1 4.9 19 6 19H10"></path>

@@ -7,6 +7,7 @@ body {
     background: #0f172a;
     color: #e5e7eb;
     margin: 0;
+    overflow-x: hidden;
 }
 
 .admin-center {
@@ -82,12 +83,6 @@ body {
 .admin-panel-head h2 {
     margin: 0;
     font-size: 1.05rem;
-}
-
-#theme-save {
-    width: auto;
-    min-width: 160px;
-    flex: 0 0 auto;
 }
 
 .admin-panel-copy {
@@ -410,10 +405,16 @@ body {
     position: absolute;
     opacity: 0;
     pointer-events: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 .theme-card-body {
     height: 100%;
+    min-width: 0;
     border: 1px solid #334155;
     border-radius: 12px;
     padding: 1rem;
@@ -443,6 +444,7 @@ body {
     gap: 0.5rem;
     flex-wrap: wrap;
     min-height: 1.75rem;
+    min-width: 0;
 }
 
 .theme-card-heading {
@@ -453,6 +455,7 @@ body {
 .theme-card h3 {
     margin: 0;
     font-size: 1rem;
+    overflow-wrap: anywhere;
 }
 
 .theme-card p {
@@ -460,6 +463,7 @@ body {
     color: #94a3b8;
     font-size: 0.88rem;
     line-height: 1.45;
+    overflow-wrap: anywhere;
 }
 
 .theme-id,
@@ -467,18 +471,21 @@ body {
     margin-top: 0.35rem;
     font-size: 0.78rem;
     color: #94a3b8;
+    overflow-wrap: anywhere;
 }
 
 .theme-badge {
     display: inline-flex;
     align-items: center;
+    max-width: 100%;
     border-radius: 999px;
     padding: 0.25rem 0.6rem;
     background: rgba(34, 197, 94, 0.18);
     border: 1px solid rgba(74, 222, 128, 0.34);
     color: #86efac;
     font-size: 0.75rem;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .theme-badge-secondary {
@@ -489,6 +496,7 @@ body {
 
 .theme-settings-trigger {
     width: auto;
+    max-width: 100%;
     cursor: pointer;
 }
 
@@ -1117,6 +1125,7 @@ button.primary:disabled {
         display: grid;
         grid-template-columns: 1fr auto;
         align-items: start;
+        margin-bottom: 0;
     }
 
     .admin-nav-toggle {
@@ -1128,8 +1137,6 @@ button.primary:disabled {
         grid-column: 1 / -1;
         width: 100%;
         gap: 0.85rem;
-        margin-top: 0.75rem;
-        padding: 0.9rem;
         border-radius: 14px;
         border: 1px solid rgba(51, 65, 85, 0.9);
         background: rgba(2, 6, 23, 0.9);
@@ -1154,6 +1161,8 @@ button.primary:disabled {
         opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
+        margin-top: 0.75rem;
+        padding: 0.9rem;
     }
 
     .admin-nav-group-end {
@@ -1186,6 +1195,21 @@ button.primary:disabled {
 
     .theme-settings-head {
         flex-direction: column;
+        position: relative;
+    }
+
+    .theme-grid,
+    .theme-setting-group-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .theme-card,
+    .theme-card-body,
+    .theme-card-top,
+    .theme-card-heading,
+    .theme-setting-group,
+    .theme-setting {
+        min-width: 0;
     }
 
     .section-header {
@@ -1209,7 +1233,7 @@ button.primary:disabled {
     #save-bar {
         left: 16px;
         right: 16px;
-        bottom: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     }
 }
 .image-badge {
@@ -1224,7 +1248,7 @@ button.primary:disabled {
 #save-bar {
     position: fixed;
     left: 24px;
-    bottom: 24px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
     display: flex;
     align-items: center;
     gap: 12px;
@@ -1235,6 +1259,30 @@ button.primary:disabled {
     padding: 14px 22px;
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+@media (max-width: 860px) {
+    .admin-page {
+        padding-bottom: 5rem;
+    }
+
+    .admin-save-bar,
+    #save-bar {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        width: auto;
+        max-width: none;
+        margin: 0;
+    }
+}
+@supports (height: 100dvh) and (height: 100lvh) {
+    @media (max-width: 860px) {
+        .admin-save-bar,
+        #save-bar {
+            bottom: calc(16px + env(safe-area-inset-bottom, 0px) + max(0px, 100lvh - 100dvh));
+        }
+    }
 }
 .save-status,
 #save-status {
