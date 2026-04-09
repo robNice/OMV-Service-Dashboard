@@ -280,6 +280,8 @@ Minimales Beispiel:
   "id": "test",
   "label": "Test",
   "description": "Eigenes Dashboard-Theme",
+  "author": "Jane Doe",
+  "authorUrl": "https://example.com",
   "version": "1.0.0"
 }
 ```
@@ -288,6 +290,8 @@ Regeln:
 
 - `id` muss zum Theme-Ordnernamen passen
 - das Backend nutzt diese Datei, um das Theme aufzulisten
+- `author` ist optional und wird in der Theme-Kachel im Admin unten rechts als `made by <name>` angezeigt
+- `authorUrl` ist optional und verlinkt den Autor in der Theme-Kachel in einem neuen Tab; erlaubt sind `http` und `https`
 - fehlt `meta.json` oder ist sie ungültig, wird das Theme im Backend nicht angeboten
 
 Wenn du im Admin-Bereich theme-spezifische Optionen anbieten willst, kannst du in `meta.json` zusätzlich ein Array `settings` definieren.
@@ -299,6 +303,8 @@ Erweitertes Beispiel:
   "id": "test",
   "label": "Test",
   "description": "Eigenes Dashboard-Theme",
+  "author": "Jane Doe",
+  "authorUrl": "https://example.com",
   "version": "1.0.0",
   "settings": [
     {
@@ -336,6 +342,34 @@ Wichtige Hinweise:
 - CSS-Variablen sehen dann z. B. so aus: `--themesetting-accent-color`
 - HTML-Attribute sehen dann z. B. so aus: `data-themesetting-card-style="glass"`
 - Theme-JavaScript erhält die validierten Werte über `window.OMVTheme.init({ settings })`
+
+Beispiele:
+
+```css
+body {
+  --my-accent: var(--themesetting-accent-color, #60a5fa);
+}
+
+.service-status {
+  background: var(--my-accent);
+}
+
+body[data-themesetting-card-style="glass"] .service {
+  backdrop-filter: blur(12px);
+}
+```
+
+```js
+window.OMVTheme = {
+  init({ settings, body }) {
+    body?.style.setProperty('--my-accent-runtime', settings['accent-color'] || '#60a5fa');
+
+    if (settings['card-style'] === 'glass') {
+      body?.setAttribute('data-card-style-runtime', 'glass');
+    }
+  }
+};
+```
 
 ##### Unterstuetzte Feldtypen
 
@@ -579,16 +613,18 @@ Das `context`-Objekt enthält aktuell:
 - `body`
 - `document`
 - `drawer`
+- `settings`
 - `version`
 
 Beispiel:
 
 ```js
 window.OMVTheme = {
-  init({ body }) {
+  init({ body, settings }) {
     if (document.getElementById('my-theme-root')) return;
     const el = document.createElement('div');
     el.id = 'my-theme-root';
+    el.textContent = settings['accent-color'] || 'theme active';
     body.appendChild(el);
   },
   destroy() {

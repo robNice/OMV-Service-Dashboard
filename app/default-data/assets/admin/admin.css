@@ -414,6 +414,8 @@ body {
 
 .theme-card-body {
     height: 100%;
+    display: flex;
+    flex-direction: column;
     min-width: 0;
     border: 1px solid #334155;
     border-radius: 12px;
@@ -466,7 +468,45 @@ body {
     overflow-wrap: anywhere;
 }
 
-.theme-id,
+.theme-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-top: auto;
+    padding-top: 0.9rem;
+    min-height: 1.2rem;
+}
+
+.theme-card-author {
+    text-align: right;
+    min-width: 0;
+}
+
+.theme-author-text,
+.theme-author-link {
+    color: #94a3b8;
+    font-size: 0.78rem;
+    overflow-wrap: anywhere;
+}
+
+.theme-author-link {
+    text-decoration: none;
+}
+
+.theme-author-link:hover {
+    color: #cbd5e1;
+    text-decoration: underline;
+}
+
+.theme-id{
+    margin-top: 0.3rem;
+    font-size: 0.78rem;
+    color: #94a3b8;
+    overflow-wrap: anywhere;
+    font-style: italic;
+    opacity: 0.5;
+}
+
 .theme-version {
     margin-top: 0.35rem;
     font-size: 0.78rem;
