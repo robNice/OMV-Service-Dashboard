@@ -262,6 +262,8 @@ Minimal example:
   "id": "test",
   "label": "Test",
   "description": "Custom dashboard theme",
+  "author": "Jane Doe",
+  "authorUrl": "https://example.com",
   "version": "1.0.0"
 }
 ```
@@ -270,6 +272,8 @@ Rules:
 
 - `id` must match the theme folder name
 - the backend uses this file to list the theme
+- `author` is optional and is shown in the admin theme card bottom right as `made by <name>`
+- `authorUrl` is optional and makes the author name link to that URL in a new tab; only `http` and `https` URLs are supported
 - if `meta.json` is missing or invalid, the theme is not offered in the backend
 
 If you want to expose theme-specific options in the admin area, you can add a `settings` array to `meta.json`.
@@ -281,6 +285,8 @@ Extended example:
   "id": "test",
   "label": "Test",
   "description": "Custom dashboard theme",
+  "author": "Jane Doe",
+  "authorUrl": "https://example.com",
   "version": "1.0.0",
   "settings": [
     {

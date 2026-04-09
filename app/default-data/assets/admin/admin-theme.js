@@ -120,6 +120,11 @@ function renderThemes() {
         const version = theme.version
             ? `<div class="theme-version">${root.dataset.versionLabel}: ${escapeHtml(theme.version)}</div>`
             : "";
+        const author = theme.author
+            ? theme.authorUrl
+                ? `<a class="theme-author-link" href="${escapeHtml(theme.authorUrl)}" target="_blank" rel="noopener noreferrer">made by ${escapeHtml(theme.author)}</a>`
+                : `<span class="theme-author-text">made by ${escapeHtml(theme.author)}</span>`
+            : "";
 
         return `
             <label class="theme-card">
@@ -127,16 +132,21 @@ function renderThemes() {
                 <div class="theme-card-body">
                     <div class="theme-card-top">
                         <div class="theme-card-badge-row">
-                            ${current}
-                            ${settingsBadge}
+                                ${current}
+                                ${settingsBadge}
                         </div>
                         <div class="theme-card-heading">
                             <h3>${escapeHtml(theme.label)}</h3>
-                            <div class="theme-id">#${escapeHtml(theme.id)}</div>
                         </div>
                     </div>
                     <p>${escapeHtml(theme.description || "")}</p>
                     ${version}
+                    <div title="#${escapeHtml(theme.id)}" class="theme-id">#${escapeHtml(theme.id)}</div>
+                    <div class="theme-card-footer">
+                        <div class="theme-card-author">
+                            ${author}
+                        </div>
+                    </div>
                 </div>
             </label>
         `;

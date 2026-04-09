@@ -280,6 +280,8 @@ Minimales Beispiel:
   "id": "test",
   "label": "Test",
   "description": "Eigenes Dashboard-Theme",
+  "author": "Jane Doe",
+  "authorUrl": "https://example.com",
   "version": "1.0.0"
 }
 ```
@@ -288,6 +290,8 @@ Regeln:
 
 - `id` muss zum Theme-Ordnernamen passen
 - das Backend nutzt diese Datei, um das Theme aufzulisten
+- `author` ist optional und wird in der Theme-Kachel im Admin unten rechts als `made by <name>` angezeigt
+- `authorUrl` ist optional und verlinkt den Autor in der Theme-Kachel in einem neuen Tab; erlaubt sind `http` und `https`
 - fehlt `meta.json` oder ist sie ungültig, wird das Theme im Backend nicht angeboten
 
 Wenn du im Admin-Bereich theme-spezifische Optionen anbieten willst, kannst du in `meta.json` zusätzlich ein Array `settings` definieren.
@@ -299,6 +303,8 @@ Erweitertes Beispiel:
   "id": "test",
   "label": "Test",
   "description": "Eigenes Dashboard-Theme",
+  "author": "Jane Doe",
+  "authorUrl": "https://example.com",
   "version": "1.0.0",
   "settings": [
     {

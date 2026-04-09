@@ -13,6 +13,7 @@
   - [Change Password](#change-password)
 - [Manual Configuration](#manual-configuration)
 - [Theming](#theming)
+- [Contributing](#contributing)
 - [Directory Structure (relevant parts)](#directory-structure-relevant-parts)
 - [Installation](#installation)
   - [Installation: Docker (recommended)](#installation-docker-recommended)
@@ -220,6 +221,18 @@ Custom themes can also reuse an existing built-in theme ID and thereby override 
 
 The technical details, folder structure, style inheritance, and overriding built-in themes are documented in [`CONFIG_README.md`](./CONFIG_README.md).
 Theme previews can be found starting at [Theme 1984](#theme-1984) below.
+
+---
+
+## Contributing
+
+Contributions are welcome, especially in these areas:
+
+- Themes: corrections, refinements, and completely new themes
+- Localizations: new translations and wording fixes
+- NAS Portal improvements: features, bug fixes, and general maintenance
+
+Please see [`CONTRIBUTING.md`](./CONTRIBUTING.md) for contribution notes and pull request guidance.
 
 ---
 

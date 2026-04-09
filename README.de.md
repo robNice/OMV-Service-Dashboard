@@ -13,6 +13,7 @@
   - [Passwort aendern](#passwort-aendern)
 - [Manuelle Konfiguration](#manuelle-konfiguration)
 - [Theming](#theming)
+- [Mitwirken](#mitwirken)
 - [Verzeichnisstruktur (relevante Teile)](#verzeichnisstruktur-relevante-teile)
 - [Installation](#installation)
   - [Installation: Docker (empfohlen)](#installation-docker-empfohlen)
@@ -222,6 +223,18 @@ Eigene Themes können dort auch eine bestehende eingebaute Theme-ID übernehmen 
 
 Die technischen Details, die Ordnerstruktur, die Style-Vererbung und das Überschreiben eingebauter Themes sind in [`CONFIG_README.de.md`](./CONFIG_README.de.md) dokumentiert.
 Theme-Vorschauen findest du weiter unten ab [Theme 1984](#theme-1984).
+
+---
+
+## Mitwirken
+
+Beiträge sind willkommen, besonders in diesen Bereichen:
+
+- Themes: Korrekturen, Verfeinerungen und komplett neue Themes
+- Lokalisierungen: neue Übersetzungen und sprachliche Korrekturen
+- NAS-Portal-Erweiterungen: Features, Bugfixes und allgemeine Verbesserungen
+
+Hinweise zum Beitragen und zu Pull Requests findest du in [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
 ---
 

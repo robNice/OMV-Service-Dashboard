@@ -2,7 +2,7 @@
   "id": "1984",
   "label": "1984",
   "description": "Retro computer theme with demo-scene gradients, stepped panel edges and subtle CRT styling.",
-  "version": "1.5.0",
+  "version": "1.5.0.2",
   "settings": [
     {
       "id": "show-section-thumbnails",
