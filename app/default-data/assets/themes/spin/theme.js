@@ -131,6 +131,9 @@
             // extend beyond the viewport would otherwise trigger a mobile
             // viewport resize (browser address-bar animation), jolting
             // position:fixed elements (background layer, drawer tab).
+            // Must be set on both <html> and <body> — body alone does not
+            // reliably propagate to the viewport in all browsers.
+            doc.documentElement.classList.add('spin-no-scroll');
             body.classList.add('spin-no-scroll');
 
             const dom = buildDOM(grid, cards);
@@ -268,6 +271,7 @@
             dom.wrapper.remove();
             grid.classList.remove('spin-carousel-active');
             body.classList.remove('spin-has-reflection');
+            doc.documentElement.classList.remove('spin-no-scroll');
             body.classList.remove('spin-no-scroll');
 
             _state = null;

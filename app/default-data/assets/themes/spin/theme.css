@@ -37,6 +37,7 @@ body {
    the page scrollable, which triggers a mobile viewport resize
    (address-bar animation) that visually jolts fixed-position
    elements such as the background layer and the drawer tab.     */
+html.spin-no-scroll,
 body.spin-no-scroll {
     overflow: hidden;
 }
