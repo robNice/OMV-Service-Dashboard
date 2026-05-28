@@ -2,7 +2,9 @@
   "id": "spin",
   "label": "Spin",
   "description": "Cards and section thumbnails as an animated 3D coverflow carousel with shadow and reflection effects.",
-  "version": "1.0.2",
+  "version": "1.0.0",
+  "author": "rob",
+  "authorUrl": "https://github.com/robNice",
   "settings": [
     {
       "id": "show-reflection",

@@ -3,6 +3,8 @@
   "label": "Hacker",
   "description": "Monochrome terminal theme with darkened backgrounds, IBM Plex Mono and prompt-style panels.",
   "version": "1.2.0",
+  "author": "rob",
+  "authorUrl": "https://github.com/robNice",
   "settings": [
     {
       "id": "show-section-thumbnails",

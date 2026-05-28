@@ -1,19 +1,22 @@
 (function () {
     'use strict';
 
-    // ── Carousel position table ───────────────────────────────
-    // Each row: [translateX (px), translateZ (px), rotateY (deg), scale, opacity, zIndex]
-    // Index 0 = active card, index N = Nth card from center.
-    // Signs for X and Y are mirrored for negative offsets in code.
-    const POSITIONS = [
-        [   0,    0,   0,  1.00, 1.00, 10],  // 0 — center/active
-        [ 290,  -90, -42,  0.82, 0.78,  7],  // ±1
-        [ 468, -195, -62,  0.63, 0.50,  4],  // ±2
-    ];
-
     const AUTOPLAY_INTERVAL_MS = 4000;
 
     let _state = null;
+
+    // ── Read responsive positions from CSS custom properties ──
+    // This allows theme.css media queries to control positions
+    // without duplicating breakpoint logic here.
+    function readPositions() {
+        const cs = getComputedStyle(document.documentElement);
+        const n  = k => parseFloat(cs.getPropertyValue(k).trim()) || 0;
+        return [
+            [0, 0, 0, 1, 1, 10],
+            [n('--spin-pos1-tx'), n('--spin-pos1-tz'), n('--spin-pos1-ry'), n('--spin-pos1-sc'), n('--spin-pos1-op'), 7],
+            [n('--spin-pos2-tx'), n('--spin-pos2-tz'), n('--spin-pos2-ry'), n('--spin-pos2-sc'), n('--spin-pos2-op'), 4],
+        ];
+    }
 
     // ── Helpers ───────────────────────────────────────────────
 
@@ -24,19 +27,19 @@
         return off;
     }
 
-    function applyCardPosition(card, off) {
+    function applyCardPosition(card, off, positions) {
         const abs = Math.abs(off);
 
-        if (abs >= POSITIONS.length) {
+        if (abs >= positions.length) {
             card.style.opacity    = '0';
             card.style.visibility = 'hidden';
             card.style.zIndex     = '0';
-            card.style.transform  = 'translate(-50%, -50%) translateZ(-600px) scale(0.3)';
+            card.style.transform  = 'translate(-50%, -50%)';
             return;
         }
 
         const sign = off >= 0 ? 1 : -1;
-        const [tx, tz, ry, scale, opacity, zIdx] = POSITIONS[abs];
+        const [tx, tz, ry, scale, opacity, zIdx] = positions[abs];
 
         card.style.visibility = 'visible';
         card.style.opacity    = String(opacity);
@@ -124,9 +127,16 @@
             grid.classList.add('spin-carousel-active');
             if (hasReflection) body.classList.add('spin-has-reflection');
 
+            // Prevent the page from becoming scrollable: stray cards that
+            // extend beyond the viewport would otherwise trigger a mobile
+            // viewport resize (browser address-bar animation), jolting
+            // position:fixed elements (background layer, drawer tab).
+            body.classList.add('spin-no-scroll');
+
             const dom = buildDOM(grid, cards);
 
-            let active = 0;
+            let positions = readPositions();
+            let active    = 0;
             let autoTimer = null;
 
             // ── Position all cards ──
@@ -137,7 +147,7 @@
 
                 cards.forEach((card, i) => {
                     const off = wrappedOffset(i, active, cards.length);
-                    applyCardPosition(card, off);
+                    applyCardPosition(card, off, positions);
                     card.classList.toggle('spin-active', off === 0);
                 });
 
@@ -183,6 +193,13 @@
                 startAutoplay();
             }
 
+            // ── Viewport resize — re-read positions from CSS ──
+            const onResize = () => {
+                positions = readPositions();
+                updatePositions(true);
+            };
+            window.addEventListener('resize', onResize);
+
             // ── Event listeners ──
             if (dom.btnPrev) dom.btnPrev.addEventListener('click', () => go(-1));
             if (dom.btnNext) dom.btnNext.addEventListener('click', () => go(1));
@@ -218,23 +235,26 @@
             dom.scene.addEventListener('mouseenter', stopAutoplay);
             dom.scene.addEventListener('mouseleave', startAutoplay);
 
-            // Initial render without animation
             updatePositions(true);
             startAutoplay();
 
-            _state = { grid, cards, dom, body, doc, stopAutoplay, onKey, onTouchStart, onTouchEnd };
+            _state = {
+                grid, cards, dom, body, doc,
+                stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize
+            };
         },
 
         destroy() {
             if (!_state) return;
-            const { grid, cards, dom, body, doc, stopAutoplay, onKey, onTouchStart, onTouchEnd } = _state;
+            const { grid, cards, dom, body, doc,
+                    stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize } = _state;
 
             stopAutoplay();
             doc.removeEventListener('keydown', onKey);
+            window.removeEventListener('resize', onResize);
             dom.scene.removeEventListener('touchstart', onTouchStart);
             dom.scene.removeEventListener('touchend',   onTouchEnd);
 
-            // Restore cards to grid and clear inline styles
             cards.forEach(card => {
                 card.style.transform  = '';
                 card.style.opacity    = '';
@@ -248,6 +268,7 @@
             dom.wrapper.remove();
             grid.classList.remove('spin-carousel-active');
             body.classList.remove('spin-has-reflection');
+            body.classList.remove('spin-no-scroll');
 
             _state = null;
         }

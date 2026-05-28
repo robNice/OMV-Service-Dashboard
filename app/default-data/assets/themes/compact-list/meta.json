@@ -3,6 +3,8 @@
   "label": "Compact List",
   "description": "Dense list layout for faster scanning with a lighter drawer treatment.",
   "version": "1.3.0",
+  "author": "rob",
+  "authorUrl": "https://github.com/robNice",
   "settings": [
     {
       "id": "show-section-thumbnails",
