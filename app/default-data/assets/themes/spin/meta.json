@@ -1,0 +1,32 @@
+{
+  "id": "spin",
+  "label": "Spin",
+  "description": "Cards and section thumbnails as an animated 3D coverflow carousel with shadow and reflection effects.",
+  "version": "1.0.0",
+  "settings": [
+    {
+      "id": "show-reflection",
+      "group": "Effects",
+      "label": "Card reflection",
+      "description": "Show a mirror reflection beneath each card.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "autoplay",
+      "group": "Carousel",
+      "label": "Auto-rotate",
+      "description": "Automatically advance the carousel every few seconds.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "id": "accent-color",
+      "group": "Colors",
+      "label": "Accent color",
+      "description": "Color used for active indicators, buttons, and highlights.",
+      "type": "color",
+      "default": "#7c6af7"
+    }
+  ]
+}
