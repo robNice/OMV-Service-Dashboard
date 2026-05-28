@@ -77,15 +77,12 @@ body.spin-has-reflection .spin-wrapper {
     position: relative;
     width: 100%;
     height: var(--spin-scene-height);
-    perspective: 1100px;
-    perspective-origin: 50% 38%;
     overflow: visible;
 }
 
 .spin-track {
     position: absolute;
     inset: 0;
-    transform-style: preserve-3d;
     pointer-events: none;
 }
 
@@ -106,8 +103,6 @@ body.spin-has-reflection .spin-wrapper {
     will-change: transform, opacity;
     user-select: none;
     pointer-events: auto;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
 }
 
 .spin-track .service.spin-active {
@@ -206,5 +201,14 @@ body.spin-has-reflection .spin-track .service {
         width: 36px;
         height: 36px;
         font-size: 19px;
+    }
+
+    /* Reflection disabled on mobile — too expensive for GPU compositing */
+    body.spin-has-reflection .spin-track .service {
+        -webkit-box-reflect: none;
+    }
+
+    body.spin-has-reflection .spin-wrapper {
+        padding-bottom: 1.5rem;
     }
 }
