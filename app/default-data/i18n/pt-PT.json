@@ -16,6 +16,7 @@
     "docker": "Contentores Docker",
     "host": "Host",
     "os": "SO",
+    "nas": "NAS",
     "kernel": "Kernel",
     "cpu": "CPU",
     "gpu": "GPU",
@@ -31,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Última atualização",
-    "now": "agora"
+    "now": "agora",
+    "secondsShort": "s",
+    "minutesShort": "min",
+    "hoursShort": "h",
+    "loadingTitle": "A carregar dados do sistema",
+    "loadingBody": "O painel de informa??es ser? preenchido automaticamente assim que o primeiro pedido de estado em tempo real estiver conclu?do.",
+    "refreshingTitle": "Est?o a ser mostrados dados do sistema em cache",
+    "refreshingBody": "Os valores apresentados v?m do ?ltimo snapshot no servidor. Os dados em tempo real est?o a ser atualizados em segundo plano."
   },
   "tooltip": {
     "infodrawer": "Abrir/fechar informações do sistema",
@@ -90,7 +98,6 @@
       "desc": "Gere as definições principais do dashboard e as opções de execução",
       "sectionTitle": "Configuração geral",
       "hint": "Estes valores afetam o comportamento global do dashboard. As alterações de porta só produzem efeito após reiniciar.",
-      "useDefaultRpcPath": "Usar caminho RPC predefinido",
       "portHint": "Altere a porta apenas se souber exatamente o que está a fazer. Uma porta incorreta pode tornar o dashboard inacessível após o reinício e também pode exigir ajustes no proxy reverso, Docker ou firewall.",
       "portConfirmTitle": "Confirmar alteração de porta",
       "portConfirmBody": "Alterou a porta do dashboard. Esta altera��o s� ser� aplicada ap�s reiniciar. Se a nova porta estiver incorreta ou n�o estiver exposta, o dashboard pode deixar de estar acess�vel. Pretende continuar mesmo assim?",
@@ -98,8 +105,15 @@
         "title": "Título do dashboard",
         "defaultLang": "Idioma de fallback",
         "infoDrawerRefreshInterval": "Intervalo de atualização do painel de informação (segundos)",
-        "omvRpcPath": "Caminho OMV RPC",
-        "port": "Porta"
+        "port": "Porta",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

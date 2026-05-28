@@ -29,6 +29,22 @@ function sanitizeOptions(options) {
         .filter(option => option.value && option.label);
 }
 
+function sanitizeThemeAuthorUrl(value) {
+    const raw = String(value ?? '').trim();
+    if (!raw) {
+        return '';
+    }
+
+    try {
+        const url = new URL(raw);
+        return url.protocol === 'http:' || url.protocol === 'https:'
+            ? url.toString()
+            : '';
+    } catch {
+        return '';
+    }
+}
+
 function normalizeDefaultValue(type, value) {
     if (type === 'boolean') {
         return Boolean(value);
@@ -108,6 +124,8 @@ function readThemeMeta(baseDir, themeId) {
             id: String(meta.id || themeId).trim().toLowerCase(),
             label: String(meta.label || themeId).trim(),
             description: String(meta.description || '').trim(),
+            author: String(meta.author || '').trim(),
+            authorUrl: sanitizeThemeAuthorUrl(meta['author-url'] || meta.authorUrl),
             version: String(meta.version || '').trim(),
             settings: sanitizeThemeSettingsSchema(meta.settings),
             source: baseDir === USER_ASSETS ? 'custom' : 'default'

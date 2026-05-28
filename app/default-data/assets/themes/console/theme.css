@@ -1,4 +1,5 @@
 :root {
+    --omv-service-card-width: 306px;
     --console-bg: #0d0a08;
     --console-bg-soft: #17110d;
     --console-panel: rgba(39, 24, 12, 0.96);
@@ -276,7 +277,7 @@ body:has(.section-nav) .page-header::before {
 
 .service {
     position: relative;
-    width: 306px;
+    width: 100%;
     border: 0;
     border-radius: 0;
     background: transparent;
@@ -403,10 +404,6 @@ body:not(:has(.section-nav)) .service::before {
 
     .section-nav-item::after {
         font-size: 0.67rem;
-    }
-
-    .service {
-        width: min(100%, 340px);
     }
 
     .service a {

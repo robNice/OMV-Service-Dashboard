@@ -16,6 +16,7 @@
     "docker": "Docker konteynerleri",
     "host": "Host",
     "os": "0S",
+    "nas": "NAS",
     "kernel": "Kernel",
     "cpu": "CPU",
     "gpu": "GPU",
@@ -31,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Son güncelleme",
-    "now": "şimdi"
+    "now": "şimdi",
+    "secondsShort": "sn",
+    "minutesShort": "dk",
+    "hoursShort": "sa",
+    "loadingTitle": "Sistem verileri y?kleniyor",
+    "loadingBody": "?lk canl? durum iste?i tamamlan?r tamamlanmaz bilgi ?ekmecesi otomatik olarak doldurulacakt?r.",
+    "refreshingTitle": "?nbelle?e al?nm?? sistem verileri g?steriliyor",
+    "refreshingBody": "G?sterilen de?erler son sunucu anl?k g?r?nt?s?nden geliyor. Canl? veriler arka planda yenileniyor."
   },
   "tooltip": {
     "infodrawer": "Sistem bilgilerini aç/kapat",
@@ -90,7 +98,6 @@
       "desc": "Gösterge panelinin temel ayarlarını ve çalışma zamanı seçeneklerini yönetin",
       "sectionTitle": "Genel yap1land1rma",
       "hint": "Bu değerler gösterge panelinin genel davranışını etkiler. Port değişiklikleri ancak yeniden başlatmadan sonra geçerli olur.",
-      "useDefaultRpcPath": "Varsay1lan RPC yolunu kullan",
       "portHint": "Portu yalnızca tam olarak ne yaptığınızı biliyorsanız değiştirin. Yanlış bir port, yeniden başlatmadan sonra gösterge panelinin erişilemez olmasına neden olabilir ve ters proxy, Docker veya güvenlik duvarı ayarlarında değişiklik gerektirebilir.",
       "portConfirmTitle": "Port değişikliğini onayla",
       "portConfirmBody": "G�sterge paneli portunu de�xi�xtirdiniz. Bu de�xi�xiklik yeniden ba�xlatmadan sonra uygulanacakt1r. Yeni port yanl1�xsa veya d1�xar1 a�1lmad1ysa g�sterge paneline art1k eri�xilemeyebilir. Yine de devam edilsin mi?",
@@ -98,8 +105,15 @@
         "title": "Gösterge paneli başlığı",
         "defaultLang": "Yedek dil",
         "infoDrawerRefreshInterval": "Bilgi çekmecesi yenileme aralığı (saniye)",
-        "omvRpcPath": "OMV RPC yolu",
-        "port": "Port"
+        "port": "Port",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

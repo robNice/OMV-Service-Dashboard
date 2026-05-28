@@ -2,5 +2,39 @@
   "id": "hippies",
   "label": "Hippies",
   "description": "Round shapes, flower-power accents and a colorful VW-Bus inspired festival vibe.",
-  "version": "1.0.0"
+  "version": "1.2.0",
+  "settings": [
+    {
+      "id": "show-section-thumbnails",
+      "group": "Layout",
+      "label": "Show section thumbnails in header",
+      "description": "Show or hide section thumbnails in the header navigation.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "cards-per-row-desktop",
+      "group": "Layout",
+      "label": "Cards per row on desktop",
+      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible.",
+      "type": "number",
+      "default": 0
+    },
+    {
+      "id": "cards-per-row-tablet",
+      "group": "Layout",
+      "label": "Cards per row on tablet",
+      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible.",
+      "type": "number",
+      "default": 0
+    },
+    {
+      "id": "cards-per-row-mobile",
+      "group": "Layout",
+      "label": "Cards per row on mobile",
+      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible.",
+      "type": "number",
+      "default": 0
+    }
+  ]
 }

@@ -16,6 +16,7 @@
     "docker": "Conteneurs Docker",
     "host": "Hôte",
     "os": "Système",
+    "nas": "NAS",
     "kernel": "Noyau",
     "cpu": "Processeur",
     "gpu": "Carte graphique",
@@ -31,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Dernière mise à jour",
-    "now": "maintenant"
+    "now": "maintenant",
+    "secondsShort": "s",
+    "minutesShort": "min",
+    "hoursShort": "h",
+    "loadingTitle": "Chargement des donn?es syst?me",
+    "loadingBody": "Le panneau d'information se remplira automatiquement d?s que la premi?re requ?te d'?tat en direct sera termin?e.",
+    "refreshingTitle": "Les donn?es syst?me en cache sont affich?es",
+    "refreshingBody": "Les valeurs affich?es proviennent du dernier instantan? c?t? serveur. Les donn?es en direct sont actualis?es en arri?re-plan."
   },
   "tooltip": {
     "infodrawer": "Ouvrir/fermer les informations système",
@@ -90,7 +98,6 @@
       "desc": "Gérez les paramètres principaux du tableau de bord et les options liées à l'exécution",
       "sectionTitle": "Configuration générale",
       "hint": "Ces valeurs influencent le comportement global du tableau de bord. Les changements de port ne prennent effet qu'après un redémarrage.",
-      "useDefaultRpcPath": "Utiliser le chemin RPC par défaut",
       "portHint": "Ne modifiez le port que si vous savez exactement ce que vous faites. Un port incorrect peut rendre le tableau de bord inaccessible après un redémarrage et nécessiter aussi des ajustements du reverse proxy, de Docker ou du pare-feu.",
       "portConfirmTitle": "Confirmer le changement de port",
       "portConfirmBody": "Vous avez modifi� le port du tableau de bord. Ce changement prendra effet apr�s un red�marrage. Si le nouveau port est incorrect ou non expos�, le tableau de bord risque de ne plus �tre accessible. Voulez-vous continuer ?",
@@ -98,8 +105,15 @@
         "title": "Titre du tableau de bord",
         "defaultLang": "Langue de secours",
         "infoDrawerRefreshInterval": "Intervalle d'actualisation du panneau d'information (secondes)",
-        "omvRpcPath": "Chemin OMV RPC",
-        "port": "Port"
+        "port": "Port",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

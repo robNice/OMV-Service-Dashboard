@@ -7,6 +7,7 @@
 }
 
 body {
+    --omv-service-card-width: 300px;
     --bg-color: #0a1030;
     --text-color: #d7e2ff;
     --tile-bg: rgba(17, 24, 61, 0.92);
@@ -136,7 +137,7 @@ body::after {
 }
 
 .service {
-    width: 300px;
+    width: 100%;
     background:
         linear-gradient(180deg, rgba(117, 242, 255, 0.06), transparent 30%),
         var(--tile-bg);

@@ -28,7 +28,10 @@ function escapeHtml(value) {
 
 function setStatus(message, tone = "") {
     statusEl.textContent = message || "";
-    statusEl.className = tone ? `hint ${tone}` : "hint";
+    statusEl.className = tone ? `save-status ${tone}` : "save-status";
+    statusEl.dataset.tone = tone || "";
+    statusEl.classList.toggle("is-visible", Boolean(message));
+    statusEl.classList.remove("is-fading");
 }
 
 function getThemeById(themeId) {
@@ -117,6 +120,11 @@ function renderThemes() {
         const version = theme.version
             ? `<div class="theme-version">${root.dataset.versionLabel}: ${escapeHtml(theme.version)}</div>`
             : "";
+        const author = theme.author
+            ? theme.authorUrl
+                ? `<a class="theme-author-link" href="${escapeHtml(theme.authorUrl)}" target="_blank" rel="noopener noreferrer">made by ${escapeHtml(theme.author)}</a>`
+                : `<span class="theme-author-text">made by ${escapeHtml(theme.author)}</span>`
+            : "";
 
         return `
             <label class="theme-card">
@@ -124,16 +132,21 @@ function renderThemes() {
                 <div class="theme-card-body">
                     <div class="theme-card-top">
                         <div class="theme-card-badge-row">
-                            ${current}
-                            ${settingsBadge}
+                                ${current}
+                                ${settingsBadge}
                         </div>
                         <div class="theme-card-heading">
                             <h3>${escapeHtml(theme.label)}</h3>
-                            <div class="theme-id">#${escapeHtml(theme.id)}</div>
                         </div>
                     </div>
                     <p>${escapeHtml(theme.description || "")}</p>
                     ${version}
+                    <div title="#${escapeHtml(theme.id)}" class="theme-id">#${escapeHtml(theme.id)}</div>
+                    <div class="theme-card-footer">
+                        <div class="theme-card-author">
+                            ${author}
+                        </div>
+                    </div>
                 </div>
             </label>
         `;
@@ -149,9 +162,12 @@ function renderField(setting, value) {
     if (setting.type === "boolean") {
         return `
             <label class="theme-setting theme-setting-toggle" for="${fieldId}">
-                <span class="theme-setting-title">${escapeHtml(setting.label)}</span>
+                <span class="theme-setting-toggle-header">
+                    <input id="${fieldId}" type="checkbox" data-setting-id="${escapeHtml(setting.id)}" ${value ? "checked" : ""}>
+                    <span class="theme-setting-choice-control" aria-hidden="true"></span>
+                    <span class="theme-setting-title">${escapeHtml(setting.label)}</span>
+                </span>
                 ${description}
-                <input id="${fieldId}" type="checkbox" data-setting-id="${escapeHtml(setting.id)}" ${value ? "checked" : ""}>
             </label>
         `;
     }
@@ -184,14 +200,16 @@ function renderField(setting, value) {
 
     if (setting.type === "radio") {
         const options = (setting.options || []).map((option) => `
-            <label class="theme-setting-choice">
+            <label class="theme-setting-choice theme-setting-choice-chip">
                 <input
                     type="radio"
                     name="${escapeHtml(fieldId)}"
                     value="${escapeHtml(option.value)}"
                     data-setting-id="${escapeHtml(setting.id)}"
                     ${option.value === String(value) ? "checked" : ""}>
-                <span>${escapeHtml(option.label)}</span>
+                <span class="theme-setting-choice-chip-surface">
+                    <span class="theme-setting-choice-label">${escapeHtml(option.label)}</span>
+                </span>
             </label>
         `).join("");
 
@@ -282,7 +300,7 @@ function renderSettings(themeId) {
 
 async function loadThemes() {
     setStatus(root.dataset.loading);
-    const response = await fetch("/admin/api/themes");
+    const response = await adminFetch("/admin/api/themes");
     if (!response.ok) {
         throw new Error("load_failed");
     }
@@ -403,7 +421,7 @@ saveBtn.addEventListener("click", async () => {
         setSaving(true);
         setStatus("");
 
-        const response = await fetch("/admin/api/theme", {
+        const response = await adminFetch("/admin/api/theme", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

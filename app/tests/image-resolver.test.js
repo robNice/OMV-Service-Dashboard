@@ -4,20 +4,13 @@ const path = require('path');
 jest.mock('fs');
 jest.mock('../lib/paths', () => ({
     USER_ASSETS: '/mock/user-assets',
-    APP_ASSETS: '/mock/app-assets'
+    APP_ASSETS: '/mock/app-assets',
+    CONFIG_DIR: '/mock/config'
 }));
 
-function findImageById({ rootPath, baseDir, id }) {
-    for (const ext of IMAGE_EXTS) {
-        const file = `${id}.${ext}`;
-        const fullPath = path.join(rootPath, baseDir, file);
-        if (fs.existsSync(fullPath)) {
-            return { file };
-        }
-    }
-    return null;
-}
-
+jest.mock('../lib/image-extensions', () => ({
+    IMAGE_EXTS: ['png', 'jpg', 'jpeg', 'webp', 'gif']
+}));
 
 const {
     resolveServiceCardImage,
@@ -89,7 +82,7 @@ describe('image-resolver – entity images', () => {
         const result = resolver({ id: 'test-id' });
 
         expect(result).toMatchObject({
-            src: `/assets/${baseDir}/test-id.png`,
+            src: `/assets/${baseDir}/test-id`,
             source: 'id',
             isCustom: true
         });
@@ -107,7 +100,7 @@ describe('image-resolver – entity images', () => {
         const result = resolver({ id: 'test-id' });
 
         expect(result).toMatchObject({
-            src: `/assets/${baseDir}/test-id.png`,
+            src: `/assets/${baseDir}/test-id`,
             source: 'app',
             isCustom: false
         });
@@ -118,9 +111,10 @@ describe('image-resolver – entity images', () => {
 
         const result = resolver({ id: 'test-id' });
 
-        expect(result).toEqual({
-            src: `/assets/${baseDir}/_default.png`,
+        expect(result).toMatchObject({
+            src: `/assets/${baseDir}/_default`,
             resolvedFile: '_default.png',
+            resolvedPath: `/mock/app-assets/${baseDir}/_default.png`,
             source: 'default',
             isCustom: false
         });
@@ -160,9 +154,10 @@ describe('image-resolver – app images', () => {
             baseDir
         });
 
-        expect(result).toEqual({
-            src: `/assets/${baseDir}/test-id.png`,
+        expect(result).toMatchObject({
+            src: `/assets/${baseDir}/test-id`,
             resolvedFile: 'test-id.png',
+            resolvedPath: `/mock/app-assets/${baseDir}/test-id.png`,
             source: 'app'
         });
     });
@@ -180,9 +175,10 @@ describe('image-resolver – app images', () => {
             baseDir
         });
 
-        expect(result).toEqual({
-            src: `/assets/${baseDir}/_default.png`,
+        expect(result).toMatchObject({
+            src: `/assets/${baseDir}/_default`,
             resolvedFile: '_default.png',
+            resolvedPath: `/mock/app-assets/${baseDir}/_default.png`,
             source: 'app'
         });
     });

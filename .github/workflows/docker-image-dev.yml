@@ -26,6 +26,7 @@ jobs:
         id: image
         run: |
           IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}"
+          # IMAGE_NAME="ghcr.io/robnice/nas-portal"
           echo "name=$IMAGE_NAME" >> $GITHUB_OUTPUT
 
       - name: Build and push DEV Docker image

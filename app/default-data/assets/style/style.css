@@ -41,11 +41,37 @@
 }
 
 body {
+    --omv-service-card-width: 300px;
+    --omv-service-grid-template:
+        var(
+            --omv-grid-template-desktop,
+            repeat(auto-fit, minmax(min(100%, var(--omv-service-card-width)), 1fr))
+        );
     margin: 0;
     padding: 2rem;
     font-family: system-ui, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
+}
+
+@media (max-width: 960px) {
+    body {
+        --omv-service-grid-template:
+            var(
+                --omv-grid-template-tablet,
+                var(--omv-grid-template-desktop, repeat(auto-fit, minmax(min(100%, var(--omv-service-card-width)), 1fr)))
+            );
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        --omv-service-grid-template:
+            var(
+                --omv-grid-template-mobile,
+                var(--omv-grid-template-tablet, var(--omv-grid-template-desktop, repeat(auto-fit, minmax(min(100%, var(--omv-service-card-width)), 1fr))))
+            );
+    }
 }
 
 .page-header {
@@ -81,6 +107,14 @@ body {
     max-width: 1000px;
 }
 
+body[data-themesetting-show-section-thumbnails="false"] .section-nav {
+    display: none;
+}
+
+body[data-themesetting-show-section-thumbnails="false"] .page-header h1 {
+    margin-bottom: 0.25rem;
+}
+
 .section-nav-item {
     width: 96px;
     height: 62px;
@@ -112,10 +146,11 @@ body {
 }
 
 .grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: var(--omv-service-grid-template);
     gap: 1.5rem;
     justify-content: center;
+    align-items: stretch;
 }
 
 .service {
@@ -123,7 +158,9 @@ body {
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    width: 300px;
+    width: 100%;
+    max-width: var(--omv-service-card-width);
+    justify-self: center;
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease;

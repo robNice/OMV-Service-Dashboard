@@ -137,3 +137,9 @@ dist
 /.forgejo/workflows/deploy.yml
 /tmp/
 AGENTS.md
+/package-lock.json
+/Todo.md
+/app/data/stats-cache.json
+/app/data
+/app/config
+/CLAUDE.md

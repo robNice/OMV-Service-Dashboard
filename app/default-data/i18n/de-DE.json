@@ -16,6 +16,7 @@
     "docker": "Docker-Container",
     "host": "Host",
     "os": "OS",
+    "nas": "NAS",
     "kernel": "Kernel",
     "cpu": "CPU",
     "gpu": "GPU",
@@ -30,12 +31,19 @@
     "gb": "GB"
   },
   "status": {
-    "updatedAt": "Letztes Update",
-    "now": "jetzt"
+    "updatedAt": "Alter der Systemdaten",
+    "now": "jetzt",
+    "secondsShort": "Sek",
+    "minutesShort": "Min",
+    "hoursShort": "Std",
+    "loadingTitle": "Systemdaten werden geladen",
+    "loadingBody": "Der Info-Drawer füllt sich automatisch, sobald die erste Live-Status-Abfrage abgeschlossen ist.",
+    "refreshingTitle": "Zwischengespeicherte Systemdaten werden angezeigt",
+    "refreshingBody": "Die angezeigten Werte stammen aus dem letzten serverseitigen Snapshot. Live-Daten werden im Hintergrund aktualisiert."
   },
   "tooltip": {
     "infodrawer": "Systeminformationen öffnen/schließen",
-    "systemLoad": "Durschnitt der Systemlast: letzte Minute / letzte 5 Minuten / letzte 15 Minuten"
+    "systemLoad": "Durchschnitt der Systemlast: letzte Minute / letzte 5 Minuten / letzte 15 Minuten"
   },
   "docker": {
     "status": {
@@ -90,7 +98,6 @@
       "desc": "Verwalte zentrale Dashboard-Einstellungen und laufzeitrelevante Optionen",
       "sectionTitle": "Allgemeine Konfiguration",
       "hint": "Diese Werte beeinflussen das globale Verhalten des Dashboards. Port-Änderungen wirken erst nach einem Neustart.",
-      "useDefaultRpcPath": "Standard-RPC-Pfad verwenden",
       "portHint": "Ändere den Port nur, wenn du genau weißt, was du tust. Ein falscher Port kann dazu führen, dass das Dashboard nach einem Neustart nicht mehr erreichbar ist und Reverse-Proxy-, Docker- oder Firewall-Einstellungen angepasst werden müssen.",
       "portConfirmTitle": "Port-Änderung bestätigen",
       "portConfirmBody": "Du hast den Dashboard-Port ge�ndert. Diese �\u001enderung wird erst nach einem Neustart wirksam. Wenn der neue Port falsch ist oder nicht freigegeben wurde, ist das Dashboard danach m�glicherweise nicht mehr erreichbar. Trotzdem fortfahren?",
@@ -98,8 +105,15 @@
         "title": "Dashboard-Titel",
         "defaultLang": "Fallback-Sprache",
         "infoDrawerRefreshInterval": "Info-Drawer-Aktualisierungsintervall (Sekunden)",
-        "omvRpcPath": "OMV-RPC-Pfad",
-        "port": "Port"
+        "port": "Port",
+        "serviceLinkTarget": "Service-Links öffnen",
+        "serviceLinkTargetHint": "Steuert, ob Service-Karten im gleichen Tab oder in einem neuen Tab geöffnet werden."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In neuem Tab",
+          "sameTab": "Im gleichen Tab"
+        }
       }
     },
     "image": {

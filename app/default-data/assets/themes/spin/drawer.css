@@ -1,0 +1,39 @@
+/* Spin Theme — drawer.css */
+
+:root {
+    --drawer-w: 364px;
+    --drawer-transition: transform .36s cubic-bezier(.22, 1, .36, 1);
+    --drawer-panel-shadow: 0 16px 48px rgba(0, 0, 0, 0.58);
+    --drawer-panel-backdrop: blur(16px);
+    --drawer-header-bg: rgba(255, 255, 255, .025);
+    --drawer-footer-bg: rgba(255, 255, 255, .025);
+}
+
+#info-drawer .panel {
+    background: rgba(10, 8, 26, 0.86);
+    border-left: 1px solid rgba(124, 106, 247, 0.14);
+}
+
+#info-drawer .tab {
+    background: rgba(10, 8, 26, 0.92);
+    border: 1px solid rgba(124, 106, 247, 0.22);
+    box-shadow: -4px 0 18px rgba(0, 0, 0, 0.44);
+}
+
+#info-drawer .section h3 {
+    color: var(--spin-accent, #7c6af7);
+    letter-spacing: 0.04em;
+}
+
+#info-drawer .chip {
+    background: rgba(124, 106, 247, 0.11);
+    border: 1px solid rgba(124, 106, 247, 0.18);
+}
+
+#info-drawer .kv:hover {
+    background: rgba(124, 106, 247, 0.07);
+}
+
+#info-drawer .bar i {
+    background: linear-gradient(90deg, var(--spin-accent, #7c6af7), color-mix(in srgb, var(--spin-accent, #7c6af7) 60%, #a78bfa));
+}

@@ -2,6 +2,73 @@
     const $ = (sel) => document.querySelector(sel);
     const host = "/api/stats";
     let POLL_MS = 30000;
+    let hasLoadedOnce = false;
+    const initialStats = window.OMV_HAS_INITIAL_STATS ? window.OMV_INITIAL_STATS : null;
+    let lastStatsTs = null;
+
+    /**
+     * Format the age of the latest stats snapshot.
+     * @param ts
+     * @returns {string}
+     */
+    function formatStatsAge(ts) {
+        const deltaSeconds = Math.max(0, Math.floor((Date.now() - Number(ts || Date.now())) / 1000));
+        const secLabel = window.I18N_STATUS?.SECONDS_SHORT || "s";
+        const minLabel = window.I18N_STATUS?.MINUTES_SHORT || "min";
+        const hourLabel = window.I18N_STATUS?.HOURS_SHORT || "h";
+
+        if (deltaSeconds < 60) {
+            return `${deltaSeconds} ${secLabel}`;
+        }
+
+        if (deltaSeconds < 3600) {
+            const minutes = Math.floor(deltaSeconds / 60);
+            const seconds = deltaSeconds % 60;
+            return `${minutes} ${minLabel} ${seconds} ${secLabel}`;
+        }
+
+        const hours = Math.floor(deltaSeconds / 3600);
+        const minutes = Math.floor((deltaSeconds % 3600) / 60);
+        const seconds = deltaSeconds % 60;
+        return `${hours} ${hourLabel} ${minutes} ${minLabel} ${seconds} ${secLabel}`;
+    }
+
+    /**
+     * Update the footer chip with the age of the current stats.
+     */
+    function updateStatsAgeDisplay() {
+        const chip = document.querySelector("[data-stats-age]");
+        if (!chip || !lastStatsTs) return;
+        chip.textContent = formatStatsAge(lastStatsTs);
+    }
+
+    /**
+     * Toggle the initial loading hint for the drawer.
+     * @param visible
+     * @param mode
+     */
+    function setDrawerLoadingVisible(visible, mode = "loading") {
+        const el = document.getElementById("drawer-loading");
+        if (!el) return;
+        el.classList.toggle("hidden", !visible);
+
+        const title = el.querySelector("[data-loading-title-text]");
+        const body = el.querySelector("[data-loading-body-text]");
+        const titleKey = mode === "refreshing" ? "refreshingTitle" : "loadingTitle";
+        const bodyKey = mode === "refreshing" ? "refreshingBody" : "loadingBody";
+
+        if (title) {
+            title.textContent = el.dataset[titleKey] || "";
+        }
+        if (body) {
+            body.textContent = el.dataset[bodyKey] || "";
+        }
+
+        const content = document.querySelector("[data-drawer-content]");
+        if (content) {
+            content.classList.toggle("loading", visible && mode !== "refreshing");
+        }
+    }
 
     /**
      * Human readable file size.
@@ -133,6 +200,17 @@
     }
 
     /**
+     * Render a plugin item.
+     * @param plugin
+     * @returns {string}
+     */
+    function renderPluginItem(plugin) {
+        const name = plugin?.name || "";
+        const version = plugin?.version || "–";
+        return `<div class="kv plugin-item"><span>${name}</span><span class="chip">${version}</span></div>`;
+    }
+
+    /**
      * Render a disk item.
      * @param raw
      * @returns {string}
@@ -202,6 +280,7 @@
     function setSystem(system) {
         setText("[data-host]", system.host);
         setText("[data-os]", system.os);
+        setText("[data-nas]", system.nas ? [system.nas.name, system.nas.version].filter(Boolean).join(" ") : "–");
         setText("[data-kernel]", system.kernel);
         setText("[data-cpu]", system.cpu);
         setText("[data-gpu]", system.gpu);
@@ -222,13 +301,11 @@
     }
 
     /**
-     * Fetch and update the stats from the server.
-     * @returns {Promise<void>}
+     * Apply a stats payload to the drawer UI.
+     * @param s
      */
-    async function loadStats() {
-        const res = await fetch(host, {cache: "no-store"});
-        if (!res.ok) throw new Error(res.statusText);
-        const s = await res.json();
+    function applyStats(s) {
+        lastStatsTs = s.ts || Date.now();
         if( s.pollInterval && s.pollInterval > 0 ) {
             POLL_MS = s.pollInterval;
         }
@@ -271,13 +348,17 @@
         if (s.uptime) setText("[data-uptime]", `${s.uptime.days} ` + window.I18N_LABELS.DAYS + ` ${s.uptime.hours} ` + window.I18N_LABELS.HOURS_SHORT);
         if (s.load) setText("[data-load]", s.load.map(v => Number(v).toFixed(2)).join(" / "));
 
-        if (s.system) setSystem(s.system)
-
+        if (s.system) setSystem(s.system);
 
         if (s.container) {
             setText("[data-omv-version]", s.container.omv || "–");
-            const plugins = Array.isArray(s.container.plugins) ? s.container.plugins.slice(0, 5).map(p => `${p.name} ${p.version}`).join(" · ") : "–";
-            setText("[data-plugins]", plugins);
+            const pluginsCont = document.getElementById("drawer-plugins");
+            if (pluginsCont) {
+                const plugins = Array.isArray(s.container.plugins) ? s.container.plugins : [];
+                pluginsCont.innerHTML = plugins.length
+                    ? plugins.map(renderPluginItem).join("\n")
+                    : `<div class="kv plugin-item"><span>–</span></div>`;
+            }
         }
         const contDocker = document.getElementById("drawer-docker");
         if (contDocker) {
@@ -285,10 +366,22 @@
             contDocker.innerHTML = items.map(renderContainerItem).join("\n");
         }
 
-        const date = new Date(s.ts || Date.now());
-        const t = date.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", second: "2-digit"});
-        const chip = document.querySelector("#info-drawer footer .chip");
-        if (chip) chip.textContent = t;
+        updateStatsAgeDisplay();
+    }
+
+    /**
+     * Fetch and update the stats from the server.
+     * @returns {Promise<void>}
+     */
+    async function loadStats() {
+        const res = await fetch(host, {cache: "no-store"});
+        if (!res.ok) throw new Error(res.statusText);
+        const s = await res.json();
+        if (!hasLoadedOnce) {
+            hasLoadedOnce = true;
+            setDrawerLoadingVisible(false);
+        }
+        applyStats(s);
     }
 
     /**
@@ -304,5 +397,14 @@
         setTimeout(loop, POLL_MS);
     }
 
+    if (initialStats) {
+        applyStats(initialStats);
+        hasLoadedOnce = true;
+        setDrawerLoadingVisible(false);
+    } else {
+        setDrawerLoadingVisible(true, "loading");
+    }
+
     loop();
+    setInterval(updateStatsAgeDisplay, 1000);
 })();

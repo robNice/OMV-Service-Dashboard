@@ -1,10 +1,10 @@
 services:
-  OMV-Service-Dashboard:
-    container_name: omv-service-dashboard-dev
+  nas-portal:
+    container_name: nas-portal
     build:
       context: .
       dockerfile: Dockerfile
-    image: omv-service-dashboard-with-docker
+    image: nas-portal-with-docker
     pid: "host"
     privileged: true
     devices:
@@ -16,7 +16,7 @@ services:
       - /sys:/host/sys:ro
       - /var/lib/dpkg:/host/var/lib/dpkg:ro
       - /:/hostroot:ro,rslave
-      - /mnt/store1/config/omv-landingpage:/config
+      - /mnt/store1/config/nas-portal:/config
     environment:
       PROC_ROOT: /host/proc
       SYS_ROOT: /host/sys

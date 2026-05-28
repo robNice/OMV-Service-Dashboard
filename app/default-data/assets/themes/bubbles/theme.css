@@ -1,4 +1,5 @@
 :root {
+    --omv-service-card-width: 290px;
     --bg-color: #dff7fb;
     --text-color: #083549;
     --tile-bg: rgba(228, 250, 255, 0.86);
@@ -143,8 +144,8 @@ body::after {
 
 .service {
     position: relative;
-    width: 290px;
-    height: 290px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     overflow: hidden;
     background:
@@ -314,8 +315,6 @@ body::after {
     }
 
     .service {
-        width: min(40vw, 156px);
-        height: min(40vw, 156px);
         border-width: 4px;
     }
 

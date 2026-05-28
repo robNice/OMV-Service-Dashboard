@@ -16,6 +16,7 @@
     "docker": "Docker-containers",
     "host": "Host",
     "os": "OS",
+    "nas": "NAS",
     "kernel": "Kernel",
     "cpu": "CPU",
     "gpu": "GPU",
@@ -31,7 +32,14 @@
   },
   "status": {
     "updatedAt": "Laatst bijgewerkt",
-    "now": "nu"
+    "now": "nu",
+    "secondsShort": "s",
+    "minutesShort": "min",
+    "hoursShort": "u",
+    "loadingTitle": "Systeemgegevens worden geladen",
+    "loadingBody": "De infolade wordt automatisch gevuld zodra het eerste live statusverzoek is voltooid.",
+    "refreshingTitle": "Gecachte systeemgegevens worden getoond",
+    "refreshingBody": "De getoonde waarden komen uit de laatste server-side snapshot. Livegegevens worden op de achtergrond vernieuwd."
   },
   "tooltip": {
     "infodrawer": "Systeeminformatie openen/sluiten",
@@ -90,7 +98,6 @@
       "desc": "Beheer de kerninstellingen van het dashboard en runtime-opties",
       "sectionTitle": "Algemene configuratie",
       "hint": "Deze waarden beïnvloeden het algemene gedrag van het dashboard. Poortwijzigingen worden pas na een herstart actief.",
-      "useDefaultRpcPath": "Standaard RPC-pad gebruiken",
       "portHint": "Wijzig de poort alleen als je precies weet wat je doet. Een verkeerde poort kan ervoor zorgen dat het dashboard na een herstart niet meer bereikbaar is en kan ook aanpassingen aan reverse proxy, Docker of firewall vereisen.",
       "portConfirmTitle": "Poortwijziging bevestigen",
       "portConfirmBody": "Je hebt de dashboardpoort gewijzigd. Deze wijziging wordt pas na een herstart actief. Als de nieuwe poort onjuist is of niet is vrijgegeven, is het dashboard mogelijk niet meer bereikbaar. Toch doorgaan?",
@@ -98,8 +105,15 @@
         "title": "Dashboardtitel",
         "defaultLang": "Terugvaltaal",
         "infoDrawerRefreshInterval": "Verversingsinterval infolade (seconden)",
-        "omvRpcPath": "OMV RPC-pad",
-        "port": "Poort"
+        "port": "Poort",
+        "serviceLinkTarget": "Open service links",
+        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+      },
+      "options": {
+        "serviceLinkTarget": {
+          "newTab": "In new tab",
+          "sameTab": "In same tab"
+        }
       }
     },
     "image": {

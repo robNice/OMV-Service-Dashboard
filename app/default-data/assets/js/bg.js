@@ -2,8 +2,6 @@
     try {
         const BASE = '/assets/backgrounds';
         const html = document.documentElement;
-        const EXTS = ['jpg', 'gif', 'webp', 'png'];
-        const CACHE_PREFIX = 'omv-bg:';
         const override =
             (document.querySelector('meta[name="omv-bg"]') || {}).content ||
             html.dataset.bg ||
@@ -17,13 +15,13 @@
             .replace(/\/+/g, '/')
             .replace(/\/$/, '') || '/';
         if (path === '/') {
-            setBgAutoCached(`${BASE}/_home`);
+            setBgResolved(`${BASE}/_home`);
             return;
         }
         const m = path.match(/^\/section\/([^/]+)$/);
         if (m) {
             const slug = decodeURIComponent(m[1]);
-            setBgAutoCached(`${BASE}/${slug}`);
+            setBgResolved(`${BASE}/${slug}`);
             return;
         }
 
@@ -37,52 +35,8 @@
             html.style.setProperty('--bg-opacity', '1');
         }
 
-        /**
-         * Fetch the ETag header for a given URL.
-         * @param url
-         * @returns {Promise<string|null>}
-         */
-        async function head(url) {
-            try {
-                const r = await fetch(url, {method: 'HEAD', cache: 'no-store'});
-                if (!r.ok) return null;
-                return r.headers.get('etag');
-            } catch {
-                return null;
-            }
-        }
-
-        /**
-         * Set the background image URL to the first available image with a matching ETag.
-         * @param base
-         * @returns {Promise<void>}
-         */
-        async function setBgAutoCached(base) {
-            const key = CACHE_PREFIX + base;
-            const cached = sessionStorage.getItem(key);
-
-            if (1 === 2 && cached) {
-                const {url, etag} = JSON.parse(cached);
-                const curEtag = await head(url);
-                if (curEtag && curEtag === etag) {
-                    setBg(url);
-                    return;
-                }
-            }
-
-            for (const ext of EXTS) {
-                const url = `${base}.${ext}`;
-                const etag = await head(url);
-                if (etag) {
-                    sessionStorage.setItem(
-                        key,
-                        JSON.stringify({url, etag})
-                    );
-                    setBg(url);
-                    return;
-                }
-            }
-            setBg(BASE + '/_default.png');
+        function setBgResolved(base) {
+            setBg(base || `${BASE}/_default`);
         }
     } catch (e) {
         console.warn('[omv-bg] failed:', e);
