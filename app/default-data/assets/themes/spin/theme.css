@@ -232,6 +232,32 @@ body.spin-has-reflection .spin-track .service {
     transform: scale(1.45);
 }
 
+/* Tablet / narrow desktop */
+@media (max-width: 900px) {
+    :root {
+        --spin-scene-height: 240px;
+        --spin-card-width:   260px;
+        --spin-card-height:  210px;
+
+        --spin-pos1-tx:  210;
+        --spin-pos1-tz:  -60;
+        --spin-pos1-ry:   36;
+        --spin-pos1-sc:  .80;
+        --spin-pos1-op:  .72;
+
+        /* Hide the second ring on narrow viewports to avoid clipped edge slivers. */
+        --spin-pos2-tx: 9999;
+        --spin-pos2-tz:    0;
+        --spin-pos2-ry:    0;
+        --spin-pos2-sc:   .5;
+        --spin-pos2-op:    0;
+    }
+
+    .spin-track .service img {
+        height: 145px;
+    }
+}
+
 /* ── Mobile ──────────────────────────────────── */
 
 @media (max-width: 640px) {
@@ -259,6 +285,19 @@ body.spin-has-reflection .spin-track .service {
         width: 36px;
         height: 36px;
         font-size: 19px;
+    }
+
+    /* Reduce image height so the full card fits inside the 210 px scene.
+       Default style.css fixes .service img at 180 px regardless of card width;
+       at 220 px card width the card ends up ~245 px tall, which overflows the
+       scene and pushes the dots into the card area.                          */
+    .spin-track .service img {
+        height: 120px;
+    }
+
+    /* More breathing room between scene bottom and dots */
+    .spin-dots {
+        padding-top: 1.8rem;
     }
 
     /* Reflection disabled on narrow mobile */

@@ -17,10 +17,11 @@ function readCliOption(name) {
 
 const cliConfigDir = readCliOption('--config-dir');
 const HAS_DOCKER_ENV = fs.existsSync('/.dockerenv');
-const DEFAULT_APP_DATA = HAS_DOCKER_ENV || fs.existsSync('/data')
+const CAN_USE_UNIX_ROOT_DEFAULTS = process.platform !== 'win32';
+const DEFAULT_APP_DATA = HAS_DOCKER_ENV || (CAN_USE_UNIX_ROOT_DEFAULTS && fs.existsSync('/data'))
     ? '/data'
     : path.join(path.resolve(__dirname, '..'), 'data');
-const DEFAULT_CONFIG_DIR = HAS_DOCKER_ENV || fs.existsSync('/config')
+const DEFAULT_CONFIG_DIR = HAS_DOCKER_ENV || (CAN_USE_UNIX_ROOT_DEFAULTS && fs.existsSync('/config'))
     ? '/config'
     : path.join(path.resolve(__dirname, '..'), 'config');
 const APP_CODE = process.env.OMV_SERVICE_DASHBOARD_APP

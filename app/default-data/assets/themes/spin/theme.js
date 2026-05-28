@@ -29,10 +29,23 @@
         const abs = Math.abs(off);
 
         if (abs >= positions.length) {
+            const sign = off >= 0 ? 1 : -1;
+            const last = positions[positions.length - 1];
+            const tx = (last ? last[0] : 0) + 180;
+            const tz = last ? last[1] : 0;
+            const ry = last ? last[2] : 0;
+            const scale = last ? last[3] : 0.5;
+
             card.style.opacity    = '0';
             card.style.visibility = 'hidden';
             card.style.zIndex     = '0';
-            card.style.transform  = 'translate(-50%, -50%)';
+            card.style.transform  =
+                `translate(-50%, -50%) ` +
+                `perspective(1100px) ` +
+                `translateX(${sign * tx}px) ` +
+                `translateZ(${tz}px) ` +
+                `rotateY(${sign * ry}deg) ` +
+                `scale(${scale})`;
             return;
         }
 
@@ -122,24 +135,44 @@
             const hasReflection = settings && settings['show-reflection'] !== false;
             const wantsAutoplay  = settings && settings['autoplay'] === true;
 
-            // Build DOM before adding the class so the FOUC-prevention
-            // CSS rule (grid:not(.spin-carousel-active) { opacity:0 })
-            // stays active until the wrapper's fade-in animation is running.
+            // Build DOM before adding the class so the FOUC-prevention CSS rule
+            // (grid:not(.spin-carousel-active) { opacity:0 }) stays active until
+            // the wrapper's fade-in animation starts running.
             const dom = buildDOM(grid, cards);
             grid.classList.add('spin-carousel-active');
 
             if (hasReflection) body.classList.add('spin-has-reflection');
 
-            // Prevent the page from becoming scrollable: stray cards that
-            // extend beyond the viewport would trigger a mobile viewport
-            // resize (address-bar animation), jolting position:fixed elements.
-            // Must be set on both <html> and <body>.
             doc.documentElement.classList.add('spin-no-scroll');
             body.classList.add('spin-no-scroll');
 
             let positions = readPositions();
             let active    = 0;
             let autoTimer = null;
+            let jumpRestoreRun = 0;
+            let jumpRestoreFrameOne = null;
+            let jumpRestoreFrameTwo = null;
+
+            function cancelPendingJumpRestore() {
+                jumpRestoreRun += 1;
+
+                if (jumpRestoreFrameOne !== null) {
+                    cancelAnimationFrame(jumpRestoreFrameOne);
+                    jumpRestoreFrameOne = null;
+                }
+
+                if (jumpRestoreFrameTwo !== null) {
+                    cancelAnimationFrame(jumpRestoreFrameTwo);
+                    jumpRestoreFrameTwo = null;
+                }
+
+                cards.forEach(card => {
+                    if (card.dataset.spinJumpPending === '1') {
+                        delete card.dataset.spinJumpPending;
+                        card.style.transition = '';
+                    }
+                });
+            }
 
             // ── Position all cards ──
             function updatePositions(instant) {
@@ -164,15 +197,34 @@
                 }
             }
 
-            // ── Navigation with wrap-around teleport ──
-            // Cards that change sign while still in the visible range
-            // (e.g. offset -2 → +1) would animate through the center card,
-            // causing a z-index artefact. Disable their transition for this
-            // one frame so they jump instantly to their new side.
+            // ── Navigation with fade-jump for wrap-around cards ───────────
+            //
+            // Cards that change sign while still in the visible range (e.g.
+            // offset -1 → +2) would fly through the centre card, causing the
+            // wrong z-order.  The fix:
+            //
+            //   1. Set transition:none on jump cards.
+            //   2. FORCED REFLOW — this is the critical step.  rAF fires in
+            //      the same frame as the click handler (before style-calc), so
+            //      a double-rAF alone does NOT reliably commit transition:none
+            //      before the property change.  void offsetHeight forces the
+            //      browser to flush all pending style assignments NOW so that
+            //      transition:none is already the computed value when we change
+            //      the transform.
+            //   3. Update positions — jump cards teleport instantly (invisible),
+            //      other cards animate normally with their CSS transition.
+            //   4. Double-rAF in Frame N+1: restore transition + fade opacity
+            //      from 0 to target → smooth fade-in at the new position.
             function navigateTo(newActive) {
-                const total   = cards.length;
-                const visRad  = positions.length - 1;
+                const total  = cards.length;
+                const visRad = positions.length - 1;
+                newActive = ((newActive % total) + total) % total;
+                if (newActive === active) return;
 
+                cancelPendingJumpRestore();
+                const restoreRun = jumpRestoreRun;
+
+                const jumpSet = new Set();
                 cards.forEach((card, i) => {
                     const oldOff = wrappedOffset(i, active, total);
                     const newOff = wrappedOffset(i, newActive, total);
@@ -182,17 +234,50 @@
                         Math.abs(oldOff) <= visRad &&
                         Math.abs(newOff) <= visRad
                     ) {
+                        jumpSet.add(i);
+                        card.dataset.spinJumpPending = '1';
                         card.style.transition = 'none';
                     }
                 });
 
+                // Flush style assignments so transition:none is committed
+                // before the transform/opacity changes below.
+                if (jumpSet.size > 0) {
+                    void document.body.offsetHeight; // forced reflow
+                }
+
                 active = newActive;
                 updatePositions(false);
 
-                // Re-enable transitions after the instant position update
-                requestAnimationFrame(() => {
-                    cards.forEach(c => { c.style.transition = ''; });
-                });
+                // applyCardPosition set the target opacity; override to 0 so
+                // jump cards are invisible at their new position.
+                jumpSet.forEach(i => { cards[i].style.opacity = '0'; });
+
+                if (jumpSet.size > 0) {
+                    // Double-rAF: rAF queued from within a rAF fires in the
+                    // NEXT frame (per spec).  By Frame N+1 the browser has
+                    // already painted the instant, invisible positions.
+                    // Restoring the transition here triggers a proper fade-in.
+                    jumpRestoreFrameOne = requestAnimationFrame(() => {
+                        jumpRestoreFrameOne = null;
+                        jumpRestoreFrameTwo = requestAnimationFrame(() => {
+                            jumpRestoreFrameTwo = null;
+                            if (restoreRun !== jumpRestoreRun) return;
+
+                            jumpSet.forEach(i => {
+                                const card  = cards[i];
+                                const off   = wrappedOffset(i, active, total);
+                                const abs   = Math.abs(off);
+                                const tgtOp = abs < positions.length
+                                    ? positions[abs][4]
+                                    : 0;
+                                delete card.dataset.spinJumpPending;
+                                card.style.transition = '';
+                                card.style.opacity    = String(tgtOp);
+                            });
+                        });
+                    });
+                }
             }
 
             function go(delta) {
@@ -270,16 +355,19 @@
 
             _state = {
                 grid, cards, dom, body, doc,
-                stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize
+                stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize,
+                cancelPendingJumpRestore
             };
         },
 
         destroy() {
             if (!_state) return;
             const { grid, cards, dom, body, doc,
-                    stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize } = _state;
+                    stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize,
+                    cancelPendingJumpRestore } = _state;
 
             stopAutoplay();
+            cancelPendingJumpRestore();
             doc.removeEventListener('keydown', onKey);
             window.removeEventListener('resize', onResize);
             dom.scene.removeEventListener('touchstart', onTouchStart);
