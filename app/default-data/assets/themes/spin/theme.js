@@ -43,6 +43,7 @@
         card.style.zIndex     = String(zIdx);
         card.style.transform  =
             `translate(-50%, -50%) ` +
+            `perspective(1100px) ` +
             `translateX(${sign * tx}px) ` +
             `translateZ(${tz}px) ` +
             `rotateY(${sign * ry}deg) ` +
