@@ -3,6 +3,8 @@
   "label": "Console",
   "description": "Amber terminal shell with ASCII boxes, monospace console styling, and keyboard navigation.",
   "version": "1.3.0",
+  "author": "rob",
+  "authorUrl": "https://github.com/robNice",
   "settings": [
     {
       "id": "show-section-thumbnails",

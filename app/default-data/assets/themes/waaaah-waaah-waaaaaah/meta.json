@@ -3,6 +3,8 @@
   "label": "Waaaah Waaah Waaaaaah",
   "description": "Weathered wood panels, torn edges and dusty saloon styling with bullet-hole accents.",
   "version": "1.4.0",
+  "author": "rob",
+  "authorUrl": "https://github.com/robNice",
   "settings": [
     {
       "id": "show-section-thumbnails",
