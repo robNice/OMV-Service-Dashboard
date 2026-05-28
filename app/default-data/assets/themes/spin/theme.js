@@ -6,8 +6,6 @@
     let _state = null;
 
     // ── Read responsive positions from CSS custom properties ──
-    // This allows theme.css media queries to control positions
-    // without duplicating breakpoint logic here.
     function readPositions() {
         const cs = getComputedStyle(document.documentElement);
         const n  = k => parseFloat(cs.getPropertyValue(k).trim()) || 0;
@@ -124,19 +122,20 @@
             const hasReflection = settings && settings['show-reflection'] !== false;
             const wantsAutoplay  = settings && settings['autoplay'] === true;
 
+            // Build DOM before adding the class so the FOUC-prevention
+            // CSS rule (grid:not(.spin-carousel-active) { opacity:0 })
+            // stays active until the wrapper's fade-in animation is running.
+            const dom = buildDOM(grid, cards);
             grid.classList.add('spin-carousel-active');
+
             if (hasReflection) body.classList.add('spin-has-reflection');
 
             // Prevent the page from becoming scrollable: stray cards that
-            // extend beyond the viewport would otherwise trigger a mobile
-            // viewport resize (browser address-bar animation), jolting
-            // position:fixed elements (background layer, drawer tab).
-            // Must be set on both <html> and <body> — body alone does not
-            // reliably propagate to the viewport in all browsers.
+            // extend beyond the viewport would trigger a mobile viewport
+            // resize (address-bar animation), jolting position:fixed elements.
+            // Must be set on both <html> and <body>.
             doc.documentElement.classList.add('spin-no-scroll');
             body.classList.add('spin-no-scroll');
-
-            const dom = buildDOM(grid, cards);
 
             let positions = readPositions();
             let active    = 0;
@@ -165,16 +164,44 @@
                 }
             }
 
-            // ── Navigation ──
-            function go(delta) {
-                active = (active + delta + cards.length) % cards.length;
+            // ── Navigation with wrap-around teleport ──
+            // Cards that change sign while still in the visible range
+            // (e.g. offset -2 → +1) would animate through the center card,
+            // causing a z-index artefact. Disable their transition for this
+            // one frame so they jump instantly to their new side.
+            function navigateTo(newActive) {
+                const total   = cards.length;
+                const visRad  = positions.length - 1;
+
+                cards.forEach((card, i) => {
+                    const oldOff = wrappedOffset(i, active, total);
+                    const newOff = wrappedOffset(i, newActive, total);
+                    if (
+                        oldOff !== 0 && newOff !== 0 &&
+                        Math.sign(oldOff) !== Math.sign(newOff) &&
+                        Math.abs(oldOff) <= visRad &&
+                        Math.abs(newOff) <= visRad
+                    ) {
+                        card.style.transition = 'none';
+                    }
+                });
+
+                active = newActive;
                 updatePositions(false);
+
+                // Re-enable transitions after the instant position update
+                requestAnimationFrame(() => {
+                    cards.forEach(c => { c.style.transition = ''; });
+                });
+            }
+
+            function go(delta) {
+                navigateTo((active + delta + cards.length) % cards.length);
                 resetAutoplay();
             }
 
             function goTo(i) {
-                active = ((i % cards.length) + cards.length) % cards.length;
-                updatePositions(false);
+                navigateTo(((i % cards.length) + cards.length) % cards.length);
                 resetAutoplay();
             }
 
