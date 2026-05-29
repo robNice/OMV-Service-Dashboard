@@ -37,9 +37,9 @@
     "minutesShort": "min",
     "hoursShort": "h",
     "loadingTitle": "Cargando datos del sistema",
-    "loadingBody": "El panel de informaci?n se completar? autom?ticamente en cuanto finalice la primera solicitud de estado en vivo.",
-    "refreshingTitle": "Se muestran datos del sistema en cach?",
-    "refreshingBody": "Los valores mostrados provienen de la ?ltima instant?nea del servidor. Los datos en vivo se est?n actualizando en segundo plano."
+    "loadingBody": "El panel de información se completará automáticamente en cuanto finalice la primera solicitud de estado en vivo.",
+    "refreshingTitle": "Se muestran datos del sistema en caché",
+    "refreshingBody": "Los valores mostrados provienen de la última instantánea del servidor. Los datos en vivo se están actualizando en segundo plano."
   },
   "tooltip": {
     "infodrawer": "Abrir/cerrar información del sistema",
@@ -77,20 +77,20 @@
       "cardimage": "Imagen de tarjeta"
     },
     "theme": {
-      "title": "Select theme",
-      "desc": "Choose the layout theme for the public dashboard",
-      "available": "Available themes",
-      "hint": "Themes affect the public dashboard only, not the admin area.",
-      "loading": "Loading themes...",
-      "current": "Current",
-      "version": "Version",
-      "empty": "No themes found",
+      "title": "Seleccionar tema",
+      "desc": "Elige el tema de diseño para el dashboard público",
+      "available": "Temas disponibles",
+      "hint": "Los temas solo afectan al dashboard público, no al área de administración.",
+      "loading": "Cargando temas...",
+      "current": "Actual",
+      "version": "Versión",
+      "empty": "No se encontraron temas",
       "settings": {
-        "title": "Theme settings",
-        "empty": "This theme has no configurable settings.",
-        "reset": "Load defaults",
+        "title": "Configuración del tema",
+        "empty": "Este tema no tiene opciones configurables.",
+        "reset": "Cargar valores predeterminados",
         "noDescription": "",
-        "count": "settings"
+        "count": "configuraciones"
       }
     },
     "config": {
@@ -100,19 +100,19 @@
       "hint": "Estos valores afectan al comportamiento global del dashboard. Los cambios de puerto solo surten efecto después de reiniciar.",
       "portHint": "Cambia el puerto solo si sabes exactamente lo que haces. Un puerto incorrecto puede hacer que el dashboard deje de estar accesible después de reiniciar y también puede requerir ajustes en el proxy inverso, Docker o el firewall.",
       "portConfirmTitle": "Confirmar cambio de puerto",
-      "portConfirmBody": "Has cambiado el puerto del dashboard. Este cambio se aplicar� despu�s de reiniciar. Si el nuevo puerto es incorrecto o no est� expuesto, es posible que el dashboard deje de ser accesible. �Quieres continuar?",
+      "portConfirmBody": "Has cambiado el puerto del dashboard. Este cambio se aplicará después de reiniciar. Si el nuevo puerto es incorrecto o no está expuesto, es posible que el dashboard deje de ser accesible. ¿Quieres continuar?",
       "fields": {
         "title": "Título del dashboard",
         "defaultLang": "Idioma de reserva",
         "infoDrawerRefreshInterval": "Intervalo de actualización del panel de información (segundos)",
         "port": "Puerto",
-        "serviceLinkTarget": "Open service links",
-        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+        "serviceLinkTarget": "Abrir enlaces de servicios",
+        "serviceLinkTargetHint": "Controla si las tarjetas de servicio se abren en la misma pestaña o en una nueva."
       },
       "options": {
         "serviceLinkTarget": {
-          "newTab": "In new tab",
-          "sameTab": "In same tab"
+          "newTab": "En nueva pestaña",
+          "sameTab": "En la misma pestaña"
         }
       }
     },

@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "label": "1984",
+    "description": "Demo-sahne degradeleri, basamaklı panel kenarları ve hafif CRT stiliyle retro bilgisayar teması."
+  },
+  "groups": {
+    "header": "Başlık",
+    "layout": "Düzen",
+    "drawer": "Bilgi paneli",
+    "drawer-tab": "Panel sekmesi",
+    "status-chips": "Durum göstergeleri",
+    "cards": "Kartlar",
+    "pixelation": "Pikselleştirme"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Gösterge paneli başlığını göster",
+      "description": "Portal başlığını başlık alanında gösterir."
+    },
+    "show-section-title": {
+      "label": "Bölüm başlığını göster",
+      "description": "Başlık alanında geçerli bölüm adını gösterir."
+    },
+    "show-section-thumbnails": {
+      "label": "Başlıkta bölüm küçük resimleri",
+      "description": "Başlık gezintisindeki bölüm küçük resimlerini gösterir veya gizler."
+    },
+    "cards-per-row-desktop": {
+      "label": "Masaüstünde satır başına kart",
+      "description": "Masaüstünde satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "cards-per-row-tablet": {
+      "label": "Tablette satır başına kart",
+      "description": "Tablette satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "cards-per-row-mobile": {
+      "label": "Mobilde satır başına kart",
+      "description": "Mobil ekranlarda satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "info-drawer-bg": {
+      "label": "Bilgi paneli arka plan rengi",
+      "description": "1984 bilgi panelinin arka plan rengi."
+    },
+    "drawer-text-color": {
+      "label": "Panel metin rengi",
+      "description": "Bilgi panelindeki birincil metin rengi."
+    },
+    "drawer-muted-text-color": {
+      "label": "Panel soluk metin rengi",
+      "description": "Etiketler ve daha az belirgin panel metni için ikincil metin rengi."
+    },
+    "drawer-tab-bg": {
+      "label": "Sekme arka plan rengi",
+      "description": "Kapalı bilgi paneli sekmesinin arka plan rengi."
+    },
+    "drawer-tab-hover-bg": {
+      "label": "Sekme üzerine gelindiğinde arka plan rengi",
+      "description": "Üzerine gelindiğinde bilgi paneli sekmesinin arka plan rengi."
+    },
+    "drawer-tab-text-color": {
+      "label": "Sekme metin rengi",
+      "description": "Kapalı bilgi paneli sekmesinin metin rengi."
+    },
+    "drawer-tab-top": {
+      "label": "Sekme üst konumu",
+      "description": "Kapalı sekmenin üst kenardan dikey konumu."
+    },
+    "status-good-bg": {
+      "label": "İyi durum: arka plan",
+      "description": "Olumlu durum göstergeleri için arka plan rengi."
+    },
+    "status-good-text": {
+      "label": "İyi durum: metin",
+      "description": "Olumlu durum göstergeleri için metin rengi."
+    },
+    "status-warn-bg": {
+      "label": "Uyarı durumu: arka plan",
+      "description": "Uyarı durum göstergeleri için arka plan rengi."
+    },
+    "status-warn-text": {
+      "label": "Uyarı durumu: metin",
+      "description": "Uyarı durum göstergeleri için metin rengi."
+    },
+    "status-bad-bg": {
+      "label": "Hata durumu: arka plan",
+      "description": "Hata durum göstergeleri için arka plan rengi."
+    },
+    "status-bad-text": {
+      "label": "Hata durumu: metin",
+      "description": "Hata durum göstergeleri için metin rengi."
+    },
+    "status-neutral-bg": {
+      "label": "Nötr durum: arka plan",
+      "description": "Nötr durum göstergeleri için arka plan rengi."
+    },
+    "status-neutral-text": {
+      "label": "Nötr durum: metin",
+      "description": "Nötr durum göstergeleri için metin rengi."
+    },
+    "status-up-bg": {
+      "label": "Çalışan container: arka plan",
+      "description": "Çalışan container göstergeleri için arka plan rengi."
+    },
+    "status-up-text": {
+      "label": "Çalışan container: metin",
+      "description": "Çalışan container göstergeleri için metin rengi."
+    },
+    "status-down-bg": {
+      "label": "Durdurulan container: arka plan",
+      "description": "Durdurulan container göstergeleri için arka plan rengi."
+    },
+    "status-down-text": {
+      "label": "Durdurulan container: metin",
+      "description": "Durdurulan container göstergeleri için metin rengi."
+    },
+    "progress-bar-color": {
+      "label": "İlerleme çubuğu rengi",
+      "description": "RAM ve depolama kullanım çubukları için dolgu rengi."
+    },
+    "card-label-text-color": {
+      "label": "Kart etiketi metin rengi",
+      "description": "Hizmet kartı başlık alanının metin rengi."
+    },
+    "card-label-bg-color": {
+      "label": "Kart etiketi arka plan rengi",
+      "description": "Hizmet kartı başlık alanının arka plan rengi."
+    },
+    "card-pixel-width": {
+      "label": "Kart piksel genişliği",
+      "description": "Hizmet kartları için yatay piksel çözünürlüğü."
+    },
+    "card-pixel-height": {
+      "label": "Kart piksel yüksekliği",
+      "description": "Hizmet kartları için dikey piksel çözünürlüğü."
+    },
+    "nav-pixel-width": {
+      "label": "Gezinti piksel genişliği",
+      "description": "Bölüm gezinti kartları için yatay piksel çözünürlüğü."
+    },
+    "nav-pixel-height": {
+      "label": "Gezinti piksel yüksekliği",
+      "description": "Bölüm gezinti kartları için dikey piksel çözünürlüğü."
+    }
+  }
+}

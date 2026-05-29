@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "label": "1984",
+    "description": "デモシーンのグラデーション、段差パネルのエッジ、繊細なCRTスタイルのレトロコンピュータテーマ。"
+  },
+  "groups": {
+    "header": "ヘッダー",
+    "layout": "レイアウト",
+    "drawer": "情報ドロワー",
+    "drawer-tab": "パネルタブ",
+    "status-chips": "ステータスチップ",
+    "cards": "カード",
+    "pixelation": "ピクセル化"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "ダッシュボードタイトルを表示",
+      "description": "ヘッダーにポータルタイトルを表示します。"
+    },
+    "show-section-title": {
+      "label": "セクションタイトルを表示",
+      "description": "ヘッダーに現在のセクション名を表示します。"
+    },
+    "show-section-thumbnails": {
+      "label": "ヘッダーにセクションサムネイルを表示",
+      "description": "ヘッダーナビゲーションのセクションサムネイルを表示または非表示にします。"
+    },
+    "cards-per-row-desktop": {
+      "label": "デスクトップの1行あたりのカード数",
+      "description": "デスクトップの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "cards-per-row-tablet": {
+      "label": "タブレットの1行あたりのカード数",
+      "description": "タブレットの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "cards-per-row-mobile": {
+      "label": "モバイルの1行あたりのカード数",
+      "description": "モバイルの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "info-drawer-bg": {
+      "label": "情報ドロワーの背景色",
+      "description": "1984情報ドロワーの背景色。"
+    },
+    "drawer-text-color": {
+      "label": "ドロワーのテキスト色",
+      "description": "情報ドロワー内の主要テキスト色。"
+    },
+    "drawer-muted-text-color": {
+      "label": "ドロワーのミュートテキスト色",
+      "description": "ラベルと目立たないドロワーテキストの二次テキスト色。"
+    },
+    "drawer-tab-bg": {
+      "label": "タブの背景色",
+      "description": "閉じた情報ドロワータブの背景色。"
+    },
+    "drawer-tab-hover-bg": {
+      "label": "ホバー時のタブ背景色",
+      "description": "ホバー時の情報ドロワータブの背景色。"
+    },
+    "drawer-tab-text-color": {
+      "label": "タブのテキスト色",
+      "description": "閉じた情報ドロワータブのテキスト色。"
+    },
+    "drawer-tab-top": {
+      "label": "タブの上端位置",
+      "description": "閉じたドロワータブの上端からの垂直位置。"
+    },
+    "status-good-bg": {
+      "label": "正常状態: 背景",
+      "description": "正常ステータスチップの背景色。"
+    },
+    "status-good-text": {
+      "label": "正常状態: テキスト",
+      "description": "正常ステータスチップのテキスト色。"
+    },
+    "status-warn-bg": {
+      "label": "警告状態: 背景",
+      "description": "警告ステータスチップの背景色。"
+    },
+    "status-warn-text": {
+      "label": "警告状態: テキスト",
+      "description": "警告ステータスチップのテキスト色。"
+    },
+    "status-bad-bg": {
+      "label": "エラー状態: 背景",
+      "description": "エラーステータスチップの背景色。"
+    },
+    "status-bad-text": {
+      "label": "エラー状態: テキスト",
+      "description": "エラーステータスチップのテキスト色。"
+    },
+    "status-neutral-bg": {
+      "label": "中立状態: 背景",
+      "description": "中立ステータスチップの背景色。"
+    },
+    "status-neutral-text": {
+      "label": "中立状態: テキスト",
+      "description": "中立ステータスチップのテキスト色。"
+    },
+    "status-up-bg": {
+      "label": "起動中コンテナ: 背景",
+      "description": "実行中コンテナチップの背景色。"
+    },
+    "status-up-text": {
+      "label": "起動中コンテナ: テキスト",
+      "description": "実行中コンテナチップのテキスト色。"
+    },
+    "status-down-bg": {
+      "label": "停止中コンテナ: 背景",
+      "description": "停止コンテナチップの背景色。"
+    },
+    "status-down-text": {
+      "label": "停止中コンテナ: テキスト",
+      "description": "停止コンテナチップのテキスト色。"
+    },
+    "progress-bar-color": {
+      "label": "プログレスバーの色",
+      "description": "RAMとストレージ使用量バーのフィル色。"
+    },
+    "card-label-text-color": {
+      "label": "カードラベルのテキスト色",
+      "description": "サービスカードのタイトルエリアのテキスト色。"
+    },
+    "card-label-bg-color": {
+      "label": "カードラベルの背景色",
+      "description": "サービスカードのタイトルエリアの背景色。"
+    },
+    "card-pixel-width": {
+      "label": "カードのピクセル幅",
+      "description": "サービスカードに使用する水平ピクセル解像度。"
+    },
+    "card-pixel-height": {
+      "label": "カードのピクセル高",
+      "description": "サービスカードに使用する垂直ピクセル解像度。"
+    },
+    "nav-pixel-width": {
+      "label": "ナビゲーションのピクセル幅",
+      "description": "セクションナビゲーションカードに使用する水平ピクセル解像度。"
+    },
+    "nav-pixel-height": {
+      "label": "ナビゲーションのピクセル高",
+      "description": "セクションナビゲーションカードに使用する垂直ピクセル解像度。"
+    }
+  }
+}

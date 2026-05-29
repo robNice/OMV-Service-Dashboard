@@ -24,9 +24,10 @@ function sanitizeOptions(options) {
     return toArray(options)
         .map(option => ({
             value: String(option?.value ?? '').trim(),
-            label: String(option?.label ?? '').trim()
+            label: String(option?.label ?? '').trim(),
+            labelKey: String(option?.labelKey ?? '').trim()
         }))
-        .filter(option => option.value && option.label);
+        .filter(option => option.value && (option.label || option.labelKey));
 }
 
 function sanitizeThemeAuthorUrl(value) {
@@ -58,7 +59,81 @@ function normalizeDefaultValue(type, value) {
     return String(value ?? '').trim();
 }
 
-function sanitizeThemeSettingsSchema(settings) {
+function readJsonFile(file) {
+    try {
+        return JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch {
+        return null;
+    }
+}
+
+function deepMerge(base, overlay) {
+    const out = {...(base || {})};
+    for (const [key, value] of Object.entries(overlay || {})) {
+        if (
+            value &&
+            typeof value === 'object' &&
+            !Array.isArray(value) &&
+            out[key] &&
+            typeof out[key] === 'object' &&
+            !Array.isArray(out[key])
+        ) {
+            out[key] = deepMerge(out[key], value);
+        } else {
+            out[key] = value;
+        }
+    }
+    return out;
+}
+
+function localeCandidates(locale) {
+    const normalized = String(locale || '').trim();
+    const language = normalized.includes('-') ? normalized.split('-')[0] : '';
+    return Array.from(new Set([
+        normalized,
+        language,
+        'en-GB',
+        'en'
+    ].filter(Boolean)));
+}
+
+function readThemeI18n(baseDir, themeId, locale) {
+    if (!locale) {
+        return {};
+    }
+
+    let data = {};
+    for (const candidate of localeCandidates(locale).reverse()) {
+        const file = path.join(baseDir, THEMES_DIR, themeId, 'i18n', `${candidate}.json`);
+        if (fs.existsSync(file)) {
+            data = deepMerge(data, readJsonFile(file) || {});
+        }
+    }
+    return data;
+}
+
+function getByPath(data, key) {
+    if (!key) {
+        return '';
+    }
+
+    return String(key).split('.').reduce((value, part) => {
+        if (!value || typeof value !== 'object') {
+            return undefined;
+        }
+        return value[part];
+    }, data);
+}
+
+function resolveText(i18n, key, fallback) {
+    const translated = getByPath(i18n, key);
+    if (typeof translated === 'string' && translated.trim()) {
+        return translated.trim();
+    }
+    return String(fallback || '').trim();
+}
+
+function sanitizeThemeSettingsSchema(settings, i18n = {}) {
     const seen = new Set();
 
     return toArray(settings)
@@ -75,17 +150,25 @@ function sanitizeThemeSettingsSchema(settings) {
                 ? sanitizeOptions(setting?.options)
                 : [];
             const defaultValue = normalizeDefaultValue(type, setting?.default);
+            const label = resolveText(i18n, setting?.labelKey, setting?.label || id);
+            const group = resolveText(i18n, setting?.groupKey, setting?.group || 'General') || 'General';
 
             return {
                 id,
-                label: String(setting?.label || id).trim(),
-                description: String(setting?.description || '').trim(),
-                group: String(setting?.group || 'General').trim() || 'General',
+                label,
+                labelKey: String(setting?.labelKey || '').trim(),
+                description: resolveText(i18n, setting?.descriptionKey, setting?.description || ''),
+                descriptionKey: String(setting?.descriptionKey || '').trim(),
+                group,
+                groupKey: String(setting?.groupKey || '').trim(),
                 type,
                 default: options.length && !options.some(option => option.value === String(defaultValue))
                     ? options[0].value
                     : defaultValue,
-                options
+                options: options.map(option => ({
+                    ...option,
+                    label: resolveText(i18n, option.labelKey, option.label || option.value)
+                }))
             };
         })
         .filter(Boolean);
@@ -112,7 +195,7 @@ function coerceSettingValue(setting, value) {
     return normalized || setting.default;
 }
 
-function readThemeMeta(baseDir, themeId) {
+function readThemeMeta(baseDir, themeId, {locale = ''} = {}) {
     const metaPath = path.join(baseDir, THEMES_DIR, themeId, 'meta.json');
     if (!fs.existsSync(metaPath)) {
         return null;
@@ -120,14 +203,17 @@ function readThemeMeta(baseDir, themeId) {
 
     try {
         const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+        const themeI18n = readThemeI18n(baseDir, themeId, locale);
         return {
             id: String(meta.id || themeId).trim().toLowerCase(),
-            label: String(meta.label || themeId).trim(),
-            description: String(meta.description || '').trim(),
+            label: resolveText(themeI18n, meta.labelKey, meta.label || themeId),
+            labelKey: String(meta.labelKey || '').trim(),
+            description: resolveText(themeI18n, meta.descriptionKey, meta.description || ''),
+            descriptionKey: String(meta.descriptionKey || '').trim(),
             author: String(meta.author || '').trim(),
             authorUrl: sanitizeThemeAuthorUrl(meta['author-url'] || meta.authorUrl),
             version: String(meta.version || '').trim(),
-            settings: sanitizeThemeSettingsSchema(meta.settings),
+            settings: sanitizeThemeSettingsSchema(meta.settings, themeI18n),
             source: baseDir === USER_ASSETS ? 'custom' : 'default'
         };
     } catch {
@@ -135,7 +221,7 @@ function readThemeMeta(baseDir, themeId) {
     }
 }
 
-function collectThemesFrom(baseDir) {
+function collectThemesFrom(baseDir, options = {}) {
     const themesRoot = path.join(baseDir, THEMES_DIR);
     if (!fs.existsSync(themesRoot)) {
         return [];
@@ -143,30 +229,30 @@ function collectThemesFrom(baseDir) {
 
     return fs.readdirSync(themesRoot, { withFileTypes: true })
         .filter(entry => entry.isDirectory())
-        .map(entry => readThemeMeta(baseDir, entry.name))
+        .map(entry => readThemeMeta(baseDir, entry.name, options))
         .filter(Boolean);
 }
 
-function listThemes() {
+function listThemes(options = {}) {
     const merged = new Map();
     const appAssetRoots = [APP_DEFAULT_ASSETS, FALLBACK_APP_ASSETS, APP_ASSETS];
 
     for (const root of appAssetRoots) {
-        for (const theme of collectThemesFrom(root)) {
+        for (const theme of collectThemesFrom(root, options)) {
             merged.set(theme.id, theme);
         }
     }
 
-    for (const theme of collectThemesFrom(USER_ASSETS)) {
+    for (const theme of collectThemesFrom(USER_ASSETS, options)) {
         merged.set(theme.id, theme);
     }
 
     return [...merged.values()].sort((a, b) => a.label.localeCompare(b.label));
 }
 
-function getTheme(themeId, { fallback = true } = {}) {
+function getTheme(themeId, { fallback = true, locale = '' } = {}) {
     const normalized = typeof themeId === 'string' ? themeId.trim().toLowerCase() : '';
-    const themes = listThemes();
+    const themes = listThemes({locale});
     const theme = themes.find(item => item.id === normalized) || null;
 
     if (theme || !fallback) {

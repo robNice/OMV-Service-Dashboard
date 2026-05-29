@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "label": "Compact List",
+    "description": "Daha hızlı tarama için kompakt liste düzeni ve daha hafif bir panel tasarımı."
+  },
+  "groups": {
+    "header": "Başlık",
+    "layout": "Düzen",
+    "colors": "Renkler"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Gösterge paneli başlığını göster",
+      "description": "Portal başlığını başlık alanında gösterir."
+    },
+    "show-section-title": {
+      "label": "Bölüm başlığını göster",
+      "description": "Başlık alanında geçerli bölüm adını gösterir."
+    },
+    "show-section-thumbnails": {
+      "label": "Başlıkta bölüm küçük resimleri",
+      "description": "Başlık gezintisindeki bölüm küçük resimlerini gösterir veya gizler."
+    },
+    "surface-bg-color": {
+      "label": "Kart ve başlık arka plan rengi",
+      "description": "Kartlar ve sayfa başlığı için arka plan rengi."
+    },
+    "surface-text-color": {
+      "label": "Kart ve başlık metin rengi",
+      "description": "Kartlar ve sayfa başlığı için metin rengi."
+    }
+  }
+}

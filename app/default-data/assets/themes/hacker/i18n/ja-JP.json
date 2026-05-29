@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "label": "Hacker",
+    "description": "暗い背景、IBM Plex Mono、プロンプトスタイルパネルのモノクロターミナルテーマ。"
+  },
+  "groups": {
+    "header": "ヘッダー",
+    "layout": "レイアウト"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "ダッシュボードタイトルを表示",
+      "description": "ヘッダーにポータルタイトルを表示します。"
+    },
+    "show-section-title": {
+      "label": "セクションタイトルを表示",
+      "description": "ヘッダーに現在のセクション名を表示します。"
+    },
+    "show-section-thumbnails": {
+      "label": "ヘッダーにセクションサムネイルを表示",
+      "description": "ヘッダーナビゲーションのセクションサムネイルを表示または非表示にします。"
+    },
+    "cards-per-row-desktop": {
+      "label": "デスクトップの1行あたりのカード数",
+      "description": "デスクトップの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "cards-per-row-tablet": {
+      "label": "タブレットの1行あたりのカード数",
+      "description": "タブレットの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "cards-per-row-mobile": {
+      "label": "モバイルの1行あたりのカード数",
+      "description": "モバイルの1行に表示するカード数。0で最大数を表示します。"
+    }
+  }
+}

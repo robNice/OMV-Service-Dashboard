@@ -29,6 +29,11 @@
       - [`select`](#select)
       - [`radio`](#radio)
       - [`boolean`](#boolean)
+    - [Theme i18n (`i18n/`)](#theme-i18n-i18n)
+      - [File naming](#file-naming)
+      - [Structure](#structure)
+      - [Wiring up in `meta.json`](#wiring-up-in-metajson)
+      - [How translated strings relate to CSS and JS](#how-translated-strings-relate-to-css-and-js)
     - [`theme.css`](#themecss)
     - [`drawer.css`](#drawercss)
     - [`theme.js` (optional)](#themejs-optional)
@@ -248,10 +253,13 @@ The following directory structure applies when you want to create your own theme
 ├─ theme.css
 ├─ drawer.css
 ├─ theme.js
-└─ assets/
+├─ assets/
+└─ i18n/
+   ├─ en-GB.json
+   └─ de-DE.json
 ```
 
-`theme.js` and `assets/` are optional. `assets/` can contain theme-local fonts or images referenced by the theme CSS.
+`theme.js`, `assets/`, and `i18n/` are optional. `assets/` can contain theme-local fonts or images referenced by the theme CSS.
 
 #### `meta.json`
 
@@ -541,6 +549,106 @@ Typical use:
 - toggles
 - enable/disable flags
 - optional effects
+
+#### Theme i18n (`i18n/`)
+
+Themes can provide translated labels and descriptions for all their admin-area strings. The translation files live in an `i18n/` subdirectory inside the theme folder.
+
+##### File naming
+
+Each file represents one locale and must be named `<locale>.json`:
+
+```text
+i18n/en-GB.json   ← required fallback
+i18n/de-DE.json
+i18n/fr-FR.json
+…
+```
+
+**At least `en-GB.json` must be present.** The backend falls back to English when no file matches the user's locale.
+
+##### Structure
+
+The file has three top-level sections:
+
+```json
+{
+  "meta": {
+    "label": "Theme name shown in the admin list",
+    "description": "One-line theme description shown in the admin card."
+  },
+  "groups": {
+    "header": "Header",
+    "layout": "Layout",
+    "colors": "Colors"
+  },
+  "settings": {
+    "accent-color": {
+      "label": "Accent color",
+      "description": "Color used for active indicators and highlights."
+    }
+  }
+}
+```
+
+- `meta.label` / `meta.description` — translated theme name and description
+- `groups.<group-id>` — translated group headings shown in the settings modal
+- `settings.<setting-id>.label` / `.description` — translated label and help text for each setting
+
+##### Wiring up in `meta.json`
+
+To activate i18n for a setting, replace the inline `label`, `description`, and `group` fields with `labelKey`, `descriptionKey`, and `groupKey`. Each key is a dot-path into the i18n file:
+
+```json
+{
+  "id": "my-theme",
+  "labelKey": "meta.label",
+  "descriptionKey": "meta.description",
+  "settings": [
+    {
+      "id": "accent-color",
+      "groupKey": "groups.colors",
+      "labelKey": "settings.accent-color.label",
+      "descriptionKey": "settings.accent-color.description",
+      "type": "color",
+      "default": "#60a5fa"
+    }
+  ]
+}
+```
+
+If a key is missing from the active locale file, the backend falls back to `en-GB.json` automatically, then to the inline `label`/`description` field if still not found.
+
+##### How translated strings relate to CSS and JS
+
+The i18n strings only affect **labels and descriptions inside the admin area**. They do not change how settings are applied to the frontend.
+
+Setting values are always exposed in the frontend as:
+
+- CSS variables: `--themesetting-<setting-id>` (e.g. `--themesetting-accent-color`)
+- HTML data attributes on `<body>`: `data-themesetting-<setting-id>` (e.g. `data-themesetting-card-style`)
+- JavaScript: `settings['<setting-id>']` inside `window.OMVTheme.init({ settings })`
+
+These are derived from setting **IDs and values**, not from the translated labels.
+
+```css
+/* Use the setting value via CSS variable — language-independent */
+body {
+  --my-accent: var(--themesetting-accent-color, #60a5fa);
+}
+```
+
+```js
+window.OMVTheme = {
+  init({ settings }) {
+    /* Setting value is always the same regardless of the user's language */
+    const color = settings['accent-color'] || '#60a5fa';
+    document.documentElement.style.setProperty('--my-accent', color);
+  }
+};
+```
+
+---
 
 #### `theme.css`
 

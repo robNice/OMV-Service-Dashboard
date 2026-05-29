@@ -4,18 +4,18 @@
   },
   "label": {
     "back": "Geri",
-    "liveStats": "Canl1 istatistikler",
+    "liveStats": "Canlı istatistikler",
     "close": "Kapat",
     "info": "Bilgi",
     "days": "Gün",
-    "hours_short": "Saat",
+    "hours_short": "sa",
     "storage": "Depolama (HDDs)",
-    "temps": "S1cakl1klar",
+    "temps": "Sıcaklıklar",
     "versions": "Sürümler",
     "system": "Sistem",
     "docker": "Docker konteynerleri",
     "host": "Host",
-    "os": "0S",
+    "os": "OS",
     "nas": "NAS",
     "kernel": "Kernel",
     "cpu": "CPU",
@@ -26,8 +26,8 @@
     "cpuLoad": "Yük",
     "plugins": "Eklentiler",
     "ram": "RAM",
-    "ramSlot": "RAM yuvas1",
-    "used": "Kullan1lan",
+    "ramSlot": "RAM yuvası",
+    "used": "Kullanılan",
     "gb": "GB"
   },
   "status": {
@@ -36,10 +36,10 @@
     "secondsShort": "sn",
     "minutesShort": "dk",
     "hoursShort": "sa",
-    "loadingTitle": "Sistem verileri y?kleniyor",
-    "loadingBody": "?lk canl? durum iste?i tamamlan?r tamamlanmaz bilgi ?ekmecesi otomatik olarak doldurulacakt?r.",
-    "refreshingTitle": "?nbelle?e al?nm?? sistem verileri g?steriliyor",
-    "refreshingBody": "G?sterilen de?erler son sunucu anl?k g?r?nt?s?nden geliyor. Canl? veriler arka planda yenileniyor."
+    "loadingTitle": "Sistem verileri yükleniyor",
+    "loadingBody": "İlk canlı durum isteği tamamlandığında bilgi çekmecesi otomatik olarak doldurulacaktır.",
+    "refreshingTitle": "Önbelleğe alınmış sistem verileri gösteriliyor",
+    "refreshingBody": "Gösterilen değerler son sunucu anlık görüntüsünden geliyor. Canlı veriler arka planda yenileniyor."
   },
   "tooltip": {
     "infodrawer": "Sistem bilgilerini aç/kapat",
@@ -77,42 +77,42 @@
       "cardimage": "Kart görseli"
     },
     "theme": {
-      "title": "Select theme",
-      "desc": "Choose the layout theme for the public dashboard",
-      "available": "Available themes",
-      "hint": "Themes affect the public dashboard only, not the admin area.",
-      "loading": "Loading themes...",
-      "current": "Current",
-      "version": "Version",
-      "empty": "No themes found",
+      "title": "Tema seç",
+      "desc": "Genel dashboard için düzen teması seçin",
+      "available": "Mevcut temalar",
+      "hint": "Temalar yalnızca genel dashboard'u etkiler, yönetici alanını etkilemez.",
+      "loading": "Temalar yükleniyor...",
+      "current": "Aktif",
+      "version": "Sürüm",
+      "empty": "Tema bulunamadı",
       "settings": {
-        "title": "Theme settings",
-        "empty": "This theme has no configurable settings.",
-        "reset": "Load defaults",
+        "title": "Tema ayarları",
+        "empty": "Bu temanın yapılandırılabilir ayarı yok.",
+        "reset": "Varsayılanları yükle",
         "noDescription": "",
-        "count": "settings"
+        "count": "ayar"
       }
     },
     "config": {
       "title": "Yapılandırmayı düzenle",
       "desc": "Gösterge panelinin temel ayarlarını ve çalışma zamanı seçeneklerini yönetin",
-      "sectionTitle": "Genel yap1land1rma",
+      "sectionTitle": "Genel yapılandırma",
       "hint": "Bu değerler gösterge panelinin genel davranışını etkiler. Port değişiklikleri ancak yeniden başlatmadan sonra geçerli olur.",
       "portHint": "Portu yalnızca tam olarak ne yaptığınızı biliyorsanız değiştirin. Yanlış bir port, yeniden başlatmadan sonra gösterge panelinin erişilemez olmasına neden olabilir ve ters proxy, Docker veya güvenlik duvarı ayarlarında değişiklik gerektirebilir.",
       "portConfirmTitle": "Port değişikliğini onayla",
-      "portConfirmBody": "G�sterge paneli portunu de�xi�xtirdiniz. Bu de�xi�xiklik yeniden ba�xlatmadan sonra uygulanacakt1r. Yeni port yanl1�xsa veya d1�xar1 a�1lmad1ysa g�sterge paneline art1k eri�xilemeyebilir. Yine de devam edilsin mi?",
+      "portConfirmBody": "Gösterge paneli portunu değiştirdiniz. Bu değişiklik yeniden başlatmadan sonra uygulanacaktır. Yeni port yanlışsa veya dışarı açılmadıysa gösterge paneline artık erişilemeyebilir. Yine de devam edilsin mi?",
       "fields": {
         "title": "Gösterge paneli başlığı",
         "defaultLang": "Yedek dil",
         "infoDrawerRefreshInterval": "Bilgi çekmecesi yenileme aralığı (saniye)",
         "port": "Port",
-        "serviceLinkTarget": "Open service links",
-        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+        "serviceLinkTarget": "Servis bağlantılarını aç",
+        "serviceLinkTargetHint": "Servis kartlarının aynı sekmede mi yoksa yeni bir sekmede mi açılacağını belirler."
       },
       "options": {
         "serviceLinkTarget": {
-          "newTab": "In new tab",
-          "sameTab": "In same tab"
+          "newTab": "Yeni sekmede",
+          "sameTab": "Aynı sekmede"
         }
       }
     },
@@ -122,7 +122,7 @@
       "uploadError": "Yükleme başarısız oldu",
       "sourceCustom": "özel",
       "sourceAuto": "otomatik",
-      "sourceDefault": "varsay1lan"
+      "sourceDefault": "varsayılan"
     },
     "section": {
       "toggle": "Genişlet veya daralt",
@@ -135,7 +135,7 @@
     },
     "service": {
       "id": "Servis ID",
-      "title": "Servis ad1",
+      "title": "Servis adı",
       "url": "Servis URL",
       "cardimage": "Kart görseli",
       "delete": "Servisi sil"
@@ -150,15 +150,15 @@
       "title": "Parola değiştir",
       "desc": "Yönetici parolanızı buradan değiştirin.",
       "new": "Yeni parola",
-      "repeat": "Parolay1 tekrar et",
-      "tooShort": "Parola en az 8 karakter olmal1d1r.",
+      "repeat": "Parolayı tekrar et",
+      "tooShort": "Parola en az 8 karakter olmalıdır.",
       "mismatch": "Parolalar eşleşmiyor."
     },
     "login": {
       "title": "Yönetici girişi",
       "passwordPlaceholder": "Parola",
       "submit": "Giriş yap",
-      "invalid": "Hatal1 parola."
+      "invalid": "Hatalı parola."
     }
   }
 }

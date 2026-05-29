@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "label": "Hippies",
+    "description": "Runde Formen, Flower-Power-Akzente und farbenfrohe VW-Bus-inspirierte Festival-Stimmung."
+  },
+  "groups": {
+    "header": "Kopfzeile",
+    "layout": "Layout"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Dashboard-Titel anzeigen",
+      "description": "Zeigt den Portal-Titel in der Kopfzeile."
+    },
+    "show-section-title": {
+      "label": "Section-Titel anzeigen",
+      "description": "Zeigt den Namen der aktuellen Section in der Kopfzeile."
+    },
+    "show-section-thumbnails": {
+      "label": "Section-Vorschaubilder in der Kopfzeile anzeigen",
+      "description": "Zeigt oder versteckt die Section-Vorschaubilder in der Kopfzeilen-Navigation."
+    },
+    "cards-per-row-desktop": {
+      "label": "Kacheln pro Zeile auf Desktop",
+      "description": "Anzahl der Kacheln pro Zeile auf Desktop-Bildschirmen. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "cards-per-row-tablet": {
+      "label": "Kacheln pro Zeile auf Tablet",
+      "description": "Anzahl der Kacheln pro Zeile auf Tablet-Bildschirmen. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "cards-per-row-mobile": {
+      "label": "Kacheln pro Zeile auf Mobilgeräten",
+      "description": "Anzahl der Kacheln pro Zeile auf Mobilgeräten. 0 zeigt so viele Kacheln wie möglich."
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "label": "Spin",
+    "description": "Cartes et vignettes de section sous forme d'un carrousel 3D animé avec effets d'ombre et de reflet."
+  },
+  "groups": {
+    "header": "En-tête",
+    "effects": "Effets",
+    "carousel": "Carrousel",
+    "colors": "Couleurs"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Afficher le titre du tableau de bord",
+      "description": "Affiche le titre du portail dans l'en-tête."
+    },
+    "show-section-title": {
+      "label": "Afficher le titre de la section",
+      "description": "Affiche le nom de la section actuelle dans l'en-tête."
+    },
+    "show-reflection": {
+      "label": "Reflet de carte",
+      "description": "Affiche un reflet en miroir sous chaque carte."
+    },
+    "autoplay": {
+      "label": "Rotation automatique",
+      "description": "Fait avancer le carrousel automatiquement toutes les quelques secondes."
+    },
+    "accent-color": {
+      "label": "Couleur d'accentuation",
+      "description": "Couleur pour les indicateurs actifs, boutons et surlignages."
+    }
+  }
+}

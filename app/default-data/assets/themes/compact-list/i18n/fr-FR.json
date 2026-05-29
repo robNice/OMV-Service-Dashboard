@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "label": "Compact List",
+    "description": "Disposition en liste compacte pour une exploration plus rapide avec un traitement allégé du panneau."
+  },
+  "groups": {
+    "header": "En-tête",
+    "layout": "Disposition",
+    "colors": "Couleurs"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Afficher le titre du tableau de bord",
+      "description": "Affiche le titre du portail dans l'en-tête."
+    },
+    "show-section-title": {
+      "label": "Afficher le titre de la section",
+      "description": "Affiche le nom de la section actuelle dans l'en-tête."
+    },
+    "show-section-thumbnails": {
+      "label": "Vignettes de section dans l'en-tête",
+      "description": "Affiche ou masque les vignettes de section dans la navigation de l'en-tête."
+    },
+    "surface-bg-color": {
+      "label": "Couleur de fond des cartes et en-tête",
+      "description": "Couleur d'arrière-plan pour les cartes et l'en-tête de page."
+    },
+    "surface-text-color": {
+      "label": "Couleur du texte des cartes et en-tête",
+      "description": "Couleur de texte pour les cartes et l'en-tête de page."
+    }
+  }
+}

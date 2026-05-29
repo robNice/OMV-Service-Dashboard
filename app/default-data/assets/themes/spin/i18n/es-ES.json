@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "label": "Spin",
+    "description": "Tarjetas y miniaturas de sección como carrusel 3D animado con efectos de sombra y reflejo."
+  },
+  "groups": {
+    "header": "Encabezado",
+    "effects": "Efectos",
+    "carousel": "Carrusel",
+    "colors": "Colores"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título del panel",
+      "description": "Muestra el título del portal en el encabezado."
+    },
+    "show-section-title": {
+      "label": "Mostrar título de sección",
+      "description": "Muestra el nombre de la sección actual en el encabezado."
+    },
+    "show-reflection": {
+      "label": "Reflejo de tarjeta",
+      "description": "Muestra un reflejo espejado bajo cada tarjeta."
+    },
+    "autoplay": {
+      "label": "Rotación automática",
+      "description": "Avanza el carrusel automáticamente cada pocos segundos."
+    },
+    "accent-color": {
+      "label": "Color de acento",
+      "description": "Color para indicadores activos, botones y resaltados."
+    }
+  }
+}

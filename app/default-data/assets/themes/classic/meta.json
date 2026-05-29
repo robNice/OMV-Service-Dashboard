@@ -1,40 +1,54 @@
 {
   "id": "classic",
-  "label": "Classic",
-  "description": "Default dashboard layout with the existing card grid.",
-  "version": "1.2.0",
-  "author": "rob",
-  "authorUrl": "https://github.com/robNice",
+  "labelKey": "meta.label",
+  "descriptionKey": "meta.description",
+  "version": "1.3.0",
   "settings": [
     {
+      "id": "show-dashboard-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-dashboard-title.label",
+      "descriptionKey": "settings.show-dashboard-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "show-section-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-section-title.label",
+      "descriptionKey": "settings.show-section-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "id": "show-section-thumbnails",
-      "group": "Layout",
-      "label": "Show section thumbnails in header",
-      "description": "Show or hide section thumbnails in the header navigation.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.show-section-thumbnails.label",
+      "descriptionKey": "settings.show-section-thumbnails.description",
       "type": "boolean",
       "default": true
     },
     {
       "id": "cards-per-row-desktop",
-      "group": "Layout",
-      "label": "Cards per row on desktop",
-      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-desktop.label",
+      "descriptionKey": "settings.cards-per-row-desktop.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-tablet",
-      "group": "Layout",
-      "label": "Cards per row on tablet",
-      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-tablet.label",
+      "descriptionKey": "settings.cards-per-row-tablet.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-mobile",
-      "group": "Layout",
-      "label": "Cards per row on mobile",
-      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-mobile.label",
+      "descriptionKey": "settings.cards-per-row-mobile.description",
       "type": "number",
       "default": 0
     }

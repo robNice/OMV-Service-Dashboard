@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "label": "Compact List",
+    "description": "Diseño de lista compacta para una exploración más rápida con un panel de información más ligero."
+  },
+  "groups": {
+    "header": "Encabezado",
+    "layout": "Diseño",
+    "colors": "Colores"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título del panel",
+      "description": "Muestra el título del portal en el encabezado."
+    },
+    "show-section-title": {
+      "label": "Mostrar título de sección",
+      "description": "Muestra el nombre de la sección actual en el encabezado."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniaturas de sección en el encabezado",
+      "description": "Muestra u oculta las miniaturas de sección en la navegación del encabezado."
+    },
+    "surface-bg-color": {
+      "label": "Color de fondo de tarjetas y encabezado",
+      "description": "Color de fondo para tarjetas y el encabezado de la página."
+    },
+    "surface-text-color": {
+      "label": "Color de texto de tarjetas y encabezado",
+      "description": "Color de texto para tarjetas y el encabezado de la página."
+    }
+  }
+}

@@ -3,6 +3,7 @@
 
     const AUTOPLAY_INTERVAL_MS = 4000;
     const DOT_ROLL_STEP_MS = 560;
+    const EXIT_FADE_MS = 560;
 
     let _state = null;
 
@@ -82,8 +83,9 @@
     function applyCardPosition(card, off, positions) {
         const pos = buildTransform(off, positions);
         const isHidden = Math.abs(off) >= positions.length;
+        const isExiting = card.dataset.spinExitPending === '1';
 
-        card.style.visibility = isHidden ? 'hidden' : 'visible';
+        card.style.visibility = isHidden && !isExiting ? 'hidden' : 'visible';
         card.style.opacity    = String(pos.opacity);
         card.style.zIndex     = String(pos.zIndex);
         card.style.transform  = pos.transform;
@@ -92,11 +94,26 @@
     function applyReflectionPosition(reflection, off, positions) {
         const pos = buildTransform(off, positions, 'translateY(var(--spin-reflection-offset)) scaleY(-1)');
         const isHidden = Math.abs(off) >= positions.length;
+        const isExiting = reflection.dataset.spinExitPending === '1';
 
-        reflection.style.visibility = isHidden ? 'hidden' : 'visible';
+        reflection.style.visibility = isHidden && !isExiting ? 'hidden' : 'visible';
         reflection.style.opacity    = String(pos.opacity);
         reflection.style.zIndex     = String(Math.max(0, pos.zIndex - 1));
         reflection.style.transform  = pos.transform;
+    }
+
+    function applyExitPosition(el, oldOff, positions, extraTransform) {
+        const inward = oldOff > 0 ? -1 : 1;
+        const pos = buildTransform(
+            oldOff,
+            positions,
+            `translateX(${inward * 34}px) scale(0.96)${extraTransform ? ` ${extraTransform}` : ''}`
+        );
+
+        el.style.visibility = 'visible';
+        el.style.opacity    = '0';
+        el.style.zIndex     = String(pos.zIndex);
+        el.style.transform  = pos.transform;
     }
 
     // ── DOM construction ──────────────────────────────────────
@@ -173,6 +190,29 @@
         return { wrapper, scene, track, btnPrev, btnNext, dotsRow, reflections };
     }
 
+    function moveBackLinkIntoSectionNav(doc) {
+        const backLink = doc.querySelector('.page-header > .back-link');
+        const sectionNav = doc.querySelector('.page-header .section-nav');
+        if (!backLink || !sectionNav) {
+            return null;
+        }
+
+        const originalParent = backLink.parentNode;
+        const originalNextSibling = backLink.nextSibling;
+        const iconLink = doc.createElement('a');
+
+        iconLink.className = 'spin-section-back';
+        iconLink.href = backLink.href;
+        iconLink.title = backLink.textContent.trim();
+        iconLink.setAttribute('aria-label', backLink.textContent.trim());
+        iconLink.setAttribute('data-spin-back', 'true');
+
+        backLink.remove();
+        sectionNav.insertBefore(iconLink, sectionNav.firstChild);
+
+        return { backLink, originalParent, originalNextSibling, iconLink };
+    }
+
     // ── Theme API ─────────────────────────────────────────────
 
     window.OMVTheme = {
@@ -186,6 +226,7 @@
 
             const hasReflection = settings && settings['show-reflection'] !== false;
             const wantsAutoplay  = settings && settings['autoplay'] === true;
+            const backLinkState = moveBackLinkIntoSectionNav(doc);
 
             // Build DOM before adding the class so the FOUC-prevention CSS rule
             // (grid:not(.spin-carousel-active) { opacity:0 }) stays active until
@@ -207,6 +248,25 @@
             let jumpRestoreRun = 0;
             let jumpRestoreFrameOne = null;
             let jumpRestoreFrameTwo = null;
+            let navigationRun = 0;
+            const exitTimers = new Map();
+
+            function clearExitTimer(i) {
+                if (exitTimers.has(i)) {
+                    clearTimeout(exitTimers.get(i));
+                    exitTimers.delete(i);
+                }
+
+                delete cards[i].dataset.spinExitPending;
+
+                if (dom.reflections[i]) {
+                    delete dom.reflections[i].dataset.spinExitPending;
+                }
+            }
+
+            function clearAllExitTimers() {
+                cards.forEach((_, i) => clearExitTimer(i));
+            }
 
             function cancelPendingJumpRestore() {
                 jumpRestoreRun += 1;
@@ -252,6 +312,10 @@
                 }
 
                 cards.forEach((card, i) => {
+                    if (card.dataset.spinExitPending === '1') {
+                        return;
+                    }
+
                     const off = wrappedOffset(i, active, cards.length, offsetTieBias);
                     applyCardPosition(card, off, positions);
                     if (dom.reflections[i]) {
@@ -289,32 +353,59 @@
             //      other cards animate normally with their CSS transition.
             //   4. Double-rAF in Frame N+1: restore transition + fade opacity
             //      from 0 to target → smooth fade-in at the new position.
-            function navigateTo(newActive, direction) {
+            function navigateTo(newActive) {
                 const total  = cards.length;
                 const visRad = positions.length - 1;
                 newActive = ((newActive % total) + total) % total;
                 if (newActive === active) return;
 
+                navigationRun += 1;
+                const currentNavigationRun = navigationRun;
+                clearAllExitTimers();
                 cancelPendingJumpRestore();
                 const restoreRun = jumpRestoreRun;
-                const nextTieBias = direction < 0 ? -1 : 1;
+                const nextTieBias = offsetTieBias;
 
                 const jumpSet = new Set();
+                const exitSet = new Map();
                 cards.forEach((card, i) => {
                     const oldOff = wrappedOffset(i, active, total, offsetTieBias);
                     const newOff = wrappedOffset(i, newActive, total, nextTieBias);
+                    const oldAbs = Math.abs(oldOff);
+                    const newAbs = Math.abs(newOff);
+                    const oldOpacity = oldAbs < positions.length ? positions[oldAbs][4] : 0;
+                    const newOpacity = newAbs < positions.length ? positions[newAbs][4] : 0;
                     if (
-                        oldOff !== 0 && newOff !== 0 &&
-                        Math.sign(oldOff) !== Math.sign(newOff) &&
-                        Math.abs(oldOff) <= visRad &&
-                        Math.abs(newOff) <= visRad
+                        oldOff !== 0 &&
+                        newOff !== 0 &&
+                        (
+                            (
+                                Math.sign(oldOff) !== Math.sign(newOff) &&
+                                oldAbs <= visRad &&
+                                newAbs <= visRad
+                            ) ||
+                            (
+                                oldAbs > visRad &&
+                                newAbs === 1
+                            )
+                        )
                     ) {
+                        clearExitTimer(i);
                         jumpSet.add(i);
                         card.dataset.spinJumpPending = '1';
                         card.style.transition = 'none';
                         if (dom.reflections[i]) {
                             dom.reflections[i].dataset.spinJumpPending = '1';
                             dom.reflections[i].style.transition = 'none';
+                        }
+                    }
+
+                    if (oldOpacity > 0 && newOpacity <= 0) {
+                        clearExitTimer(i);
+                        exitSet.set(i, oldOff);
+                        card.dataset.spinExitPending = '1';
+                        if (dom.reflections[i]) {
+                            dom.reflections[i].dataset.spinExitPending = '1';
                         }
                     }
                 });
@@ -328,6 +419,18 @@
                 active = newActive;
                 offsetTieBias = nextTieBias;
                 updatePositions(false);
+
+                exitSet.forEach((oldOff, i) => {
+                    applyExitPosition(cards[i], oldOff, positions);
+                    if (dom.reflections[i]) {
+                        applyExitPosition(
+                            dom.reflections[i],
+                            oldOff,
+                            positions,
+                            'translateY(var(--spin-reflection-offset)) scaleY(-1)'
+                        );
+                    }
+                });
 
                 // applyCardPosition set the target opacity; override to 0 so
                 // jump cards are invisible at their new position.
@@ -369,11 +472,30 @@
                         });
                     });
                 }
+
+                if (exitSet.size > 0) {
+                    exitSet.forEach((_, i) => {
+                        const timer = setTimeout(() => {
+                            if (currentNavigationRun !== navigationRun) return;
+
+                            exitTimers.delete(i);
+                            delete cards[i].dataset.spinExitPending;
+                            cards[i].style.visibility = 'hidden';
+
+                            if (dom.reflections[i]) {
+                                delete dom.reflections[i].dataset.spinExitPending;
+                                dom.reflections[i].style.visibility = 'hidden';
+                            }
+                        }, EXIT_FADE_MS);
+
+                        exitTimers.set(i, timer);
+                    });
+                }
             }
 
             function go(delta) {
                 cancelRolling();
-                navigateTo((active + delta + cards.length) % cards.length, delta);
+                navigateTo((active + delta + cards.length) % cards.length);
                 resetAutoplay();
             }
 
@@ -395,7 +517,7 @@
                 function rollStep() {
                     if (run !== rollRun) return;
 
-                    navigateTo((active + direction + total) % total, direction);
+                    navigateTo((active + direction + total) % total);
 
                     if (active === target) {
                         rollTimer = null;
@@ -473,20 +595,21 @@
             startAutoplay();
 
             _state = {
-                grid, cards, dom, body, doc,
+                grid, cards, dom, body, doc, backLinkState,
                 stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize,
-                cancelPendingJumpRestore, cancelRolling
+                cancelPendingJumpRestore, cancelRolling, clearAllExitTimers
             };
         },
 
         destroy() {
             if (!_state) return;
-            const { grid, cards, dom, body, doc,
+            const { grid, cards, dom, body, doc, backLinkState,
                     stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize,
-                    cancelPendingJumpRestore, cancelRolling } = _state;
+                    cancelPendingJumpRestore, cancelRolling, clearAllExitTimers } = _state;
 
             stopAutoplay();
             cancelRolling();
+            clearAllExitTimers();
             cancelPendingJumpRestore();
             doc.removeEventListener('keydown', onKey);
             window.removeEventListener('resize', onResize);
@@ -504,6 +627,13 @@
             });
 
             dom.wrapper.remove();
+
+            if (backLinkState) {
+                const { backLink, originalParent, originalNextSibling, iconLink } = backLinkState;
+                iconLink.remove();
+                originalParent.insertBefore(backLink, originalNextSibling);
+            }
+
             grid.classList.remove('spin-carousel-active');
             body.classList.remove('spin-has-reflection');
             doc.documentElement.classList.remove('spin-no-scroll');

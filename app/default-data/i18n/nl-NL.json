@@ -9,7 +9,7 @@
     "info": "Info",
     "days": "Dagen",
     "hours_short": "u",
-    "storage": "Opslag (HDD’s)",
+    "storage": "Opslag (HDD's)",
     "temps": "Temperaturen",
     "versions": "Versies",
     "system": "Systeem",
@@ -77,20 +77,20 @@
       "cardimage": "Kaartafbeelding"
     },
     "theme": {
-      "title": "Select theme",
-      "desc": "Choose the layout theme for the public dashboard",
-      "available": "Available themes",
-      "hint": "Themes affect the public dashboard only, not the admin area.",
-      "loading": "Loading themes...",
-      "current": "Current",
-      "version": "Version",
-      "empty": "No themes found",
+      "title": "Thema kiezen",
+      "desc": "Kies het lay-outthema voor het publieke dashboard",
+      "available": "Beschikbare thema's",
+      "hint": "Thema's beïnvloeden alleen het publieke dashboard, niet het beheerdersgebied.",
+      "loading": "Thema's laden...",
+      "current": "Huidig",
+      "version": "Versie",
+      "empty": "Geen thema's gevonden",
       "settings": {
-        "title": "Theme settings",
-        "empty": "This theme has no configurable settings.",
-        "reset": "Load defaults",
+        "title": "Thema-instellingen",
+        "empty": "Dit thema heeft geen configureerbare instellingen.",
+        "reset": "Standaardwaarden laden",
         "noDescription": "",
-        "count": "settings"
+        "count": "instellingen"
       }
     },
     "config": {
@@ -106,13 +106,13 @@
         "defaultLang": "Terugvaltaal",
         "infoDrawerRefreshInterval": "Verversingsinterval infolade (seconden)",
         "port": "Poort",
-        "serviceLinkTarget": "Open service links",
-        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+        "serviceLinkTarget": "Servicelinks openen",
+        "serviceLinkTargetHint": "Bepaalt of servicekaarten in hetzelfde tabblad of in een nieuw tabblad openen."
       },
       "options": {
         "serviceLinkTarget": {
-          "newTab": "In new tab",
-          "sameTab": "In same tab"
+          "newTab": "In nieuw tabblad",
+          "sameTab": "In hetzelfde tabblad"
         }
       }
     },

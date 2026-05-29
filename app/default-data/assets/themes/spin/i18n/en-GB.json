@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "label": "Spin",
+    "description": "Cards and section thumbnails as an animated 3D coverflow carousel with shadow and reflection effects."
+  },
+  "groups": {
+    "header": "Header",
+    "effects": "Effects",
+    "carousel": "Carousel",
+    "colors": "Colors"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Show dashboard title",
+      "description": "Show the portal title in the header."
+    },
+    "show-section-title": {
+      "label": "Show section title",
+      "description": "Show the name of the current section in the header."
+    },
+    "show-reflection": {
+      "label": "Card reflection",
+      "description": "Show a mirror reflection beneath each card."
+    },
+    "autoplay": {
+      "label": "Auto-rotate",
+      "description": "Automatically advance the carousel every few seconds."
+    },
+    "accent-color": {
+      "label": "Accent color",
+      "description": "Color used for active indicators, buttons, and highlights."
+    }
+  }
+}

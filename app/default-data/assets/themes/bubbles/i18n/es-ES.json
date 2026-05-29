@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Bubbles",
+    "description": "Tema de burbujas con burbujas flotantes, peces animados e islas de servicio circulares."
+  },
+  "groups": {
+    "header": "Encabezado",
+    "layout": "Diseño",
+    "effects": "Efectos"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título del panel",
+      "description": "Muestra el título del portal en el encabezado."
+    },
+    "show-section-title": {
+      "label": "Mostrar título de sección",
+      "description": "Muestra el nombre de la sección actual en el encabezado."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniaturas de sección en el encabezado",
+      "description": "Muestra u oculta las miniaturas de sección en la navegación del encabezado."
+    },
+    "cards-per-row-desktop": {
+      "label": "Tarjetas por fila en escritorio",
+      "description": "Número de tarjetas por fila en escritorio. Use 0 para el máximo posible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Tarjetas por fila en tableta",
+      "description": "Número de tarjetas por fila en tableta. Use 0 para el máximo posible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Tarjetas por fila en móvil",
+      "description": "Número de tarjetas por fila en móvil. Use 0 para el máximo posible."
+    },
+    "bubble-count": {
+      "label": "Cantidad de burbujas",
+      "description": "Número de burbujas flotantes en el fondo."
+    },
+    "fish-count": {
+      "label": "Cantidad de peces",
+      "description": "Número de peces animados en el fondo."
+    },
+    "bubble-size-min": {
+      "label": "Tamaño de burbuja desde",
+      "description": "Tamaño mínimo de burbuja en píxeles."
+    },
+    "bubble-size-max": {
+      "label": "Tamaño de burbuja hasta",
+      "description": "Tamaño máximo de burbuja en píxeles."
+    },
+    "fish-size-min": {
+      "label": "Tamaño de pez desde",
+      "description": "Tamaño mínimo de pez en píxeles."
+    },
+    "fish-size-max": {
+      "label": "Tamaño de pez hasta",
+      "description": "Tamaño máximo de pez en píxeles."
+    }
+  }
+}

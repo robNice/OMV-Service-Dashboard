@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "label": "1984",
+    "description": "Tema de computador retro com gradientes de cena demo, bordas de painel escalonadas e estilo CRT subtil."
+  },
+  "groups": {
+    "header": "Cabeçalho",
+    "layout": "Esquema",
+    "drawer": "Painel de informação",
+    "drawer-tab": "Separador do painel",
+    "status-chips": "Indicadores de estado",
+    "cards": "Cartões",
+    "pixelation": "Pixelização"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título do painel",
+      "description": "Mostra o título do portal no cabeçalho."
+    },
+    "show-section-title": {
+      "label": "Mostrar título da secção",
+      "description": "Mostra o nome da secção atual no cabeçalho."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniaturas de secção no cabeçalho",
+      "description": "Mostra ou oculta miniaturas de secção na navegação do cabeçalho."
+    },
+    "cards-per-row-desktop": {
+      "label": "Cartões por linha no computador",
+      "description": "Número de cartões por linha no computador. Use 0 para o máximo possível."
+    },
+    "cards-per-row-tablet": {
+      "label": "Cartões por linha no tablet",
+      "description": "Número de cartões por linha em tablets. Use 0 para o máximo possível."
+    },
+    "cards-per-row-mobile": {
+      "label": "Cartões por linha no telemóvel",
+      "description": "Número de cartões por linha no telemóvel. Use 0 para o máximo possível."
+    },
+    "info-drawer-bg": {
+      "label": "Cor de fundo do painel de info",
+      "description": "Cor de fundo do painel de informação 1984."
+    },
+    "drawer-text-color": {
+      "label": "Cor do texto do painel",
+      "description": "Cor do texto principal no painel de informação."
+    },
+    "drawer-muted-text-color": {
+      "label": "Cor de texto secundário do painel",
+      "description": "Cor de texto secundário para rótulos e texto menos proeminente."
+    },
+    "drawer-tab-bg": {
+      "label": "Cor de fundo do separador",
+      "description": "Cor de fundo do separador do painel de informação fechado."
+    },
+    "drawer-tab-hover-bg": {
+      "label": "Cor do separador ao passar o rato",
+      "description": "Cor de fundo do separador do painel ao passar o rato."
+    },
+    "drawer-tab-text-color": {
+      "label": "Cor do texto do separador",
+      "description": "Cor do texto do separador do painel de informação fechado."
+    },
+    "drawer-tab-top": {
+      "label": "Posição superior do separador",
+      "description": "Posição vertical do separador fechado a partir do bordo superior."
+    },
+    "status-good-bg": {
+      "label": "Estado bom: fundo",
+      "description": "Cor de fundo para indicadores de estado positivo."
+    },
+    "status-good-text": {
+      "label": "Estado bom: texto",
+      "description": "Cor de texto para indicadores de estado positivo."
+    },
+    "status-warn-bg": {
+      "label": "Aviso: fundo",
+      "description": "Cor de fundo para indicadores de aviso."
+    },
+    "status-warn-text": {
+      "label": "Aviso: texto",
+      "description": "Cor de texto para indicadores de aviso."
+    },
+    "status-bad-bg": {
+      "label": "Erro: fundo",
+      "description": "Cor de fundo para indicadores de erro."
+    },
+    "status-bad-text": {
+      "label": "Erro: texto",
+      "description": "Cor de texto para indicadores de erro."
+    },
+    "status-neutral-bg": {
+      "label": "Estado neutro: fundo",
+      "description": "Cor de fundo para indicadores de estado neutro."
+    },
+    "status-neutral-text": {
+      "label": "Estado neutro: texto",
+      "description": "Cor de texto para indicadores de estado neutro."
+    },
+    "status-up-bg": {
+      "label": "Contentor ativo: fundo",
+      "description": "Cor de fundo para indicadores de contentor em execução."
+    },
+    "status-up-text": {
+      "label": "Contentor ativo: texto",
+      "description": "Cor de texto para indicadores de contentor em execução."
+    },
+    "status-down-bg": {
+      "label": "Contentor parado: fundo",
+      "description": "Cor de fundo para indicadores de contentor parado."
+    },
+    "status-down-text": {
+      "label": "Contentor parado: texto",
+      "description": "Cor de texto para indicadores de contentor parado."
+    },
+    "progress-bar-color": {
+      "label": "Cor da barra de progresso",
+      "description": "Cor de preenchimento para barras de uso de RAM e armazenamento."
+    },
+    "card-label-text-color": {
+      "label": "Cor do texto da etiqueta do cartão",
+      "description": "Cor do texto da área de título do cartão de serviço."
+    },
+    "card-label-bg-color": {
+      "label": "Cor de fundo da etiqueta do cartão",
+      "description": "Cor de fundo da área de título do cartão de serviço."
+    },
+    "card-pixel-width": {
+      "label": "Largura de pixel do cartão",
+      "description": "Resolução de pixel horizontal para cartões de serviço."
+    },
+    "card-pixel-height": {
+      "label": "Altura de pixel do cartão",
+      "description": "Resolução de pixel vertical para cartões de serviço."
+    },
+    "nav-pixel-width": {
+      "label": "Largura de pixel de navegação",
+      "description": "Resolução de pixel horizontal para cartões de navegação de secção."
+    },
+    "nav-pixel-height": {
+      "label": "Altura de pixel de navegação",
+      "description": "Resolução de pixel vertical para cartões de navegação de secção."
+    }
+  }
+}

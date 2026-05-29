@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "label": "Compact List",
+    "description": "Dichtes Listenlayout für schnelleres Scannen mit leichterer Drawer-Gestaltung."
+  },
+  "groups": {
+    "header": "Kopfzeile",
+    "layout": "Layout",
+    "colors": "Farben"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Dashboard-Titel anzeigen",
+      "description": "Zeigt den Portal-Titel in der Kopfzeile."
+    },
+    "show-section-title": {
+      "label": "Section-Titel anzeigen",
+      "description": "Zeigt den Namen der aktuellen Section in der Kopfzeile."
+    },
+    "show-section-thumbnails": {
+      "label": "Section-Vorschaubilder in der Kopfzeile anzeigen",
+      "description": "Zeigt oder versteckt die Section-Vorschaubilder in der Kopfzeilen-Navigation."
+    },
+    "surface-bg-color": {
+      "label": "Hintergrundfarbe für Kacheln und Kopfzeile",
+      "description": "Hintergrundfarbe für Kacheln und Seitenkopf."
+    },
+    "surface-text-color": {
+      "label": "Textfarbe für Kacheln und Kopfzeile",
+      "description": "Textfarbe für Kacheln und Seitenkopf."
+    }
+  }
+}

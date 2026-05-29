@@ -37,3 +37,51 @@
 #info-drawer .bar i {
     background: linear-gradient(90deg, var(--spin-accent, #7c6af7), color-mix(in srgb, var(--spin-accent, #7c6af7) 60%, #a78bfa));
 }
+
+@media (max-width: 640px) {
+    :root {
+        --drawer-tab-top: calc(100dvh - 76px);
+        --drawer-tab-right: -44px;
+        --drawer-tab-transform: translateY(-50%);
+    }
+
+    #info-drawer .tab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border-radius: 0 14px 14px 0;
+        border: 1px solid rgba(124, 106, 247, 0.30);
+        border-left: none;
+        background: rgba(10, 8, 26, 0.82);
+        box-shadow: 8px 0 20px rgba(0, 0, 0, 0.34), 0 0 16px color-mix(in srgb, var(--spin-accent, #7c6af7) 22%, transparent);
+        letter-spacing: 0;
+    }
+
+    #info-drawer .tab-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+
+    #info-drawer .tab::before {
+        content: "i";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid currentColor;
+        border-radius: 50%;
+        font-family: "OutfitLocal", system-ui, sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        line-height: 1;
+        color: rgba(255, 255, 255, 0.88);
+    }
+}

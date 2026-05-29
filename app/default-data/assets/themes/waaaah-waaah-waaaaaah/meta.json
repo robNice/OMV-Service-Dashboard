@@ -1,88 +1,102 @@
 {
   "id": "waaaah-waaah-waaaaaah",
-  "label": "Waaaah Waaah Waaaaaah",
-  "description": "Weathered wood panels, torn edges and dusty saloon styling with bullet-hole accents.",
-  "version": "1.4.0",
-  "author": "rob",
-  "authorUrl": "https://github.com/robNice",
+  "labelKey": "meta.label",
+  "descriptionKey": "meta.description",
+  "version": "1.5.0",
   "settings": [
     {
+      "id": "show-dashboard-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-dashboard-title.label",
+      "descriptionKey": "settings.show-dashboard-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "show-section-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-section-title.label",
+      "descriptionKey": "settings.show-section-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "id": "show-section-thumbnails",
-      "group": "Layout",
-      "label": "Show section thumbnails in header",
-      "description": "Show or hide section thumbnails in the header navigation.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.show-section-thumbnails.label",
+      "descriptionKey": "settings.show-section-thumbnails.description",
       "type": "boolean",
       "default": true
     },
     {
       "id": "cards-per-row-desktop",
-      "group": "Layout",
-      "label": "Cards per row on desktop",
-      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-desktop.label",
+      "descriptionKey": "settings.cards-per-row-desktop.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-tablet",
-      "group": "Layout",
-      "label": "Cards per row on tablet",
-      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-tablet.label",
+      "descriptionKey": "settings.cards-per-row-tablet.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-mobile",
-      "group": "Layout",
-      "label": "Cards per row on mobile",
-      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-mobile.label",
+      "descriptionKey": "settings.cards-per-row-mobile.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "bullet-hole-count-min",
-      "group": "Bullet Holes",
-      "label": "Bullet hole count from",
-      "description": "Minimum number of bullet hole attempts per service card.",
+      "groupKey": "groups.bullet-holes",
+      "labelKey": "settings.bullet-hole-count-min.label",
+      "descriptionKey": "settings.bullet-hole-count-min.description",
       "type": "number",
       "default": 3
     },
     {
       "id": "bullet-hole-count-max",
-      "group": "Bullet Holes",
-      "label": "Bullet hole count to",
-      "description": "Maximum number of bullet hole attempts per service card.",
+      "groupKey": "groups.bullet-holes",
+      "labelKey": "settings.bullet-hole-count-max.label",
+      "descriptionKey": "settings.bullet-hole-count-max.description",
       "type": "number",
       "default": 6
     },
     {
       "id": "bullet-hole-chance-min",
-      "group": "Bullet Holes",
-      "label": "Bullet hole chance from",
-      "description": "Minimum chance in percent that a service card gets bullet holes.",
+      "groupKey": "groups.bullet-holes",
+      "labelKey": "settings.bullet-hole-chance-min.label",
+      "descriptionKey": "settings.bullet-hole-chance-min.description",
       "type": "number",
       "default": 100
     },
     {
       "id": "bullet-hole-chance-max",
-      "group": "Bullet Holes",
-      "label": "Bullet hole chance to",
-      "description": "Maximum chance in percent that a service card gets bullet holes.",
+      "groupKey": "groups.bullet-holes",
+      "labelKey": "settings.bullet-hole-chance-max.label",
+      "descriptionKey": "settings.bullet-hole-chance-max.description",
       "type": "number",
       "default": 100
     },
     {
       "id": "bullet-hole-size-min",
-      "group": "Bullet Holes",
-      "label": "Bullet hole size from",
-      "description": "Minimum bullet hole size in pixels.",
+      "groupKey": "groups.bullet-holes",
+      "labelKey": "settings.bullet-hole-size-min.label",
+      "descriptionKey": "settings.bullet-hole-size-min.description",
       "type": "number",
       "default": 4.8
     },
     {
       "id": "bullet-hole-size-max",
-      "group": "Bullet Holes",
-      "label": "Bullet hole size to",
-      "description": "Maximum bullet hole size in pixels.",
+      "groupKey": "groups.bullet-holes",
+      "labelKey": "settings.bullet-hole-size-max.label",
+      "descriptionKey": "settings.bullet-hole-size-max.description",
       "type": "number",
       "default": 8.6
     }

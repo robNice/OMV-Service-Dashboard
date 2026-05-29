@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "label": "Console",
+    "description": "Bernsteinfarbenes Terminal-Theme mit ASCII-Rahmen, Monospace-Stil und Tastaturnavigation."
+  },
+  "groups": {
+    "header": "Kopfzeile",
+    "layout": "Layout",
+    "colors": "Farben"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Dashboard-Titel anzeigen",
+      "description": "Zeigt den Portal-Titel in der Kopfzeile."
+    },
+    "show-section-title": {
+      "label": "Section-Titel anzeigen",
+      "description": "Zeigt den Namen der aktuellen Section in der Kopfzeile."
+    },
+    "show-section-thumbnails": {
+      "label": "Section-Vorschaubilder in der Kopfzeile anzeigen",
+      "description": "Zeigt oder versteckt die Section-Vorschaubilder in der Kopfzeilen-Navigation."
+    },
+    "cards-per-row-desktop": {
+      "label": "Kacheln pro Zeile auf Desktop",
+      "description": "Anzahl der Kacheln pro Zeile auf Desktop-Bildschirmen. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "cards-per-row-tablet": {
+      "label": "Kacheln pro Zeile auf Tablet",
+      "description": "Anzahl der Kacheln pro Zeile auf Tablet-Bildschirmen. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "cards-per-row-mobile": {
+      "label": "Kacheln pro Zeile auf Mobilgeräten",
+      "description": "Anzahl der Kacheln pro Zeile auf Mobilgeräten. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "console-text-color": {
+      "label": "Primäre Textfarbe",
+      "description": "Haupttextfarbe im Console-Theme."
+    },
+    "console-accent-color": {
+      "label": "Akzent-Textfarbe",
+      "description": "Akzentfarbe für Prompts, Überschriften und Hervorhebungen."
+    },
+    "console-muted-text-color": {
+      "label": "Gedämpfte Textfarbe",
+      "description": "Sekundäre Textfarbe für Labels und dekorative Terminal-Texte."
+    }
+  }
+}

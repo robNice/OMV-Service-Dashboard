@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "label": "1984",
+    "description": "Retro computer theme with demo-scene gradients, stepped panel edges and subtle CRT styling."
+  },
+  "groups": {
+    "header": "Header",
+    "layout": "Layout",
+    "drawer": "Drawer",
+    "drawer-tab": "Drawer Tab",
+    "status-chips": "Status Chips",
+    "cards": "Cards",
+    "pixelation": "Pixelation"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Show dashboard title",
+      "description": "Show the portal title in the header."
+    },
+    "show-section-title": {
+      "label": "Show section title",
+      "description": "Show the name of the current section in the header."
+    },
+    "show-section-thumbnails": {
+      "label": "Show section thumbnails in header",
+      "description": "Show or hide section thumbnails in the header navigation."
+    },
+    "cards-per-row-desktop": {
+      "label": "Cards per row on desktop",
+      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Cards per row on tablet",
+      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Cards per row on mobile",
+      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible."
+    },
+    "info-drawer-bg": {
+      "label": "Info drawer background color",
+      "description": "Background color of the 1984 info drawer."
+    },
+    "drawer-text-color": {
+      "label": "Drawer text color",
+      "description": "Primary text color inside the info drawer."
+    },
+    "drawer-muted-text-color": {
+      "label": "Drawer muted text color",
+      "description": "Secondary text color used for labels and less prominent drawer text."
+    },
+    "drawer-tab-bg": {
+      "label": "Tab background color",
+      "description": "Background color of the closed info drawer tab."
+    },
+    "drawer-tab-hover-bg": {
+      "label": "Tab hover background color",
+      "description": "Background color of the info drawer tab on hover."
+    },
+    "drawer-tab-text-color": {
+      "label": "Tab text color",
+      "description": "Text color of the closed info drawer tab."
+    },
+    "drawer-tab-top": {
+      "label": "Tab top position",
+      "description": "Vertical position of the closed info drawer tab from the top edge."
+    },
+    "status-good-bg": {
+      "label": "Status good background",
+      "description": "Background color for positive status chips."
+    },
+    "status-good-text": {
+      "label": "Status good text",
+      "description": "Text color for positive status chips."
+    },
+    "status-warn-bg": {
+      "label": "Status warn background",
+      "description": "Background color for warning status chips."
+    },
+    "status-warn-text": {
+      "label": "Status warn text",
+      "description": "Text color for warning status chips."
+    },
+    "status-bad-bg": {
+      "label": "Status bad background",
+      "description": "Background color for error status chips."
+    },
+    "status-bad-text": {
+      "label": "Status bad text",
+      "description": "Text color for error status chips."
+    },
+    "status-neutral-bg": {
+      "label": "Status neutral background",
+      "description": "Background color for neutral status chips."
+    },
+    "status-neutral-text": {
+      "label": "Status neutral text",
+      "description": "Text color for neutral status chips."
+    },
+    "status-up-bg": {
+      "label": "Status up background",
+      "description": "Background color for running container chips."
+    },
+    "status-up-text": {
+      "label": "Status up text",
+      "description": "Text color for running container chips."
+    },
+    "status-down-bg": {
+      "label": "Status down background",
+      "description": "Background color for stopped container chips."
+    },
+    "status-down-text": {
+      "label": "Status down text",
+      "description": "Text color for stopped container chips."
+    },
+    "progress-bar-color": {
+      "label": "Progress bar color",
+      "description": "Fill color used for RAM and storage usage bars."
+    },
+    "card-label-text-color": {
+      "label": "Card label text color",
+      "description": "Text color of the service card title area."
+    },
+    "card-label-bg-color": {
+      "label": "Card label background color",
+      "description": "Background color of the service card title area."
+    },
+    "card-pixel-width": {
+      "label": "Card pixel width",
+      "description": "Horizontal pixel resolution used for service cards."
+    },
+    "card-pixel-height": {
+      "label": "Card pixel height",
+      "description": "Vertical pixel resolution used for service cards."
+    },
+    "nav-pixel-width": {
+      "label": "Navigation pixel width",
+      "description": "Horizontal pixel resolution used for section navigation cards."
+    },
+    "nav-pixel-height": {
+      "label": "Navigation pixel height",
+      "description": "Vertical pixel resolution used for section navigation cards."
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "label": "Console",
+    "description": "Terminal ámbar con marcos ASCII, estilo consola monoespaciada y navegación por teclado."
+  },
+  "groups": {
+    "header": "Encabezado",
+    "layout": "Diseño",
+    "colors": "Colores"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título del panel",
+      "description": "Muestra el título del portal en el encabezado."
+    },
+    "show-section-title": {
+      "label": "Mostrar título de sección",
+      "description": "Muestra el nombre de la sección actual en el encabezado."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniaturas de sección en el encabezado",
+      "description": "Muestra u oculta las miniaturas de sección en la navegación del encabezado."
+    },
+    "cards-per-row-desktop": {
+      "label": "Tarjetas por fila en escritorio",
+      "description": "Número de tarjetas por fila en escritorio. Use 0 para el máximo posible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Tarjetas por fila en tableta",
+      "description": "Número de tarjetas por fila en tableta. Use 0 para el máximo posible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Tarjetas por fila en móvil",
+      "description": "Número de tarjetas por fila en móvil. Use 0 para el máximo posible."
+    },
+    "console-text-color": {
+      "label": "Color de texto principal",
+      "description": "Color de texto principal en el tema de consola."
+    },
+    "console-accent-color": {
+      "label": "Color de acento",
+      "description": "Color de acento para prompts, encabezados y resaltados."
+    },
+    "console-muted-text-color": {
+      "label": "Color de texto tenue",
+      "description": "Color de texto secundario para etiquetas y texto decorativo de terminal."
+    }
+  }
+}

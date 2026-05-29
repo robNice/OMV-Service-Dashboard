@@ -34,6 +34,8 @@
 
 body {
     --spin-accent: var(--themesetting-accent-color, #7c6af7);
+    --font-card: "OutfitLocal", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --card-weight: 700;
 }
 
 /* Prevent page from becoming scrollable while carousel is active.
@@ -52,32 +54,135 @@ body.spin-no-scroll {
     border-radius: 18px;
 }
 
-/* ── Section-nav thumbnails (3D tilt on hover) ── */
+.page-header h1 {
+    font-family: "OutfitLocal", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+/* ── Section-nav orbit selector ── */
 
 .section-nav {
+    position: relative;
+    width: fit-content;
+    max-width: min(100%, 780px);
+    gap: 0.48rem;
+    margin: -0.85rem auto 0;
+    padding: 0.42rem 0.58rem;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 999px;
+    background:
+        radial-gradient(ellipse at 50% 130%, color-mix(in srgb, var(--spin-accent) 12%, transparent) 0%, transparent 56%),
+        rgba(10, 16, 32, 0.22);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        inset 0 -8px 18px rgba(0, 0, 0, 0.12),
+        0 14px 30px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     overflow: visible;
 }
 
-.section-nav-item {
-    opacity: 0.75;
-    box-shadow: var(--spin-shadow);
-    transition:
-        transform    0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow   0.38s ease,
-        opacity      0.28s ease;
+.section-nav::before {
+    content: "";
+    position: absolute;
+    left: 1.2rem;
+    right: 1.2rem;
+    bottom: -0.26rem;
+    height: 0.55rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--spin-accent) 24%, transparent);
+    border-radius: 50%;
+    opacity: 0.46;
+    pointer-events: none;
 }
 
-.section-nav-item:hover {
-    opacity: 1;
-    transform: translateY(-4px) scale(1.1) perspective(320px) rotateY(-9deg);
-    box-shadow: var(--spin-shadow-active);
+.section-nav-item,
+.spin-section-back {
+    position: relative;
+    width: 66px;
+    height: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03)),
+        rgba(18, 26, 44, 0.30);
+    opacity: 0.74;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        0 8px 18px rgba(0, 0, 0, 0.24);
+    transition:
+        transform    0.24s ease,
+        box-shadow   0.24s ease,
+        opacity      0.24s ease,
+        border-color 0.24s ease,
+        filter       0.24s ease;
+    filter: saturate(0.86) brightness(0.92);
+}
+
+.spin-section-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+}
+
+.spin-section-back::before {
+    content: "";
+    width: 0.8rem;
+    height: 0.8rem;
+    border-left: 3px solid currentColor;
+    border-bottom: 3px solid currentColor;
+    border-radius: 2px;
+    transform: translateX(2px) rotate(45deg);
+}
+
+.section-nav-item img {
+    object-fit: contain;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.section-nav-item:hover,
+.spin-section-back:hover {
+    opacity: 0.96;
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--spin-accent) 34%, rgba(255, 255, 255, 0.24));
+    filter: saturate(1) brightness(1);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        0 13px 25px rgba(0, 0, 0, 0.34);
+}
+
+.spin-section-back:hover {
+    color: #fff;
 }
 
 .section-nav-item.active {
     opacity: 1;
-    outline: 2px solid var(--spin-accent);
+    transform: translateY(-3px) scale(1.05);
+    border-color: color-mix(in srgb, var(--spin-accent) 62%, rgba(255, 255, 255, 0.38));
+    outline: 1px solid color-mix(in srgb, var(--spin-accent) 46%, transparent);
     outline-offset: 2px;
-    box-shadow: var(--spin-shadow-active);
+    filter: saturate(1.06) brightness(1.03);
+    box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--spin-accent) 12%, transparent),
+        0 12px 26px rgba(0, 0, 0, 0.30),
+        0 0 18px color-mix(in srgb, var(--spin-accent) 26%, transparent);
+}
+
+.section-nav-item.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -0.62rem;
+    width: 0.34rem;
+    height: 0.34rem;
+    border-radius: 50%;
+    background: var(--spin-accent);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--spin-accent) 72%, transparent);
+    transform: translateX(-50%);
 }
 
 /* ── FOUC prevention ─────────────────────────── */
@@ -302,11 +407,11 @@ body.spin-has-reflection .spin-track .service {
         --spin-pos1-sc:  .80;
         --spin-pos1-op:  .68;
 
-        /* ±2 pushed fully out of view on mobile */
-        --spin-pos2-tx: 9999;
-        --spin-pos2-tz:    0;
-        --spin-pos2-ry:    0;
-        --spin-pos2-sc:   .5;
+        /* ±2 is a near hidden spawn slot; JS fades it into ±1 on entry. */
+        --spin-pos2-tx:  230;
+        --spin-pos2-tz:  -70;
+        --spin-pos2-ry:   36;
+        --spin-pos2-sc:  .68;
         --spin-pos2-op:    0;
     }
 
@@ -314,6 +419,39 @@ body.spin-has-reflection .spin-track .service {
         width: 36px;
         height: 36px;
         font-size: 19px;
+    }
+
+    .section-nav {
+        gap: 0.28rem;
+        max-width: min(100%, 350px);
+        padding: 0.38rem 0.5rem;
+    }
+
+    .section-nav-item,
+    .spin-section-back {
+        width: 48px;
+        height: 42px;
+    }
+
+    .spin-section-back {
+        width: 42px;
+    }
+
+    .spin-section-back::before {
+        width: 0.68rem;
+        height: 0.68rem;
+        border-left-width: 2px;
+        border-bottom-width: 2px;
+    }
+
+    .section-nav-item img {
+        padding: 7px;
+    }
+
+    .section-nav-item.active::after {
+        bottom: -0.64rem;
+        width: 0.34rem;
+        height: 0.34rem;
     }
 
     /* Reduce image height so the full card fits inside the 210 px scene.

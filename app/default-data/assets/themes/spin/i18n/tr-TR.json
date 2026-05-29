@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "label": "Spin",
+    "description": "Gölge ve yansıma efektleriyle kartlar ve bölüm küçük resimleri animasyonlu 3D coverflow carousel olarak."
+  },
+  "groups": {
+    "header": "Başlık",
+    "effects": "Efektler",
+    "carousel": "Atlıkarınca",
+    "colors": "Renkler"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Gösterge paneli başlığını göster",
+      "description": "Portal başlığını başlık alanında gösterir."
+    },
+    "show-section-title": {
+      "label": "Bölüm başlığını göster",
+      "description": "Başlık alanında geçerli bölüm adını gösterir."
+    },
+    "show-reflection": {
+      "label": "Kart yansıması",
+      "description": "Her kartın altında ayna yansıması gösterir."
+    },
+    "autoplay": {
+      "label": "Otomatik döndürme",
+      "description": "Atlıkarıncayı birkaç saniyede bir otomatik olarak ilerletir."
+    },
+    "accent-color": {
+      "label": "Vurgu rengi",
+      "description": "Aktif göstergeler, düğmeler ve vurgular için kullanılan renk."
+    }
+  }
+}

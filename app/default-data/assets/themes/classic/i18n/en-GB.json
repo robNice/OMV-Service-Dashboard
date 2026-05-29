@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "label": "Classic",
+    "description": "Default dashboard layout with the existing card grid."
+  },
+  "groups": {
+    "header": "Header",
+    "layout": "Layout"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Show dashboard title",
+      "description": "Show the portal title in the header."
+    },
+    "show-section-title": {
+      "label": "Show section title",
+      "description": "Show the name of the current section in the header."
+    },
+    "show-section-thumbnails": {
+      "label": "Show section thumbnails in header",
+      "description": "Show or hide section thumbnails in the header navigation."
+    },
+    "cards-per-row-desktop": {
+      "label": "Cards per row on desktop",
+      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Cards per row on tablet",
+      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Cards per row on mobile",
+      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible."
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "label": "Console",
+    "description": "Terminale ambra con riquadri ASCII, stile console monospazio e navigazione da tastiera."
+  },
+  "groups": {
+    "header": "Intestazione",
+    "layout": "Layout",
+    "colors": "Colori"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostra titolo della dashboard",
+      "description": "Mostra il titolo del portale nell'intestazione."
+    },
+    "show-section-title": {
+      "label": "Mostra titolo sezione",
+      "description": "Mostra il nome della sezione corrente nell'intestazione."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniature sezione nell'intestazione",
+      "description": "Mostra o nasconde le miniature di sezione nella navigazione dell'intestazione."
+    },
+    "cards-per-row-desktop": {
+      "label": "Schede per riga su desktop",
+      "description": "Numero di schede per riga su desktop. Usare 0 per il massimo possibile."
+    },
+    "cards-per-row-tablet": {
+      "label": "Schede per riga su tablet",
+      "description": "Numero di schede per riga su tablet. Usare 0 per il massimo possibile."
+    },
+    "cards-per-row-mobile": {
+      "label": "Schede per riga su mobile",
+      "description": "Numero di schede per riga su mobile. Usare 0 per il massimo possibile."
+    },
+    "console-text-color": {
+      "label": "Colore testo principale",
+      "description": "Colore del testo principale nel tema console."
+    },
+    "console-accent-color": {
+      "label": "Colore accento",
+      "description": "Colore accento per prompt, intestazioni ed evidenziazioni."
+    },
+    "console-muted-text-color": {
+      "label": "Colore testo smorzato",
+      "description": "Colore del testo secondario per etichette e testo decorativo del terminale."
+    }
+  }
+}

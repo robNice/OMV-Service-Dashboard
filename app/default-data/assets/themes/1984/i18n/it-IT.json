@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "label": "1984",
+    "description": "Tema computer retrò con gradienti della scena demo, bordi pannello a gradini e stile CRT discreto."
+  },
+  "groups": {
+    "header": "Intestazione",
+    "layout": "Layout",
+    "drawer": "Pannello info",
+    "drawer-tab": "Scheda del pannello",
+    "status-chips": "Indicatori di stato",
+    "cards": "Schede",
+    "pixelation": "Pixelazione"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostra titolo della dashboard",
+      "description": "Mostra il titolo del portale nell'intestazione."
+    },
+    "show-section-title": {
+      "label": "Mostra titolo sezione",
+      "description": "Mostra il nome della sezione corrente nell'intestazione."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniature sezione nell'intestazione",
+      "description": "Mostra o nasconde le miniature di sezione nella navigazione dell'intestazione."
+    },
+    "cards-per-row-desktop": {
+      "label": "Schede per riga su desktop",
+      "description": "Numero di schede per riga su desktop. Usare 0 per il massimo possibile."
+    },
+    "cards-per-row-tablet": {
+      "label": "Schede per riga su tablet",
+      "description": "Numero di schede per riga su tablet. Usare 0 per il massimo possibile."
+    },
+    "cards-per-row-mobile": {
+      "label": "Schede per riga su mobile",
+      "description": "Numero di schede per riga su mobile. Usare 0 per il massimo possibile."
+    },
+    "info-drawer-bg": {
+      "label": "Colore sfondo pannello info",
+      "description": "Colore di sfondo del pannello info 1984."
+    },
+    "drawer-text-color": {
+      "label": "Colore testo del pannello",
+      "description": "Colore del testo principale nel pannello info."
+    },
+    "drawer-muted-text-color": {
+      "label": "Colore testo secondario del pannello",
+      "description": "Colore del testo secondario per etichette e testo meno prominente."
+    },
+    "drawer-tab-bg": {
+      "label": "Colore sfondo scheda",
+      "description": "Colore di sfondo della scheda del pannello info chiuso."
+    },
+    "drawer-tab-hover-bg": {
+      "label": "Colore sfondo scheda al passaggio del mouse",
+      "description": "Colore di sfondo della scheda del pannello info al passaggio del mouse."
+    },
+    "drawer-tab-text-color": {
+      "label": "Colore testo scheda",
+      "description": "Colore del testo della scheda del pannello info chiuso."
+    },
+    "drawer-tab-top": {
+      "label": "Posizione superiore della scheda",
+      "description": "Posizione verticale della scheda chiusa dal bordo superiore."
+    },
+    "status-good-bg": {
+      "label": "Stato positivo: sfondo",
+      "description": "Colore di sfondo per gli indicatori di stato positivo."
+    },
+    "status-good-text": {
+      "label": "Stato positivo: testo",
+      "description": "Colore del testo per gli indicatori di stato positivo."
+    },
+    "status-warn-bg": {
+      "label": "Avviso: sfondo",
+      "description": "Colore di sfondo per gli indicatori di avviso."
+    },
+    "status-warn-text": {
+      "label": "Avviso: testo",
+      "description": "Colore del testo per gli indicatori di avviso."
+    },
+    "status-bad-bg": {
+      "label": "Errore: sfondo",
+      "description": "Colore di sfondo per gli indicatori di errore."
+    },
+    "status-bad-text": {
+      "label": "Errore: testo",
+      "description": "Colore del testo per gli indicatori di errore."
+    },
+    "status-neutral-bg": {
+      "label": "Stato neutro: sfondo",
+      "description": "Colore di sfondo per gli indicatori di stato neutro."
+    },
+    "status-neutral-text": {
+      "label": "Stato neutro: testo",
+      "description": "Colore del testo per gli indicatori di stato neutro."
+    },
+    "status-up-bg": {
+      "label": "Contenitore attivo: sfondo",
+      "description": "Colore di sfondo per gli indicatori di contenitore in esecuzione."
+    },
+    "status-up-text": {
+      "label": "Contenitore attivo: testo",
+      "description": "Colore del testo per gli indicatori di contenitore in esecuzione."
+    },
+    "status-down-bg": {
+      "label": "Contenitore fermo: sfondo",
+      "description": "Colore di sfondo per gli indicatori di contenitore fermo."
+    },
+    "status-down-text": {
+      "label": "Contenitore fermo: testo",
+      "description": "Colore del testo per gli indicatori di contenitore fermo."
+    },
+    "progress-bar-color": {
+      "label": "Colore barra di avanzamento",
+      "description": "Colore di riempimento per le barre di utilizzo RAM e archiviazione."
+    },
+    "card-label-text-color": {
+      "label": "Colore testo etichetta scheda",
+      "description": "Colore del testo dell'area titolo della scheda servizio."
+    },
+    "card-label-bg-color": {
+      "label": "Colore sfondo etichetta scheda",
+      "description": "Colore di sfondo dell'area titolo della scheda servizio."
+    },
+    "card-pixel-width": {
+      "label": "Larghezza pixel scheda",
+      "description": "Risoluzione pixel orizzontale per le schede servizio."
+    },
+    "card-pixel-height": {
+      "label": "Altezza pixel scheda",
+      "description": "Risoluzione pixel verticale per le schede servizio."
+    },
+    "nav-pixel-width": {
+      "label": "Larghezza pixel navigazione",
+      "description": "Risoluzione pixel orizzontale per le schede di navigazione sezione."
+    },
+    "nav-pixel-height": {
+      "label": "Altezza pixel navigazione",
+      "description": "Risoluzione pixel verticale per le schede di navigazione sezione."
+    }
+  }
+}

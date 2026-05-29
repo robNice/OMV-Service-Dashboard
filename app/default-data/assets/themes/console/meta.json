@@ -1,64 +1,78 @@
 {
   "id": "console",
-  "label": "Console",
-  "description": "Amber terminal shell with ASCII boxes, monospace console styling, and keyboard navigation.",
-  "version": "1.3.0",
-  "author": "rob",
-  "authorUrl": "https://github.com/robNice",
+  "labelKey": "meta.label",
+  "descriptionKey": "meta.description",
+  "version": "1.4.0",
   "settings": [
     {
+      "id": "show-dashboard-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-dashboard-title.label",
+      "descriptionKey": "settings.show-dashboard-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "show-section-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-section-title.label",
+      "descriptionKey": "settings.show-section-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "id": "show-section-thumbnails",
-      "group": "Layout",
-      "label": "Show section thumbnails in header",
-      "description": "Show or hide section thumbnails in the header navigation.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.show-section-thumbnails.label",
+      "descriptionKey": "settings.show-section-thumbnails.description",
       "type": "boolean",
       "default": true
     },
     {
       "id": "cards-per-row-desktop",
-      "group": "Layout",
-      "label": "Cards per row on desktop",
-      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-desktop.label",
+      "descriptionKey": "settings.cards-per-row-desktop.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-tablet",
-      "group": "Layout",
-      "label": "Cards per row on tablet",
-      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-tablet.label",
+      "descriptionKey": "settings.cards-per-row-tablet.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-mobile",
-      "group": "Layout",
-      "label": "Cards per row on mobile",
-      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-mobile.label",
+      "descriptionKey": "settings.cards-per-row-mobile.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "console-text-color",
-      "group": "Colors",
-      "label": "Primary text color",
-      "description": "Main text color used across the console theme.",
+      "groupKey": "groups.colors",
+      "labelKey": "settings.console-text-color.label",
+      "descriptionKey": "settings.console-text-color.description",
       "type": "color",
       "default": "#ffd899"
     },
     {
       "id": "console-accent-color",
-      "group": "Colors",
-      "label": "Accent text color",
-      "description": "Accent color used for prompts, headings and highlights.",
+      "groupKey": "groups.colors",
+      "labelKey": "settings.console-accent-color.label",
+      "descriptionKey": "settings.console-accent-color.description",
       "type": "color",
       "default": "#ffbf5f"
     },
     {
       "id": "console-muted-text-color",
-      "group": "Colors",
-      "label": "Muted text color",
-      "description": "Secondary text color for labels and decorative terminal copy.",
+      "groupKey": "groups.colors",
+      "labelKey": "settings.console-muted-text-color.label",
+      "descriptionKey": "settings.console-muted-text-color.description",
       "type": "color",
       "default": "#c6a172"
     }

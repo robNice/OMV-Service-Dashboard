@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "label": "Spin",
+    "description": "Kaarten en sectie-thumbnails als geanimeerd 3D-coverflow-carrousel met schaduw- en reflectie-effecten."
+  },
+  "groups": {
+    "header": "Header",
+    "effects": "Effecten",
+    "carousel": "Carrousel",
+    "colors": "Kleuren"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Dashboardtitel tonen",
+      "description": "Toont de portaaltitel in de header."
+    },
+    "show-section-title": {
+      "label": "Sectietitel tonen",
+      "description": "Toont de naam van de huidige sectie in de header."
+    },
+    "show-reflection": {
+      "label": "Kaartreflectie",
+      "description": "Toont een spiegelreflectie onder elke kaart."
+    },
+    "autoplay": {
+      "label": "Automatisch draaien",
+      "description": "Laat het carrousel automatisch elke paar seconden vooruitgaan."
+    },
+    "accent-color": {
+      "label": "Accentkleur",
+      "description": "Kleur voor actieve indicatoren, knoppen en markeringen."
+    }
+  }
+}

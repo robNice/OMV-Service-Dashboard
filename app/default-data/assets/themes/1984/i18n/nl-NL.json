@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "label": "1984",
+    "description": "Retro-computerthema met demoscène-verlopen, getrande paneelranden en subtiele CRT-stijl."
+  },
+  "groups": {
+    "header": "Header",
+    "layout": "Indeling",
+    "drawer": "Infopaneel",
+    "drawer-tab": "Paneeltab",
+    "status-chips": "Statuschips",
+    "cards": "Kaarten",
+    "pixelation": "Pixelraster"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Dashboardtitel tonen",
+      "description": "Toont de portaaltitel in de header."
+    },
+    "show-section-title": {
+      "label": "Sectietitel tonen",
+      "description": "Toont de naam van de huidige sectie in de header."
+    },
+    "show-section-thumbnails": {
+      "label": "Sectie-thumbnails in header tonen",
+      "description": "Toont of verbergt sectie-thumbnails in de headernavigatie."
+    },
+    "cards-per-row-desktop": {
+      "label": "Kaarten per rij op desktop",
+      "description": "Aantal kaarten per rij op desktop. Gebruik 0 voor het maximum."
+    },
+    "cards-per-row-tablet": {
+      "label": "Kaarten per rij op tablet",
+      "description": "Aantal kaarten per rij op tablet. Gebruik 0 voor het maximum."
+    },
+    "cards-per-row-mobile": {
+      "label": "Kaarten per rij op mobiel",
+      "description": "Aantal kaarten per rij op mobiel. Gebruik 0 voor het maximum."
+    },
+    "info-drawer-bg": {
+      "label": "Achtergrondkleur infopaneel",
+      "description": "Achtergrondkleur van het 1984-infopaneel."
+    },
+    "drawer-text-color": {
+      "label": "Tekstkleur paneel",
+      "description": "Primaire tekstkleur in het infopaneel."
+    },
+    "drawer-muted-text-color": {
+      "label": "Gedempte tekstkleur paneel",
+      "description": "Secundaire tekstkleur voor labels en minder prominente tekst."
+    },
+    "drawer-tab-bg": {
+      "label": "Achtergrondkleur tab",
+      "description": "Achtergrondkleur van de gesloten infopaneel-tab."
+    },
+    "drawer-tab-hover-bg": {
+      "label": "Achtergrondkleur tab bij hover",
+      "description": "Achtergrondkleur van de infopaneel-tab bij hover."
+    },
+    "drawer-tab-text-color": {
+      "label": "Tekstkleur tab",
+      "description": "Tekstkleur van de gesloten infopaneel-tab."
+    },
+    "drawer-tab-top": {
+      "label": "Tab-bovenpositie",
+      "description": "Verticale positie van de gesloten infopaneel-tab vanaf de bovenkant."
+    },
+    "status-good-bg": {
+      "label": "Status goed: achtergrond",
+      "description": "Achtergrondkleur voor positieve statuschips."
+    },
+    "status-good-text": {
+      "label": "Status goed: tekst",
+      "description": "Tekstkleur voor positieve statuschips."
+    },
+    "status-warn-bg": {
+      "label": "Status waarschuwing: achtergrond",
+      "description": "Achtergrondkleur voor waarschuwingsstatusschips."
+    },
+    "status-warn-text": {
+      "label": "Status waarschuwing: tekst",
+      "description": "Tekstkleur voor waarschuwingsstatusschips."
+    },
+    "status-bad-bg": {
+      "label": "Status fout: achtergrond",
+      "description": "Achtergrondkleur voor foutstatusschips."
+    },
+    "status-bad-text": {
+      "label": "Status fout: tekst",
+      "description": "Tekstkleur voor foutstatusschips."
+    },
+    "status-neutral-bg": {
+      "label": "Status neutraal: achtergrond",
+      "description": "Achtergrondkleur voor neutrale statuschips."
+    },
+    "status-neutral-text": {
+      "label": "Status neutraal: tekst",
+      "description": "Tekstkleur voor neutrale statuschips."
+    },
+    "status-up-bg": {
+      "label": "Container actief: achtergrond",
+      "description": "Achtergrondkleur voor actieve containerchips."
+    },
+    "status-up-text": {
+      "label": "Container actief: tekst",
+      "description": "Tekstkleur voor actieve containerchips."
+    },
+    "status-down-bg": {
+      "label": "Container gestopt: achtergrond",
+      "description": "Achtergrondkleur voor gestopte containerchips."
+    },
+    "status-down-text": {
+      "label": "Container gestopt: tekst",
+      "description": "Tekstkleur voor gestopte containerchips."
+    },
+    "progress-bar-color": {
+      "label": "Voortgangsbalkkleur",
+      "description": "Vulkleur voor RAM- en opslaggebruikbalken."
+    },
+    "card-label-text-color": {
+      "label": "Tekstkleur kaartlabel",
+      "description": "Tekstkleur van het titelgebied van de servicekaart."
+    },
+    "card-label-bg-color": {
+      "label": "Achtergrondkleur kaartlabel",
+      "description": "Achtergrondkleur van het titelgebied van de servicekaart."
+    },
+    "card-pixel-width": {
+      "label": "Kaartpixelbreedte",
+      "description": "Horizontale pixelresolutie voor servicekaarten."
+    },
+    "card-pixel-height": {
+      "label": "Kaartpixelhoogte",
+      "description": "Verticale pixelresolutie voor servicekaarten."
+    },
+    "nav-pixel-width": {
+      "label": "Navigatiepixelbreedte",
+      "description": "Horizontale pixelresolutie voor sectienavigatie-kaarten."
+    },
+    "nav-pixel-height": {
+      "label": "Navigatiepixelhoogte",
+      "description": "Verticale pixelresolutie voor sectienavigatie-kaarten."
+    }
+  }
+}

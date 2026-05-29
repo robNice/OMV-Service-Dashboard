@@ -36,10 +36,10 @@
     "secondsShort": "s",
     "minutesShort": "min",
     "hoursShort": "h",
-    "loadingTitle": "Chargement des donn?es syst?me",
-    "loadingBody": "Le panneau d'information se remplira automatiquement d?s que la premi?re requ?te d'?tat en direct sera termin?e.",
-    "refreshingTitle": "Les donn?es syst?me en cache sont affich?es",
-    "refreshingBody": "Les valeurs affich?es proviennent du dernier instantan? c?t? serveur. Les donn?es en direct sont actualis?es en arri?re-plan."
+    "loadingTitle": "Chargement des données système",
+    "loadingBody": "Le panneau d'information se remplira automatiquement dès que la première requête d'état en direct sera terminée.",
+    "refreshingTitle": "Les données système en cache sont affichées",
+    "refreshingBody": "Les valeurs affichées proviennent du dernier instantané côté serveur. Les données en direct sont actualisées en arrière-plan."
   },
   "tooltip": {
     "infodrawer": "Ouvrir/fermer les informations système",
@@ -77,20 +77,20 @@
       "cardimage": "Image de carte"
     },
     "theme": {
-      "title": "Select theme",
-      "desc": "Choose the layout theme for the public dashboard",
-      "available": "Available themes",
-      "hint": "Themes affect the public dashboard only, not the admin area.",
-      "loading": "Loading themes...",
-      "current": "Current",
+      "title": "Sélectionner un thème",
+      "desc": "Choisir le thème de mise en page pour le tableau de bord public",
+      "available": "Thèmes disponibles",
+      "hint": "Les thèmes n'affectent que le tableau de bord public, pas la zone d'administration.",
+      "loading": "Chargement des thèmes...",
+      "current": "Actuel",
       "version": "Version",
-      "empty": "No themes found",
+      "empty": "Aucun thème trouvé",
       "settings": {
-        "title": "Theme settings",
-        "empty": "This theme has no configurable settings.",
-        "reset": "Load defaults",
+        "title": "Paramètres du thème",
+        "empty": "Ce thème n'a aucun paramètre configurable.",
+        "reset": "Charger les valeurs par défaut",
         "noDescription": "",
-        "count": "settings"
+        "count": "paramètres"
       }
     },
     "config": {
@@ -100,25 +100,25 @@
       "hint": "Ces valeurs influencent le comportement global du tableau de bord. Les changements de port ne prennent effet qu'après un redémarrage.",
       "portHint": "Ne modifiez le port que si vous savez exactement ce que vous faites. Un port incorrect peut rendre le tableau de bord inaccessible après un redémarrage et nécessiter aussi des ajustements du reverse proxy, de Docker ou du pare-feu.",
       "portConfirmTitle": "Confirmer le changement de port",
-      "portConfirmBody": "Vous avez modifi� le port du tableau de bord. Ce changement prendra effet apr�s un red�marrage. Si le nouveau port est incorrect ou non expos�, le tableau de bord risque de ne plus �tre accessible. Voulez-vous continuer ?",
+      "portConfirmBody": "Vous avez modifié le port du tableau de bord. Ce changement prendra effet après un redémarrage. Si le nouveau port est incorrect ou non exposé, le tableau de bord risque de ne plus être accessible. Voulez-vous continuer ?",
       "fields": {
         "title": "Titre du tableau de bord",
         "defaultLang": "Langue de secours",
         "infoDrawerRefreshInterval": "Intervalle d'actualisation du panneau d'information (secondes)",
         "port": "Port",
-        "serviceLinkTarget": "Open service links",
-        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+        "serviceLinkTarget": "Ouvrir les liens de service",
+        "serviceLinkTargetHint": "Contrôle si les cartes de service s'ouvrent dans le même onglet ou dans un nouvel onglet."
       },
       "options": {
         "serviceLinkTarget": {
-          "newTab": "In new tab",
-          "sameTab": "In same tab"
+          "newTab": "Dans un nouvel onglet",
+          "sameTab": "Dans le même onglet"
         }
       }
     },
     "image": {
-      "resetToDefault": "Réinitialiser à l’image par défaut",
-      "deleteCustomImage": "Supprimer l’image personnalisée",
+      "resetToDefault": "Réinitialiser à l'image par défaut",
+      "deleteCustomImage": "Supprimer l'image personnalisée",
       "uploadError": "Le téléversement a échoué",
       "sourceCustom": "personnalisée",
       "sourceAuto": "automatique",
@@ -130,7 +130,7 @@
       "title": "Nom de la section",
       "delete": "Supprimer la section",
       "addService": "Ajouter un service",
-      "backgroundimage": "Image d’arrière-plan",
+      "backgroundimage": "Image d'arrière-plan",
       "cardimage": "Image de carte"
     },
     "service": {
@@ -144,7 +144,7 @@
       "label": "Enregistrer",
       "saving": "enregistrement…",
       "saved": "enregistré",
-      "error": "Échec de l’enregistrement"
+      "error": "Échec de l'enregistrement"
     },
     "password": {
       "title": "Changer le mot de passe",

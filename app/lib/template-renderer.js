@@ -107,10 +107,20 @@ function serializeForInlineScript(value) {
         .replace(/&/g, "\\u0026");
 }
 
+function buildHeadingMarkup(head, suffix = "") {
+    const safeHead = escapeHtml(head);
+    const safeSuffix = escapeHtml(suffix);
+    const separator = safeSuffix ? " - " : "";
+
+    return `<span id="omvportal-head">${safeHead}</span><span id="omvportal-head-separator">${separator}</span><span id="omvportal-head-suffix">${safeSuffix}</span>`;
+}
+
 function setTemplate(req, template, {
     backlink = "",
     version,
     title,
+    headingTitle = title,
+    headingSuffix = "",
     cards,
     sectionNav = "",
     theme = "classic",
@@ -125,7 +135,7 @@ function setTemplate(req, template, {
             .replace(/{{BACKLINK}}/g, backlink)
             .replace(/{{VERSION}}/g, version)
             .replace(/{{TITLE}}/g, title)
-            .replace(/{{SECTION_NAME}}/g, title)
+            .replace(/{{SECTION_NAME}}/g, buildHeadingMarkup(headingTitle, headingSuffix))
             .replace(/{{SECTION_NAV}}/g, sectionNav)
             .replace(/{{THEME}}/g, theme)
             .replace(/{{THEME_SETTINGS_BODY_ATTRS}}/g, themeMarkup.bodyAttrs)

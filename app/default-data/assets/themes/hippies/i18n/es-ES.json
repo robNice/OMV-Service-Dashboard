@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "label": "Hippies",
+    "description": "Formas redondeadas, acentos flor y colores de festival inspirados en el autobús VW."
+  },
+  "groups": {
+    "header": "Encabezado",
+    "layout": "Diseño"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título del panel",
+      "description": "Muestra el título del portal en el encabezado."
+    },
+    "show-section-title": {
+      "label": "Mostrar título de sección",
+      "description": "Muestra el nombre de la sección actual en el encabezado."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniaturas de sección en el encabezado",
+      "description": "Muestra u oculta las miniaturas de sección en la navegación del encabezado."
+    },
+    "cards-per-row-desktop": {
+      "label": "Tarjetas por fila en escritorio",
+      "description": "Número de tarjetas por fila en escritorio. Use 0 para el máximo posible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Tarjetas por fila en tableta",
+      "description": "Número de tarjetas por fila en tableta. Use 0 para el máximo posible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Tarjetas por fila en móvil",
+      "description": "Número de tarjetas por fila en móvil. Use 0 para el máximo posible."
+    }
+  }
+}

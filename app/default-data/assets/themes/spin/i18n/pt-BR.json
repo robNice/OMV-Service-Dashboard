@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "label": "Spin",
+    "description": "Cards e miniaturas de seção como carrossel 3D animado com efeitos de sombra e reflexo."
+  },
+  "groups": {
+    "header": "Cabeçalho",
+    "effects": "Efeitos",
+    "carousel": "Carrossel",
+    "colors": "Cores"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título do painel",
+      "description": "Exibe o título do portal no cabeçalho."
+    },
+    "show-section-title": {
+      "label": "Mostrar título da seção",
+      "description": "Exibe o nome da seção atual no cabeçalho."
+    },
+    "show-reflection": {
+      "label": "Reflexo do card",
+      "description": "Exibe um reflexo espelhado sob cada card."
+    },
+    "autoplay": {
+      "label": "Rotação automática",
+      "description": "Avança o carrossel automaticamente a cada poucos segundos."
+    },
+    "accent-color": {
+      "label": "Cor de destaque",
+      "description": "Cor para indicadores ativos, botões e realces."
+    }
+  }
+}

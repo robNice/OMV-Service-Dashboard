@@ -98,6 +98,21 @@ body {
     line-height: 1.1;
 }
 
+body[data-themesetting-show-dashboard-title="false"] #omvportal-head,
+body[data-themesetting-show-section-title="false"] #omvportal-head-suffix,
+body[data-themesetting-show-dashboard-title="false"] #omvportal-head-separator,
+body[data-themesetting-show-section-title="false"] #omvportal-head-separator {
+    display: none;
+}
+
+body[data-themesetting-show-dashboard-title="false"][data-themesetting-show-section-title="false"] .page-header h1 {
+    display: none;
+}
+
+body[data-themesetting-show-dashboard-title="false"]:not(:has(.section-nav)) .page-header {
+    display: none;
+}
+
 .section-nav {
     display: flex;
     flex-wrap: wrap;
