@@ -2,6 +2,7 @@
     'use strict';
 
     const AUTOPLAY_INTERVAL_MS = 4000;
+    const DOT_ROLL_STEP_MS = 560;
 
     let _state = null;
 
@@ -18,14 +19,25 @@
 
     // ── Helpers ───────────────────────────────────────────────
 
-    function wrappedOffset(index, active, total) {
+    function wrappedOffset(index, active, total, tieBias) {
         let off = index - active;
+        const half = total / 2;
+        if (total % 2 === 0 && Math.abs(off) === half) {
+            return (tieBias < 0 ? -1 : 1) * half;
+        }
         if (off >  total / 2) off -= total;
         if (off < -total / 2) off += total;
         return off;
     }
 
-    function applyCardPosition(card, off, positions) {
+    function directionBetween(from, to, total) {
+        const forward = (to - from + total) % total;
+        const backward = (from - to + total) % total;
+        if (forward === 0) return 0;
+        return forward <= backward ? 1 : -1;
+    }
+
+    function buildTransform(off, positions, extraTransform) {
         const abs = Math.abs(off);
 
         if (abs >= positions.length) {
@@ -36,37 +48,60 @@
             const ry = last ? last[2] : 0;
             const scale = last ? last[3] : 0.5;
 
-            card.style.opacity    = '0';
-            card.style.visibility = 'hidden';
-            card.style.zIndex     = '0';
-            card.style.transform  =
-                `translate(-50%, -50%) ` +
-                `perspective(1100px) ` +
-                `translateX(${sign * tx}px) ` +
-                `translateZ(${tz}px) ` +
-                `rotateY(${sign * ry}deg) ` +
-                `scale(${scale})`;
-            return;
+            return {
+                opacity: 0,
+                zIndex: 0,
+                transform:
+                    `translate(-50%, -50%) ` +
+                    `perspective(1100px) ` +
+                    `translateX(${sign * tx}px) ` +
+                    `translateZ(${tz}px) ` +
+                    `rotateY(${sign * ry}deg) ` +
+                    `scale(${scale})` +
+                    (extraTransform ? ` ${extraTransform}` : '')
+            };
         }
 
         const sign = off >= 0 ? 1 : -1;
         const [tx, tz, ry, scale, opacity, zIdx] = positions[abs];
 
-        card.style.visibility = 'visible';
-        card.style.opacity    = String(opacity);
-        card.style.zIndex     = String(zIdx);
-        card.style.transform  =
-            `translate(-50%, -50%) ` +
-            `perspective(1100px) ` +
-            `translateX(${sign * tx}px) ` +
-            `translateZ(${tz}px) ` +
-            `rotateY(${sign * ry}deg) ` +
-            `scale(${scale})`;
+        return {
+            opacity,
+            zIndex: zIdx,
+            transform:
+                `translate(-50%, -50%) ` +
+                `perspective(1100px) ` +
+                `translateX(${sign * tx}px) ` +
+                `translateZ(${tz}px) ` +
+                `rotateY(${sign * ry}deg) ` +
+                `scale(${scale})` +
+                (extraTransform ? ` ${extraTransform}` : '')
+        };
+    }
+
+    function applyCardPosition(card, off, positions) {
+        const pos = buildTransform(off, positions);
+        const isHidden = Math.abs(off) >= positions.length;
+
+        card.style.visibility = isHidden ? 'hidden' : 'visible';
+        card.style.opacity    = String(pos.opacity);
+        card.style.zIndex     = String(pos.zIndex);
+        card.style.transform  = pos.transform;
+    }
+
+    function applyReflectionPosition(reflection, off, positions) {
+        const pos = buildTransform(off, positions, 'translateY(var(--spin-reflection-offset)) scaleY(-1)');
+        const isHidden = Math.abs(off) >= positions.length;
+
+        reflection.style.visibility = isHidden ? 'hidden' : 'visible';
+        reflection.style.opacity    = String(pos.opacity);
+        reflection.style.zIndex     = String(Math.max(0, pos.zIndex - 1));
+        reflection.style.transform  = pos.transform;
     }
 
     // ── DOM construction ──────────────────────────────────────
 
-    function buildDOM(grid, cards) {
+    function buildDOM(grid, cards, hasReflection) {
         const wrapper = document.createElement('div');
         wrapper.className = 'spin-wrapper';
 
@@ -75,6 +110,23 @@
 
         const track = document.createElement('div');
         track.className = 'spin-track';
+
+        const reflections = [];
+
+        if (hasReflection) {
+            cards.forEach(card => {
+                const reflection = document.createElement('div');
+                reflection.className = 'spin-reflection';
+                reflection.setAttribute('aria-hidden', 'true');
+                reflection.innerHTML = card.innerHTML;
+                reflection.querySelectorAll('a, button, input, textarea, select').forEach(el => {
+                    el.tabIndex = -1;
+                    el.setAttribute('aria-hidden', 'true');
+                });
+                reflections.push(reflection);
+                track.appendChild(reflection);
+            });
+        }
 
         cards.forEach(c => track.appendChild(c));
         scene.appendChild(track);
@@ -118,7 +170,7 @@
 
         grid.appendChild(wrapper);
 
-        return { wrapper, scene, track, btnPrev, btnNext, dotsRow };
+        return { wrapper, scene, track, btnPrev, btnNext, dotsRow, reflections };
     }
 
     // ── Theme API ─────────────────────────────────────────────
@@ -138,7 +190,7 @@
             // Build DOM before adding the class so the FOUC-prevention CSS rule
             // (grid:not(.spin-carousel-active) { opacity:0 }) stays active until
             // the wrapper's fade-in animation starts running.
-            const dom = buildDOM(grid, cards);
+            const dom = buildDOM(grid, cards, hasReflection);
             grid.classList.add('spin-carousel-active');
 
             if (hasReflection) body.classList.add('spin-has-reflection');
@@ -148,7 +200,10 @@
 
             let positions = readPositions();
             let active    = 0;
+            let offsetTieBias = 1;
             let autoTimer = null;
+            let rollTimer = null;
+            let rollRun = 0;
             let jumpRestoreRun = 0;
             let jumpRestoreFrameOne = null;
             let jumpRestoreFrameTwo = null;
@@ -172,6 +227,22 @@
                         card.style.transition = '';
                     }
                 });
+
+                dom.reflections.forEach(reflection => {
+                    if (reflection.dataset.spinJumpPending === '1') {
+                        delete reflection.dataset.spinJumpPending;
+                        reflection.style.transition = '';
+                    }
+                });
+            }
+
+            function cancelRolling() {
+                rollRun += 1;
+
+                if (rollTimer !== null) {
+                    clearTimeout(rollTimer);
+                    rollTimer = null;
+                }
             }
 
             // ── Position all cards ──
@@ -181,8 +252,11 @@
                 }
 
                 cards.forEach((card, i) => {
-                    const off = wrappedOffset(i, active, cards.length);
+                    const off = wrappedOffset(i, active, cards.length, offsetTieBias);
                     applyCardPosition(card, off, positions);
+                    if (dom.reflections[i]) {
+                        applyReflectionPosition(dom.reflections[i], off, positions);
+                    }
                     card.classList.toggle('spin-active', off === 0);
                 });
 
@@ -215,7 +289,7 @@
             //      other cards animate normally with their CSS transition.
             //   4. Double-rAF in Frame N+1: restore transition + fade opacity
             //      from 0 to target → smooth fade-in at the new position.
-            function navigateTo(newActive) {
+            function navigateTo(newActive, direction) {
                 const total  = cards.length;
                 const visRad = positions.length - 1;
                 newActive = ((newActive % total) + total) % total;
@@ -223,11 +297,12 @@
 
                 cancelPendingJumpRestore();
                 const restoreRun = jumpRestoreRun;
+                const nextTieBias = direction < 0 ? -1 : 1;
 
                 const jumpSet = new Set();
                 cards.forEach((card, i) => {
-                    const oldOff = wrappedOffset(i, active, total);
-                    const newOff = wrappedOffset(i, newActive, total);
+                    const oldOff = wrappedOffset(i, active, total, offsetTieBias);
+                    const newOff = wrappedOffset(i, newActive, total, nextTieBias);
                     if (
                         oldOff !== 0 && newOff !== 0 &&
                         Math.sign(oldOff) !== Math.sign(newOff) &&
@@ -237,6 +312,10 @@
                         jumpSet.add(i);
                         card.dataset.spinJumpPending = '1';
                         card.style.transition = 'none';
+                        if (dom.reflections[i]) {
+                            dom.reflections[i].dataset.spinJumpPending = '1';
+                            dom.reflections[i].style.transition = 'none';
+                        }
                     }
                 });
 
@@ -247,11 +326,17 @@
                 }
 
                 active = newActive;
+                offsetTieBias = nextTieBias;
                 updatePositions(false);
 
                 // applyCardPosition set the target opacity; override to 0 so
                 // jump cards are invisible at their new position.
-                jumpSet.forEach(i => { cards[i].style.opacity = '0'; });
+                jumpSet.forEach(i => {
+                    cards[i].style.opacity = '0';
+                    if (dom.reflections[i]) {
+                        dom.reflections[i].style.opacity = '0';
+                    }
+                });
 
                 if (jumpSet.size > 0) {
                     // Double-rAF: rAF queued from within a rAF fires in the
@@ -266,7 +351,7 @@
 
                             jumpSet.forEach(i => {
                                 const card  = cards[i];
-                                const off   = wrappedOffset(i, active, total);
+                                const off   = wrappedOffset(i, active, total, offsetTieBias);
                                 const abs   = Math.abs(off);
                                 const tgtOp = abs < positions.length
                                     ? positions[abs][4]
@@ -274,6 +359,12 @@
                                 delete card.dataset.spinJumpPending;
                                 card.style.transition = '';
                                 card.style.opacity    = String(tgtOp);
+
+                                if (dom.reflections[i]) {
+                                    delete dom.reflections[i].dataset.spinJumpPending;
+                                    dom.reflections[i].style.transition = '';
+                                    dom.reflections[i].style.opacity    = String(tgtOp);
+                                }
                             });
                         });
                     });
@@ -281,13 +372,41 @@
             }
 
             function go(delta) {
-                navigateTo((active + delta + cards.length) % cards.length);
+                cancelRolling();
+                navigateTo((active + delta + cards.length) % cards.length, delta);
                 resetAutoplay();
             }
 
             function goTo(i) {
-                navigateTo(((i % cards.length) + cards.length) % cards.length);
-                resetAutoplay();
+                const total = cards.length;
+                const target = ((i % total) + total) % total;
+                if (target === active) {
+                    cancelRolling();
+                    resetAutoplay();
+                    return;
+                }
+
+                cancelRolling();
+                stopAutoplay();
+
+                const direction = directionBetween(active, target, total);
+                const run = rollRun;
+
+                function rollStep() {
+                    if (run !== rollRun) return;
+
+                    navigateTo((active + direction + total) % total, direction);
+
+                    if (active === target) {
+                        rollTimer = null;
+                        resetAutoplay();
+                        return;
+                    }
+
+                    rollTimer = setTimeout(rollStep, DOT_ROLL_STEP_MS);
+                }
+
+                rollStep();
             }
 
             // ── Autoplay ──
@@ -325,7 +444,7 @@
 
             cards.forEach((card, i) => {
                 card.addEventListener('click', e => {
-                    if (wrappedOffset(i, active, cards.length) !== 0) {
+                    if (wrappedOffset(i, active, cards.length, offsetTieBias) !== 0) {
                         e.preventDefault();
                         goTo(i);
                     }
@@ -356,7 +475,7 @@
             _state = {
                 grid, cards, dom, body, doc,
                 stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize,
-                cancelPendingJumpRestore
+                cancelPendingJumpRestore, cancelRolling
             };
         },
 
@@ -364,9 +483,10 @@
             if (!_state) return;
             const { grid, cards, dom, body, doc,
                     stopAutoplay, onKey, onTouchStart, onTouchEnd, onResize,
-                    cancelPendingJumpRestore } = _state;
+                    cancelPendingJumpRestore, cancelRolling } = _state;
 
             stopAutoplay();
+            cancelRolling();
             cancelPendingJumpRestore();
             doc.removeEventListener('keydown', onKey);
             window.removeEventListener('resize', onResize);

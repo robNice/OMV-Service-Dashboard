@@ -27,6 +27,8 @@
     --spin-scene-height:  260px;
     --spin-card-width:    300px;
     --spin-card-height:   240px;
+    --spin-reflection-offset: 245px;
+    --spin-reflection-opacity: 0.34;
 }
 
 body {
@@ -131,7 +133,8 @@ body.spin-has-reflection .spin-wrapper {
 
 /* ── Cards inside the carousel ───────────────── */
 
-.spin-track .service {
+.spin-track .service,
+.spin-reflection {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -145,6 +148,48 @@ body.spin-has-reflection .spin-wrapper {
     transition: var(--spin-transition);
     user-select: none;
     pointer-events: auto;
+}
+
+.spin-reflection {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--tile-bg);
+    pointer-events: none;
+    user-select: none;
+    cursor: default;
+    opacity: 0;
+    filter: blur(0.35px) saturate(0.92);
+    transform-origin: center center;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, var(--spin-reflection-opacity)) 0%, transparent 52%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, var(--spin-reflection-opacity)) 0%, transparent 52%);
+}
+
+.spin-reflection a {
+    color: inherit;
+    text-decoration: none;
+    pointer-events: none;
+    padding-bottom: 10px;
+}
+
+.spin-reflection img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.spin-reflection .service-title {
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-card), system-ui, sans-serif;
+    font-weight: var(--card-weight);
+    letter-spacing: .15px;
+    line-height: 1.2;
 }
 
 .spin-track .service.spin-active {
@@ -161,12 +206,10 @@ body.spin-has-reflection .spin-wrapper {
     pointer-events: auto;
 }
 
-/* Reflection — starts at card bottom, fades out after ~45 % of card height.
-   Keeping it short prevents it from extending beyond the viewport where
-   html { overflow: hidden } would clip it.                              */
+/* Native reflection is unreliable on 3D-transformed cards, so theme.js creates
+   mirrored reflection layers and positions them with the same carousel state. */
 body.spin-has-reflection .spin-track .service {
-    -webkit-box-reflect: below 0px
-        linear-gradient(rgba(0, 0, 0, 0.22) 0%, transparent 45%);
+    -webkit-box-reflect: none;
 }
 
 /* ── Navigation buttons ──────────────────────── */
@@ -232,32 +275,6 @@ body.spin-has-reflection .spin-track .service {
     transform: scale(1.45);
 }
 
-/* Tablet / narrow desktop */
-@media (max-width: 900px) {
-    :root {
-        --spin-scene-height: 240px;
-        --spin-card-width:   260px;
-        --spin-card-height:  210px;
-
-        --spin-pos1-tx:  210;
-        --spin-pos1-tz:  -60;
-        --spin-pos1-ry:   36;
-        --spin-pos1-sc:  .80;
-        --spin-pos1-op:  .72;
-
-        /* Hide the second ring on narrow viewports to avoid clipped edge slivers. */
-        --spin-pos2-tx: 9999;
-        --spin-pos2-tz:    0;
-        --spin-pos2-ry:    0;
-        --spin-pos2-sc:   .5;
-        --spin-pos2-op:    0;
-    }
-
-    .spin-track .service img {
-        height: 145px;
-    }
-}
-
 /* ── Mobile ──────────────────────────────────── */
 
 @media (max-width: 640px) {
@@ -265,6 +282,7 @@ body.spin-has-reflection .spin-track .service {
         --spin-scene-height: 210px;
         --spin-card-width:   220px;
         --spin-card-height:  178px;
+        --spin-reflection-offset: 183px;
 
         /* Tighter offsets: ±1 peeks ~40 px from the viewport edge */
         --spin-pos1-tx:  160;
@@ -295,14 +313,18 @@ body.spin-has-reflection .spin-track .service {
         height: 120px;
     }
 
+    .spin-reflection img {
+        height: 120px;
+    }
+
     /* More breathing room between scene bottom and dots */
     .spin-dots {
         padding-top: 1.8rem;
     }
 
     /* Reflection disabled on narrow mobile */
-    body.spin-has-reflection .spin-track .service {
-        -webkit-box-reflect: none;
+    .spin-reflection {
+        display: none;
     }
 
     body.spin-has-reflection .spin-wrapper {
@@ -317,8 +339,8 @@ body.spin-has-reflection .spin-track .service {
         --spin-card-height:  130px;
     }
 
-    body.spin-has-reflection .spin-track .service {
-        -webkit-box-reflect: none;
+    .spin-reflection {
+        display: none;
     }
 
     body.spin-has-reflection .spin-wrapper {
