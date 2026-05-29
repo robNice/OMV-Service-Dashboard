@@ -28,7 +28,8 @@
     --spin-card-width:    300px;
     --spin-card-height:   240px;
     --spin-reflection-offset: 245px;
-    --spin-reflection-opacity: 0.34;
+    --spin-reflection-opacity: 0.30;
+    --spin-reflection-space: 0.78;
 }
 
 body {
@@ -113,9 +114,9 @@ body[data-theme="spin"] .grid:not(.spin-carousel-active) {
     overflow: visible;
 }
 
-/* Space for the short reflection (≈ 45 % of card height) */
+/* Space for the reflection below the carousel scene */
 body.spin-has-reflection .spin-wrapper {
-    padding-bottom: calc(var(--spin-card-height) * 0.48 + 1rem);
+    padding-bottom: calc(var(--spin-card-height) * var(--spin-reflection-space) + 1rem);
 }
 
 .spin-scene {
@@ -160,8 +161,18 @@ body.spin-has-reflection .spin-wrapper {
     opacity: 0;
     filter: blur(0.35px) saturate(0.92);
     transform-origin: center center;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, var(--spin-reflection-opacity)) 0%, transparent 52%);
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, var(--spin-reflection-opacity)) 0%, transparent 52%);
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, var(--spin-reflection-opacity)) 0%,
+        rgba(0, 0, 0, 0.16) 42%,
+        transparent 82%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, var(--spin-reflection-opacity)) 0%,
+        rgba(0, 0, 0, 0.16) 42%,
+        transparent 82%
+    );
 }
 
 .spin-reflection a {
