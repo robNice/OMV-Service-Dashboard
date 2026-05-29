@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Waaaah Waaah Waaaaaah",
+    "description": "使い古した木製パネル、引き裂かれたエッジ、弾痕アクセントの埃っぽいサルーンスタイル。"
+  },
+  "groups": {
+    "header": "ヘッダー",
+    "layout": "レイアウト",
+    "bullet-holes": "弾痕"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "ダッシュボードタイトルを表示",
+      "description": "ヘッダーにポータルタイトルを表示します。"
+    },
+    "show-section-title": {
+      "label": "セクションタイトルを表示",
+      "description": "ヘッダーに現在のセクション名を表示します。"
+    },
+    "show-section-thumbnails": {
+      "label": "ヘッダーにセクションサムネイルを表示",
+      "description": "ヘッダーナビゲーションのセクションサムネイルを表示または非表示にします。"
+    },
+    "cards-per-row-desktop": {
+      "label": "デスクトップの1行あたりのカード数",
+      "description": "デスクトップの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "cards-per-row-tablet": {
+      "label": "タブレットの1行あたりのカード数",
+      "description": "タブレットの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "cards-per-row-mobile": {
+      "label": "モバイルの1行あたりのカード数",
+      "description": "モバイルの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "bullet-hole-count-min": {
+      "label": "弾痕の数 (最小)",
+      "description": "サービスカードあたりの最小弾痕数。"
+    },
+    "bullet-hole-count-max": {
+      "label": "弾痕の数 (最大)",
+      "description": "サービスカードあたりの最大弾痕数。"
+    },
+    "bullet-hole-chance-min": {
+      "label": "弾痕の確率 (最小)",
+      "description": "サービスカードが弾痕を持つ最小確率（%）。"
+    },
+    "bullet-hole-chance-max": {
+      "label": "弾痕の確率 (最大)",
+      "description": "サービスカードが弾痕を持つ最大確率（%）。"
+    },
+    "bullet-hole-size-min": {
+      "label": "弾痕のサイズ (最小)",
+      "description": "弾痕の最小サイズ（ピクセル単位）。"
+    },
+    "bullet-hole-size-max": {
+      "label": "弾痕のサイズ (最大)",
+      "description": "弾痕の最大サイズ（ピクセル単位）。"
+    }
+  }
+}

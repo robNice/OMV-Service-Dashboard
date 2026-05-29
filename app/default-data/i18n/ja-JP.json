@@ -33,13 +33,13 @@
   "status": {
     "updatedAt": "最終更新",
     "now": "現在",
-    "secondsShort": "?",
-    "minutesShort": "?",
-    "hoursShort": "??",
-    "loadingTitle": "?????????????",
-    "loadingBody": "?????????????????????????????????????????",
-    "refreshingTitle": "???????????????????",
-    "refreshingBody": "????????????????????????????????????????????????????????"
+    "secondsShort": "秒",
+    "minutesShort": "分",
+    "hoursShort": "時間",
+    "loadingTitle": "システムデータを読み込んでいます",
+    "loadingBody": "最初のライブステータスリクエストが完了すると、情報ドロワーが自動的に表示されます。",
+    "refreshingTitle": "キャッシュされたシステムデータを表示しています",
+    "refreshingBody": "表示されている値はサーバー側の最新スナップショットから取得されたものです。ライブデータはバックグラウンドで更新されています。"
   },
   "tooltip": {
     "infodrawer": "システム情報を開く／閉じる",
@@ -47,7 +47,7 @@
   },
   "docker": {
     "status": {
-      "up": "稼咍中",
+      "up": "稼働中",
       "created": "作成済み"
     }
   },
@@ -77,20 +77,20 @@
       "cardimage": "カード画像"
     },
     "theme": {
-      "title": "Select theme",
-      "desc": "Choose the layout theme for the public dashboard",
-      "available": "Available themes",
-      "hint": "Themes affect the public dashboard only, not the admin area.",
-      "loading": "Loading themes...",
-      "current": "Current",
-      "version": "Version",
-      "empty": "No themes found",
+      "title": "テーマを選択",
+      "desc": "公開ダッシュボードのレイアウトテーマを選択します",
+      "available": "利用可能なテーマ",
+      "hint": "テーマは公開ダッシュボードにのみ適用され、管理エリアには影響しません。",
+      "loading": "テーマを読み込み中...",
+      "current": "現在",
+      "version": "バージョン",
+      "empty": "テーマが見つかりません",
       "settings": {
-        "title": "Theme settings",
-        "empty": "This theme has no configurable settings.",
-        "reset": "Load defaults",
+        "title": "テーマ設定",
+        "empty": "このテーマには設定可能なオプションがありません。",
+        "reset": "デフォルトを読み込む",
         "noDescription": "",
-        "count": "settings"
+        "count": "設定"
       }
     },
     "config": {
@@ -106,13 +106,13 @@
         "defaultLang": "フォールバック言語",
         "infoDrawerRefreshInterval": "情報ドロワー更新間隔（秒）",
         "port": "ポート",
-        "serviceLinkTarget": "Open service links",
-        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+        "serviceLinkTarget": "サービスリンクを開く",
+        "serviceLinkTargetHint": "サービスカードを同じタブで開くか新しいタブで開くかを制御します。"
       },
       "options": {
         "serviceLinkTarget": {
-          "newTab": "In new tab",
-          "sameTab": "In same tab"
+          "newTab": "新しいタブで",
+          "sameTab": "同じタブで"
         }
       }
     },

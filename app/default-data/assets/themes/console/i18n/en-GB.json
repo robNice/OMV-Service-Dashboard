@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "label": "Console",
+    "description": "Amber terminal shell with ASCII boxes, monospace console styling, and keyboard navigation."
+  },
+  "groups": {
+    "header": "Header",
+    "layout": "Layout",
+    "colors": "Colors"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Show dashboard title",
+      "description": "Show the portal title in the header."
+    },
+    "show-section-title": {
+      "label": "Show section title",
+      "description": "Show the name of the current section in the header."
+    },
+    "show-section-thumbnails": {
+      "label": "Show section thumbnails in header",
+      "description": "Show or hide section thumbnails in the header navigation."
+    },
+    "cards-per-row-desktop": {
+      "label": "Cards per row on desktop",
+      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Cards per row on tablet",
+      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Cards per row on mobile",
+      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible."
+    },
+    "console-text-color": {
+      "label": "Primary text color",
+      "description": "Main text color used across the console theme."
+    },
+    "console-accent-color": {
+      "label": "Accent text color",
+      "description": "Accent color used for prompts, headings and highlights."
+    },
+    "console-muted-text-color": {
+      "label": "Muted text color",
+      "description": "Secondary text color for labels and decorative terminal copy."
+    }
+  }
+}

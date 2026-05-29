@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "label": "Compact List",
+    "description": "Layout a lista compatta per una scansione più rapida con un pannello info più leggero."
+  },
+  "groups": {
+    "header": "Intestazione",
+    "layout": "Layout",
+    "colors": "Colori"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostra titolo della dashboard",
+      "description": "Mostra il titolo del portale nell'intestazione."
+    },
+    "show-section-title": {
+      "label": "Mostra titolo sezione",
+      "description": "Mostra il nome della sezione corrente nell'intestazione."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniature sezione nell'intestazione",
+      "description": "Mostra o nasconde le miniature di sezione nella navigazione dell'intestazione."
+    },
+    "surface-bg-color": {
+      "label": "Colore sfondo schede e intestazione",
+      "description": "Colore di sfondo per le schede e l'intestazione della pagina."
+    },
+    "surface-text-color": {
+      "label": "Colore testo schede e intestazione",
+      "description": "Colore del testo per le schede e l'intestazione della pagina."
+    }
+  }
+}

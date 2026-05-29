@@ -1,88 +1,102 @@
 {
   "id": "bubbles",
-  "label": "Bubbles",
-  "description": "Bubble-inspired dashboard theme with floating bubbles, passing fish and circular service islands.",
-  "version": "1.4.0",
-  "author": "rob",
-  "authorUrl": "https://github.com/robNice",
+  "labelKey": "meta.label",
+  "descriptionKey": "meta.description",
+  "version": "1.5.0",
   "settings": [
     {
+      "id": "show-dashboard-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-dashboard-title.label",
+      "descriptionKey": "settings.show-dashboard-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "show-section-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-section-title.label",
+      "descriptionKey": "settings.show-section-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "id": "show-section-thumbnails",
-      "group": "Layout",
-      "label": "Show section thumbnails in header",
-      "description": "Show or hide section thumbnails in the header navigation.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.show-section-thumbnails.label",
+      "descriptionKey": "settings.show-section-thumbnails.description",
       "type": "boolean",
       "default": true
     },
     {
       "id": "cards-per-row-desktop",
-      "group": "Layout",
-      "label": "Cards per row on desktop",
-      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-desktop.label",
+      "descriptionKey": "settings.cards-per-row-desktop.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-tablet",
-      "group": "Layout",
-      "label": "Cards per row on tablet",
-      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-tablet.label",
+      "descriptionKey": "settings.cards-per-row-tablet.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-mobile",
-      "group": "Layout",
-      "label": "Cards per row on mobile",
-      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-mobile.label",
+      "descriptionKey": "settings.cards-per-row-mobile.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "bubble-count",
-      "group": "Effects",
-      "label": "Bubble count",
-      "description": "Number of floating bubbles rendered in the background.",
+      "groupKey": "groups.effects",
+      "labelKey": "settings.bubble-count.label",
+      "descriptionKey": "settings.bubble-count.description",
       "type": "number",
       "default": 14
     },
     {
       "id": "fish-count",
-      "group": "Effects",
-      "label": "Fish count",
-      "description": "Number of animated fish rendered in the background.",
+      "groupKey": "groups.effects",
+      "labelKey": "settings.fish-count.label",
+      "descriptionKey": "settings.fish-count.description",
       "type": "number",
       "default": 3
     },
     {
       "id": "bubble-size-min",
-      "group": "Effects",
-      "label": "Bubble size from",
-      "description": "Minimum bubble size in pixels.",
+      "groupKey": "groups.effects",
+      "labelKey": "settings.bubble-size-min.label",
+      "descriptionKey": "settings.bubble-size-min.description",
       "type": "number",
       "default": 14
     },
     {
       "id": "bubble-size-max",
-      "group": "Effects",
-      "label": "Bubble size to",
-      "description": "Maximum bubble size in pixels.",
+      "groupKey": "groups.effects",
+      "labelKey": "settings.bubble-size-max.label",
+      "descriptionKey": "settings.bubble-size-max.description",
       "type": "number",
       "default": 48
     },
     {
       "id": "fish-size-min",
-      "group": "Effects",
-      "label": "Fish size from",
-      "description": "Minimum fish size in pixels.",
+      "groupKey": "groups.effects",
+      "labelKey": "settings.fish-size-min.label",
+      "descriptionKey": "settings.fish-size-min.description",
       "type": "number",
       "default": 56
     },
     {
       "id": "fish-size-max",
-      "group": "Effects",
-      "label": "Fish size to",
-      "description": "Maximum fish size in pixels.",
+      "groupKey": "groups.effects",
+      "labelKey": "settings.fish-size-max.label",
+      "descriptionKey": "settings.fish-size-max.description",
       "type": "number",
       "default": 100
     }

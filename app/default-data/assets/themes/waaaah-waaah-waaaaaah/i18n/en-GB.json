@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Waaaah Waaah Waaaaaah",
+    "description": "Weathered wood panels, torn edges and dusty saloon styling with bullet-hole accents."
+  },
+  "groups": {
+    "header": "Header",
+    "layout": "Layout",
+    "bullet-holes": "Bullet Holes"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Show dashboard title",
+      "description": "Show the portal title in the header."
+    },
+    "show-section-title": {
+      "label": "Show section title",
+      "description": "Show the name of the current section in the header."
+    },
+    "show-section-thumbnails": {
+      "label": "Show section thumbnails in header",
+      "description": "Show or hide section thumbnails in the header navigation."
+    },
+    "cards-per-row-desktop": {
+      "label": "Cards per row on desktop",
+      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Cards per row on tablet",
+      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Cards per row on mobile",
+      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible."
+    },
+    "bullet-hole-count-min": {
+      "label": "Bullet hole count from",
+      "description": "Minimum number of bullet hole attempts per service card."
+    },
+    "bullet-hole-count-max": {
+      "label": "Bullet hole count to",
+      "description": "Maximum number of bullet hole attempts per service card."
+    },
+    "bullet-hole-chance-min": {
+      "label": "Bullet hole chance from",
+      "description": "Minimum chance in percent that a service card gets bullet holes."
+    },
+    "bullet-hole-chance-max": {
+      "label": "Bullet hole chance to",
+      "description": "Maximum chance in percent that a service card gets bullet holes."
+    },
+    "bullet-hole-size-min": {
+      "label": "Bullet hole size from",
+      "description": "Minimum bullet hole size in pixels."
+    },
+    "bullet-hole-size-max": {
+      "label": "Bullet hole size to",
+      "description": "Maximum bullet hole size in pixels."
+    }
+  }
+}

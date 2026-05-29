@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Bubbles",
+    "description": "Yüzen kabarcıklar, yüzen balıklar ve dairesel hizmet adacıklarıyla kabarcık esinlendirmeli gösterge paneli teması."
+  },
+  "groups": {
+    "header": "Başlık",
+    "layout": "Düzen",
+    "effects": "Efektler"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Gösterge paneli başlığını göster",
+      "description": "Portal başlığını başlık alanında gösterir."
+    },
+    "show-section-title": {
+      "label": "Bölüm başlığını göster",
+      "description": "Başlık alanında geçerli bölüm adını gösterir."
+    },
+    "show-section-thumbnails": {
+      "label": "Başlıkta bölüm küçük resimleri",
+      "description": "Başlık gezintisindeki bölüm küçük resimlerini gösterir veya gizler."
+    },
+    "cards-per-row-desktop": {
+      "label": "Masaüstünde satır başına kart",
+      "description": "Masaüstünde satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "cards-per-row-tablet": {
+      "label": "Tablette satır başına kart",
+      "description": "Tablette satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "cards-per-row-mobile": {
+      "label": "Mobilde satır başına kart",
+      "description": "Mobil ekranlarda satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "bubble-count": {
+      "label": "Kabarcık sayısı",
+      "description": "Arka planda görüntülenen yüzen kabarcık sayısı."
+    },
+    "fish-count": {
+      "label": "Balık sayısı",
+      "description": "Arka planda görüntülenen balık sayısı."
+    },
+    "bubble-size-min": {
+      "label": "Kabarcık boyutu (min)",
+      "description": "Minimum kabarcık boyutu piksel cinsinden."
+    },
+    "bubble-size-max": {
+      "label": "Kabarcık boyutu (maks)",
+      "description": "Maksimum kabarcık boyutu piksel cinsinden."
+    },
+    "fish-size-min": {
+      "label": "Balık boyutu (min)",
+      "description": "Minimum balık boyutu piksel cinsinden."
+    },
+    "fish-size-max": {
+      "label": "Balık boyutu (maks)",
+      "description": "Maksimum balık boyutu piksel cinsinden."
+    }
+  }
+}

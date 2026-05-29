@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "label": "1984",
+    "description": "Tema de ordenador retro con degradados de la escena demo, bordes de panel escalonados y estilo CRT sutil."
+  },
+  "groups": {
+    "header": "Encabezado",
+    "layout": "Diseño",
+    "drawer": "Panel de información",
+    "drawer-tab": "Pestaña del panel",
+    "status-chips": "Indicadores de estado",
+    "cards": "Tarjetas",
+    "pixelation": "Pixelado"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título del panel",
+      "description": "Muestra el título del portal en el encabezado."
+    },
+    "show-section-title": {
+      "label": "Mostrar título de sección",
+      "description": "Muestra el nombre de la sección actual en el encabezado."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniaturas de sección en el encabezado",
+      "description": "Muestra u oculta las miniaturas de sección en la navegación del encabezado."
+    },
+    "cards-per-row-desktop": {
+      "label": "Tarjetas por fila en escritorio",
+      "description": "Número de tarjetas por fila en escritorio. Use 0 para el máximo posible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Tarjetas por fila en tableta",
+      "description": "Número de tarjetas por fila en tableta. Use 0 para el máximo posible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Tarjetas por fila en móvil",
+      "description": "Número de tarjetas por fila en móvil. Use 0 para el máximo posible."
+    },
+    "info-drawer-bg": {
+      "label": "Color de fondo del panel de info",
+      "description": "Color de fondo del panel de información 1984."
+    },
+    "drawer-text-color": {
+      "label": "Color de texto del panel",
+      "description": "Color de texto principal dentro del panel de información."
+    },
+    "drawer-muted-text-color": {
+      "label": "Color de texto secundario del panel",
+      "description": "Color de texto secundario para etiquetas y texto menos destacado."
+    },
+    "drawer-tab-bg": {
+      "label": "Color de fondo de la pestaña",
+      "description": "Color de fondo de la pestaña del panel de info cerrado."
+    },
+    "drawer-tab-hover-bg": {
+      "label": "Color de fondo de la pestaña al pasar el ratón",
+      "description": "Color de fondo de la pestaña del panel de info al pasar el ratón."
+    },
+    "drawer-tab-text-color": {
+      "label": "Color de texto de la pestaña",
+      "description": "Color de texto de la pestaña del panel de info cerrado."
+    },
+    "drawer-tab-top": {
+      "label": "Posición superior de la pestaña",
+      "description": "Posición vertical de la pestaña del panel cerrado desde el borde superior."
+    },
+    "status-good-bg": {
+      "label": "Estado correcto: fondo",
+      "description": "Color de fondo para indicadores de estado positivo."
+    },
+    "status-good-text": {
+      "label": "Estado correcto: texto",
+      "description": "Color de texto para indicadores de estado positivo."
+    },
+    "status-warn-bg": {
+      "label": "Advertencia: fondo",
+      "description": "Color de fondo para indicadores de advertencia."
+    },
+    "status-warn-text": {
+      "label": "Advertencia: texto",
+      "description": "Color de texto para indicadores de advertencia."
+    },
+    "status-bad-bg": {
+      "label": "Error: fondo",
+      "description": "Color de fondo para indicadores de error."
+    },
+    "status-bad-text": {
+      "label": "Error: texto",
+      "description": "Color de texto para indicadores de error."
+    },
+    "status-neutral-bg": {
+      "label": "Estado neutro: fondo",
+      "description": "Color de fondo para indicadores de estado neutro."
+    },
+    "status-neutral-text": {
+      "label": "Estado neutro: texto",
+      "description": "Color de texto para indicadores de estado neutro."
+    },
+    "status-up-bg": {
+      "label": "Contenedor activo: fondo",
+      "description": "Color de fondo para chips de contenedor en ejecución."
+    },
+    "status-up-text": {
+      "label": "Contenedor activo: texto",
+      "description": "Color de texto para chips de contenedor en ejecución."
+    },
+    "status-down-bg": {
+      "label": "Contenedor detenido: fondo",
+      "description": "Color de fondo para chips de contenedor detenido."
+    },
+    "status-down-text": {
+      "label": "Contenedor detenido: texto",
+      "description": "Color de texto para chips de contenedor detenido."
+    },
+    "progress-bar-color": {
+      "label": "Color de barra de progreso",
+      "description": "Color de relleno para barras de uso de RAM y almacenamiento."
+    },
+    "card-label-text-color": {
+      "label": "Color de texto de la etiqueta de tarjeta",
+      "description": "Color de texto del área de título de la tarjeta de servicio."
+    },
+    "card-label-bg-color": {
+      "label": "Color de fondo de la etiqueta de tarjeta",
+      "description": "Color de fondo del área de título de la tarjeta de servicio."
+    },
+    "card-pixel-width": {
+      "label": "Anchura de píxel de tarjeta",
+      "description": "Resolución de píxel horizontal para tarjetas de servicio."
+    },
+    "card-pixel-height": {
+      "label": "Altura de píxel de tarjeta",
+      "description": "Resolución de píxel vertical para tarjetas de servicio."
+    },
+    "nav-pixel-width": {
+      "label": "Anchura de píxel de navegación",
+      "description": "Resolución de píxel horizontal para tarjetas de navegación de sección."
+    },
+    "nav-pixel-height": {
+      "label": "Altura de píxel de navegación",
+      "description": "Resolución de píxel vertical para tarjetas de navegación de sección."
+    }
+  }
+}

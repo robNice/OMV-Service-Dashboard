@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Bubbles",
+    "description": "浮かぶ泡、泳ぐ魚、円形サービスアイランドを備えたバブルインスパイアのダッシュボードテーマ。"
+  },
+  "groups": {
+    "header": "ヘッダー",
+    "layout": "レイアウト",
+    "effects": "エフェクト"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "ダッシュボードタイトルを表示",
+      "description": "ヘッダーにポータルタイトルを表示します。"
+    },
+    "show-section-title": {
+      "label": "セクションタイトルを表示",
+      "description": "ヘッダーに現在のセクション名を表示します。"
+    },
+    "show-section-thumbnails": {
+      "label": "ヘッダーにセクションサムネイルを表示",
+      "description": "ヘッダーナビゲーションのセクションサムネイルを表示または非表示にします。"
+    },
+    "cards-per-row-desktop": {
+      "label": "デスクトップの1行あたりのカード数",
+      "description": "デスクトップの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "cards-per-row-tablet": {
+      "label": "タブレットの1行あたりのカード数",
+      "description": "タブレットの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "cards-per-row-mobile": {
+      "label": "モバイルの1行あたりのカード数",
+      "description": "モバイルの1行に表示するカード数。0で最大数を表示します。"
+    },
+    "bubble-count": {
+      "label": "泡の数",
+      "description": "背景に表示する浮かぶ泡の数。"
+    },
+    "fish-count": {
+      "label": "魚の数",
+      "description": "背景に表示する魚の数。"
+    },
+    "bubble-size-min": {
+      "label": "泡の最小サイズ",
+      "description": "泡の最小サイズ（ピクセル単位）。"
+    },
+    "bubble-size-max": {
+      "label": "泡の最大サイズ",
+      "description": "泡の最大サイズ（ピクセル単位）。"
+    },
+    "fish-size-min": {
+      "label": "魚の最小サイズ",
+      "description": "魚の最小サイズ（ピクセル単位）。"
+    },
+    "fish-size-max": {
+      "label": "魚の最大サイズ",
+      "description": "魚の最大サイズ（ピクセル単位）。"
+    }
+  }
+}

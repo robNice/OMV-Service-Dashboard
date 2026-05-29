@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "label": "Console",
+    "description": "Terminal âmbar com caixas ASCII, estilo de consola de espaço único e navegação por teclado."
+  },
+  "groups": {
+    "header": "Cabeçalho",
+    "layout": "Esquema",
+    "colors": "Cores"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título do painel",
+      "description": "Mostra o título do portal no cabeçalho."
+    },
+    "show-section-title": {
+      "label": "Mostrar título da secção",
+      "description": "Mostra o nome da secção atual no cabeçalho."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniaturas de secção no cabeçalho",
+      "description": "Mostra ou oculta miniaturas de secção na navegação do cabeçalho."
+    },
+    "cards-per-row-desktop": {
+      "label": "Cartões por linha no computador",
+      "description": "Número de cartões por linha no computador. Use 0 para o máximo possível."
+    },
+    "cards-per-row-tablet": {
+      "label": "Cartões por linha no tablet",
+      "description": "Número de cartões por linha em tablets. Use 0 para o máximo possível."
+    },
+    "cards-per-row-mobile": {
+      "label": "Cartões por linha no telemóvel",
+      "description": "Número de cartões por linha no telemóvel. Use 0 para o máximo possível."
+    },
+    "console-text-color": {
+      "label": "Cor do texto principal",
+      "description": "Cor do texto principal no tema de consola."
+    },
+    "console-accent-color": {
+      "label": "Cor de destaque",
+      "description": "Cor de destaque para prompts, cabeçalhos e realces."
+    },
+    "console-muted-text-color": {
+      "label": "Cor de texto atenuado",
+      "description": "Cor de texto secundário para rótulos e texto terminal decorativo."
+    }
+  }
+}

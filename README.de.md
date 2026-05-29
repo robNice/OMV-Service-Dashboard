@@ -196,10 +196,13 @@ theme.css
 drawer.css
 ```
 
-Themes können optional auch ein clientseitiges Skript mitbringen:
+Themes können optional auch ein clientseitiges Skript und Übersetzungen mitbringen:
 
 ```text
 theme.js
+i18n/en-GB.json   ← erforderlich, wenn meta.json i18n-Keys verwendet
+i18n/de-DE.json
+…
 ```
 
 Wenn für das aktive Theme eine Datei unter `/assets/themes/<theme-id>/theme.js` existiert, wird sie vom Frontend automatisch geladen.

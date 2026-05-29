@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "label": "Hacker",
+    "description": "Kararaltılmış arka planlar, IBM Plex Mono ve prompt tarzı panellerle tek renkli terminal teması."
+  },
+  "groups": {
+    "header": "Başlık",
+    "layout": "Düzen"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Gösterge paneli başlığını göster",
+      "description": "Portal başlığını başlık alanında gösterir."
+    },
+    "show-section-title": {
+      "label": "Bölüm başlığını göster",
+      "description": "Başlık alanında geçerli bölüm adını gösterir."
+    },
+    "show-section-thumbnails": {
+      "label": "Başlıkta bölüm küçük resimleri",
+      "description": "Başlık gezintisindeki bölüm küçük resimlerini gösterir veya gizler."
+    },
+    "cards-per-row-desktop": {
+      "label": "Masaüstünde satır başına kart",
+      "description": "Masaüstünde satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "cards-per-row-tablet": {
+      "label": "Tablette satır başına kart",
+      "description": "Tablette satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "cards-per-row-mobile": {
+      "label": "Mobilde satır başına kart",
+      "description": "Mobil ekranlarda satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    }
+  }
+}

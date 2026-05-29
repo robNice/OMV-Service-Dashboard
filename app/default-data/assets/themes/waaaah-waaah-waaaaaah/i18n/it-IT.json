@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Waaaah Waaah Waaaaaah",
+    "description": "Pannelli di legno consumati, bordi strappati e stile saloon polveroso con fori di proiettile."
+  },
+  "groups": {
+    "header": "Intestazione",
+    "layout": "Layout",
+    "bullet-holes": "Fori di proiettile"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostra titolo della dashboard",
+      "description": "Mostra il titolo del portale nell'intestazione."
+    },
+    "show-section-title": {
+      "label": "Mostra titolo sezione",
+      "description": "Mostra il nome della sezione corrente nell'intestazione."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniature sezione nell'intestazione",
+      "description": "Mostra o nasconde le miniature di sezione nella navigazione dell'intestazione."
+    },
+    "cards-per-row-desktop": {
+      "label": "Schede per riga su desktop",
+      "description": "Numero di schede per riga su desktop. Usare 0 per il massimo possibile."
+    },
+    "cards-per-row-tablet": {
+      "label": "Schede per riga su tablet",
+      "description": "Numero di schede per riga su tablet. Usare 0 per il massimo possibile."
+    },
+    "cards-per-row-mobile": {
+      "label": "Schede per riga su mobile",
+      "description": "Numero di schede per riga su mobile. Usare 0 per il massimo possibile."
+    },
+    "bullet-hole-count-min": {
+      "label": "Fori di proiettile da",
+      "description": "Numero minimo di fori di proiettile per scheda servizio."
+    },
+    "bullet-hole-count-max": {
+      "label": "Fori di proiettile a",
+      "description": "Numero massimo di fori di proiettile per scheda servizio."
+    },
+    "bullet-hole-chance-min": {
+      "label": "Probabilità fori da",
+      "description": "Probabilità minima in percentuale che una scheda abbia fori di proiettile."
+    },
+    "bullet-hole-chance-max": {
+      "label": "Probabilità fori a",
+      "description": "Probabilità massima in percentuale che una scheda abbia fori di proiettile."
+    },
+    "bullet-hole-size-min": {
+      "label": "Dimensione foro da",
+      "description": "Dimensione minima dei fori di proiettile in pixel."
+    },
+    "bullet-hole-size-max": {
+      "label": "Dimensione foro a",
+      "description": "Dimensione massima dei fori di proiettile in pixel."
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "label": "1984",
+    "description": "Retro-Computer-Theme mit Demo-Scene-Farbverlaeufen, gestuften Panel-Kanten und dezentem CRT-Stil."
+  },
+  "groups": {
+    "header": "Kopfzeile",
+    "layout": "Layout",
+    "drawer": "Info-Drawer",
+    "drawer-tab": "Drawer-Tab",
+    "status-chips": "Status-Chips",
+    "cards": "Kacheln",
+    "pixelation": "Pixelraster"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Dashboard-Titel anzeigen",
+      "description": "Zeigt den Portal-Titel in der Kopfzeile."
+    },
+    "show-section-title": {
+      "label": "Section-Titel anzeigen",
+      "description": "Zeigt den Namen der aktuellen Section in der Kopfzeile."
+    },
+    "show-section-thumbnails": {
+      "label": "Section-Vorschaubilder in der Kopfzeile anzeigen",
+      "description": "Zeigt oder versteckt die Section-Vorschaubilder in der Kopfzeilen-Navigation."
+    },
+    "cards-per-row-desktop": {
+      "label": "Kacheln pro Zeile auf Desktop",
+      "description": "Anzahl der Kacheln pro Zeile auf Desktop-Bildschirmen. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "cards-per-row-tablet": {
+      "label": "Kacheln pro Zeile auf Tablet",
+      "description": "Anzahl der Kacheln pro Zeile auf Tablet-Bildschirmen. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "cards-per-row-mobile": {
+      "label": "Kacheln pro Zeile auf Mobilgeräten",
+      "description": "Anzahl der Kacheln pro Zeile auf Mobilgeräten. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "info-drawer-bg": {
+      "label": "Hintergrundfarbe des Info-Drawers",
+      "description": "Hintergrundfarbe des 1984-Info-Drawers."
+    },
+    "drawer-text-color": {
+      "label": "Textfarbe im Drawer",
+      "description": "Primäre Textfarbe im Info-Drawer."
+    },
+    "drawer-muted-text-color": {
+      "label": "Gedämpfte Textfarbe im Drawer",
+      "description": "Sekundäre Textfarbe für Labels und weniger prominente Drawer-Texte."
+    },
+    "drawer-tab-bg": {
+      "label": "Tab-Hintergrundfarbe",
+      "description": "Hintergrundfarbe des geschlossenen Info-Drawer-Tabs."
+    },
+    "drawer-tab-hover-bg": {
+      "label": "Tab-Hintergrundfarbe bei Hover",
+      "description": "Hintergrundfarbe des Info-Drawer-Tabs bei Hover."
+    },
+    "drawer-tab-text-color": {
+      "label": "Tab-Textfarbe",
+      "description": "Textfarbe des geschlossenen Info-Drawer-Tabs."
+    },
+    "drawer-tab-top": {
+      "label": "Obere Tab-Position",
+      "description": "Vertikale Position des geschlossenen Info-Drawer-Tabs ab Oberkante."
+    },
+    "status-good-bg": {
+      "label": "Status gut: Hintergrund",
+      "description": "Hintergrundfarbe für positive Status-Chips."
+    },
+    "status-good-text": {
+      "label": "Status gut: Text",
+      "description": "Textfarbe für positive Status-Chips."
+    },
+    "status-warn-bg": {
+      "label": "Status Warnung: Hintergrund",
+      "description": "Hintergrundfarbe für Warnungs-Status-Chips."
+    },
+    "status-warn-text": {
+      "label": "Status Warnung: Text",
+      "description": "Textfarbe für Warnungs-Status-Chips."
+    },
+    "status-bad-bg": {
+      "label": "Status schlecht: Hintergrund",
+      "description": "Hintergrundfarbe für Fehler-Status-Chips."
+    },
+    "status-bad-text": {
+      "label": "Status schlecht: Text",
+      "description": "Textfarbe für Fehler-Status-Chips."
+    },
+    "status-neutral-bg": {
+      "label": "Status neutral: Hintergrund",
+      "description": "Hintergrundfarbe für neutrale Status-Chips."
+    },
+    "status-neutral-text": {
+      "label": "Status neutral: Text",
+      "description": "Textfarbe für neutrale Status-Chips."
+    },
+    "status-up-bg": {
+      "label": "Container läuft: Hintergrund",
+      "description": "Hintergrundfarbe für laufende Container-Chips."
+    },
+    "status-up-text": {
+      "label": "Container läuft: Text",
+      "description": "Textfarbe für laufende Container-Chips."
+    },
+    "status-down-bg": {
+      "label": "Container gestoppt: Hintergrund",
+      "description": "Hintergrundfarbe für gestoppte Container-Chips."
+    },
+    "status-down-text": {
+      "label": "Container gestoppt: Text",
+      "description": "Textfarbe für gestoppte Container-Chips."
+    },
+    "progress-bar-color": {
+      "label": "Fortschrittsbalken-Farbe",
+      "description": "Füllfarbe für RAM- und Speicherbelegungsbalken."
+    },
+    "card-label-text-color": {
+      "label": "Textfarbe der Kachelbeschriftung",
+      "description": "Textfarbe des Titelbereichs einer Dienst-Kachel."
+    },
+    "card-label-bg-color": {
+      "label": "Hintergrundfarbe der Kachelbeschriftung",
+      "description": "Hintergrundfarbe des Titelbereichs einer Dienst-Kachel."
+    },
+    "card-pixel-width": {
+      "label": "Kachel-Pixelbreite",
+      "description": "Horizontale Pixelauflösung für Dienst-Kacheln."
+    },
+    "card-pixel-height": {
+      "label": "Kachel-Pixelhoehe",
+      "description": "Vertikale Pixelauflösung für Dienst-Kacheln."
+    },
+    "nav-pixel-width": {
+      "label": "Navigations-Pixelbreite",
+      "description": "Horizontale Pixelauflösung für Section-Navigationskacheln."
+    },
+    "nav-pixel-height": {
+      "label": "Navigations-Pixelhoehe",
+      "description": "Vertikale Pixelauflösung für Section-Navigationskacheln."
+    }
+  }
+}

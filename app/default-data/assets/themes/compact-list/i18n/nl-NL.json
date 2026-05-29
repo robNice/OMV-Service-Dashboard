@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "label": "Compact List",
+    "description": "Compacte lijstindeling voor sneller scannen met een lichtere paneelbehandeling."
+  },
+  "groups": {
+    "header": "Header",
+    "layout": "Indeling",
+    "colors": "Kleuren"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Dashboardtitel tonen",
+      "description": "Toont de portaaltitel in de header."
+    },
+    "show-section-title": {
+      "label": "Sectietitel tonen",
+      "description": "Toont de naam van de huidige sectie in de header."
+    },
+    "show-section-thumbnails": {
+      "label": "Sectie-thumbnails in header tonen",
+      "description": "Toont of verbergt sectie-thumbnails in de headernavigatie."
+    },
+    "surface-bg-color": {
+      "label": "Achtergrondkleur kaarten en header",
+      "description": "Achtergrondkleur voor kaarten en de paginakop."
+    },
+    "surface-text-color": {
+      "label": "Tekstkleur kaarten en header",
+      "description": "Tekstkleur voor kaarten en de paginakop."
+    }
+  }
+}

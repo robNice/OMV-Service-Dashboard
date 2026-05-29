@@ -37,9 +37,9 @@
     "minutesShort": "min",
     "hoursShort": "h",
     "loadingTitle": "A carregar dados do sistema",
-    "loadingBody": "O painel de informa??es ser? preenchido automaticamente assim que o primeiro pedido de estado em tempo real estiver conclu?do.",
-    "refreshingTitle": "Est?o a ser mostrados dados do sistema em cache",
-    "refreshingBody": "Os valores apresentados v?m do ?ltimo snapshot no servidor. Os dados em tempo real est?o a ser atualizados em segundo plano."
+    "loadingBody": "O painel de informações será preenchido automaticamente assim que o primeiro pedido de estado em tempo real estiver concluído.",
+    "refreshingTitle": "Estão a ser mostrados dados do sistema em cache",
+    "refreshingBody": "Os valores apresentados vêm do último snapshot no servidor. Os dados em tempo real estão a ser atualizados em segundo plano."
   },
   "tooltip": {
     "infodrawer": "Abrir/fechar informações do sistema",
@@ -77,20 +77,20 @@
       "cardimage": "Imagem do cartão"
     },
     "theme": {
-      "title": "Select theme",
-      "desc": "Choose the layout theme for the public dashboard",
-      "available": "Available themes",
-      "hint": "Themes affect the public dashboard only, not the admin area.",
-      "loading": "Loading themes...",
-      "current": "Current",
-      "version": "Version",
-      "empty": "No themes found",
+      "title": "Selecionar tema",
+      "desc": "Escolha o tema de apresentação para o dashboard público",
+      "available": "Temas disponíveis",
+      "hint": "Os temas afetam apenas o dashboard público, não a área de administração.",
+      "loading": "A carregar temas...",
+      "current": "Atual",
+      "version": "Versão",
+      "empty": "Nenhum tema encontrado",
       "settings": {
-        "title": "Theme settings",
-        "empty": "This theme has no configurable settings.",
-        "reset": "Load defaults",
+        "title": "Definições do tema",
+        "empty": "Este tema não tem definições configuráveis.",
+        "reset": "Carregar predefinições",
         "noDescription": "",
-        "count": "settings"
+        "count": "definições"
       }
     },
     "config": {
@@ -100,19 +100,19 @@
       "hint": "Estes valores afetam o comportamento global do dashboard. As alterações de porta só produzem efeito após reiniciar.",
       "portHint": "Altere a porta apenas se souber exatamente o que está a fazer. Uma porta incorreta pode tornar o dashboard inacessível após o reinício e também pode exigir ajustes no proxy reverso, Docker ou firewall.",
       "portConfirmTitle": "Confirmar alteração de porta",
-      "portConfirmBody": "Alterou a porta do dashboard. Esta altera��o s� ser� aplicada ap�s reiniciar. Se a nova porta estiver incorreta ou n�o estiver exposta, o dashboard pode deixar de estar acess�vel. Pretende continuar mesmo assim?",
+      "portConfirmBody": "Alterou a porta do dashboard. Esta alteração só será aplicada após reiniciar. Se a nova porta estiver incorreta ou não estiver exposta, o dashboard pode deixar de estar acessível. Pretende continuar mesmo assim?",
       "fields": {
         "title": "Título do dashboard",
         "defaultLang": "Idioma de fallback",
         "infoDrawerRefreshInterval": "Intervalo de atualização do painel de informação (segundos)",
         "port": "Porta",
-        "serviceLinkTarget": "Open service links",
-        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+        "serviceLinkTarget": "Abrir ligações de serviço",
+        "serviceLinkTargetHint": "Controla se os cartões de serviço abrem no mesmo separador ou num novo separador."
       },
       "options": {
         "serviceLinkTarget": {
-          "newTab": "In new tab",
-          "sameTab": "In same tab"
+          "newTab": "Em novo separador",
+          "sameTab": "No mesmo separador"
         }
       }
     },

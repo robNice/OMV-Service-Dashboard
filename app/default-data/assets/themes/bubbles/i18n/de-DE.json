@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Bubbles",
+    "description": "Blasen-inspiriertes Dashboard-Theme mit schwebenden Blasen, vorbeiziehenden Fischen und runden Service-Inseln."
+  },
+  "groups": {
+    "header": "Kopfzeile",
+    "layout": "Layout",
+    "effects": "Effekte"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Dashboard-Titel anzeigen",
+      "description": "Zeigt den Portal-Titel in der Kopfzeile."
+    },
+    "show-section-title": {
+      "label": "Section-Titel anzeigen",
+      "description": "Zeigt den Namen der aktuellen Section in der Kopfzeile."
+    },
+    "show-section-thumbnails": {
+      "label": "Section-Vorschaubilder in der Kopfzeile anzeigen",
+      "description": "Zeigt oder versteckt die Section-Vorschaubilder in der Kopfzeilen-Navigation."
+    },
+    "cards-per-row-desktop": {
+      "label": "Kacheln pro Zeile auf Desktop",
+      "description": "Anzahl der Kacheln pro Zeile auf Desktop-Bildschirmen. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "cards-per-row-tablet": {
+      "label": "Kacheln pro Zeile auf Tablet",
+      "description": "Anzahl der Kacheln pro Zeile auf Tablet-Bildschirmen. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "cards-per-row-mobile": {
+      "label": "Kacheln pro Zeile auf Mobilgeräten",
+      "description": "Anzahl der Kacheln pro Zeile auf Mobilgeräten. 0 zeigt so viele Kacheln wie möglich."
+    },
+    "bubble-count": {
+      "label": "Anzahl der Blasen",
+      "description": "Anzahl der animierten Hintergrundblasen."
+    },
+    "fish-count": {
+      "label": "Anzahl der Fische",
+      "description": "Anzahl der vorbeiziehenden Fische."
+    },
+    "bubble-size-min": {
+      "label": "Blasengröße von",
+      "description": "Kleinste Größe der animierten Blasen."
+    },
+    "bubble-size-max": {
+      "label": "Blasengröße bis",
+      "description": "Größte Größe der animierten Blasen."
+    },
+    "fish-size-min": {
+      "label": "Fischgröße von",
+      "description": "Kleinste Größe der animierten Fische."
+    },
+    "fish-size-max": {
+      "label": "Fischgröße bis",
+      "description": "Größte Größe der animierten Fische."
+    }
+  }
+}

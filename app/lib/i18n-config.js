@@ -40,7 +40,8 @@ const CUSTOM_DEFAULTS = Object.freeze({
             "pt-BR",
             "pt-PT",
             "tr-TR",
-            "ja-JP"
+            "ja-JP",
+            "uk-UA"
         ],
         "fallbacks": {
             "en": "en-GB",
@@ -62,7 +63,9 @@ const CUSTOM_DEFAULTS = Object.freeze({
 
             "tr": "tr-TR",
 
-            "ja": "ja-JP"
+            "ja": "ja-JP",
+
+            "uk": "uk-UA"
         }
     }
 );

@@ -1,32 +1,46 @@
 {
   "id": "compact-list",
-  "label": "Compact List",
-  "description": "Dense list layout for faster scanning with a lighter drawer treatment.",
-  "version": "1.3.0",
-  "author": "rob",
-  "authorUrl": "https://github.com/robNice",
+  "labelKey": "meta.label",
+  "descriptionKey": "meta.description",
+  "version": "1.4.0",
   "settings": [
     {
+      "id": "show-dashboard-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-dashboard-title.label",
+      "descriptionKey": "settings.show-dashboard-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "show-section-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-section-title.label",
+      "descriptionKey": "settings.show-section-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "id": "show-section-thumbnails",
-      "group": "Layout",
-      "label": "Show section thumbnails in header",
-      "description": "Show or hide section thumbnails in the header navigation.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.show-section-thumbnails.label",
+      "descriptionKey": "settings.show-section-thumbnails.description",
       "type": "boolean",
       "default": true
     },
     {
       "id": "surface-bg-color",
-      "group": "Colors",
-      "label": "Card and header background color",
-      "description": "Background color used for cards and the page header.",
+      "groupKey": "groups.colors",
+      "labelKey": "settings.surface-bg-color.label",
+      "descriptionKey": "settings.surface-bg-color.description",
       "type": "color",
       "default": "#ffffff"
     },
     {
       "id": "surface-text-color",
-      "group": "Colors",
-      "label": "Card and header text color",
-      "description": "Text color used for cards and the page header.",
+      "groupKey": "groups.colors",
+      "labelKey": "settings.surface-text-color.label",
+      "descriptionKey": "settings.surface-text-color.description",
       "type": "color",
       "default": "#0f172a"
     }

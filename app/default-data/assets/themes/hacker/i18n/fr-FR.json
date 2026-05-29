@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "label": "Hacker",
+    "description": "Thème de terminal monochrome avec des fonds assombris, IBM Plex Mono et des panneaux style invite."
+  },
+  "groups": {
+    "header": "En-tête",
+    "layout": "Disposition"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Afficher le titre du tableau de bord",
+      "description": "Affiche le titre du portail dans l'en-tête."
+    },
+    "show-section-title": {
+      "label": "Afficher le titre de la section",
+      "description": "Affiche le nom de la section actuelle dans l'en-tête."
+    },
+    "show-section-thumbnails": {
+      "label": "Vignettes de section dans l'en-tête",
+      "description": "Affiche ou masque les vignettes de section dans la navigation de l'en-tête."
+    },
+    "cards-per-row-desktop": {
+      "label": "Cartes par ligne (bureau)",
+      "description": "Nombre de cartes par ligne sur bureau. Utilisez 0 pour le maximum possible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Cartes par ligne (tablette)",
+      "description": "Nombre de cartes par ligne sur tablette. Utilisez 0 pour le maximum possible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Cartes par ligne (mobile)",
+      "description": "Nombre de cartes par ligne sur mobile. Utilisez 0 pour le maximum possible."
+    }
+  }
+}

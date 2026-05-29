@@ -1,32 +1,46 @@
 {
   "id": "spin",
-  "label": "Spin",
-  "description": "Cards and section thumbnails as an animated 3D coverflow carousel with shadow and reflection effects.",
+  "labelKey": "meta.label",
+  "descriptionKey": "meta.description",
   "version": "1.0.0",
-  "author": "rob",
-  "authorUrl": "https://github.com/robNice",
   "settings": [
     {
+      "id": "show-dashboard-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-dashboard-title.label",
+      "descriptionKey": "settings.show-dashboard-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "show-section-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-section-title.label",
+      "descriptionKey": "settings.show-section-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "id": "show-reflection",
-      "group": "Effects",
-      "label": "Card reflection",
-      "description": "Show a mirror reflection beneath each card.",
+      "groupKey": "groups.effects",
+      "labelKey": "settings.show-reflection.label",
+      "descriptionKey": "settings.show-reflection.description",
       "type": "boolean",
       "default": true
     },
     {
       "id": "autoplay",
-      "group": "Carousel",
-      "label": "Auto-rotate",
-      "description": "Automatically advance the carousel every few seconds.",
+      "groupKey": "groups.carousel",
+      "labelKey": "settings.autoplay.label",
+      "descriptionKey": "settings.autoplay.description",
       "type": "boolean",
       "default": false
     },
     {
       "id": "accent-color",
-      "group": "Colors",
-      "label": "Accent color",
-      "description": "Color used for active indicators, buttons, and highlights.",
+      "groupKey": "groups.colors",
+      "labelKey": "settings.accent-color.label",
+      "descriptionKey": "settings.accent-color.description",
       "type": "color",
       "default": "#7c6af7"
     }

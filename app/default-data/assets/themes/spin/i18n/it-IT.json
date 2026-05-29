@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "label": "Spin",
+    "description": "Schede e miniature di sezione come carosello 3D animato con effetti ombra e riflesso."
+  },
+  "groups": {
+    "header": "Intestazione",
+    "effects": "Effetti",
+    "carousel": "Carosello",
+    "colors": "Colori"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostra titolo della dashboard",
+      "description": "Mostra il titolo del portale nell'intestazione."
+    },
+    "show-section-title": {
+      "label": "Mostra titolo sezione",
+      "description": "Mostra il nome della sezione corrente nell'intestazione."
+    },
+    "show-reflection": {
+      "label": "Riflesso scheda",
+      "description": "Mostra un riflesso a specchio sotto ogni scheda."
+    },
+    "autoplay": {
+      "label": "Rotazione automatica",
+      "description": "Avanza automaticamente il carosello ogni pochi secondi."
+    },
+    "accent-color": {
+      "label": "Colore accento",
+      "description": "Colore per gli indicatori attivi, pulsanti e evidenziazioni."
+    }
+  }
+}

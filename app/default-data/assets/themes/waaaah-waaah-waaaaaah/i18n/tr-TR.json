@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Waaaah Waaah Waaaaaah",
+    "description": "Yıpranmış ahşap paneller, yırtık kenarlar ve kurşun delikleriyle tozlu saloon tarzı."
+  },
+  "groups": {
+    "header": "Başlık",
+    "layout": "Düzen",
+    "bullet-holes": "Kurşun delikleri"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Gösterge paneli başlığını göster",
+      "description": "Portal başlığını başlık alanında gösterir."
+    },
+    "show-section-title": {
+      "label": "Bölüm başlığını göster",
+      "description": "Başlık alanında geçerli bölüm adını gösterir."
+    },
+    "show-section-thumbnails": {
+      "label": "Başlıkta bölüm küçük resimleri",
+      "description": "Başlık gezintisindeki bölüm küçük resimlerini gösterir veya gizler."
+    },
+    "cards-per-row-desktop": {
+      "label": "Masaüstünde satır başına kart",
+      "description": "Masaüstünde satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "cards-per-row-tablet": {
+      "label": "Tablette satır başına kart",
+      "description": "Tablette satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "cards-per-row-mobile": {
+      "label": "Mobilde satır başına kart",
+      "description": "Mobil ekranlarda satır başına gösterilen kart sayısı. Maksimum için 0 kullanın."
+    },
+    "bullet-hole-count-min": {
+      "label": "Kurşun deliği sayısı (min)",
+      "description": "Her hizmet kartı başına minimum kurşun deliği sayısı."
+    },
+    "bullet-hole-count-max": {
+      "label": "Kurşun deliği sayısı (maks)",
+      "description": "Her hizmet kartı başına maksimum kurşun deliği sayısı."
+    },
+    "bullet-hole-chance-min": {
+      "label": "Kurşun deliği ihtimali (min)",
+      "description": "Bir hizmet kartının kurşun deliği alma minimum ihtimali (yüzde)."
+    },
+    "bullet-hole-chance-max": {
+      "label": "Kurşun deliği ihtimali (maks)",
+      "description": "Bir hizmet kartının kurşun deliği alma maksimum ihtimali (yüzde)."
+    },
+    "bullet-hole-size-min": {
+      "label": "Kurşun deliği boyutu (min)",
+      "description": "Minimum kurşun deliği boyutu piksel cinsinden."
+    },
+    "bullet-hole-size-max": {
+      "label": "Kurşun deliği boyutu (maks)",
+      "description": "Maksimum kurşun deliği boyutu piksel cinsinden."
+    }
+  }
+}

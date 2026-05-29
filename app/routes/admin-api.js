@@ -47,7 +47,7 @@ function createAdminApiRouter({
         res.json({
             currentTheme: normalizeTheme(config.theme),
             themeSettings: config.themeSettings || {},
-            themes: listThemes()
+            themes: listThemes({locale: req.getLocale()})
         });
     });
 

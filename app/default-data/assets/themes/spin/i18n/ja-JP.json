@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "label": "Spin",
+    "description": "影と反射エフェクトを持つアニメーション3Dカバーフローカルーセルとしてのカードとセクションサムネイル。"
+  },
+  "groups": {
+    "header": "ヘッダー",
+    "effects": "エフェクト",
+    "carousel": "カルーセル",
+    "colors": "カラー"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "ダッシュボードタイトルを表示",
+      "description": "ヘッダーにポータルタイトルを表示します。"
+    },
+    "show-section-title": {
+      "label": "セクションタイトルを表示",
+      "description": "ヘッダーに現在のセクション名を表示します。"
+    },
+    "show-reflection": {
+      "label": "カードの反射",
+      "description": "各カードの下にミラー反射を表示します。"
+    },
+    "autoplay": {
+      "label": "自動回転",
+      "description": "数秒ごとにカルーセルを自動的に進めます。"
+    },
+    "accent-color": {
+      "label": "アクセントカラー",
+      "description": "アクティブインジケーター、ボタン、ハイライトに使用する色。"
+    }
+  }
+}

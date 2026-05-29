@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Bubbles",
+    "description": "Bellend dashboardthema met drijvende bellen, voorbijzwemmende vissen en ronde service-eilanden."
+  },
+  "groups": {
+    "header": "Header",
+    "layout": "Indeling",
+    "effects": "Effecten"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Dashboardtitel tonen",
+      "description": "Toont de portaaltitel in de header."
+    },
+    "show-section-title": {
+      "label": "Sectietitel tonen",
+      "description": "Toont de naam van de huidige sectie in de header."
+    },
+    "show-section-thumbnails": {
+      "label": "Sectie-thumbnails in header tonen",
+      "description": "Toont of verbergt sectie-thumbnails in de headernavigatie."
+    },
+    "cards-per-row-desktop": {
+      "label": "Kaarten per rij op desktop",
+      "description": "Aantal kaarten per rij op desktop. Gebruik 0 voor het maximum."
+    },
+    "cards-per-row-tablet": {
+      "label": "Kaarten per rij op tablet",
+      "description": "Aantal kaarten per rij op tablet. Gebruik 0 voor het maximum."
+    },
+    "cards-per-row-mobile": {
+      "label": "Kaarten per rij op mobiel",
+      "description": "Aantal kaarten per rij op mobiel. Gebruik 0 voor het maximum."
+    },
+    "bubble-count": {
+      "label": "Aantal bellen",
+      "description": "Aantal drijvende bellen in de achtergrond."
+    },
+    "fish-count": {
+      "label": "Aantal vissen",
+      "description": "Aantal geanimeerde vissen in de achtergrond."
+    },
+    "bubble-size-min": {
+      "label": "Belgrootte van",
+      "description": "Minimale belgrootte in pixels."
+    },
+    "bubble-size-max": {
+      "label": "Belgrootte tot",
+      "description": "Maximale belgrootte in pixels."
+    },
+    "fish-size-min": {
+      "label": "Visgrootte van",
+      "description": "Minimale visgrootte in pixels."
+    },
+    "fish-size-max": {
+      "label": "Visgrootte tot",
+      "description": "Maximale visgrootte in pixels."
+    }
+  }
+}

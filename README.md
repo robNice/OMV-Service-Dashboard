@@ -194,10 +194,13 @@ theme.css
 drawer.css
 ```
 
-Themes may also provide an optional client-side script:
+Themes may also provide an optional client-side script and optional translations:
 
 ```text
 theme.js
+i18n/en-GB.json   ← required if using i18n keys in meta.json
+i18n/de-DE.json
+…
 ```
 
 If `/assets/themes/<theme-id>/theme.js` exists for the active theme, the frontend loads it automatically.

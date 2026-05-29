@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "label": "Compact List",
+    "description": "Layout de lista compacta para digitalização mais rápida com um painel mais leve."
+  },
+  "groups": {
+    "header": "Cabeçalho",
+    "layout": "Esquema",
+    "colors": "Cores"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Mostrar título do painel",
+      "description": "Mostra o título do portal no cabeçalho."
+    },
+    "show-section-title": {
+      "label": "Mostrar título da secção",
+      "description": "Mostra o nome da secção atual no cabeçalho."
+    },
+    "show-section-thumbnails": {
+      "label": "Miniaturas de secção no cabeçalho",
+      "description": "Mostra ou oculta miniaturas de secção na navegação do cabeçalho."
+    },
+    "surface-bg-color": {
+      "label": "Cor de fundo de cartões e cabeçalho",
+      "description": "Cor de fundo para cartões e o cabeçalho da página."
+    },
+    "surface-text-color": {
+      "label": "Cor de texto de cartões e cabeçalho",
+      "description": "Cor de texto para cartões e o cabeçalho da página."
+    }
+  }
+}

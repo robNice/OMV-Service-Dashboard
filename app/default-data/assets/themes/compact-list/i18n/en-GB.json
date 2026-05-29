@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "label": "Compact List",
+    "description": "Dense list layout for faster scanning with a lighter drawer treatment."
+  },
+  "groups": {
+    "header": "Header",
+    "layout": "Layout",
+    "colors": "Colors"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Show dashboard title",
+      "description": "Show the portal title in the header."
+    },
+    "show-section-title": {
+      "label": "Show section title",
+      "description": "Show the name of the current section in the header."
+    },
+    "show-section-thumbnails": {
+      "label": "Show section thumbnails in header",
+      "description": "Show or hide section thumbnails in the header navigation."
+    },
+    "surface-bg-color": {
+      "label": "Card and header background color",
+      "description": "Background color used for cards and the page header."
+    },
+    "surface-text-color": {
+      "label": "Card and header text color",
+      "description": "Text color used for cards and the page header."
+    }
+  }
+}

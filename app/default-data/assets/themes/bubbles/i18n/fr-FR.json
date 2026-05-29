@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "label": "Bubbles",
+    "description": "Thème inspiré des bulles avec des bulles flottantes, des poissons animés et des îles de service circulaires."
+  },
+  "groups": {
+    "header": "En-tête",
+    "layout": "Disposition",
+    "effects": "Effets"
+  },
+  "settings": {
+    "show-dashboard-title": {
+      "label": "Afficher le titre du tableau de bord",
+      "description": "Affiche le titre du portail dans l'en-tête."
+    },
+    "show-section-title": {
+      "label": "Afficher le titre de la section",
+      "description": "Affiche le nom de la section actuelle dans l'en-tête."
+    },
+    "show-section-thumbnails": {
+      "label": "Vignettes de section dans l'en-tête",
+      "description": "Affiche ou masque les vignettes de section dans la navigation de l'en-tête."
+    },
+    "cards-per-row-desktop": {
+      "label": "Cartes par ligne (bureau)",
+      "description": "Nombre de cartes par ligne sur bureau. Utilisez 0 pour le maximum possible."
+    },
+    "cards-per-row-tablet": {
+      "label": "Cartes par ligne (tablette)",
+      "description": "Nombre de cartes par ligne sur tablette. Utilisez 0 pour le maximum possible."
+    },
+    "cards-per-row-mobile": {
+      "label": "Cartes par ligne (mobile)",
+      "description": "Nombre de cartes par ligne sur mobile. Utilisez 0 pour le maximum possible."
+    },
+    "bubble-count": {
+      "label": "Nombre de bulles",
+      "description": "Nombre de bulles flottantes dans l'arrière-plan."
+    },
+    "fish-count": {
+      "label": "Nombre de poissons",
+      "description": "Nombre de poissons animés dans l'arrière-plan."
+    },
+    "bubble-size-min": {
+      "label": "Taille de bulle min.",
+      "description": "Taille minimale de bulle en pixels."
+    },
+    "bubble-size-max": {
+      "label": "Taille de bulle max.",
+      "description": "Taille maximale de bulle en pixels."
+    },
+    "fish-size-min": {
+      "label": "Taille de poisson min.",
+      "description": "Taille minimale de poisson en pixels."
+    },
+    "fish-size-max": {
+      "label": "Taille de poisson max.",
+      "description": "Taille maximale de poisson en pixels."
+    }
+  }
+}

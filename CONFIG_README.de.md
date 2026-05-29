@@ -29,6 +29,11 @@
       - [`select`](#select)
       - [`radio`](#radio)
       - [`boolean`](#boolean)
+    - [Theme-i18n (`i18n/`)](#theme-i18n-i18n)
+      - [Dateinamen](#dateinamen)
+      - [Struktur](#struktur)
+      - [Verknuepfung in `meta.json`](#verknuepfung-in-metajson)
+      - [Wie Uebersetzungen CSS und JS beeinflussen](#wie-uebersetzungen-css-und-js-beeinflussen)
     - [`theme.css`](#themecss)
     - [`drawer.css`](#drawercss)
     - [`theme.js` (optional)](#themejs-optional)
@@ -264,10 +269,13 @@ Die folgende Verzeichnisstruktur gilt, wenn du im User-Config-Verzeichnis ein ei
 ├─ theme.css
 ├─ drawer.css
 ├─ theme.js
-└─ assets/
+├─ assets/
+└─ i18n/
+   ├─ en-GB.json
+   └─ de-DE.json
 ```
 
-`theme.js` und `assets/` sind optional. `assets/` kann theme-lokale Fonts oder Bilder enthalten, die von der Theme-CSS referenziert werden.
+`theme.js`, `assets/` und `i18n/` sind optional. `assets/` kann theme-lokale Fonts oder Bilder enthalten, die von der Theme-CSS referenziert werden.
 
 ---
 
@@ -559,6 +567,106 @@ Typische Einsätze:
 - Umschalter
 - Ein/Aus-Flags
 - optionale Effekte
+
+#### Theme-i18n (`i18n/`)
+
+Themes können übersetzte Labels und Beschreibungen für alle Admin-Bereich-Strings mitliefern. Die Übersetzungsdateien liegen in einem Unterverzeichnis `i18n/` innerhalb des Theme-Ordners.
+
+##### Dateinamen
+
+Jede Datei repräsentiert eine Sprache und muss wie folgt benannt werden: `<locale>.json`:
+
+```text
+i18n/en-GB.json   ← Pflicht-Fallback
+i18n/de-DE.json
+i18n/fr-FR.json
+…
+```
+
+**Mindestens `en-GB.json` muss vorhanden sein.** Das Backend fällt automatisch auf Englisch zurück, wenn keine Datei zur Nutzersprache passt.
+
+##### Struktur
+
+Die Datei hat drei Hauptbereiche:
+
+```json
+{
+  "meta": {
+    "label": "Theme-Name in der Admin-Liste",
+    "description": "Kurze Beschreibung des Themes in der Admin-Karte."
+  },
+  "groups": {
+    "header": "Kopfzeile",
+    "layout": "Layout",
+    "colors": "Farben"
+  },
+  "settings": {
+    "accent-color": {
+      "label": "Akzentfarbe",
+      "description": "Farbe für aktive Indikatoren und Hervorhebungen."
+    }
+  }
+}
+```
+
+- `meta.label` / `meta.description` — übersetzter Theme-Name und Beschreibung
+- `groups.<group-id>` — übersetzte Gruppenüberschriften im Einstellungs-Modal
+- `settings.<setting-id>.label` / `.description` — übersetztes Label und Hilfstext für jedes Setting
+
+##### Verknuepfung in `meta.json`
+
+Um i18n für ein Setting zu aktivieren, ersetze die direkten Felder `label`, `description` und `group` durch `labelKey`, `descriptionKey` und `groupKey`. Jeder Key ist ein Punkt-Pfad in die i18n-Datei:
+
+```json
+{
+  "id": "my-theme",
+  "labelKey": "meta.label",
+  "descriptionKey": "meta.description",
+  "settings": [
+    {
+      "id": "accent-color",
+      "groupKey": "groups.colors",
+      "labelKey": "settings.accent-color.label",
+      "descriptionKey": "settings.accent-color.description",
+      "type": "color",
+      "default": "#60a5fa"
+    }
+  ]
+}
+```
+
+Fehlt ein Key in der aktiven Sprachdatei, fällt das Backend automatisch auf `en-GB.json` zurück und danach auf das direkte `label`/`description`-Feld in `meta.json`.
+
+##### Wie Uebersetzungen CSS und JS beeinflussen
+
+Die i18n-Strings beeinflussen ausschließlich **Labels und Beschreibungen im Admin-Bereich**. Sie ändern nichts daran, wie Settings im Frontend angewendet werden.
+
+Setting-Werte werden im Frontend immer so übergeben:
+
+- CSS-Variablen: `--themesetting-<setting-id>` (z. B. `--themesetting-accent-color`)
+- HTML-Datenattribute an `<body>`: `data-themesetting-<setting-id>` (z. B. `data-themesetting-card-style`)
+- JavaScript: `settings['<setting-id>']` in `window.OMVTheme.init({ settings })`
+
+Diese werden aus Setting-**IDs und Werten** abgeleitet, nicht aus den übersetzten Labels.
+
+```css
+/* Setting-Wert per CSS-Variable verwenden – sprachunabhängig */
+body {
+  --my-accent: var(--themesetting-accent-color, #60a5fa);
+}
+```
+
+```js
+window.OMVTheme = {
+  init({ settings }) {
+    /* Setting-Wert ist unabhängig von der Nutzersprache immer gleich */
+    const color = settings['accent-color'] || '#60a5fa';
+    document.documentElement.style.setProperty('--my-accent', color);
+  }
+};
+```
+
+---
 
 #### `theme.css`
 

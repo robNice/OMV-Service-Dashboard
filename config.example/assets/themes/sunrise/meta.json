@@ -1,46 +1,64 @@
 {
   "id": "sunrise",
-  "label": "Sunrise Example",
-  "description": "Example theme demonstrating CSS overrides and a small theme.js enhancement.",
+  "labelKey": "meta.label",
+  "descriptionKey": "meta.description",
   "version": "1.3.0",
+  "author": "FEEL FREE TO CHANGE THIS TO YOUR NAME",
+  "authorUrl": "FEEL FREE TO CHANGE THIS TO YOUR SITE URL",
   "settings": [
     {
+      "id": "show-dashboard-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-dashboard-title.label",
+      "descriptionKey": "settings.show-dashboard-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "show-section-title",
+      "groupKey": "groups.header",
+      "labelKey": "settings.show-section-title.label",
+      "descriptionKey": "settings.show-section-title.description",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "id": "show-section-thumbnails",
-      "group": "Layout",
-      "label": "Show section thumbnails in header",
-      "description": "Show or hide section thumbnails in the header navigation.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.show-section-thumbnails.label",
+      "descriptionKey": "settings.show-section-thumbnails.description",
       "type": "boolean",
       "default": true
     },
     {
       "id": "cards-per-row-desktop",
-      "group": "Layout",
-      "label": "Cards per row on desktop",
-      "description": "Number of cards shown per row on desktop screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-desktop.label",
+      "descriptionKey": "settings.cards-per-row-desktop.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-tablet",
-      "group": "Layout",
-      "label": "Cards per row on tablet",
-      "description": "Number of cards shown per row on tablet screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-tablet.label",
+      "descriptionKey": "settings.cards-per-row-tablet.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "cards-per-row-mobile",
-      "group": "Layout",
-      "label": "Cards per row on mobile",
-      "description": "Number of cards shown per row on mobile screens. Use 0 to fit as many cards as possible.",
+      "groupKey": "groups.layout",
+      "labelKey": "settings.cards-per-row-mobile.label",
+      "descriptionKey": "settings.cards-per-row-mobile.description",
       "type": "number",
       "default": 0
     },
     {
       "id": "accent-color",
-      "group": "Colors",
-      "label": "Accent color",
-      "description": "Primary accent used for active navigation, drawer headings and badges.",
+      "groupKey": "groups.colors",
+      "labelKey": "settings.accent-color.label",
+      "descriptionKey": "settings.accent-color.description",
       "type": "color",
       "default": "#ff8a3d"
     }

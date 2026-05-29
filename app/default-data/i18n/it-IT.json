@@ -37,7 +37,7 @@
     "minutesShort": "min",
     "hoursShort": "h",
     "loadingTitle": "Caricamento dei dati di sistema",
-    "loadingBody": "Il pannello informazioni si popoler? automaticamente non appena sar? completata la prima richiesta di stato in tempo reale.",
+    "loadingBody": "Il pannello informazioni si popolerà automaticamente non appena sarà completata la prima richiesta di stato in tempo reale.",
     "refreshingTitle": "Sono visualizzati dati di sistema memorizzati nella cache",
     "refreshingBody": "I valori mostrati provengono dall'ultima istantanea lato server. I dati in tempo reale vengono aggiornati in background."
   },
@@ -77,20 +77,20 @@
       "cardimage": "Immagine card"
     },
     "theme": {
-      "title": "Select theme",
-      "desc": "Choose the layout theme for the public dashboard",
-      "available": "Available themes",
-      "hint": "Themes affect the public dashboard only, not the admin area.",
-      "loading": "Loading themes...",
-      "current": "Current",
-      "version": "Version",
-      "empty": "No themes found",
+      "title": "Seleziona tema",
+      "desc": "Scegli il tema di layout per il dashboard pubblico",
+      "available": "Temi disponibili",
+      "hint": "I temi riguardano solo il dashboard pubblico, non l'area di amministrazione.",
+      "loading": "Caricamento temi...",
+      "current": "Attuale",
+      "version": "Versione",
+      "empty": "Nessun tema trovato",
       "settings": {
-        "title": "Theme settings",
-        "empty": "This theme has no configurable settings.",
-        "reset": "Load defaults",
+        "title": "Impostazioni del tema",
+        "empty": "Questo tema non ha impostazioni configurabili.",
+        "reset": "Carica valori predefiniti",
         "noDescription": "",
-        "count": "settings"
+        "count": "impostazioni"
       }
     },
     "config": {
@@ -100,19 +100,19 @@
       "hint": "Questi valori influenzano il comportamento globale della dashboard. Le modifiche alla porta diventano effettive solo dopo un riavvio.",
       "portHint": "Modifica la porta solo se sai esattamente cosa stai facendo. Una porta errata può rendere la dashboard irraggiungibile dopo il riavvio e potrebbe richiedere anche modifiche a reverse proxy, Docker o firewall.",
       "portConfirmTitle": "Conferma modifica porta",
-      "portConfirmBody": "Hai modificato la porta della dashboard. Questa modifica sar� applicata dopo un riavvio. Se la nuova porta � errata o non � esposta, la dashboard potrebbe non essere pi� raggiungibile. Vuoi continuare comunque?",
+      "portConfirmBody": "Hai modificato la porta della dashboard. Questa modifica sarà applicata dopo un riavvio. Se la nuova porta è errata o non è esposta, la dashboard potrebbe non essere più raggiungibile. Vuoi continuare comunque?",
       "fields": {
         "title": "Titolo dashboard",
         "defaultLang": "Lingua di fallback",
         "infoDrawerRefreshInterval": "Intervallo di aggiornamento del pannello informazioni (secondi)",
         "port": "Porta",
-        "serviceLinkTarget": "Open service links",
-        "serviceLinkTargetHint": "Controls whether service cards open in the same tab or in a new tab."
+        "serviceLinkTarget": "Apri i link dei servizi",
+        "serviceLinkTargetHint": "Controlla se le schede servizio si aprono nella stessa scheda o in una nuova."
       },
       "options": {
         "serviceLinkTarget": {
-          "newTab": "In new tab",
-          "sameTab": "In same tab"
+          "newTab": "In una nuova scheda",
+          "sameTab": "Nella stessa scheda"
         }
       }
     },
